@@ -1,0 +1,10 @@
+QT.@BIN_NAME@.VERSION = @PROJECT_VERSION@
+QT.@BIN_NAME@.name = @BIN_NAME@
+QT.@BIN_NAME@.module = @BIN_NAME@
+QT.@BIN_NAME@.libs = @CMAKE_INSTALL_LIBDIR@
+QT.@BIN_NAME@.includes = @CMAKE_INSTALL_INCLUDEDIR@
+QT.@BIN_NAME@.frameworks =
+QT.@BIN_NAME@.depends = core
+QT.@BIN_NAME@.module_config = v2 ltcg
+QT.@BIN_NAME@.DEFINES = 
+QT_MODULES += @BIN_NAME@ 

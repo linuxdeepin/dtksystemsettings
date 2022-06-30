@@ -5,17 +5,12 @@
 # Good tutoral for understanding .pc files:
 # https://people.freedesktop.org/~dbn/pkg-config-guide.html
 
-prefix="@CMAKE_INSTALL_PREFIX@"
-exec_prefix="${prefix}"
-libdir="${prefix}/lib"
-includedir="${prefix}/include"
-
 Name: @BIN_NAME@
 Description: @CMAKE_PROJECT_DESCRIPTION@
 URL: @CMAKE_PROJECT_HOMEPAGE_URL@
 Version: @PROJECT_VERSION@
 Requires: @PC_REQ_PUBLIC@
 Requires.private: @PC_REQ_PRIVATE@
-Cflags: -I"${includedir}"
-Libs: -L"${libdir}" -l@BIN_NAME@
-Libs.private: -L"${libdir}" -l@BIN_NAME@ @PC_LIBS_PRIVATE@
+Cflags: -I"@CMAKE_INSTALL_INCLUDEDIR@"
+Libs: -L"@CMAKE_INSTALL_LIBDIR@" -l@BIN_NAME@
+Libs.private: -L"@CMAKE_INSTALL_LIBDIR@" -l@BIN_NAME@ @PC_LIBS_PRIVATE@
