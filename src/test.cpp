@@ -1,9 +1,10 @@
 #include "include/test.h"
+#include <qobject.h>
 
 namespace Test {
-int Test::add(const int a, const int b)
-{
-    return a + b;
-}
-}
+Test::Test(QObject *parent) : QObject(parent) {}
 
+Test::~Test() {}
+
+int Test::add(const int a, const int b) { return a + b; }
+} // namespace Test
