@@ -1,9 +1,14 @@
 cmake_minimum_required(VERSION 3.19)
+
+if (NOT DEFINED VERSION)
+	set(VERSION "1.0.0")
+endif()
+
 project(dframework
     LANGUAGES CXX
     HOMEPAGE_URL https://test.com
     DESCRIPTION "Test library"
-    VERSION 1.0.0)
+		VERSION ${VERSION})
 
 include(GNUInstallDirs)
 set(CMAKE_CXX_STANDARD 17)
@@ -12,8 +17,6 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC -Wall -Wextra")
-
-message(CMAKE_PROJECT_VERSION = ${CMAKE_PROJECT_VERSION})
 
 # Install settings
 if (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
@@ -48,6 +51,8 @@ install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/DFramework DESTINATION ${CMAKE_INS
 add_library(${BIN_NAME} SHARED
     ${INCLUDE_FILES}
     ${SRCS})
+
+target_compile_definitions(${BIN_NAME} PRIVATE VERSION="${CMAKE_PROJECT_VERSION}")
 
 target_include_directories(${BIN_NAME} PUBLIC
     Qt5::Core
