@@ -1,5 +1,4 @@
 #include "include/test.h"
-#include <qobject.h>
 
 namespace Test {
 Test::Test(QObject *parent) : QObject(parent) {}

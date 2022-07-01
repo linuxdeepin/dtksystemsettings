@@ -40,14 +40,10 @@ set(PC_LIBS_PRIVATE Qt5Core)
 set(PC_REQ_PRIVATE)
 set(PC_REQ_PUBLIC)
 
-message($${TARGET}ooo)
-
 configure_file(misc/dframework.pc.in dframework.pc @ONLY)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/dframework.pc DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig)
 configure_file(misc/DFrameworkConfig.cmake.in DFramework/DFrameworkConfig.cmake @ONLY)
 install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/DFramework DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake)
-configure_file(misc/qt_lib_dframework.pri.in qt/mkspecs/modules/qt_lib_dframework.pri @ONLY)
-install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/qt DESTINATION ${CMAKE_INSTALL_LIBDIR})
 
 add_library(${BIN_NAME} SHARED
     ${INCLUDE_FILES}
