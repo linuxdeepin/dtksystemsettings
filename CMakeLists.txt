@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.13)
 
 if (NOT DEFINED VERSION)
-	set(VERSION "1.0.0")
+    set(VERSION "1.0.0")
 endif()
 
 project(dframework
@@ -54,11 +54,8 @@ add_library(${BIN_NAME} SHARED
     ${SRCS})
 
 set_target_properties(${BIN_NAME} PROPERTIES
-		OUTPUT_NAME ${BIN_NAME}
-		PREFIX lib
-		SUFFIX .so
-		VERSION ${CMAKE_PROJECT_VERSION}
-		SOVERSION ${CMAKE_PROJECT_VERSION_MAJOR})
+    VERSION ${CMAKE_PROJECT_VERSION}
+    SOVERSION ${CMAKE_PROJECT_VERSION_MAJOR})
 
 target_compile_definitions(${BIN_NAME} PRIVATE VERSION="${CMAKE_PROJECT_VERSION}")
 
