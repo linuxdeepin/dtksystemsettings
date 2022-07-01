@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 3.13)
 
+# If do't define version number, specify the version number
 if (NOT DEFINED VERSION)
     set(VERSION "1.0.0")
 endif()
@@ -8,7 +9,7 @@ project(dframework
     LANGUAGES CXX
     HOMEPAGE_URL https://test.com
     DESCRIPTION "Test library"
-		VERSION ${VERSION})
+    VERSION ${VERSION})
 
 include(GNUInstallDirs)
 set(CMAKE_CXX_STANDARD 17)
