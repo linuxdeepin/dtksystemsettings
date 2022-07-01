@@ -3,7 +3,7 @@ Section: libdevel
 Priority: optional
 Maintainer: Deepin Packages Builder <packages@deepin.com>
 Build-Depends:
- debhelper-compat,
+ debhelper-compat (= 12),
  cmake,
  qtbase5-dev
 Standards-Version: 4.5.0
@@ -18,7 +18,7 @@ Description: Deepin Tool Kit Framework library
 
 Package: libdframework-dev
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, libdframework( =${binary:Version})
+Depends:${misc:Depends}, libdframework( =${binary:Version})
 Description: Deepin Tool Kit Framework Devel library
  DFramework is base devel library of Deepin Qt/C++ applications.
  .
