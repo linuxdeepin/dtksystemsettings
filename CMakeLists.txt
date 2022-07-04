@@ -7,8 +7,8 @@ endif()
 
 project(dframework
     LANGUAGES CXX
-    HOMEPAGE_URL https://test.com
-    DESCRIPTION "Test library"
+    HOMEPAGE_URL https://github.com/Groveer/dframework
+    DESCRIPTION "dframework library"
     VERSION ${VERSION})
 
 include(GNUInstallDirs)
@@ -47,8 +47,8 @@ set(PC_REQ_PUBLIC)
 
 configure_file(misc/${BIN_NAME}.pc.in ${BIN_NAME}.pc @ONLY)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${BIN_NAME}.pc DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig)
-configure_file(misc/${BIN_NAME}Config.cmake.in ${BIN_NAME}/${BIN_NAME}Config.cmake @ONLY)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${BIN_NAME}/${BIN_NAME}Config.cmake DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${BIN_NAME})
+configure_file(misc/${BIN_NAME}Config.cmake.in ${BIN_NAME}Config.cmake @ONLY)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${BIN_NAME}Config.cmake DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${BIN_NAME})
 
 add_library(${BIN_NAME} SHARED
     ${INCLUDE_FILES}
@@ -68,5 +68,5 @@ target_link_libraries(${BIN_NAME} PRIVATE
     Qt5::Core
 )
 
-install(FILES ${INCLUDE_FILES} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+install(FILES ${INCLUDE_FILES} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${BIN_NAME})
 install(TARGETS ${BIN_NAME} DESTINATION ${CMAKE_INSTALL_LIBDIR})

@@ -1,7 +1,7 @@
 Source: dframework
 Section: libdevel
 Priority: optional
-Maintainer: Deepin Packages Builder <packages@deepin.com>
+Maintainer: Packages Builder <packages@deepin.com>
 Build-Depends:
  debhelper-compat (= 12),
  cmake,
@@ -12,7 +12,7 @@ Package: libdframework
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: Deepin Tool Kit Framework library
- DFramework is base library of Deepin Qt/C++ applications.
+ libdframework is base library of Deepin Qt/C++ applications.
  .
  This package contains the shared libraries.
 
@@ -20,6 +20,6 @@ Package: libdframework-dev
 Architecture: any
 Depends:${misc:Depends}, libdframework( =${binary:Version})
 Description: Deepin Tool Kit Framework Devel library
- DFramework is base devel library of Deepin Qt/C++ applications.
+ libdframework-dev is base devel library of Deepin Qt/C++ applications.
  .
  This package contains the header files and static libraries.

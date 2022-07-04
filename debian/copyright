@@ -1,6 +1,6 @@
 Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: dframework
-Source: https://github.com/linuxdeepin/
+Source: https://github.com/Groveer/dframework
 
 Files: *
 Copyright: 2022 Deepin Technology Co., Ltd.
