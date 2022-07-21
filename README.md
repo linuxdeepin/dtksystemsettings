@@ -10,6 +10,6 @@ Development framework based on qt5 for library.
 1. clone this repostiory.
 2. config your project name:
 ```shell
-./config.sh -n name
+bash config.sh -n <name>
 ```
 3. modify the other config, eg: README.md

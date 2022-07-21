@@ -1,4 +1,4 @@
-#/usr/bin/sh
+#/usr/bin/bash
 # -n name
 # -h help
 
@@ -8,6 +8,7 @@ ChangeName() {
     # modify CMakeLists.txt
     sed -i "s/dframework/${name}/g" CMakeLists.txt
     # rename config file
+    sed -i "s/dframework/${name^}/g" misc/dframeworkConfig.cmake.in
     mv misc/dframework.pc.in "misc/${name}.pc.in"
     mv misc/dframeworkConfig.cmake.in "misc/${name}Config.cmake.in"
     # rename debian file
