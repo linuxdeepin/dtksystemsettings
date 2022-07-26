@@ -1,0 +1,25 @@
+// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+//
+// SPDX-License-Identifier: LGPL-3.0-only
+
+/*!
+@~english
+@file test.h
+
+This is the description of test.h
+
+@class Test::Test test.h
+@brief Test class.
+
+Details about Test.
+
+@fn int Test::add(const int a,const int b)
+@brief A member function.
+
+Details of the function
+
+@param a an integer.
+@param b an integer.
+@return an integer.
+
+*/

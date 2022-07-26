@@ -1,0 +1,25 @@
+// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+//
+// SPDX-License-Identifier: LGPL-3.0-only
+
+/*!
+@~chinese
+@file test.h
+
+这里是 test.h 的描述
+
+@class Test::Test test.h
+@brief Test class.
+
+Test 的详情.
+
+@fn int Test::add(const int a,const int b)
+@brief 一个成员函数.
+
+函数的详细描述
+
+@param a 一个数字.
+@param b 一个数字.
+@return 一个数字.
+
+*/
