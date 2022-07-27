@@ -5,6 +5,7 @@
 ChangeName() {
     echo "begin config name: $1..."
     name=$1
+    sed -i "s/dframework/${name}/g" .reuse/dep5
     # modify CMakeLists.txt
     sed -i "s/dframework/${name}/g" CMakeLists.txt
     # rename config file
