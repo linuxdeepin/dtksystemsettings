@@ -1,6 +1,6 @@
 # dframework
 ------------
-基于Qt5的开发模板库。
+基于Qt的开发模板库。
 
 ## 特性
 1. 使用`cmake`进行项目管理。
@@ -41,9 +41,8 @@ bash config.sh -n <name>
 本风格指南遵循[deepin开源风格指南](https://github.com/linuxdeepin/deepin-styleguide/releases)，在其基础上进行细化拆分，形成适用于开发库的风格指南。
 
 ### 基本约定
-1. 开发库必须基于`Qt5`，不能有`Dtk`的依赖。
-2. 开发库必须声明命名空间。
-3. 尽量使用前置声明，此处与[deepin开源风格指南](https://github.com/linuxdeepin/deepin-styleguide/releases)不同，作为开发库，尽量使头文件的依赖最小化。
+1. 开发库必须基于`Qt`，可以依赖`dtkcore`，但不允许依赖`dtkgui`与`dtkwidget`，以最小化依赖为原则，若无需依赖`dtkcore`，则不应依赖`dtkcore`。
+2. 尽量使用前置声明，此处与[deepin开源风格指南](https://github.com/linuxdeepin/deepin-styleguide/releases)不同，作为开发库，尽量使头文件的依赖最小化。
 
 ### 命名约定
 
@@ -51,18 +50,16 @@ bash config.sh -n <name>
 1. 尽可能使用描述性的命名，尽可能使用全单词组合的命名，务必不要使用缩写或简写。
 
 #### 项目命名
-项目应该使用全小写的命名方式，单词使用`-`进行连接，仅仅对`DBus`进行封装的项目，应使用`name-qt5`的方式进行命名，如：power-qt5；若是对其他开源库进行二次封装，应使用`dname`的方式进行命名，如：dpower, dnetwork-manager等。
+项目名应以`dtk`三个字母开头，并且全字母小写，不允许有任何连接符号，如：`dtkpower`, `dtkpowermanager`。
 
 #### 文件命名
-1. 源文件需使用单词组合并且全小写，如：powermanager.h，必要时，可使用加下划线组合的方式，如：powermanager\_p.h；当该源文件为`dde`实现，则需以`dname`的方式进行命名，如：dpowermanager.h
-2. 配置文件应使用项目名+后缀名进行命名，如：power-qt5.conf 或者 dpower.conf
+1. 头文件与源文件需使单词全小写，并且以`d`开头，如：`dpower.h`，`dpowermanager.h`，必要时，可使用加下划线组合的方式，如：`dpowermanager_p.h`。
+2. 配置文件应使用项目名+后缀名进行命名，如：`dtkpower.conf` 或者 `dtkpowermanager.conf`
 
 #### 命名空间与类
-值得注意的有两点：
-1. 命名空间的首字母必须为‘D’，如：DTest。
-2. 类名应声明为两种类型，并且第二种类型继承自第一种类型，若没有第二种类型，则只使用第一种类型即可：
-    1. 封装上游的接口：其类名应该是一个通用的名称，如：Test。
-    2. dde实现的接口：其类名应是一个以‘D’开头的名称，如：DTest。
+命名空间需有两层：<br>
+顶级命名空间统一为`Dtk`，二级命名空间为项目命名空间，如：`Dtk::Power` 或`Dtk::PowerManager`。<br>
+类命名需以`D`为首字母，如：`DPower`,`DPowerManager`。
 
 ## doxygen 与 reuse
 1. 项目需使用`doxygen`编写文档，尽可能多的编写示例，示例可写在`docs/*.md`，注释可写在`docs/*.dox`中。
