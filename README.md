@@ -50,10 +50,10 @@ bash config.sh -n <name>
 1. 尽可能使用描述性的命名，尽可能使用全单词组合的命名，务必不要使用缩写或简写。
 
 #### 项目命名
-项目应该使用全小写的命名方式，单词使用-进行连接，对于仅仅对DBus进行封装的项目，应使用name-qt5的方式进行命名，如：power-qt5；若是对其他开源库进行二次封装，应使用d_name_的方式进行命名：如dpower。
+项目应该使用全小写的命名方式，单词使用-进行连接，对于仅仅对DBus进行封装的项目，应使用name-qt5的方式进行命名，如：power-qt5；若是对其他开源库进行二次封装，应使用d*name*的方式进行命名：如dpower。
 
 #### 文件命名
-1. 源文件需使用单词组合并且全小写，如：powermanager.h，必要时，可使用加下划线组合的方式，如：powermanager\_p.h；当该源文件为dde实现，则需以d_name_的方式进行命名：如dpowermanager.h
+1. 源文件需使用单词组合并且全小写，如：powermanager.h，必要时，可使用加下划线组合的方式，如：powermanager\_p.h；当该源文件为dde实现，则需以d*name*的方式进行命名：如dpowermanager.h
 2. 配置文件应使用项目名+后缀名进行命名，如：power-qt5.conf 或者 dpower.conf
 
 #### 其他命名
