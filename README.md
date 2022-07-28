@@ -43,7 +43,7 @@ bash config.sh -n <name>
 ### 基本约定
 1. 开发库必须基于`Qt5`，不能有`Dtk`的依赖。
 2. 开发库必须声明命名空间。
-3. 尽量使用前置声明。
+3. 尽量使用前置声明，此处与[deepin开源风格指南](https://github.com/linuxdeepin/deepin-styleguide/releases)不同，作为开发库，尽量使头文件的依赖最小化。
 
 ### 命名约定
 
@@ -63,3 +63,7 @@ bash config.sh -n <name>
 2. 类名应声明为两种类型，并且第二种类型继承自第一种类型，若没有第二种类型，则只使用第一种类型即可：
     1. 封装上游的接口：其类名应该是一个通用的名称，如：Test。
     2. dde实现的接口：其类名应是一个以‘D’开头的名称，如：DTest。
+
+## doxygen 与 reuse
+1. 项目需使用`doxygen`编写文档，尽可能多的编写示例，示例可写在`docs/*.md`，注释可写在`docs/*.dox`中。
+2. 项目使用`SPDX`规范开源协议，请使用`reuse`工具进行检查，参考[这里](https://spdx.org/licenses/)。
