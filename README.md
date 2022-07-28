@@ -41,7 +41,7 @@ bash config.sh -n <name>
 本风格指南遵循[deepin开源风格指南](https://github.com/linuxdeepin/deepin-styleguide/releases)，在其基础上进行细化拆分，形成适用于开发库的风格指南。
 
 ### 基本约定
-1. 开发库必须基于`Qt5`。
+1. 开发库必须基于`Qt5`，不能有`Dtk`的依赖。
 2. 开发库必须声明命名空间。
 3. 尽量使用前置声明。
 
