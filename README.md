@@ -53,7 +53,7 @@ bash config.sh -n <name>
 项目名应以`dtk`三个字母开头，并且全字母小写，不允许有任何连接符号，如：`dtkpower`, `dtkpowermanager`。
 
 #### 文件命名
-1. 头文件与源文件需使单词全小写，并且以`d`开头，如：`dpower.h`，`dpowermanager.h`，必要时，可使用加下划线组合的方式，如：`dpowermanager_p.h`。
+1. 头文件与源文件需使单词全小写，并且以`d`开头，如：`dpower.h`，`dpowermanager.h`，必要时，可使用加下划线组合的方式（一般指`private`类），如：`dpowermanager_p.h`。
 2. 配置文件应使用项目名+后缀名进行命名，如：`dtkpower.conf` 或者 `dtkpowermanager.conf`
 
 #### 命名空间与类
