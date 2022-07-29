@@ -7,7 +7,7 @@
 #include "namespace.h"
 #include <qobject.h>
 
-DEMO_BEGIN_NAMESPACE
+DDEMO_BEGIN_NAMESPACE
 class Demo : public QObject {
     Q_OBJECT
   public:
@@ -15,4 +15,4 @@ class Demo : public QObject {
     ~Demo();
     int add(const int a, const int b);
 };
-DEMO_END_NAMESPACE
+DDEMO_END_NAMESPACE

@@ -9,7 +9,7 @@ if (NOT DEFINED VERSION)
     set(VERSION "1.0.0")
 endif()
 
-project(dtk
+project(dtkdemo
     LANGUAGES CXX
     HOMEPAGE_URL https://github.com/Groveer/dtk
     DESCRIPTION "dtk library template"

@@ -6,7 +6,7 @@
 
 #include "include/demo.h"
 
-DEMO_USE_NAMESPACE
+DDEMO_USE_NAMESPACE
 
 class Tst_Demo : public testing::Test
 {
