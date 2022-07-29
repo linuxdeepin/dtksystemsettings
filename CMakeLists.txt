@@ -31,12 +31,15 @@ if (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
     set(CMAKE_INSTALL_PREFIX /usr)
 endif ()
 
-if (NOT (${CMAKE_BUILD_TYPE} MATCHES "Debug"))
+if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O1 -g -fsanitize=address -fno-omit-frame-pointer")
+    set(UNITTEST ON)
+else ()
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Ofast")
 endif ()
 
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core)
-find_package(Qt5 REQUIRED COMPONENTS Core)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core)
 find_package(Doxygen)
 # find_package(PkgConfig REQUIRED)
 # pkg_search_module(XCB REQUIRED xcb)
@@ -108,14 +111,39 @@ set_target_properties(${BIN_NAME} PROPERTIES
 target_compile_definitions(${BIN_NAME} PRIVATE VERSION="${CMAKE_PROJECT_VERSION}")
 
 target_include_directories(${BIN_NAME} PUBLIC
-    # Qt${QT_VERSION_MAJOR}::Core
-    Qt5::Core
+    Qt${QT_VERSION_MAJOR}::Core
 )
 
 target_link_libraries(${BIN_NAME} PRIVATE
-    # Qt${QT_VERSION_MAJOR}::Core
-    Qt5::Core
+    Qt${QT_VERSION_MAJOR}::Core
 )
 
 install(FILES ${INCLUDE_FILES} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${BIN_NAME})
 install(TARGETS ${BIN_NAME} DESTINATION ${CMAKE_INSTALL_LIBDIR})
+
+# test
+if (UNITTEST)
+    file(GLOB_RECURSE TEST_FILES "tests/*.cpp")
+    add_executable(ut-${BIN_NAME}
+        ${INCLUDE_FILES}
+        ${SRCS}
+        ${TEST_FILES})
+
+    if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+        target_compile_options(ut-${BIN_NAME} PRIVATE -fprofile-instr-generate -ftest-coverage)
+    endif()
+    if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+        target_compile_options(ut-${BIN_NAME} PRIVATE -fprofile-arcs -ftest-coverage)
+    endif()
+
+    target_include_directories(ut-${BIN_NAME} PUBLIC
+        Qt${QT_VERSION_MAJOR}::Core
+    )
+
+    target_link_libraries(ut-${BIN_NAME} PRIVATE
+        Qt${QT_VERSION_MAJOR}::Core
+        -lpthread
+        -lgcov
+        -lgtest
+    )
+endif ()
