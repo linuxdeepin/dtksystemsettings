@@ -4,16 +4,16 @@
 
 /*!
 @~chinese
-@file test.h
+@file demo.h
 
-这里是 test.h 的描述
+这里是 demo.h 的描述
 
-@class Test::Test test.h
-@brief Test class.
+@class Dtk::Demo::Demo demo.h
+@brief Demo class.
 
-Test 的详情.
+Demo 的详情.
 
-@fn int Test::add(const int a,const int b)
+@fn int Demo::add(const int a,const int b)
 @brief 一个成员函数.
 
 函数的详细描述

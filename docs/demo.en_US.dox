@@ -4,16 +4,16 @@
 
 /*!
 @~english
-@file test.h
+@file demo.h
 
-This is the description of test.h
+This is the description of demo.h
 
-@class Test::Test test.h
-@brief Test class.
+@class Dtk::Demo::Demo demo.h
+@brief Demo class.
 
-Details about Test.
+Details about Demo.
 
-@fn int Test::add(const int a,const int b)
+@fn int Demo::add(const int a,const int b)
 @brief A member function.
 
 Details of the function
