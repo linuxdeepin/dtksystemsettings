@@ -4,14 +4,15 @@
 
 #pragma once
 
+#include "namespace.h"
 #include <qobject.h>
 
-namespace Test {
-class Test : public QObject {
+DEMO_BEGIN_NAMESPACE
+class Demo : public QObject {
     Q_OBJECT
   public:
-    Test(QObject *parent = nullptr);
-    ~Test();
+    Demo(QObject *parent = nullptr);
+    ~Demo();
     int add(const int a, const int b);
 };
-} // namespace Test
+DEMO_END_NAMESPACE

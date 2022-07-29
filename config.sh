@@ -5,18 +5,18 @@
 ChangeName() {
     echo "begin config name: $1..."
     name=$1
-    sed -i "s/dframework/${name}/g" .reuse/dep5
+    sed -i "s/dtkdemo/${name}/g" .reuse/dep5
     # modify CMakeLists.txt
-    sed -i "s/dframework/${name}/g" CMakeLists.txt
+    sed -i "s/dtkdemo/${name}/g" CMakeLists.txt
     # rename config file
-    sed -i "s/dframework/${name^}/g" misc/dframeworkConfig.cmake.in
-    mv misc/dframework.pc.in "misc/${name}.pc.in"
-    mv misc/dframeworkConfig.cmake.in "misc/${name}Config.cmake.in"
+    sed -i "s/dtkdemo/${name^}/g" misc/dtkdemoConfig.cmake.in
+    mv misc/dtkdemo.pc.in "misc/${name}.pc.in"
+    mv misc/dtkdemoConfig.cmake.in "misc/${name}Config.cmake.in"
     # rename debian file
-    mv debian/libdframework.install "debian/lib${name}.install"
-    mv debian/libdframework-dev.install "debian/lib${name}-dev.install"
+    mv debian/libdtkdemo.install "debian/lib${name}.install"
+    mv debian/libdtkdemo-dev.install "debian/lib${name}-dev.install"
     # modify debian file content
-    sed -i "s/dframework/${name}/g" debian/{control,changelog,copyright}
+    sed -i "s/dtkdemo/${name}/g" debian/{control,changelog,copyright}
     echo "end config name"
 }
 

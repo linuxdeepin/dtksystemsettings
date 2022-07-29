@@ -9,12 +9,13 @@ if (NOT DEFINED VERSION)
     set(VERSION "1.0.0")
 endif()
 
-project(dframework
+project(dtk
     LANGUAGES CXX
-    HOMEPAGE_URL https://github.com/Groveer/dframework
-    DESCRIPTION "dframework library"
+    HOMEPAGE_URL https://github.com/Groveer/dtk
+    DESCRIPTION "dtk library template"
     VERSION ${VERSION})
 
+# specify install dir
 include(GNUInstallDirs)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED on)
@@ -23,6 +24,7 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC -Wall -Wextra")
 set(CMAKE_SHARED_LINKER_FLAGS ${CMAKE_SHARED_LINKER_FLAGS} "-Wl,--as-needed")
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # Install settings
 if (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
@@ -33,15 +35,16 @@ if (NOT (${CMAKE_BUILD_TYPE} MATCHES "Debug"))
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Ofast")
 endif ()
 
-find_package(PkgConfig REQUIRED)
+find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core)
 find_package(Qt5 REQUIRED COMPONENTS Core)
 find_package(Doxygen)
-#pkg_search_module(XCB REQUIRED xcb)
+# find_package(PkgConfig REQUIRED)
+# pkg_search_module(XCB REQUIRED xcb)
 
 set (BUILD_DOCS ON)
 
 if (BUILD_DOCS AND DOXYGEN_FOUND)
-    set (QCH_INSTALL_DESTINATION ${CMAKE_INSTALLL_PREFIX}/share/dde/doc CACHE STRING "QCH install location")
+    set (QCH_INSTALL_DESTINATION ${CMAKE_INSTALL_PREFIX}/share/dtk/doc CACHE STRING "QCH install location")
     set (DOXYGEN_GENERATE_HTML "YES" CACHE STRING "Doxygen HTML output")
     set (DOXYGEN_GENERATE_XML "NO" CACHE STRING "Doxygen XML output")
     set (DOXYGEN_GENERATE_QHP "YES" CACHE STRING "Doxygen QHP output")
@@ -58,11 +61,11 @@ if (BUILD_DOCS AND DOXYGEN_FOUND)
     set (DOXYGEN_TAGFILES "qtcore.tags=qthelp://doc.qt.io/qt-5/" CACHE STRING "Doxygen tag files")
     set (DOXYGEN_MACRO_EXPANSION "YES")
     set (DOXYGEN_EXPAND_ONLY_PREDEF "YES")
-    # set (DOXYGEN_PREDEFINED
-    #     "\"TEST_BEGIN_NAMESPACE=namespace TEST {\""
-    #     "\"TEST_END_NAMESPACE=}\""
-    #     "\"TEST_USE_NAMESPACE=using namespace TEST;\""
-    # )
+    set (DOXYGEN_PREDEFINED
+        "\"DEMO_BEGIN_NAMESPACE=namespace Dtk { namespace Demo {\""
+        "\"DEMO_END_NAMESPACE=}}\""
+        "\"DEMO_USE_NAMESPACE=using namespace Dtk::Demo;\""
+    )
 
     doxygen_add_docs (doxygen
         ${CMAKE_CURRENT_SOURCE_DIR}/include
@@ -81,12 +84,14 @@ file(GLOB_RECURSE SRCS
     "src/*.cpp"
 )
 
-set(BIN_NAME dframework)
+set(BIN_NAME dtkdemo)
 
-set(PC_LIBS_PRIVATE Qt5Core)
+# for pc file config
+set(PC_LIBS_PRIVATE Qt${QT_VERSION_MAJOR}Core)
 set(PC_REQ_PRIVATE)
 set(PC_REQ_PUBLIC)
 
+# config template file
 configure_file(misc/${BIN_NAME}.pc.in ${BIN_NAME}.pc @ONLY)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${BIN_NAME}.pc DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig)
 configure_file(misc/${BIN_NAME}Config.cmake.in ${BIN_NAME}Config.cmake @ONLY)
@@ -103,10 +108,12 @@ set_target_properties(${BIN_NAME} PROPERTIES
 target_compile_definitions(${BIN_NAME} PRIVATE VERSION="${CMAKE_PROJECT_VERSION}")
 
 target_include_directories(${BIN_NAME} PUBLIC
+    # Qt${QT_VERSION_MAJOR}::Core
     Qt5::Core
 )
 
 target_link_libraries(${BIN_NAME} PRIVATE
+    # Qt${QT_VERSION_MAJOR}::Core
     Qt5::Core
 )
 

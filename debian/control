@@ -1,4 +1,4 @@
-Source: dframework
+Source: dtkdemo
 Section: libdevel
 Priority: optional
 Maintainer: Packages Builder <packages@deepin.com>
@@ -8,18 +8,18 @@ Build-Depends:
  qtbase5-dev
 Standards-Version: 4.5.0
 
-Package: libdframework
+Package: libdtkdemo
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
-Description: Deepin Tool Kit Framework library
- libdframework is base library of Deepin Qt/C++ applications.
+Description: Deepin Tool Kit template library
+ libdtkdemo is base library of Deepin Qt/C++ applications.
  .
  This package contains the shared libraries.
 
-Package: libdframework-dev
+Package: libdtkdemo-dev
 Architecture: any
-Depends:${misc:Depends}, libdframework( =${binary:Version})
-Description: Deepin Tool Kit Framework Devel library
- libdframework-dev is base devel library of Deepin Qt/C++ applications.
+Depends:${misc:Depends}, libdtktemplate( =${binary:Version})
+Description: Deepin Tool Kit template devel library
+ libdtkdemo-dev is base devel library of Deepin Qt/C++ applications.
  .
  This package contains the header files and static libraries.

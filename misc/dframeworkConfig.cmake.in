@@ -1,3 +1,0 @@
-set(dframework_INCLUDE_DIR @CMAKE_INSTALL_INCLUDEDIR@/@BIN_NAME@)
-set(dframework_LIBRARIES @BIN_NAME@)
-include_directories("${dframework_INCLUDE_DIR}")
