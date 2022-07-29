@@ -65,9 +65,9 @@ if (BUILD_DOCS AND DOXYGEN_FOUND)
     set (DOXYGEN_MACRO_EXPANSION "YES")
     set (DOXYGEN_EXPAND_ONLY_PREDEF "YES")
     set (DOXYGEN_PREDEFINED
-        "\"DEMO_BEGIN_NAMESPACE=namespace Dtk { namespace Demo {\""
-        "\"DEMO_END_NAMESPACE=}}\""
-        "\"DEMO_USE_NAMESPACE=using namespace Dtk::Demo;\""
+        "\"DDEMO_BEGIN_NAMESPACE=namespace Dtk { namespace Demo {\""
+        "\"DDEMO_END_NAMESPACE=}}\""
+        "\"DDEMO_USE_NAMESPACE=using namespace Dtk::Demo;\""
     )
 
     doxygen_add_docs (doxygen
