@@ -123,6 +123,7 @@ install(TARGETS ${BIN_NAME} DESTINATION ${CMAKE_INSTALL_LIBDIR})
 
 # test
 if (UNITTEST)
+    enable_testing()
     file(GLOB_RECURSE TEST_FILES "tests/*.cpp")
     add_executable(ut-${BIN_NAME}
         ${INCLUDE_FILES}
@@ -146,4 +147,6 @@ if (UNITTEST)
         -lgcov
         -lgtest
     )
+
+    add_test(NAME ut-${BIN_NAME} COMMAND ut-${BIN_NAME})
 endif ()
