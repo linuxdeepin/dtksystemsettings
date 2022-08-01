@@ -18,6 +18,7 @@
 2. 配置项目名称：
 ```shell
 bash config.sh -n <name>
+bash config.sh -N <namespace>
 ```
 3. 修改其他配置文件, 例如：README.md
 

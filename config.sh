@@ -22,25 +22,38 @@ ChangeName() {
     echo "end config name"
 }
 
+ChangeNamespace() {
+    echo "begin config namespace: $1..."
+    name=$1
+    sed -i "s/Demo/${name}/g" include/namespace.h
+    sed -i "s/DDEMO/D${name^^}/g" include/*.h src/*.cpp tests/*.cpp
+    echo "end config namespace"
+}
+
 Print_help() {
     cat << EOF
 config.sh <options> value
 
 config the project for custom.
 
-eg:./config.sh -n Test
+eg:bash config.sh -n dtktest
+   bash config.sh -N Test
 
 Options:
   -n project name
+  -N namespace
   -h print help
 EOF
 }
 
-while getopts ":n:a:h" optname
+while getopts ":n:N:h" optname
 do
     case "$optname" in
       "n")
         ChangeName $OPTARG
+        ;;
+      "N")
+        ChangeNamespace $OPTARG
         ;;
       "h")
         Print_help
