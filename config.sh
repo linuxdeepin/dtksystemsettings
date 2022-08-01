@@ -17,6 +17,8 @@ ChangeName() {
     mv debian/libdtkdemo-dev.install "debian/lib${name}-dev.install"
     # modify debian file content
     sed -i "s/dtkdemo/${name}/g" debian/{control,changelog,copyright}
+    # modify test script
+    sed -i "s/dtkdemo/${name}/g" test-recoverage.sh
     echo "end config name"
 }
 
