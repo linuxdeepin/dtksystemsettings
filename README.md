@@ -1,74 +1,73 @@
 # dtk
 ------------
-基于Qt的开发模板库。
+Qt-based development template library.
 
-## 特性
-1. 使用`cmake`进行项目管理。
-2. 使用`doxygen`进行文档编写。
-3. 使用`gtest`进行单元测试。
-4. 使用`reuse`进行开源协议检查。
-5. 支持生成单元测试覆盖率报告。
-6. 支持`g++`和`clang++`两种编译器。
-7. 兼容`Qt6`与`Qt5`。
-8. 支持编译为`debian`平台安装包。
-9. 使用脚本一键配置项目，参见[使用方式](#使用方式)
+## Features
+1. Use `cmake` for project management.
+2. Use `doxygen` for documentation.
+3. Use `gtest` for unit testing.
+4. Use `reuse` for open source protocol checking.
+5. Support generating unit test coverage reports.
+6. Both `g++` and `clang++` compilers are supported.
+7. Compatible with `Qt6` and `Qt5`.
+8. Support for compiling as a `debian` platform installer.
+9. Use the script to configure the project with one click, see [Usage](# Usage)
 
-## 使用方式
-1. 克隆本仓库；
-2. 配置项目名称：
+## Usage
+1. Clone this repository；
+2. Config project name:
 ```shell
 bash config.sh -n <name>
 bash config.sh -N <namespace>
 ```
-3. 修改其他配置文件, 例如：README.md
+3. Modify other configuration files, e.g. README.md
 
-## 项目目录规范
- **目录**           | **描述**
+## Catalog Specification
+ **Catalog**           | **Description**
 ------------------|---------------------------------------------------------
- .github/         | github相关文件，一般用来存储工作流
- .reuse/          | license声明文件，项目中应使用reuse工具进行license声明
- .gitignore       | git过滤列表，用来过滤不需要推送到仓库中的文件
- .clang-format    | 格式化声明文件，使用该文件进行格式化代码，以保持格式统一性
- README.md        | 项目概述文档
- LICENSE          | 许可协议文件，该文件给github这种仓库使用，项目应使用reuse工具，但协议必须统一，一般为LGPL-v3
- CMakeLists.txt   | 项目文件可放置在最外层
- [debian/]        | debian打包所需文件
- docs/            | 存放文档相关内容，目前作为doxygen生成文档目录
- include/         | 公共头文件目录，所有需要开放的头文件均应放置在此目录
- LINCENSES/       | 许可协议目录，存放该项目所有的许可协议
- misc/            | 存放项目独立的资源或配置文件，如.service .conf .in等
- src/             | 存放源码文件，如 .h .cpp
- [src/3rdparty/]  | 存放第三方库或组件。**请注意，如果仓库内包含对应项目，请使用仓库内的版本，不允许另行提供版本包含至项目内**
- [qml/]           | 专门存放qml源码文件，如 .qml
- [translations/ ] | 存放本地化相关文件，如 .ts
- [tests/]         | 单元测试相关代码存放目录
- [tools/]         | 小工具存放目录
- [examples/]      | 示例存放目录
+ .github/         | github related files, generally used to store workflows
+ .reuse/          | license declaration file, the project should use the reuse tool for license declaration
+ .gitignore       | The git filter list, used to filter files that don't need to be pushed to the repository
+ .clang-format    | Formatting declaration file, which is used for formatting code to maintain formatting uniformity
+ README.md        | Project Overview Document
+ LICENSE          | License agreement file, the file to github such repository use, the project should use reuse tool, but the agreement must be unified, generally LGPL-v3
+ CMakeLists.txt   | Project files can be placed in the outermost
+ [debian/]        | Required files for debian packaging
+ docs/            | Store document-related content, currently used as a directory for doxygen-generated documents
+ include/         | Public headers directory, all open headers should be placed in this directory
+ LINCENSES/       | License agreement directory, where all license agreements for the project are stored
+ misc/            | Store project-independent resources or configuration files, such as .service .conf .in, etc.
+ src/             | Store source code files, such as: .h .cpp
+ [src/3rdparty/]  | Store third-party libraries or components. **Please note that if the repository contains a corresponding project, please use the version in the repository and do not allow to provide a separate version to be included in the project**
+ [qml/]           | Specialized qml source files, such as .qml
+ [translations/ ] | Store localization-related files, such as .ts
+ [tests/]         | Unit test related code storage directory
+ [tools/]         | Tools storage directory
+ [examples/]      | Examples storage directory
 
-## 风格指南
-本风格指南遵循[deepin开源风格指南](https://github.com/linuxdeepin/deepin-styleguide/releases)，在其基础上进行细化拆分，形成适用于开发库的风格指南。
+## Style Guide
+This style guide follows the [deepin-styleguide](https://github.com/linuxdeepin/deepin-styleguide/releases) and is refined and split on its basis to form a style guide applicable to development libraries.
 
-### 基本约定
-1. 开发库必须基于`Qt`，可以依赖`dtkcore`，但不允许依赖`dtkgui`与`dtkwidget`，以最小化依赖为原则，若无需依赖`dtkcore`，则不应依赖`dtkcore`。
-2. 尽量使用前置声明，此处与[deepin开源风格指南](https://github.com/linuxdeepin/deepin-styleguide/releases)不同，作为开发库，尽量使头文件的依赖最小化。
+### Basic
+1. The development library must be based on `Qt` and can depend on `dtkcore`, but is not allowed to depend on `dtkgui` and `dtkwidget`, in order to minimize dependencies, and should not depend on `dtkcore` if it does not need to.
+2. Try to use pre-declarations, unlike [deepin-tyleguide](https://github.com/linuxdeepin/deepin-styleguide/releases) here, as a development library, to try to minimize dependencies on header files.
 
-### 命名约定
+### Naming
 
-#### 通用规则
-1. 尽可能使用描述性的命名，尽可能使用全单词组合的命名，务必不要使用缩写或简写。
+#### General Rules
+1. Use descriptive naming whenever possible, use full word combinations whenever possible, and be sure not to use abbreviations or shorthand.
 
-#### 项目命名
-项目名应以`dtk`三个字母开头，并且全字母小写，不允许有任何连接符号，如：`dtkpower`, `dtkpowermanager`。
+#### Project Name
+The project name should start with the three letters `dtk` and be all lowercase, no ligatures are allowed, e.g. `dtkpower`, `dtkpowermanager`.
 
-#### 文件命名
-1. 头文件与源文件需使单词全小写，并且以`d`开头，如：`dpower.h`，`dpowermanager.h`，必要时，可使用加下划线组合的方式（一般指`private`类），如：`dpowermanager_p.h`。
-2. 配置文件应使用项目名+后缀名进行命名，如：`dtkpower.conf` 或者 `dtkpowermanager.conf`
+#### File Name
+1. The header and source files need to make the words all lowercase and start with `d`, e.g.: `dpower.h`, `dpowermanager.h`, and, if necessary, use an underscore combination (generally referring to the `private` class), e.g.: `dpowermanager_p.h`.
+2. The configuration file should be named using the project name + suffix, e.g. `dtkpower.conf` or `dtkpowermanager.conf`
+#### Namespace And Class
+The namespace needs to have two layers.<br>
+The top-level namespace is unified as `Dtk`, and the secondary namespace is the project namespace, such as: `Dtk::Power` or `Dtk::PowerManager`.<br>
+Classes should be named with `D` as the first letter, such as: `DPower`,`DPowerManager`.
 
-#### 命名空间与类
-命名空间需有两层：<br>
-顶级命名空间统一为`Dtk`，二级命名空间为项目命名空间，如：`Dtk::Power` 或`Dtk::PowerManager`。<br>
-类命名需以`D`为首字母，如：`DPower`,`DPowerManager`。
-
-## doxygen 与 reuse
-1. 项目需使用`doxygen`编写文档，尽可能多的编写示例，示例可写在`docs/*.md`，注释可写在`docs/*.dox`中。
-2. 项目使用`SPDX`规范开源协议，请使用`reuse`工具进行检查，参考[这里](https://spdx.org/licenses/)。
+## Doxygen And Reuse
+1. The project needs to be documented using `doxygen` and as many examples as possible. Examples can be written in `docs/*.md` and comments can be written in `docs/*.dox`.
+2. The project uses the `SPDX` specification open source protocol, please use the `reuse` tool to check it, refer to [here](https://spdx.org/licenses/).

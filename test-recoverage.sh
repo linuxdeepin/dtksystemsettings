@@ -1,5 +1,9 @@
 #!/usr/bin/env sh
 
+# SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+#
+# SPDX-License-Identifier: LGPL-3.0-only
+
 cmake -B build -DCMAKE_BUILD_TYPE=Debug
 cmake --build build --target ut-dtkdemo -- -j $(nproc)
 ctest --test-dir build -VV
