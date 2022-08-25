@@ -3,12 +3,11 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
 #include "gtest/gtest.h"
-
 #include "include/demo.h"
 
 DDEMO_USE_NAMESPACE
 
-class Tst_Demo : public testing::Test
+class ut_Demo : public testing::Test
 {
 public:
     void SetUp() override
@@ -24,7 +23,7 @@ public:
     Demo *m_demo = nullptr;
 };
 
-TEST_F(Tst_Demo, add)
+TEST_F(ut_Demo, add)
 {
     EXPECT_EQ(3, m_demo->add(1, 2));
 }

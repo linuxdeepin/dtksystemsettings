@@ -33,13 +33,13 @@ endif ()
 
 if (CMAKE_BUILD_TYPE STREQUAL "Debug")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O1 -g -fsanitize=address -fno-omit-frame-pointer")
-    set(UNITTEST ON)
+    set(BUILD_TESTING ON)
 else ()
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Ofast")
 endif ()
 
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core DBus)
 find_package(Doxygen)
 # find_package(PkgConfig REQUIRED)
 # pkg_search_module(XCB REQUIRED xcb)
@@ -110,25 +110,39 @@ set_target_properties(${BIN_NAME} PROPERTIES
 
 target_compile_definitions(${BIN_NAME} PRIVATE VERSION="${CMAKE_PROJECT_VERSION}")
 
-target_include_directories(${BIN_NAME} PUBLIC
+set(BIN_INCLUDE_DIRS
     Qt${QT_VERSION_MAJOR}::Core
+    Qt${QT_VERSION_MAJOR}::DBus
+)
+
+set(BIN_LIBRARIES
+    Qt${QT_VERSION_MAJOR}::Core
+    Qt${QT_VERSION_MAJOR}::DBus
+)
+
+target_include_directories(${BIN_NAME} PUBLIC
+    ${BIN_INCLUDE_DIRS}
 )
 
 target_link_libraries(${BIN_NAME} PRIVATE
-    Qt${QT_VERSION_MAJOR}::Core
+    ${BIN_LIBRARIES}
 )
 
 install(FILES ${INCLUDE_FILES} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${BIN_NAME})
 install(TARGETS ${BIN_NAME} DESTINATION ${CMAKE_INSTALL_LIBDIR})
 
 # test
-if (UNITTEST)
+if (BUILD_TESTING)
     enable_testing()
+    find_package(Qt5 REQUIRED COMPONENTS Test)
     file(GLOB_RECURSE TEST_FILES "tests/*.cpp")
+    include(./tests/dbus/fakeInterface.cmake)
+
     add_executable(ut-${BIN_NAME}
         ${INCLUDE_FILES}
         ${SRCS}
-        ${TEST_FILES})
+        ${TEST_FILES}
+        ${DFAKE_INTERFACE_DBUS_XML})
 
     if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
         target_compile_options(ut-${BIN_NAME} PRIVATE -fprofile-instr-generate -ftest-coverage)
@@ -138,11 +152,12 @@ if (UNITTEST)
     endif()
 
     target_include_directories(ut-${BIN_NAME} PUBLIC
-        Qt${QT_VERSION_MAJOR}::Core
+        ${BIN_INCLUDE_DIRS}
     )
 
     target_link_libraries(ut-${BIN_NAME} PRIVATE
-        Qt${QT_VERSION_MAJOR}::Core
+        ${BIN_LIBRARIES}
+#        Qt5::Test     # QTest functions
         -lpthread
         -lgcov
         -lgtest
