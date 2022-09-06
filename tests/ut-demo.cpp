@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
 #include "gtest/gtest.h"
-#include "include/demo.h"
+#include "demo.h"
 
 DDEMO_USE_NAMESPACE
 

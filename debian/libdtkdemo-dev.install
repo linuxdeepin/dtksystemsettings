@@ -2,4 +2,5 @@ usr/lib/*/lib*.so
 usr/include
 usr/lib/*/pkgconfig/*.pc
 usr/lib/*/cmake/*/*.cmake
-usr/share/dtk/doc/*.qch
+usr/lib/*/*/mkspecs/modules/*.pri
+usr/share/*/doc/*.qch

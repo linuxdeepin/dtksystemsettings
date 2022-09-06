@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
-#include "include/demo.h"
+#include "demo.h"
 
 DDEMO_BEGIN_NAMESPACE
 Demo::Demo(QObject *parent) : QObject(parent) {}
