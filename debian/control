@@ -5,6 +5,7 @@ Maintainer: Packages Builder <packages@deepin.com>
 Build-Depends:
  debhelper-compat (= 12),
  cmake,
+ librsvg2-dev,
  qtbase5-dev
 Standards-Version: 4.5.0
 

@@ -27,3 +27,9 @@ TEST_F(ut_Demo, add)
 {
     EXPECT_EQ(3, m_demo->add(1, 2));
 }
+
+TEST_F(ut_Demo, svg2png)
+{
+    EXPECT_TRUE(m_demo->svg2png("/no/exist/svg", "/tmp/test.png"));
+}
+

@@ -4,7 +4,7 @@
 
 set(BIN_NAME ut-dtkdemo)
 
-add_definitions(-DUSE_MOCK_INTERFACE)
+#add_definitions(-DUSE_MOCK_INTERFACE)
 
 include(./dbus/fakeInterface.cmake)
 
@@ -27,18 +27,25 @@ add_executable(${BIN_NAME}
     ${DFAKE_INTERFACE_DBUS_XML}
 )
 
+find_package(PkgConfig REQUIRED)
+pkg_search_module(RSVG2 REQUIRED librsvg-2.0)
+
 target_include_directories(${BIN_NAME} PUBLIC
     Qt${QT_VERSION_MAJOR}::Core
+    Qt${QT_VERSION_MAJOR}::Gui
     Qt${QT_VERSION_MAJOR}::DBus
+    ${RSVG2_INCLUDE_DIRS}
 )
 
 target_link_libraries(${BIN_NAME} PRIVATE
     Qt${QT_VERSION_MAJOR}::Core
+    Qt${QT_VERSION_MAJOR}::Gui
     Qt${QT_VERSION_MAJOR}::DBus
+    ${RSVG2_LIBRARIES}
     -lpthread
     -lgcov
     -lgtest
-    -ldl            # dlsym
+    -Wl,--wrap=g_object_unref    # --wrap=symbol replace g_object_unref
 )
 
 if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
