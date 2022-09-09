@@ -76,4 +76,3 @@ void DFakeInterface::setListUsers(const UserPathList &list)
     m_users = list;
 }
 
-#include "dfakeinterface.moc"
