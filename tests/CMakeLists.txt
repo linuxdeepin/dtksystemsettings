@@ -6,6 +6,8 @@ set(BIN_NAME ut-dtkdemo)
 
 #add_definitions(-DUSE_MOCK_INTERFACE)
 
+# set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-access-control -fno-inline -Wno-pmf-conversions")
+
 include(./dbus/fakeInterface.cmake)
 
 file(GLOB_RECURSE INCLUDE_FILES "../include/*.h")
@@ -13,7 +15,7 @@ file(GLOB_RECURSE SRCS
     "../src/*.h"
     "../src/*.cpp"
 )
-file(GLOB_RECURSE TEST_FILES "./*.cpp")
+file(GLOB_RECURSE TEST_FILES "./*.h" "./*.cpp")
 
 include_directories(
     "../include"
@@ -45,7 +47,6 @@ target_link_libraries(${BIN_NAME} PRIVATE
     -lpthread
     -lgcov
     -lgtest
-    -Wl,--wrap=g_object_unref    # --wrap=symbol replace g_object_unref
 )
 
 if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")

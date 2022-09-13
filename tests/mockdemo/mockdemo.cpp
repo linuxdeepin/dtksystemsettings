@@ -2,13 +2,16 @@
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
-#include <librsvg/rsvg.h>
+// #include <librsvg/rsvg.h>
+#include "mockdemo.h"
 #include <QDebug>
+#include <qglobal.h>
+#include <qnumeric.h>
 
-extern "C"{
+// extern "C"{
 
 ////// mock rsvg_handle_new_from_file
-RsvgHandle *rsvg_handle_new_from_file (const gchar *file_name, GError **error)
+RsvgHandle *rsvg_handle_new_from_file_stub(const gchar *file_name, GError **error)
 {
     Q_UNUSED(file_name);
     Q_UNUSED(error);
@@ -18,7 +21,7 @@ RsvgHandle *rsvg_handle_new_from_file (const gchar *file_name, GError **error)
 }
 
 ////// mock rsvg_handle_get_dimensions
-void rsvg_handle_get_dimensions (RsvgHandle *handle, RsvgDimensionData *dimension_data)
+void rsvg_handle_get_dimensions_stub(RsvgHandle *handle, RsvgDimensionData *dimension_data)
 {
     Q_UNUSED(handle);
     Q_UNUSED(dimension_data);
@@ -27,7 +30,7 @@ void rsvg_handle_get_dimensions (RsvgHandle *handle, RsvgDimensionData *dimensio
 }
 
 //// mock cairo_image_surface_create_for_data
-cairo_surface_t *cairo_image_surface_create_for_data(unsigned char *data,
+cairo_surface_t *cairo_image_surface_create_for_data_stub(unsigned char *data,
           cairo_format_t format, int width, int height, int stride)
 {
     Q_UNUSED(data);
@@ -41,7 +44,7 @@ cairo_surface_t *cairo_image_surface_create_for_data(unsigned char *data,
 }
 
 //// mock cairo_create
-cairo_t *cairo_create (cairo_surface_t *target)
+cairo_t *cairo_create_stub(cairo_surface_t *target)
 {
     Q_UNUSED(target);
     qInfo() << __func__ << "mocked";
@@ -50,7 +53,7 @@ cairo_t *cairo_create (cairo_surface_t *target)
 }
 
 //// mock cairo_scale
-void cairo_scale(cairo_t *cr, double sx, double sy)
+void cairo_scale_stub(cairo_t *cr, double sx, double sy)
 {
     Q_UNUSED(cr);
     Q_UNUSED(sx);
@@ -60,7 +63,7 @@ void cairo_scale(cairo_t *cr, double sx, double sy)
 }
 
 //// mock cairo_translate
-void cairo_translate(cairo_t *cr, double tx, double ty)
+void cairo_translate_stub(cairo_t *cr, double tx, double ty)
 {
     Q_UNUSED(cr);
     Q_UNUSED(tx);
@@ -70,7 +73,7 @@ void cairo_translate(cairo_t *cr, double tx, double ty)
 }
 
 //// mock rsvg_handle_render_cairo
-gboolean rsvg_handle_render_cairo (RsvgHandle *handle, cairo_t *cr)
+gboolean rsvg_handle_render_cairo_stub(RsvgHandle *handle, cairo_t *cr)
 {
     Q_UNUSED(handle);
     Q_UNUSED(cr);
@@ -79,7 +82,7 @@ gboolean rsvg_handle_render_cairo (RsvgHandle *handle, cairo_t *cr)
 }
 
 //// mock cairo_surface_destroy
-void cairo_surface_destroy(cairo_surface_t *surface)
+void cairo_surface_destroy_stub(cairo_surface_t *surface)
 {
     Q_UNUSED(surface);
     qInfo() << __func__ << "mocked";
@@ -87,7 +90,7 @@ void cairo_surface_destroy(cairo_surface_t *surface)
 }
 
 //// mock cairo_destroy
-void cairo_destroy(cairo_t *cr)
+void cairo_destroy_stub(cairo_t *cr)
 {
     Q_UNUSED(cr);
     qInfo() << __func__ << "mocked";
@@ -101,11 +104,11 @@ void cairo_destroy(cairo_t *cr)
 *  reference to "__real_symbol" will be resolved to symbol.
 *  call __real_g_object_unref for real g_object_unref function
 */
-void __wrap_g_object_unref (gpointer object)
+void g_object_unref_stub (gpointer object)
 {
     Q_UNUSED(object);
     qInfo() << __func__ << "mocked";
     return;
 }
 
-}
+// }
