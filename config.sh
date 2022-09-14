@@ -8,10 +8,11 @@ ChangeName() {
     sed -i "s/dtkdemo/${name}/g" .reuse/dep5
     # modify CMakeLists.txt
     sed -i "s/dtkdemo/${name}/g" CMakeLists.txt
+    sed -i "s/dtkdemo/${name}/g" tests/CMakeLists.txt
     # rename config file
-    sed -i "s/dtkdemo/${name^}/g" misc/dtkdemoConfig.cmake.in
     mv misc/dtkdemo.pc.in "misc/${name}.pc.in"
     mv misc/dtkdemoConfig.cmake.in "misc/${name}Config.cmake.in"
+    mv misc/qt_lib_dtkdemo.pri.in "misc/qt_lib_${name}.pri.in"
     # rename debian file
     mv debian/libdtkdemo.install "debian/lib${name}.install"
     mv debian/libdtkdemo-dev.install "debian/lib${name}-dev.install"
