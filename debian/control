@@ -1,4 +1,4 @@
-Source: dtkdemo
+Source: dtksystemsettings
 Section: libdevel
 Priority: optional
 Maintainer: Packages Builder <packages@deepin.com>
@@ -9,18 +9,18 @@ Build-Depends:
  qtbase5-dev
 Standards-Version: 4.5.0
 
-Package: libdtkdemo
+Package: libdtksystemsettings
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: Deepin Tool Kit template library
- libdtkdemo is base library of Deepin Qt/C++ applications.
+ libdtksystemsettings is base library of Deepin Qt/C++ applications.
  .
  This package contains the shared libraries.
 
-Package: libdtkdemo-dev
+Package: libdtksystemsettings-dev
 Architecture: any
 Depends:${misc:Depends}, libdtktemplate( =${binary:Version})
 Description: Deepin Tool Kit template devel library
- libdtkdemo-dev is base devel library of Deepin Qt/C++ applications.
+ libdtksystemsettings-dev is base devel library of Deepin Qt/C++ applications.
  .
  This package contains the header files and static libraries.

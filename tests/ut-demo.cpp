@@ -7,7 +7,7 @@
 #include "3rdparty/cpp-stub/src/stub.h"
 #include "demo.h"
 
-DDEMO_USE_NAMESPACE
+DSYSTEMSETTINGS_USE_NAMESPACE
 
 class ut_Demo : public testing::Test
 {

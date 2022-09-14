@@ -8,7 +8,7 @@
 #include <QSize>
 #include <qobject.h>
 
-DDEMO_BEGIN_NAMESPACE
+DSYSTEMSETTINGS_BEGIN_NAMESPACE
 class Demo : public QObject {
     Q_OBJECT
   public:
@@ -19,4 +19,4 @@ class Demo : public QObject {
     // librsvg
     bool svg2png(const QString &svgfile, const QString &pngfile, QSize size = QSize(128, 128));
 };
-DDEMO_END_NAMESPACE
+DSYSTEMSETTINGS_END_NAMESPACE

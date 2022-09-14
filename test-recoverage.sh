@@ -5,7 +5,7 @@
 # SPDX-License-Identifier: LGPL-3.0-or-later
 
 cmake -B build -DCMAKE_BUILD_TYPE=Debug
-cmake --build build --target ut-dtkdemo -- -j $(nproc)
+cmake --build build --target ut-dtksystemsettings -- -j $(nproc)
 ctest --test-dir build -VV
 
 lcov -d build/ -c -o build/coverage_all.info
