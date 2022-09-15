@@ -1,5 +1,0 @@
-@~english
-
-## English Page
-
-content

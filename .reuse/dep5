@@ -4,17 +4,12 @@ Upstream-Contact: guoyao <guoyao@uniontech.com>
 Source: https://github.com/Groveer/dframework
 
 # Config files
-Files: .clang-format misc/*.in config.sh
-Copyright: None
-License: CC0-1.0
-
-# Readme
-Files: README*.md
+Files: .clang-format *.in
 Copyright: None
 License: CC0-1.0
 
 # docs
-Files: docs/*.md
+Files: *.md
 Copyright: None
 License: CC0-1.0
 
@@ -27,9 +22,4 @@ License: CC0-1.0
 Files: .github/* .gitignore
 Copyright: None
 License: CC0-1.0
-
-# cpp-stub
-Files: tests/3rdparty/cpp-stub/*
-Copyright: None
-License: MIT
 

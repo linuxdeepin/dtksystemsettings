@@ -1,0 +1,198 @@
+// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+//
+// SPDX-License-Identifier: LGPL-3.0-or-later
+
+/*!
+
+@~chinese
+@file dlogin1user.h
+
+dlogin1user.h 中定义了会话管理的接口
+
+@class Dtk::Login1::DLogin1User dlogin1user.h 
+@brief DLogin1User 类
+
+Login1User类中定义了用户管理的接口
+
+@fn DLogin1User::DLogin1User()
+@brief 类初始化
+
+@fn QList<SessionPath> DLogin1User::sessions() const
+@brief 当前用户所有当前会话的结构数组
+
+@return 包含用户当前所有session的结构数组
+
+
+@fn bool DLogin1User::idleHint() const
+@brief 当前用户的空闲状态
+
+@return 用户空闲状态的布尔值
+
+@fn bool DLogin1User::linger() const
+@brief 用户滞留
+
+
+@return 用户滞留的状态
+
+@fn QString DLogin1User::name() const 
+@brief name
+
+
+@return 用户名
+
+@fn QString DLogin1User::runtimePath() const 
+@brief 返回用户runtime路径
+
+
+@return 用户运行时路径
+
+@fn QString DLogin1User::service() const 
+@brief 包含该用户的systemd的服务单元名称
+
+@return 用户当前的systemd服务单元名称
+
+@fn QString DLogin1User::state() const 
+@brief 用户当前状态名称
+
+@return 以字符串形式返回用户当前状态信息
+
+@fn QString DLogin1User::slice() const 
+@brief 用户systemd切片的单元名称
+
+@return 以字符串形式返回用户当前单元切片单元名称
+
+@fn SessionPath DLogin1User::display() const 
+@brief User的session id和路径
+
+@return 返回 User的 session id和路径
+
+@fn QString DLogin1User::GID() const 
+@brief 用户组id 
+
+@return 用户组的id
+
+@fn QString DLogin1User::UID() const 
+@brief 用户id 
+
+@return 用户id
+
+@fn quint64 DLogin1User::idleSinceHint() const 
+@brief 从该User开始空闲后的CLOCK_REALTIME时间戳
+
+@return 从User开始空闲后经过的CLOCK_REALTIME 时间
+
+
+@fn quint64 DLogin1User::idleSinceHintMonotonic() const 
+@brief 从该User开始空闲后的CLOCK_MONOTONIC时间戳
+
+@return 从User开始空闲后经过的CLOCK_MONOTONIC 时间
+
+@fn quint64 DLogin1User::timestamp() const 
+@brief 用户登陆以来经过的CLOCK_REALTIME时间
+
+@return 用户自登陆以来的CLOCK_REALTIME 时间
+
+@fn quint64 DLogin1User::timestampMonotonic() const 
+@brief 用户自登陆以来的CLOCK_MONOTONIC时间
+
+
+@return 用户自登陆以来的CLOCK_MONOTONIC 时间
+
+@fn void DLogin1User::errorMessageChanged(const QString &message)
+@brief 当接口连接错误后发送信号
+
+发送接口连接的错误信息
+
+@fn QString DLogin1User::lastError() const 
+@brief 上一次的错误信息
+
+存储上一次错误信息并返回
+
+@return 上一次错误信息
+
+@fn void DLogin1User::kill(const int signal_number);
+@brief 杀死进程 
+
+对应Dbus上的kill信号，功能同manager的的KillUser一样，向用户所有进程发送Unix信号，需要信号编号，杀死进程
+
+@fn void DLogin1User::terminate()
+@brief 强制终止用户所有进程
+
+对应DBus上对应的Terminate 信号，强制终止该用户的所有进程。
+
+@property DLogin1User::Sessions
+@brief 当前用户所有当前会话的结构数组
+
+Session是一个包含用户当前所有session的结构数组，每个结构都由ID和对象路径组成
+
+@property DLogin1User::IdleHint 
+@brief 当前用户的空闲状态
+
+返回当前用户是否空闲，针对当前特定用户
+
+@property DLogin1User::Linger
+@brief 用户滞留
+
+当用户注销时候，用户不希望某些服务被杀死在注销后继续运行，当用户退出但是以用户身份运行的进程仍然在运行，就是用户滞留该属性记录了用户滞留状态
+
+
+@property DLogin1User::Name 
+@brief Name 
+
+用户的用户名
+
+@property DLogin1User::RuntimePath 
+@brief RuntimePath 
+
+用户运行时路径，即$XDG_RUNTIME_DIR 请参见XDG_RUNTIME_DIR 
+
+@property DLogin1User::Service 
+@brief 包含该用户的systemd的服务单元名称
+
+返回当前用户的systemd的服务单元名称
+
+@property DLogin1User::Slice 
+@brief 用户systemd切片的单元名称
+
+Slice 包含该用户的systemd切片单元名称，每个定路用户都有一个私有切片
+
+@property DLogin1User::State 
+@brief 用户状态
+
+用户状态分为四种，"offline"(离线)，"lingering"(滞留)，"online"(在线), "active"(活动)或者"closing"(关闭)
+
+@property DLogin1User::Display 
+@brief 用户当前session的id和路径
+
+显示返回应该将哪个图形会话用作用户的主要 UI 显示。它是一个记录会话 ID 和要使用的会话的对象路径的结构。
+
+@property DLogin1User::GID 
+@brief 用户组id
+
+GID,即Group identifier。在Unix like系统里面，多个用户被放到不同用户组里。POSIX和Unix文件系统权限被分为三个类，用户、组和其他。组给不同用户分配不同能力。该函数可以返回对应的GID
+
+@property DLogin1User::UID 
+@brief 用户id
+
+UID,在操作系统上，操作系统分辨用户是通过一个叫user identifier的值进行分辨。UID与组标志符(GID)确认用户可以访问某些资源。该函数就返回这个UID。
+
+@property DLogin1User::IdleSinceHint 
+@brief 从该User开始空闲后的CLOCK_REALTIME时间戳
+
+对应Login1中的IdleSinceHint方法，描述了空闲状态。该方法记录了自从空闲状态最后一次CLOCK_REALTIME的时间戳，以微秒为单位
+
+@property DLogin1User::IdleSinceHintMonotonic 
+@brief 从该User开始空闲后的CLOCK_MONOTONIC时间戳
+
+对应Login1 中的IdleSinceHintMonotonic方法，
+
+@property DLogin1User::Timestamp 
+@brief 用户登陆以来经过的CLOCK_REALTIME时间
+
+对应Login1中的Timestamp接口。该接口记录的是用户自从登陆以来的CLOCK_REALTIME微秒时间
+
+@property DLogin1User::TimestampMonotonic 
+@brief 用户自登陆以来的CLOCK_MONOTONIC时间
+
+对应User中的TimestampMonotonic接口。接口记录的是用户自登陆以来的CLOCK_MONOTONIC 微秒时间
+*/
