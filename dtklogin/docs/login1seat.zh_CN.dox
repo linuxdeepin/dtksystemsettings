@@ -1,0 +1,86 @@
+// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+//
+// SPDX-License-Identifier: LGPL-3.0-or-later
+
+/*!
+@~chinese
+@file dlogin1seat.h
+
+login1seat.h 中定义了管理用户seat的接口。
+
+@class Dtk::Login1::DLogin1Seat dlogin1seat.h
+@brief DLogin1Seat
+    DLogin1Manager 中定义了管理用户seat的接口。
+@note seat一般情况下只有seat0，seat由分配给特定工作场所的所有硬件设备组成。
+    它由至少一个图形设备组成，通常还包括键盘、鼠标。它还可以包括摄像机、声卡等。
+    seat由seat名称标识，这些字符串是字符串(<= 255 个字符），以四个字符 "seat" 开头，
+    后跟至少一个 [a-zA-Z0-9]、" _" 和 " -" 范围内的字符。它们适合用作文件名。seat名称可能稳定，
+    也可能不稳定，如果座位再次可用，则可能会复用。经过测试，在同一台主机上使用vnc启动两个用户桌面，也只有一个seat0
+
+@fn bool DLogin1Seat::canGraphical() const
+@brief 判断是否适合图形会话
+    该属性无需传入值，若适合返回true不适合返回false
+@return 布尔值
+
+@fn bool DLogin1Seat::canTTY() const
+@brief 判断是否适合文本登录
+    该属性无需传入值，若适合返回true不适合返回false
+@return 布尔值
+
+@fn bool DLogin1Seat::idleHint() const
+@brief 判断会话的空闲状态
+    该属性无需传入值，若会话空闲返回true不空闲返回false
+@return 布尔值
+
+@fn QList<SessionPath> DLogin1Seat::sessions() const
+@brief 会话属性是这个Seat的所有当前会话的数组
+    每个会话都被编码为一个由ID和对象路径组成的数据结构。
+@note 注意，返回的是一个QList,需要使用[]来获取列表中某个元素
+@return [('<ID>','<对象路径>')]
+\sa Dtk::Login1::SessionPath
+
+@fn QString DLogin1Seat::id() const
+@brief 对seat的id进行编码
+@return seat的id（一般情况为seat0）
+
+@fn SessionPath DLogin1Seat::activeSession() const
+@brief 如果存在，则对当前活动的会话进行编码
+    是*一个*由会话id和路径对象组成的结构
+@return Dtk::Login1::SessionPath
+
+@fn quint64 DLogin1Seat::idleSinceHint() const
+@brief 对空闲状态进行编码
+@return 返回一个整型值
+
+@fn quint64 DLogin1Seat::idleSinceHintMonotonic() const;
+@brief 对空闲状态进行编码
+@return 返回一个整型值
+
+@fn void DLogin1Seat::errorMessageChanged(const QString &message)
+@brief 这个是一个信号
+@return 返回QString类型错误信息
+
+@fn void DLogin1Seat::activateSession(const QString &session_id)
+@brief 将指定id的会话带到前台
+@return 无
+
+@fn void DLogin1Seat::switchTo(const uint vtnr)
+@brief 切换到虚拟终端上的会话
+@param 会话号
+@return 无
+
+@fn void DLogin1Seat::switchToNext()
+@brief 切换到下一个会话，如果没有活动的会话，切换到seat上的第一个会话。
+@return 无
+
+@fn void DLogin1Seat::switchToPrevious()
+@brief 切换到上一个会话，如果没有活动的会话，切换到seat上的最后一个会话。
+@return 无
+
+@fn void DLogin1Seat::terminate()
+@brief 强制终止一个会话，但是多数情况调用无效
+@return 无
+
+
+
+*/

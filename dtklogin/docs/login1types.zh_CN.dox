@@ -1,0 +1,58 @@
+// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+//
+// SPDX-License-Identifier: LGPL-3.0-or-later
+
+/*!
+@~chinese
+@file dlogin1types.h
+dlogin1types.h 中定义了login1组件需要使用到的一些自定义数据结构。
+
+@struct Dtk::Login1::ScheduledShutdownValue
+@brief 定义定时关机所用数据结构
+@param type: 电源管理类型：关机操作类型，可以是"poweroff"、"dry-poweroff"、"reboot"、"dry-reboot"、"halt "和 "dry-halt "之一
+@param usec: Unix时间戳，从1970年1月1日零点到现在的微秒数
+
+@struct Dtk::Login1::SessionProperty
+@brief 定义Session所用的数据结构
+@param name: Session名
+@param var
+
+@struct Dtk::Login1::Inhibitor
+@brief 一个结构数组
+@param what: 电源模式（关机，待机，休眠等）
+@param who: 发出抑制器的对象
+@param why: 为何发出抑制器
+@param mode: 抑制器模式
+@param uid: 用户id
+@param pid: 进程id
+
+@struct Dtk::Login1::Seat
+@param seat_id: seat编号,例如:“seat0”
+@param path: seat路径
+
+@struct Dtk::Login1::Session
+@param session_id: 会话编号
+@param user_id: 用户编号
+@param username: 用户名
+@param seat_id: seat编号,例如:“seat0”
+@param path: 路径
+
+@struct Dtk::Login1::User
+@param user_id: 用户编号
+@param username: 用户名
+@param path: 路径
+
+@struct Dtk::Login1::SeatPath
+\sa Dtk::Login1::Seat
+
+@struct Dtk::Login1::SessionPath
+@param session_id: 会话编号
+@param path: 路径
+
+@struct Dtk::Login1::UserPath
+@param user_id: 用户编号
+@param path: 路径
+
+
+
+*/
