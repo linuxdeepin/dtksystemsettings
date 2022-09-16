@@ -20,12 +20,12 @@ set (DOXYGEN_TAGFILES "qtcore.tags=qthelp://doc.qt.io/qt-5/" CACHE STRING "Doxyg
 set (DOXYGEN_MACRO_EXPANSION "YES")
 set (DOXYGEN_EXPAND_ONLY_PREDEF "YES")
 set (DOXYGEN_PREDEFINED
-    "\"DLOGIN1_BEGIN_NAMESPACE=namespace Dtk::Login1 {\""
-    "\"DLOGIN1_END_NAMESPACE=}\""
-    "\"DLOGIN1_USE_NAMESPACE=using namespace Dtk::Login1;\""
+    "\"DPOWER_BEGIN_NAMESPACE=namespace Dtk { namespace Power {\""
+    "\"DPOWER_END_NAMESPACE=}}\""
+    "\"DPOWER_USE_NAMESPACE=using namespace Dtk::Power;\""
 )
 
-doxygen_add_docs (doxygen_dtklogin
+doxygen_add_docs (doxygen_dtkpower
     ${CMAKE_CURRENT_SOURCE_DIR}/../include
     ${CMAKE_CURRENT_SOURCE_DIR}/../docs
     ALL
