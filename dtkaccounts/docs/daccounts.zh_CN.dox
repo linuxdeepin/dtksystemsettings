@@ -1,0 +1,77 @@
+// SPDX-FileCopyrightText: 2022 Uniontech Software Technology Co., Ltd.
+//
+// SPDX-License-Identifier: LGPL-3.0-or-later
+
+/*!
+@~chinese
+@file daccounts.h
+
+daccounts.h是对于一组用于查询和管理用户帐户信息的D-BUS接口的封装。
+
+@class Dtk::Accounts::DAccounts daccounts.h
+@brief DAccounts类
+
+@fn QString DAccounts::CacheUser(const QString &name)
+@brief 缓存一个用户帐户以便在调用ListCachedusers()时获得该账户
+@note 用户名可能是远程用户，但是系统必须能够查找用户名并解析用户信息
+@param[in] name 用户的用户名
+@return 该用户的对象路径的字符串
+
+@fn QString DAccounts::CreateUser(const QString &name, const QString &fullname, const int accountType)
+@brief 创建一个新用户
+@param[in] name 新用户的用户名
+@param[in] fullname 新用户的真名
+@param[in] accountType 用户类型，以整数标识
+@return 该用户的对象路径的字符串
+
+@fn void DAccounts::DeleteUser(const qint64 id, const bool removeFiles)
+@brief 删除一个用户
+@param[in] id 要删除的用户的uid
+@param[in] removeFiles 是否要删除用户的文件
+@return 空
+
+@fn QString DAccounts::FindUserById(const qint64 id)
+@brief 用uid来寻找用户
+@param[in] id 要查找的用户的uid
+@return 该用户的对象路径的字符串
+
+@fn QString DAccounts::FindUserByName(const QString &name)
+@brief 用用户名来寻找用户
+@param[in] name 要查找的用户的用户名
+@return 该用户的对象路径的字符串
+
+@fn QStringList DAccounts::ListCachedUsers()
+@brief 列出之前在本地系统中登录过的用户
+@attention 这并不意味着函数会返回系统中的所有用户，如果要查找不在列表中的用户可以使用FindUserByname()
+@return 一个由用户的对象路径的字符串组成的链表
+
+@fn void DAccounts::UncacheUser(const QString &name)
+@brief 释放用户账户上所有的元数据，包括图标、语言和会话
+@note 如果用户账户来自远程服务器并且之前从未登录过，那么用户将不会在ListCachedUsers()的返回值中显示
+@param[in] name 用户的用户名
+@return 空
+
+@fn QString DAccounts::lastError() const 
+@brief 上一次的错误信息
+@return 空
+
+@fn void DAccounts::errorMessageChanged(const QString &message)
+@brief 当接口连接错误后发送信号
+@param[in] message 错误信息
+@return 空
+
+@fn QString DAccounts::daemonVersion() const
+@brief 当前运行的守护程序的版本
+@return 一个代表版本的字符串
+
+@fn void DAccounts::UserAdded(const QString &path)
+@brief 当添加用户时发送信号
+@param[in] path 一个表示被添加用户的对象路径的字符串
+@return 空
+
+@fn void DAccounts::UserDeleted(const QString &path)
+@brief 当用户被删除时发送信号
+@param[in] path 一个表示被删除用户的对象路径的字符串
+@return 空
+
+*/

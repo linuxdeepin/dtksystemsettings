@@ -1,0 +1,203 @@
+// SPDX-FileCopyrightText: 2022 Uniontech Software Technology Co., Ltd.
+//
+// SPDX-License-Identifier: LGPL-3.0-or-later
+
+/*!
+@~chinese
+@file duser.h
+
+duser.h是对于一组用于管理用户账户属性和相关信息的D-BUS接口的封装。
+
+@class Dtk::Accounts::DUser duser.h
+@brief DUser类
+
+@fn QList<LoginHistory> DUser::loginHistorys() const
+@brief 当前用户的登录历史
+@return 一个由用户登录历史组成的链表
+
+@fn bool DUser::automaticLogin() const
+@brief 判断当前用户是否启用了自动登录
+@return 自动登录是否激活
+
+@fn bool DUser::localAccount() const
+@brief 判断当前用户是否是本地用户
+@return 是否是本地用户
+
+@fn bool DUser::locked() const
+@brief 判断当前用户账户是否锁定
+@return 用户账户是否锁定
+
+@fn bool DUser::systemAccount() const
+@brief 判断当前用户是否是system账户
+@return 是否是system账户
+
+@fn qint32 DUser::accountType() const
+@brief 获取当前用户的用户类型
+@return 一个表示用户类型的32位整数
+@retval 0 标准用户
+@retval 1 管理员
+
+@fn qint32 DUser::passwordMode() const
+@brief 获取当前用户的密码模式
+@return 一个表示用户密码模式的32位整数
+@retval 0 常规密码
+@retval 1 下次登录必须设定密码
+@retval 2 没有密码
+
+@fn qint64 DUser::loginTime() const
+@brief 最近一次的登录时间
+@return 一个表示登录时间的64位整数
+
+@fn QString DUser::email() const
+@brief 获取当前用户的邮箱地址
+@return 一个表示邮箱地址的字符串
+
+@fn QString DUser::homeDirectory() const
+@brief 获取当前用户的家目录
+@return 一个表示家目录路径的字符串
+
+@fn QString DUser::iconFile() const
+@brief 获取包含用户图标的png文件的文件名
+@return 一个表示文件名的字符串
+
+@fn QString DUser::language() const
+@brief 获取当前用户的主要语言，类似于"de_DE.UTF-8"
+@return 一个表示语言的字符串
+
+@fn QString DUser::location() const
+@brief 获取当前用户的位置
+@return 一个表示位置的字符串
+
+@fn QString DUser::passwordHint() const
+@brief 获取当前用户的密码提示
+@return 一个表示密码提示的字符串
+
+@fn QString DUser::realName() const
+@brief 获取当前用户的真名
+@return 一个表示用户真名的字符串
+
+@fn QString DUser::shell() const
+@brief 获取当前用户的shell
+@return 一个表示shell的字符串
+
+@fn QString DUser::userName() const
+@brief 获取当前用户的用户名
+@return 一个表示用户名的字符串
+
+@fn QString DUser::xSession() const
+@brief 获取当前用户的x会话
+@return 一个表示x会话的字符串
+
+@fn quint64 DUser::loginFrequency() const
+@brief 获取当前用户的登录频率
+@return 一个表示登录频率的64位整数
+
+@fn quint64 DUser::uid() const
+@brief 获取当前用户的uid
+@return 一个表示uid的64位无符号整数
+
+@fn void DUser::Changed();
+@brief 当用户改变时发送信号
+@return 空
+
+@fn void DUser::errorMessageChanged(const QString &message)
+@brief 当接口连接错误后发送信号
+@param[in] message 错误信息
+@return 空
+
+@fn QString DUser::lastError() const 
+@brief 上一次的错误信息
+@return 空
+
+@fn std::tuple<qint64, qint64, qint64, qint64, qint64, qint64> DUser::GetPasswordExpirationPolicy()
+@brief 获取当前用户的密码过期策略
+@return 一个由六个64位整数组成的元组，其中每个整数代表着不同的过期策略，具体含义参考头文件中的注释
+
+@fn void DUser::SetAccountType(qint32 accountType)
+@brief 设置当前用户的账户类型
+@parma[in] accountType 账户的类型，取值为0或1
+@return 空
+
+@fn void DUser::SetAutomaticLogin(bool enabled)
+@brief 设置当前用户是否使用自动登录
+@parma[in] enabled 一个代表是否开启自动登录的布尔值
+@attention 通常情况下只有一个用户可以开启自动登录，所以当前用户调用此函数后前一个设置自动登录的用户将会禁用这个选项
+@return 空
+
+@fn void DUser::SetEmail(const QString &email)
+@brief 设置当前用户的邮箱
+@parma[in] email 一个代表邮箱地址的字符串
+@attention 在账户服务中设置的邮箱地址与邮箱客户端中设置的邮箱地址中不同时，邮件客户端可能默认设置地址为此处的配置 
+@return 空
+
+@fn void DUser::SetHomeDirectory(const QString &homedir)
+@brief 设置当前用户的家目录
+@parma[in] homedir 一个代表家目录的字符串
+@attention 将会使用户的所有文件从原先的家目录移动到新的位置，这可能是一个开销较大的操作
+@return 空
+
+@fn void DUser::SetIconFile(const QString &filename)
+@brief 设置当前用户的图标
+@parma[in] filename 一个代表用户想要当做图标的png文件的绝对路径的字符串
+@return 空
+
+@fn void DUser::SetLanguage(const QString &language)
+@brief 设置当前用户的语言
+@parma[in] language 一个代表语言的字符串，类似于"de_DE.UTF-8"
+@note 显示管理器将会以此语言启动用户的会话
+@return 空
+
+@fn void DUser::SetLocation(const QString &location)
+@brief 设置当前用户的位置
+@parma[in] location 一个代表位置的字符串
+@return 空
+
+@fn void DUser::SetLocked(bool locked)
+@brief 设置是否锁定当前用户
+@note 锁定后可以阻止该用户登录
+@parma[in] locked 一个代表是否锁定用户的布尔值
+@return 空
+
+@fn void DUser::SetPassword(const QString &password, const QString &hint)
+@brief 设置当前用户的密码和密码提示
+@note 设置密码模式会为解锁账户带来副作用
+@parma[in] password 一个代表用户新密码的字符串
+@param[in] hint 一个代表用户密码提示的字符串
+@return 空
+
+@fn void DUser::SetPasswordHint(const QString &hint)
+@brief 设置当前用户的密码提示
+@parma[in] hint 一个代表密码提示的字符串
+@return 空
+
+@fn void DUser::SetPasswordMode(qint32 mode)
+@brief 设置当前用户的密码模式
+@parma[in] mode 一个表示密码模式的32位整数
+@note 设置密码模式会为解锁账户带来副作用
+@return 空
+
+@fn void DUser::SetRealName(const QString &name)
+@brief 设置当前用户的真实名字
+@parma[in] name 一个表示用户真实名字的字符串
+@return 空
+
+@fn void DUser::SetShell(const QString &shell)
+@brief 设置当前用户的shell
+@note 设置shell为一个不允许的程序可能会阻止用户登录
+@parma[in] shell 一个代表shell的字符串
+@return 空
+
+@fn void DUser::SetUserName(const QString &name)
+@brief 设置当前用户的用户名
+@note 通常来说不允许多个用户使用相同的用户名
+@parma[in] name 一个代表用户名的字符串
+@return 空
+
+@fn void DUser::SetXSession(const QString &x_session)
+@brief 设置当前用户的X会话
+@note 如果可能的话，显示管理器将会使用户登录到这个指定的会话中
+@deprecated 这个方法已经被弃用并且被SetSession所替代，因为并不是所有图形会话使用X作为显示服务器
+@parma[in] 一个代表xsession的字符串
+@return 空
+
+*/
