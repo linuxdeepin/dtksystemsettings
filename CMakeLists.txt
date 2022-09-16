@@ -15,4 +15,5 @@ project(dtksystemsettings
 )
 
 add_subdirectory(dtklogin)
+add_subdirectory(dtkpower)
 

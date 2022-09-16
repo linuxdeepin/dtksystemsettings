@@ -1,0 +1,63 @@
+// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+//
+// SPDX-License-Identifier: LGPL-3.0-or-later
+
+/*!
+@~chinese
+@file dpowermanager.h
+
+dpowermanager.h 是对于dbus接口中关于电源设备（包括且不限于：dc电源，笔记本电池，ups不间断电源，使用干电池的鼠标键盘（其实即使不使用干电池也能被管理）等内部外部设备的管理接口。）
+
+@class Dtk::Power::DPowerManager dpowermanager.h
+@brief DPowerManager class.
+DPowerManager类
+
+@fn bool DPowerManager::lidlsClosed()
+@brief 笔记本盖子关闭（或者二合一设备关上皮套）通过霍尔传感器读取相关数值
+@return 布尔值，如果为true则笔记本盖子是关上的
+
+@fn bool DPowerManager::lidlsPresent()
+@brief 笔记本盖子传感器是否有效
+@return 布尔值，如果为true则笔记本盖子上存在霍尔传感器
+
+@fn bool DPowerManager::onBattery()
+@brief 系统是否使用电池电源运行
+@return 布尔值
+
+@fn QString DPowerManager::daemonVersion() 
+@brief 守护程序版本
+@return 返回upower守护程序版本
+
+@fn QStringList DPowerManager::enumerateDevices()
+@brief 枚举电源设备，将此计算机上的电源设备以QStringList的方式列举
+@return 返回电源设备列表
+
+@fn QString DPowerManager::getDisplayDevice()
+@brief 获取对象“DisplayDevice”，这是一个表示要在桌面环境中显示的状态图标的复合设备。您也可以直接访问该对象，因为它的路径为 /org/freedesktop/UPower/devices/DisplayDevice。
+    将定义以下标准 org.freedesktop.UPower.Device 属性（仅IsPresent具有特殊含义）
+@return 返回被display的设备路径：一般情况：`/org/freedesktop/UPower/devices/DisplayDevice`
+
+@fn QString DPowerManager::getCriticalAction()
+@brief 获取当电源严重不足的情况下，电脑采取的操作
+@return 返回一种电源状态
+
+@fn QString DPowerManager::lastError()
+@brief 返回错误信息
+@return 返回一个字符串
+
+@fn void DPowerManager::errorMessageChanged(const QString &message)
+@brief 信号：产生错误信号
+@return 无
+
+@fn void DPowerManager::DeviceAdded(const QString &path);
+@brief 信号：有新的设备被接入
+@return 无
+
+
+@fn void DPowerManager::DeviceRemoved(const QString &path)
+@brief 信号：设备被移除
+@return 无
+
+
+*/
+
