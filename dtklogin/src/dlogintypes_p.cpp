@@ -2,10 +2,10 @@
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
-#include "dlogin1types_p.h"
+#include "dlogintypes_p.h"
 #include <qdbusmetatype.h>
 
-DLOGIN1_BEGIN_NAMESPACE
+DLOGIN_BEGIN_NAMESPACE
 
 QDBusArgument &operator<< (QDBusArgument &arg, const ScheduledShutdownValue_p &value)
 {
@@ -223,4 +223,4 @@ void UserPath_p::registerMetaType()
     qDBusRegisterMetaType<QList<UserPath_p>>();
 }
 
-DLOGIN1_END_NAMESPACE
+DLOGIN_END_NAMESPACE

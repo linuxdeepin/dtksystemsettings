@@ -9,19 +9,19 @@
 #include <qscopedpointer.h>
 #include <tuple>
 
+#include "dlogintypes.h"
 #include "namespace.h"
-#include "dlogin1types.h"
 
-DLOGIN1_BEGIN_NAMESPACE
+DLOGIN_BEGIN_NAMESPACE
 
-class DLogin1ManagerPrivate;
+class DLoginManagerPrivate;
 
-class DLogin1Manager : public QObject
+class DLoginManager : public QObject
 {
     Q_OBJECT
 public:
-    explicit DLogin1Manager(QObject *parent = nullptr);
-    virtual ~DLogin1Manager();
+    explicit DLoginManager(QObject *parent = nullptr);
+    virtual ~DLoginManager();
 
     Q_PROPERTY(QStringList BootLoaderEntries READ bootLoaderEntries)
     Q_PROPERTY(QStringList KillExcludeUsers READ killExcludeUsers)
@@ -190,7 +190,7 @@ public slots:
     void unlockSessions();
 
 private:
-    QScopedPointer<DLogin1ManagerPrivate> d_ptr;
-    Q_DECLARE_PRIVATE(DLogin1Manager)
+    QScopedPointer<DLoginManagerPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(DLoginManager)
 };
-DLOGIN1_END_NAMESPACE
+DLOGIN_END_NAMESPACE

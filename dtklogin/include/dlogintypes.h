@@ -8,7 +8,7 @@
 #include <qobject.h>
 #include <qvariant.h>
 
-DLOGIN1_BEGIN_NAMESPACE
+DLOGIN_BEGIN_NAMESPACE
 struct ScheduledShutdownValue
 {
     QString type;
@@ -67,4 +67,4 @@ struct UserPath
     QString path;
 };
 
-DLOGIN1_END_NAMESPACE
+DLOGIN_END_NAMESPACE

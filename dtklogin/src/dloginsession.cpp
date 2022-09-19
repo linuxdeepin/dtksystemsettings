@@ -2,135 +2,135 @@
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
-#include "dlogin1session.h"
+#include "dloginsession.h"
 
 #include "ddbusinterface.h"
-#include "dlogin1session_p.h"
-#include "dlogin1types_p.h"
+#include "dloginsession_p.h"
+#include "dlogintypes_p.h"
 #include <QDBusError>
 #include <qdbuspendingreply.h>
 #include <qdbusunixfiledescriptor.h>
 #include <qobject.h>
 #include <qvariant.h>
-DLOGIN1_BEGIN_NAMESPACE
+DLOGIN_BEGIN_NAMESPACE
 
-DLogin1Session::DLogin1Session(const QString &path, QObject *parent)
+DLoginSession::DLoginSession(const QString &path, QObject *parent)
     : QObject(parent)
-    , d_ptr(new DLogin1SessionPrivate(this))
+    , d_ptr(new DLoginSessionPrivate(this))
 {
     const QString &Service = QStringLiteral("org.freedesktop.login1");
     const QString &Interface = QStringLiteral("org.freedesktop.login1.Session");
 
-    Q_D(DLogin1Session);
+    Q_D(DLoginSession);
     SeatPath_p::registerMetaType();
     UserPath_p::registerMetaType();
     d->m_inter = new DDBusInterface(Service, path, Interface, QDBusConnection::systemBus(), this);
 }
 
-DLogin1Session::~DLogin1Session(){};
+DLoginSession::~DLoginSession(){};
 
-bool DLogin1Session::active() const
+bool DLoginSession::active() const
 {
-    Q_D(const DLogin1Session);
+    Q_D(const DLoginSession);
     return qvariant_cast<bool>(d->m_inter->property("Active"));
 }
 
-bool DLogin1Session::idleHint() const
+bool DLoginSession::idleHint() const
 {
-    Q_D(const DLogin1Session);
+    Q_D(const DLoginSession);
     return qvariant_cast<bool>(d->m_inter->property("IdleHint"));
 }
 
-bool DLogin1Session::lockedHint() const
+bool DLoginSession::lockedHint() const
 {
-    Q_D(const DLogin1Session);
+    Q_D(const DLoginSession);
     return qvariant_cast<bool>(d->m_inter->property("LockedHint"));
 }
 
-bool DLogin1Session::remote() const
+bool DLoginSession::remote() const
 {
-    Q_D(const DLogin1Session);
+    Q_D(const DLoginSession);
     return qvariant_cast<bool>(d->m_inter->property("Remote"));
 }
-QString DLogin1Session::_class() const
+QString DLoginSession::_class() const
 {
-    Q_D(const DLogin1Session);
+    Q_D(const DLoginSession);
     return qvariant_cast<QString>(d->m_inter->property("Class"));
 }
-QString DLogin1Session::desktop() const
+QString DLoginSession::desktop() const
 {
-    Q_D(const DLogin1Session);
+    Q_D(const DLoginSession);
     return qvariant_cast<QString>(d->m_inter->property("Desktop"));
 }
-QString DLogin1Session::display() const
+QString DLoginSession::display() const
 {
-    Q_D(const DLogin1Session);
+    Q_D(const DLoginSession);
     return qvariant_cast<QString>(d->m_inter->property("Display"));
 }
-QString DLogin1Session::id() const
+QString DLoginSession::id() const
 {
-    Q_D(const DLogin1Session);
+    Q_D(const DLoginSession);
     return qvariant_cast<QString>(d->m_inter->property("Id"));
 }
-QString DLogin1Session::name() const
+QString DLoginSession::name() const
 {
-    Q_D(const DLogin1Session);
+    Q_D(const DLoginSession);
     return qvariant_cast<QString>(d->m_inter->property("Name"));
 }
 
-QString DLogin1Session::remoteHost() const
+QString DLoginSession::remoteHost() const
 {
-    Q_D(const DLogin1Session);
+    Q_D(const DLoginSession);
     return qvariant_cast<QString>(d->m_inter->property("RemoteHost"));
 }
-QString DLogin1Session::remoteUser() const
+QString DLoginSession::remoteUser() const
 {
-    Q_D(const DLogin1Session);
+    Q_D(const DLoginSession);
     return qvariant_cast<QString>(d->m_inter->property("RemoteUser"));
 }
 
-QString DLogin1Session::scope() const
+QString DLoginSession::scope() const
 {
-    Q_D(const DLogin1Session);
+    Q_D(const DLoginSession);
     return qvariant_cast<QString>(d->m_inter->property("Scope"));
 }
 
-QString DLogin1Session::service() const
+QString DLoginSession::service() const
 {
-    Q_D(const DLogin1Session);
+    Q_D(const DLoginSession);
     return qvariant_cast<QString>(d->m_inter->property("Service"));
 }
 
-QString DLogin1Session::state() const
+QString DLoginSession::state() const
 {
-    Q_D(const DLogin1Session);
+    Q_D(const DLoginSession);
     return qvariant_cast<QString>(d->m_inter->property("State"));
 }
 
-QString DLogin1Session::tty() const
+QString DLoginSession::tty() const
 {
-    Q_D(const DLogin1Session);
+    Q_D(const DLoginSession);
     return qvariant_cast<QString>(d->m_inter->property("TTY"));
 }
 
-QString DLogin1Session::type() const
+QString DLoginSession::type() const
 {
-    Q_D(const DLogin1Session);
+    Q_D(const DLoginSession);
     return qvariant_cast<QString>(d->m_inter->property("Type"));
 }
 
-SeatPath DLogin1Session::seat() const
+SeatPath DLoginSession::seat() const
 {
-    Q_D(const DLogin1Session);
+    Q_D(const DLoginSession);
     const auto &result = qvariant_cast<SeatPath_p>(d->m_inter->property("Seat"));
     SeatPath seatPath;
     seatPath.path = result.path.path();
     seatPath.seat_id = result.seat_id;
     return seatPath;
 }
-UserPath DLogin1Session::user() const
+UserPath DLoginSession::user() const
 {
-    Q_D(const DLogin1Session);
+    Q_D(const DLoginSession);
     const auto &result = qvariant_cast<UserPath_p>(d->m_inter->property("User"));
     UserPath userPath;
     userPath.path = result.path.path();
@@ -138,55 +138,55 @@ UserPath DLogin1Session::user() const
     return userPath;
 }
 
-uint DLogin1Session::audit() const
+uint DLoginSession::audit() const
 {
-    Q_D(const DLogin1Session);
+    Q_D(const DLoginSession);
     return qvariant_cast<uint>(d->m_inter->property("Audit"));
 }
 
-uint DLogin1Session::leader() const
+uint DLoginSession::leader() const
 {
-    Q_D(const DLogin1Session);
+    Q_D(const DLoginSession);
     return qvariant_cast<uint>(d->m_inter->property("Leader"));
 }
-uint DLogin1Session::vtnr() const
+uint DLoginSession::vtnr() const
 {
-    Q_D(const DLogin1Session);
+    Q_D(const DLoginSession);
     return qvariant_cast<uint>(d->m_inter->property("VTNr"));
 }
 
-quint64 DLogin1Session::idleSinceHint() const
+quint64 DLoginSession::idleSinceHint() const
 {
-    Q_D(const DLogin1Session);
+    Q_D(const DLoginSession);
     return qvariant_cast<quint64>(d->m_inter->property("IdleSinceHint"));
 }
 
-quint64 DLogin1Session::idleSinceHintMonotonic() const
+quint64 DLoginSession::idleSinceHintMonotonic() const
 {
-    Q_D(const DLogin1Session);
+    Q_D(const DLoginSession);
     return qvariant_cast<quint64>(d->m_inter->property("IdleSinceHintMonotonic"));
 }
 
-quint64 DLogin1Session::timestamp() const
+quint64 DLoginSession::timestamp() const
 {
-    Q_D(const DLogin1Session);
+    Q_D(const DLoginSession);
     return qvariant_cast<quint64>(d->m_inter->property("Timestamp"));
 }
-quint64 DLogin1Session::timestampMonotonic() const
+quint64 DLoginSession::timestampMonotonic() const
 {
-    Q_D(const DLogin1Session);
+    Q_D(const DLoginSession);
     return qvariant_cast<quint64>(d->m_inter->property("TimestampMonotonic"));
 }
 
-QString DLogin1Session::lastError() const
+QString DLoginSession::lastError() const
 {
-    Q_D(const DLogin1Session);
+    Q_D(const DLoginSession);
     return d->m_errorMessage;
 }
 
-void DLogin1Session::activate()
+void DLoginSession::activate()
 {
-    Q_D(DLogin1Session);
+    Q_D(DLoginSession);
     QDBusPendingReply<> reply = d->m_inter->asyncCall(QStringLiteral("Activate"));
     reply.waitForFinished();
     if (!reply.isValid()) {
@@ -195,9 +195,9 @@ void DLogin1Session::activate()
     }
 }
 
-void DLogin1Session::kill(const QString who, const uint signal_number)
+void DLoginSession::kill(const QString who, const uint signal_number)
 {
-    Q_D(DLogin1Session);
+    Q_D(DLoginSession);
     QDBusPendingReply<> reply = d->m_inter->asyncCallWithArgumentList(QStringLiteral("Kill"),
                                                                        {
                                                                            QVariant::fromValue(who),
@@ -209,9 +209,9 @@ void DLogin1Session::kill(const QString who, const uint signal_number)
         emit errorMessageChanged(d->m_errorMessage);
     }
 }
-void DLogin1Session::lock()
+void DLoginSession::lock()
 {
-    Q_D(DLogin1Session);
+    Q_D(DLoginSession);
     QDBusPendingReply<> reply = d->m_inter->asyncCall(QStringLiteral("Lock"));
     reply.waitForFinished();
     if (!reply.isValid()) {
@@ -219,9 +219,9 @@ void DLogin1Session::lock()
         emit errorMessageChanged(d->m_errorMessage);
     }
 }
-void DLogin1Session::pauseDeviceComplete(const uint major, const uint minor)
+void DLoginSession::pauseDeviceComplete(const uint major, const uint minor)
 {
-    Q_D(DLogin1Session);
+    Q_D(DLoginSession);
     QDBusPendingReply<> reply = d->m_inter->asyncCallWithArgumentList(QStringLiteral("pauseDeviceComplete"),
                                                                        {
                                                                            QVariant::fromValue(major),
@@ -233,9 +233,9 @@ void DLogin1Session::pauseDeviceComplete(const uint major, const uint minor)
         emit errorMessageChanged(d->m_errorMessage);
     }
 }
-void DLogin1Session::releaseControl()
+void DLoginSession::releaseControl()
 {
-    Q_D(DLogin1Session);
+    Q_D(DLoginSession);
     QDBusPendingReply<> reply = d->m_inter->asyncCall(QStringLiteral("ReleaseControl"));
     reply.waitForFinished();
     if (!reply.isValid()) {
@@ -243,9 +243,9 @@ void DLogin1Session::releaseControl()
         emit errorMessageChanged(d->m_errorMessage);
     }
 }
-void DLogin1Session::releaseDevice(const uint major, const uint minor)
+void DLoginSession::releaseDevice(const uint major, const uint minor)
 {
-    Q_D(DLogin1Session);
+    Q_D(DLoginSession);
     QDBusPendingReply<> reply = d->m_inter->asyncCallWithArgumentList(QStringLiteral("ReleaseDevice"),
                                                                        {
                                                                            QVariant::fromValue(major),
@@ -258,9 +258,9 @@ void DLogin1Session::releaseDevice(const uint major, const uint minor)
     }
 }
 
-void DLogin1Session::setBrightness(const QString &subsystem, const QString &name, const uint brightness)
+void DLoginSession::setBrightness(const QString &subsystem, const QString &name, const uint brightness)
 {
-    Q_D(DLogin1Session);
+    Q_D(DLoginSession);
     QDBusPendingReply<> reply = d->m_inter->asyncCallWithArgumentList(QStringLiteral("SetBrightness"),
                                                                        {
                                                                            QVariant::fromValue(subsystem),
@@ -274,9 +274,9 @@ void DLogin1Session::setBrightness(const QString &subsystem, const QString &name
     }
 }
 
-void DLogin1Session::setIdleHint(const bool idle)
+void DLoginSession::setIdleHint(const bool idle)
 {
-    Q_D(DLogin1Session);
+    Q_D(DLoginSession);
     QDBusPendingReply<> reply = d->m_inter->asyncCallWithArgumentList(QStringLiteral("SetIdleHint"),
                                                                        {
                                                                            QVariant::fromValue(idle),
@@ -287,9 +287,9 @@ void DLogin1Session::setIdleHint(const bool idle)
         emit errorMessageChanged(d->m_errorMessage);
     }
 }
-void DLogin1Session::setLockedHint(const bool locked)
+void DLoginSession::setLockedHint(const bool locked)
 {
-    Q_D(DLogin1Session);
+    Q_D(DLoginSession);
     QDBusPendingReply<> reply = d->m_inter->asyncCallWithArgumentList(QStringLiteral("SetLockedHint"),
                                                                        {
                                                                            QVariant::fromValue(locked),
@@ -301,9 +301,9 @@ void DLogin1Session::setLockedHint(const bool locked)
     }
 }
 
-void DLogin1Session::setType(const QString &type)
+void DLoginSession::setType(const QString &type)
 {
-    Q_D(DLogin1Session);
+    Q_D(DLoginSession);
     QDBusPendingReply<> reply = d->m_inter->asyncCallWithArgumentList(QStringLiteral("SetType"),
                                                                        {
                                                                            QVariant::fromValue(type),
@@ -315,9 +315,9 @@ void DLogin1Session::setType(const QString &type)
     }
 }
 
-void DLogin1Session::takeControl(const bool force)
+void DLoginSession::takeControl(const bool force)
 {
-    Q_D(DLogin1Session);
+    Q_D(DLoginSession);
     QDBusPendingReply<> reply = d->m_inter->asyncCallWithArgumentList(QStringLiteral("TakeControl"),
                                                                        {
                                                                            QVariant::fromValue(force),
@@ -332,9 +332,9 @@ void DLogin1Session::takeControl(const bool force)
 std::tuple<int,  // fd
            bool  // inactive
            >
-DLogin1Session::takeDevice(uint manjor, uint minor)
+DLoginSession::takeDevice(uint manjor, uint minor)
 {
-    Q_D(DLogin1Session);
+    Q_D(DLoginSession);
     QDBusPendingReply<QDBusUnixFileDescriptor, bool> reply = d->m_inter->asyncCallWithArgumentList(
         QStringLiteral("TakeDevice"), {QVariant::fromValue(manjor), QVariant::fromValue(minor)});
     reply.waitForFinished();
@@ -345,9 +345,9 @@ DLogin1Session::takeDevice(uint manjor, uint minor)
     }
     return std::make_tuple<int, bool>(reply.argumentAt<0>().fileDescriptor(), reply.argumentAt<1>());
 }
-void DLogin1Session::terminate()
+void DLoginSession::terminate()
 {
-    Q_D(DLogin1Session);
+    Q_D(DLoginSession);
     QDBusPendingReply<> reply = d->m_inter->asyncCall(QStringLiteral("Terminate"));
     reply.waitForFinished();
     if (!reply.isValid()) {
@@ -355,9 +355,9 @@ void DLogin1Session::terminate()
         emit errorMessageChanged(d->m_errorMessage);
     }
 }
-void DLogin1Session::unlock()
+void DLoginSession::unlock()
 {
-    Q_D(DLogin1Session);
+    Q_D(DLoginSession);
     QDBusPendingReply<> reply = d->m_inter->asyncCall(QStringLiteral("Unlock"));
     reply.waitForFinished();
     if (!reply.isValid()) {
@@ -365,4 +365,4 @@ void DLogin1Session::unlock()
         emit errorMessageChanged(d->m_errorMessage);
     }
 }
-DLOGIN1_END_NAMESPACE
+DLOGIN_END_NAMESPACE
