@@ -27,18 +27,18 @@ dlogin1types.h 中定义了login1组件需要使用到的一些自定义数据�
 @param pid: 进程id
 
 @struct Dtk::Login1::Seat
-@param seat_id: seat编号,例如:“seat0”
+@param seatId: seat编号,例如:“seat0”
 @param path: seat路径
 
 @struct Dtk::Login1::Session
-@param session_id: 会话编号
-@param user_id: 用户编号
+@param sessionId: 会话编号
+@param userId: 用户编号
 @param username: 用户名
-@param seat_id: seat编号,例如:“seat0”
+@param seatId: seat编号,例如:“seat0”
 @param path: 路径
 
 @struct Dtk::Login1::User
-@param user_id: 用户编号
+@param userId: 用户编号
 @param username: 用户名
 @param path: 路径
 
@@ -46,11 +46,11 @@ dlogin1types.h 中定义了login1组件需要使用到的一些自定义数据�
 \sa Dtk::Login1::Seat
 
 @struct Dtk::Login1::SessionPath
-@param session_id: 会话编号
+@param sessionId: 会话编号
 @param path: 路径
 
 @struct Dtk::Login1::UserPath
-@param user_id: 用户编号
+@param userId: 用户编号
 @param path: 路径
 
 

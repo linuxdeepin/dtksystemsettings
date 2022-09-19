@@ -20,21 +20,21 @@ public:
     explicit DLoginUser(const QString &path, QObject *parent = nullptr);
     virtual ~DLoginUser();
 
-    Q_PROPERTY(QList<SessionPath> Sessions READ sessions)
-    Q_PROPERTY(bool IdleHint READ idleHint)
-    Q_PROPERTY(bool Linger READ linger)
-    Q_PROPERTY(QString Name READ name)
-    Q_PROPERTY(QString RuntimePath READ runtimePath)
-    Q_PROPERTY(QString Service READ service)
-    Q_PROPERTY(QString Slice READ slice)
-    Q_PROPERTY(QString State READ state)
-    Q_PROPERTY(SessionPath Display READ display)
+    Q_PROPERTY(QList<SessionPath> sessions READ sessions)
+    Q_PROPERTY(bool idleHint READ idleHint)
+    Q_PROPERTY(bool linger READ linger)
+    Q_PROPERTY(QString name READ name)
+    Q_PROPERTY(QString runtimePath READ runtimePath)
+    Q_PROPERTY(QString service READ service)
+    Q_PROPERTY(QString slice READ slice)
+    Q_PROPERTY(QString state READ state)
+    Q_PROPERTY(SessionPath display READ display)
     Q_PROPERTY(uint GID READ GID)
     Q_PROPERTY(uint UID READ UID)
-    Q_PROPERTY(quint64 IdleSinceHint READ idleSinceHint)
-    Q_PROPERTY(quint64 IdleSinceHintMonotonic READ idleSinceHintMonotonic)
-    Q_PROPERTY(quint64 Timestamp READ timestamp)
-    Q_PROPERTY(quint64 TimestampMonotonic READ timestampMonotonic)
+    Q_PROPERTY(quint64 idleSinceHint READ idleSinceHint)
+    Q_PROPERTY(quint64 idleSinceHintMonotonic READ idleSinceHintMonotonic)
+    Q_PROPERTY(quint64 timestamp READ timestamp)
+    Q_PROPERTY(quint64 timestampMonotonic READ timestampMonotonic)
 
     QList<SessionPath> sessions() const;
     bool idleHint() const;
@@ -57,7 +57,7 @@ signals:
 
 public slots:
     QString lastError() const;
-    void kill(const int signal_number);
+    void kill(const int signalNumber);
     void terminate();
 
 private:

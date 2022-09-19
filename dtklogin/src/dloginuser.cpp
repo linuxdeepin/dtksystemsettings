@@ -35,7 +35,7 @@ QList<SessionPath> DLoginUser::sessions() const
     QList<SessionPath> sessions;
     for (auto && session_p : result) {
         SessionPath session;
-        session.session_id = session_p.session_id;
+        session.sessionId = session_p.sessionId;
         session.path =session_p.path.path();
         sessions.append(session);
     }
@@ -90,7 +90,7 @@ SessionPath DLoginUser::display() const
     const auto &result = qdbus_cast<SessionPath_p>(d->m_inter->property("Display"));
     SessionPath session;
     session.path = result.path.path();
-    session.session_id = result.session_id;
+    session.sessionId = result.sessionId;
     return session;
 }
 
@@ -138,10 +138,10 @@ QString DLoginUser::lastError() const
     return d->m_errorMessage;
 }
 
-void DLoginUser::kill(const int signal_number)
+void DLoginUser::kill(const int signalNumber)
 {
     Q_D(DLoginUser);
-    QVariantList args {QVariant::fromValue(signal_number)};
+    QVariantList args {QVariant::fromValue(signalNumber)};
     QDBusPendingReply<> reply = d->m_inter->asyncCallWithArgumentList("Kill", args);
     reply.waitForFinished();
     if (!reply.isValid()) {

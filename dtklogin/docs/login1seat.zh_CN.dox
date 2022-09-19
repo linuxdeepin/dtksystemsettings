@@ -60,11 +60,11 @@ login1seat.h 中定义了管理用户seat的接口。
 @brief 这个是一个信号
 @return 返回QString类型错误信息
 
-@fn void DLogin1Seat::activateSession(const QString &session_id)
+@fn void DLogin1Seat::activateSession(const QString &sessionId)
 @brief 将指定id的会话带到前台
 @return 无
 
-@fn void DLogin1Seat::switchTo(const uint vtnr)
+@fn void DLogin1Seat::switchTo(const uint VTNr)
 @brief 切换到虚拟终端上的会话
 @param 会话号
 @return 无

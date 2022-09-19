@@ -19,35 +19,35 @@ class DLoginSession : public QObject
 public:
     explicit DLoginSession(const QString &path, QObject *parent = nullptr);
     virtual ~DLoginSession();
-    Q_PROPERTY(bool Active READ active)
-    Q_PROPERTY(bool IdleHint READ idleHint)
-    Q_PROPERTY(bool LockedHint READ lockedHint)
-    Q_PROPERTY(bool Remote READ remote)
-    Q_PROPERTY(QString Class READ _class)
-    Q_PROPERTY(QString Desktop READ desktop)
-    Q_PROPERTY(QString Display READ display)
-    Q_PROPERTY(QString Id READ id)
-    Q_PROPERTY(QString Name READ name)
-    Q_PROPERTY(QString RemoteHost READ remoteHost)
-    Q_PROPERTY(QString RemoteUser READ remoteUser)
-    Q_PROPERTY(QString Scope READ scope)
-    Q_PROPERTY(QString Service READ service)
-    Q_PROPERTY(QString State READ state)
+    Q_PROPERTY(bool active READ active)
+    Q_PROPERTY(bool idleHint READ idleHint)
+    Q_PROPERTY(bool lockedHint READ lockedHint)
+    Q_PROPERTY(bool remote READ remote)
+    Q_PROPERTY(QString _class READ _class)
+    Q_PROPERTY(QString desktop READ desktop)
+    Q_PROPERTY(QString display READ display)
+    Q_PROPERTY(QString id READ id)
+    Q_PROPERTY(QString name READ name)
+    Q_PROPERTY(QString remoteHost READ remoteHost)
+    Q_PROPERTY(QString remoteUser READ remoteUser)
+    Q_PROPERTY(QString scope READ scope)
+    Q_PROPERTY(QString service READ service)
+    Q_PROPERTY(QString state READ state)
     // Why TTY?
-    Q_PROPERTY(QString TTY READ tty)
-    Q_PROPERTY(QString Type READ type)
+    Q_PROPERTY(QString TTY READ TTY)
+    Q_PROPERTY(QString type READ type)
 
-    Q_PROPERTY(SeatPath Seat READ seat)
-    Q_PROPERTY(UserPath User READ user)
+    Q_PROPERTY(SeatPath seat READ seat)
+    Q_PROPERTY(UserPath user READ user)
 
-    Q_PROPERTY(uint Audit READ audit)
-    Q_PROPERTY(uint Leader READ leader)
-    Q_PROPERTY(uint VTNr READ vtnr)
+    Q_PROPERTY(uint audit READ audit)
+    Q_PROPERTY(uint leader READ leader)
+    Q_PROPERTY(uint VTNr READ VTNr)
 
-    Q_PROPERTY(quint64 IdleSinceHint READ idleSinceHint)
-    Q_PROPERTY(quint64 IdleSinceHintMonotonic READ idleSinceHintMonotonic)
-    Q_PROPERTY(quint64 Timestamp READ timestamp)
-    Q_PROPERTY(quint64 TimestampMonotonic READ timestampMonotonic)
+    Q_PROPERTY(quint64 idleSinceHint READ idleSinceHint)
+    Q_PROPERTY(quint64 idleSinceHintMonotonic READ idleSinceHintMonotonic)
+    Q_PROPERTY(quint64 timestamp READ timestamp)
+    Q_PROPERTY(quint64 timestampMonotonic READ timestampMonotonic)
 
     bool active() const;
     bool idleHint() const;
@@ -63,13 +63,13 @@ public:
     QString scope() const;
     QString service() const;
     QString state() const;
-    QString tty() const;
+    QString TTY() const;
     QString type() const;
     SeatPath seat() const;
     UserPath user() const;
     uint audit() const;
     uint leader() const;
-    uint vtnr() const;
+    uint VTNr() const;
 
     quint64 idleSinceHint() const;
     quint64 idleSinceHintMonotonic() const;
@@ -77,20 +77,20 @@ public:
     quint64 timestampMonotonic() const;
 
 signals:
-    void Lock();
-    void PauseDevice(const uint value, const uint device, const QString &location);
-    void ResumeDevice(const uint value, const uint device, const int descriptor);
-    void Unlock();
+    void locked();
+    void pauseDevice(const uint value, const uint device, const QString &location);
+    void resumeDevice(const uint value, const uint device, const int descriptor);
+    void unlocked();
     void errorMessageChanged(const QString &message);
 
 public slots:
     QString lastError() const;
     void activate();
-    void kill(const QString who, const uint signal_number);
+    void kill(const QString who, const uint signalNumber);
     void lock();
     void pauseDeviceComplete(const uint major, const uint minor);
     void releaseControl();
-    void releaseDevice(const uint manjor, const uint minor);
+    void releaseDevice(const uint major, const uint minor);
     void setBrightness(const QString &subsystem, const QString &name, const uint brightness);
     void setIdleHint(const bool idle);
     void setLockedHint(const bool locked);
@@ -99,7 +99,7 @@ public slots:
     std::tuple<int,  // fd
                bool  // inactive
                >
-    takeDevice(uint manjor, uint minor);
+    takeDevice(uint major, uint minor);
     void terminate();
     void unlock();
 

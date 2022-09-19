@@ -72,7 +72,7 @@ const QDBusArgument &operator>> (const QDBusArgument &arg, Inhibitor_p &inhibito
 QDBusArgument &operator<< (QDBusArgument &arg, const Seat_p &seat)
 {
     arg.beginStructure();
-    arg << seat.seat_id;
+    arg << seat.seatId;
     arg << seat.path;
     arg.endStructure();
     return arg;
@@ -81,7 +81,7 @@ QDBusArgument &operator<< (QDBusArgument &arg, const Seat_p &seat)
 const QDBusArgument &operator>> (const QDBusArgument &arg, Seat_p &seat)
 {
     arg.beginStructure();
-    arg >> seat.seat_id;
+    arg >> seat.seatId;
     arg >> seat.path;
     arg.endStructure();
     return arg;
@@ -90,10 +90,10 @@ const QDBusArgument &operator>> (const QDBusArgument &arg, Seat_p &seat)
 QDBusArgument &operator<< (QDBusArgument &arg, const Session_p &session)
 {
     arg.beginStructure();
-    arg << session.session_id;
-    arg << session.user_id;
-    arg << session.user_name;
-    arg << session.seat_id;
+    arg << session.sessionId;
+    arg << session.userId;
+    arg << session.userName;
+    arg << session.seatId;
     arg << session.path;
     arg.endStructure();
     return arg;
@@ -102,10 +102,10 @@ QDBusArgument &operator<< (QDBusArgument &arg, const Session_p &session)
 const QDBusArgument &operator>> (const QDBusArgument &arg, Session_p &session)
 {
     arg.beginStructure();
-    arg >> session.session_id;
-    arg >> session.user_id;
-    arg >> session.user_name;
-    arg >> session.seat_id;
+    arg >> session.sessionId;
+    arg >> session.userId;
+    arg >> session.userName;
+    arg >> session.seatId;
     arg >> session.path;
     arg.endStructure();
     return arg;
@@ -114,8 +114,8 @@ const QDBusArgument &operator>> (const QDBusArgument &arg, Session_p &session)
 QDBusArgument &operator<< (QDBusArgument &arg, const User_p &user)
 {
     arg.beginStructure();
-    arg << user.user_id;
-    arg << user.user_name;
+    arg << user.userId;
+    arg << user.userName;
     arg << user.path;
     arg.endStructure();
     return arg;
@@ -124,8 +124,8 @@ QDBusArgument &operator<< (QDBusArgument &arg, const User_p &user)
 const QDBusArgument &operator>> (const QDBusArgument &arg, User_p &user)
 {
     arg.beginStructure();
-    arg >> user.user_id;
-    arg >> user.user_name;
+    arg >> user.userId;
+    arg >> user.userName;
     arg >> user.path;
     arg.endStructure();
     return arg;
@@ -134,7 +134,7 @@ const QDBusArgument &operator>> (const QDBusArgument &arg, User_p &user)
 QDBusArgument &operator<< (QDBusArgument &arg, const SessionPath_p &path)
 {
     arg.beginStructure();
-    arg << path.session_id;
+    arg << path.sessionId;
     arg << path.path;
     arg.endStructure();
     return arg;
@@ -143,7 +143,7 @@ QDBusArgument &operator<< (QDBusArgument &arg, const SessionPath_p &path)
 const QDBusArgument &operator>> (const QDBusArgument &arg, SessionPath_p &path)
 {
     arg.beginStructure();
-    arg >> path.session_id;
+    arg >> path.sessionId;
     arg >> path.path;
     arg.endStructure();
     return arg;
@@ -152,7 +152,7 @@ const QDBusArgument &operator>> (const QDBusArgument &arg, SessionPath_p &path)
 QDBusArgument &operator<< (QDBusArgument &arg, const UserPath_p &path)
 {
     arg.beginStructure();
-    arg << path.user_id;
+    arg << path.userId;
     arg << path.path;
     arg.endStructure();
     return arg;
@@ -161,7 +161,7 @@ QDBusArgument &operator<< (QDBusArgument &arg, const UserPath_p &path)
 const QDBusArgument &operator>> (const QDBusArgument &arg, UserPath_p &path)
 {
     arg.beginStructure();
-    arg >> path.user_id;
+    arg >> path.userId;
     arg >> path.path;
     arg.endStructure();
     return arg;

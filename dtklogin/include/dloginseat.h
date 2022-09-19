@@ -20,14 +20,14 @@ public:
     explicit DLoginSeat(const QString &path, QObject *parent = nullptr);
     virtual ~DLoginSeat();
 
-    Q_PROPERTY(QList<SessionPath> Sessions READ sessions)
-    Q_PROPERTY(bool CanGraphical READ canGraphical)
-    Q_PROPERTY(bool CanTTY READ canTTY)
-    Q_PROPERTY(bool IdleHint READ idleHint)
-    Q_PROPERTY(QString Id READ id)
-    Q_PROPERTY(SessionPath ActiveSession READ activeSession)
-    Q_PROPERTY(quint64 IdleSinceHint READ idleSinceHint)
-    Q_PROPERTY(quint64 IdleSinceHintMonotonic READ idleSinceHintMonotonic)
+    Q_PROPERTY(QList<SessionPath> sessions READ sessions)
+    Q_PROPERTY(bool canGraphical READ canGraphical)
+    Q_PROPERTY(bool canTTY READ canTTY)
+    Q_PROPERTY(bool idleHint READ idleHint)
+    Q_PROPERTY(QString id READ id)
+    Q_PROPERTY(SessionPath activeSession READ activeSession)
+    Q_PROPERTY(quint64 idleSinceHint READ idleSinceHint)
+    Q_PROPERTY(quint64 idleSinceHintMonotonic READ idleSinceHintMonotonic)
 
     bool canGraphical() const;
     bool canTTY() const;
@@ -43,8 +43,8 @@ signals:
 
 public slots:
     QString lastError() const;
-    void activateSession(const QString &session_id);
-    void switchTo(const uint vtnr);
+    void activateSession(const QString &sessionId);
+    void switchTo(const uint VTNr);
     void switchToNext();
     void switchToPrevious();
     void terminate();
