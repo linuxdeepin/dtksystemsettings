@@ -20,8 +20,8 @@ public:
     QString suffix() const;
     void setSuffix(const QString &suffix);
 
-    QVariant property(const char *propname);
-    void setProperty(const char *propname, const QVariant &value);
+    QVariant property(const char *propName);
+    void setProperty(const char *propName, const QVariant &value);
 
 Q_SIGNALS:
     void serviceValidChanged(const bool valid) const;

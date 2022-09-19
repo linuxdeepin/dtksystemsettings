@@ -21,12 +21,12 @@ signals:
     // private signals
     void PrepareForShutdown(const bool value);
     void PrepareForSleep(const bool value);
-    void SeatNew(const QString &seat_id, const QDBusObjectPath &seat_path);
-    void SeatRemoved(const QString &seat_id, const QDBusObjectPath &seat_path);
-    void SessionNew(const QString &session_id, const QDBusObjectPath &session_path);
-    void SessionRemoved(const QString &session_id, const QDBusObjectPath &session_path);
-    void UserNew(const uint uid, const QDBusObjectPath &path);
-    void UserRemoved(const uint uid, const QDBusObjectPath &path);
+    void SeatNew(const QString &seatId, const QDBusObjectPath &seatPath);
+    void SeatRemoved(const QString &seatId, const QDBusObjectPath &seatPath);
+    void SessionNew(const QString &sessionId, const QDBusObjectPath &sessionPath);
+    void SessionRemoved(const QString &sessionId, const QDBusObjectPath &sessionPath);
+    void UserNew(const uint UID, const QDBusObjectPath &path);
+    void UserRemoved(const uint UID, const QDBusObjectPath &path);
 
 public:
     QString m_errorMessage;

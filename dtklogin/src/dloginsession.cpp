@@ -195,7 +195,7 @@ void DLoginSession::activate()
     }
 }
 
-void DLoginSession::kill(const QString who, const uint signalNumber)
+void DLoginSession::kill(const QString &who, const uint signalNumber)
 {
     Q_D(DLoginSession);
     QDBusPendingReply<> reply = d->m_inter->asyncCallWithArgumentList(QStringLiteral("Kill"),

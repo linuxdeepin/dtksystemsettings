@@ -86,7 +86,7 @@ signals:
 public slots:
     QString lastError() const;
     void activate();
-    void kill(const QString who, const uint signalNumber);
+    void kill(const QString &who, const uint signalNumber);
     void lock();
     void pauseDeviceComplete(const uint major, const uint minor);
     void releaseControl();
