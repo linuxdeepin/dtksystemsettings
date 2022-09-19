@@ -33,7 +33,7 @@ QList<SessionPath> DLoginSeat::sessions() const
     for (auto sessionPath_p : result) {
         SessionPath sessionPath;
         sessionPath.path = sessionPath_p.path.path();
-        sessionPath.session_id =sessionPath_p.session_id;
+        sessionPath.sessionId =sessionPath_p.sessionId;
         sessionPaths.append(sessionPath);
     }
     return sessionPaths;
@@ -75,7 +75,7 @@ SessionPath DLoginSeat::activeSession() const
     const auto & result = qdbus_cast<SessionPath_p>(d->m_inter->property("ActiveSession"));
     SessionPath path;
     path.path = result.path.path();
-    path.session_id = result.session_id;
+    path.sessionId = result.sessionId;
     return path;
 }
 
@@ -91,10 +91,10 @@ quint64 DLoginSeat::idleSinceHintMonotonic() const
     return qdbus_cast<quint64>(d->m_inter->property("IdleSinceHintMonotonic"));
 }
 
-void DLoginSeat::activateSession(const QString &session_id)
+void DLoginSeat::activateSession(const QString &sessionId)
 {
     Q_D(DLoginSeat);
-    QVariantList args {QVariant::fromValue(session_id)};
+    QVariantList args {QVariant::fromValue(sessionId)};
     QDBusPendingReply<> reply = d->m_inter->asyncCallWithArgumentList("ActivateSession", args);
     reply.waitForFinished();
     if (!reply.isValid()) {
@@ -103,11 +103,11 @@ void DLoginSeat::activateSession(const QString &session_id)
     }
 }
 
-void DLoginSeat::switchTo(const uint vtnr)
+void DLoginSeat::switchTo(const uint VTNr)
 {
     Q_D(DLoginSeat);
     QDBusPendingReply<> reply = d->m_inter->asyncCallWithArgumentList(QStringLiteral("SwitchTo"),
-        {QVariant::fromValue(vtnr)});
+        {QVariant::fromValue(VTNr)});
     reply.waitForFinished();
     if (!reply.isValid()) {
         d->m_errorMessage = reply.error().message();

@@ -23,46 +23,46 @@ public:
     explicit DLoginManager(QObject *parent = nullptr);
     virtual ~DLoginManager();
 
-    Q_PROPERTY(QStringList BootLoaderEntries READ bootLoaderEntries)
-    Q_PROPERTY(QStringList KillExcludeUsers READ killExcludeUsers)
-    Q_PROPERTY(QStringList KillOnlyUsers READ killOnlyUsers)
-    Q_PROPERTY(bool Docked READ docked)
-    Q_PROPERTY(bool EnableWallMessages READ enableWallMessages WRITE setEnableWallMessages);
-    Q_PROPERTY(bool IdleHint READ idleHint);
-    Q_PROPERTY(bool KillUserProcesses READ killUserProcesses);
-    Q_PROPERTY(bool LidClosed READ lidClosed);
-    Q_PROPERTY(bool OnExternalPower READ onExternalPower);
-    Q_PROPERTY(bool PreparingForShutdown READ preparingForShutdown);
-    Q_PROPERTY(bool PreparingForSleep READ preparingForSleep);
-    Q_PROPERTY(bool RebootToFirmwareSetup READ rebootToFirmwareSetup);
-    Q_PROPERTY(bool RemoveIPC READ removeIPC);
-    Q_PROPERTY(QString BlockInhibited READ blockInhibited);
-    Q_PROPERTY(QString DelayInhibited READ delayInhibited);
-    Q_PROPERTY(QString HandleHibernateKey READ handleHibernateKey);
-    Q_PROPERTY(QString HandleLidSwitch READ handleLidSwitch);
-    Q_PROPERTY(QString HandleLidSwitchDocked READ handleLidSwitchDocked);
-    Q_PROPERTY(QString HandleLidSwitchExternalPower READ handleLidSwitchExternalPower);
-    Q_PROPERTY(QString HandlePowerKey READ handlePowerKey);
-    Q_PROPERTY(QString HandleSuspendKey READ handleSuspendKey);
-    Q_PROPERTY(QString IdleAction READ idleAction);
-    Q_PROPERTY(QString RebootParameter READ rebootParameter);
-    Q_PROPERTY(QString RebootToBootLoaderEntry READ rebootToBootLoaderEntry);
-    Q_PROPERTY(QString WallMessage READ wallMessage WRITE setWallMessage);
-    Q_PROPERTY(ScheduledShutdownValue ScheduledShutdown READ scheduledShutdown);
-    Q_PROPERTY(uint NAutoVTs READ nAutoVTs);
-    Q_PROPERTY(quint64 HoldoffTimeoutUSec READ holdoffTimeoutUSec);
-    Q_PROPERTY(quint64 IdleActionUSec READ idleActionUSec);
-    Q_PROPERTY(quint64 IdleSinceHint READ idleSinceHint);
-    Q_PROPERTY(quint64 IdleSinceHintMonotonic READ idleSinceHintMonotonic);
-    Q_PROPERTY(quint64 InhibitDelayMaxUSec READ inhibitDelayMaxUSec);
-    Q_PROPERTY(quint64 InhibitorsMax READ inhibitorsMax);
-    Q_PROPERTY(quint64 NCurrentInhibitors READ nCurrentInhibitors);
-    Q_PROPERTY(quint64 NCurrentSessions READ nCurrentSessions);
-    Q_PROPERTY(quint64 RebootToBootLoaderMenu READ rebootToBootLoaderMenu);
-    Q_PROPERTY(quint64 RuntimeDirectoryInodesMax READ runtimeDirectoryInodesMax);
-    Q_PROPERTY(quint64 RuntimeDirectorySize READ runtimeDirectorySize);
-    Q_PROPERTY(quint64 SessionsMax READ sessionsMax);
-    Q_PROPERTY(quint64 UserStopDelayUSec READ userStopDelayUSec);
+    Q_PROPERTY(QStringList bootLoaderEntries READ bootLoaderEntries)
+    Q_PROPERTY(QStringList killExcludeUsers READ killExcludeUsers)
+    Q_PROPERTY(QStringList killOnlyUsers READ killOnlyUsers)
+    Q_PROPERTY(bool docked READ docked)
+    Q_PROPERTY(bool enableWallMessages READ enableWallMessages WRITE setEnableWallMessages);
+    Q_PROPERTY(bool idleHint READ idleHint);
+    Q_PROPERTY(bool killUserProcesses READ killUserProcesses);
+    Q_PROPERTY(bool lidClosed READ lidClosed);
+    Q_PROPERTY(bool onExternalPower READ onExternalPower);
+    Q_PROPERTY(bool preparingForShutdown READ preparingForShutdown);
+    Q_PROPERTY(bool preparingForSleep READ preparingForSleep);
+    Q_PROPERTY(bool rebootToFirmwareSetup READ rebootToFirmwareSetup);
+    Q_PROPERTY(bool removeIPC READ removeIPC);
+    Q_PROPERTY(QString blockInhibited READ blockInhibited);
+    Q_PROPERTY(QString delayInhibited READ delayInhibited);
+    Q_PROPERTY(QString handleHibernateKey READ handleHibernateKey);
+    Q_PROPERTY(QString handleLidSwitch READ handleLidSwitch);
+    Q_PROPERTY(QString handleLidSwitchDocked READ handleLidSwitchDocked);
+    Q_PROPERTY(QString handleLidSwitchExternalPower READ handleLidSwitchExternalPower);
+    Q_PROPERTY(QString handlePowerKey READ handlePowerKey);
+    Q_PROPERTY(QString handleSuspendKey READ handleSuspendKey);
+    Q_PROPERTY(QString idleAction READ idleAction);
+    Q_PROPERTY(QString rebootParameter READ rebootParameter);
+    Q_PROPERTY(QString rebootToBootLoaderEntry READ rebootToBootLoaderEntry);
+    Q_PROPERTY(QString wallMessage READ wallMessage WRITE setWallMessage);
+    Q_PROPERTY(ScheduledShutdownValue scheduledShutdown READ scheduledShutdown);
+    Q_PROPERTY(uint nAutoVTs READ nAutoVTs);
+    Q_PROPERTY(quint64 holdoffTimeoutUSec READ holdoffTimeoutUSec);
+    Q_PROPERTY(quint64 idleActionUSec READ idleActionUSec);
+    Q_PROPERTY(quint64 idleSinceHint READ idleSinceHint);
+    Q_PROPERTY(quint64 idleSinceHintMonotonic READ idleSinceHintMonotonic);
+    Q_PROPERTY(quint64 inhibitDelayMaxUSec READ inhibitDelayMaxUSec);
+    Q_PROPERTY(quint64 inhibitorsMax READ inhibitorsMax);
+    Q_PROPERTY(quint64 nCurrentInhibitors READ nCurrentInhibitors);
+    Q_PROPERTY(quint64 nCurrentSessions READ nCurrentSessions);
+    Q_PROPERTY(quint64 rebootToBootLoaderMenu READ rebootToBootLoaderMenu);
+    Q_PROPERTY(quint64 runtimeDirectoryInodesMax READ runtimeDirectoryInodesMax);
+    Q_PROPERTY(quint64 runtimeDirectorySize READ runtimeDirectorySize);
+    Q_PROPERTY(quint64 sessionsMax READ sessionsMax);
+    Q_PROPERTY(quint64 userStopDelayUSec READ userStopDelayUSec);
 
     QStringList bootLoaderEntries() const;
     QStringList killExcludeUsers() const;
@@ -108,20 +108,20 @@ public:
 
 signals:
     void errorMessageChanged(const QString &message);
-    void PrepareForShutdown(const bool value);
-    void PrepareForSleep(const bool value);
-    void SeatNew(const QString &seat_id, const QString &seat_path);
-    void SeatRemoved(const QString &seat_id, const QString &seat_path);
-    void SessionNew(const QString &session_id, const QString &session_path);
-    void SessionRemoved(const QString &session_id, const QString &session_path);
-    void UserNew(const uint uid, const QString &path);
-    void UserRemoved(const uint uid, const QString &path);
+    void prepareForShutdown(const bool value);
+    void prepareForSleep(const bool value);
+    void seatNew(const QString &seatId, const QString &seatPath);
+    void seatRemoved(const QString &seatId, const QString &seatPath);
+    void sessionNew(const QString &sessionId, const QString &sessionPath);
+    void sessionRemoved(const QString &sessionId, const QString &sessionPath);
+    void userNew(const uint UID, const QString &path);
+    void userRemoved(const uint UID, const QString &path);
 
 public slots:
     QString lastError() const;
-    void activateSession(const QString &session_id);
-    void activateSessionOnSeat(const QString &session_id, const QString &seat_id);
-    void attachDevice(const QString &seat_id, const QString &sysfs_path, const bool interactive);
+    void activateSession(const QString &sessionId);
+    void activateSessionOnSeat(const QString &sessionId, const QString &seatId);
+    void attachDevice(const QString &seatId, const QString &sysfsPath, const bool interactive);
     QString canHalt();
     QString canHibernate();
     QString canHybridSleep();
@@ -134,23 +134,23 @@ public slots:
     QString canSuspend();
     QString canSuspendThenHibernate();
     bool cancelScheduledShutdown();
-    std::tuple<QString,     // session_id
+    std::tuple<QString,     // sessionId
             QString,        // path
             QString,        // runtime_path
             int,            // fifo_fd
             uint,           // uid
-            QString,        // seat_id
-            uint,           // vtnr
+            QString,        // seatId
+            uint,           // VTNr
             bool            // existing
             > createSession(uint uid, uint pid, const QString &service, const QString &type,
-                    const QString &_class, const QString &desktop, const QString &seat_id,
-                    uint vtnr, const QString &tty, const QString &display, const QString &remote,
-                    const QString &remote_user, const QString &remote_host, const QList<SessionProperty> &properties);
+                    const QString &_class, const QString &desktop, const QString &seatId,
+                    uint VTNr, const QString &TTY, const QString &display, const QString &remote,
+                    const QString &remoteUser, const QString &remoteHost, const QList<SessionProperty> &properties);
     void flushDevices(const bool value);
-    QString getSeat(const QString &seat_id);
-    QString getSession(const QString &session_id);
+    QString getSeat(const QString &seatId);
+    QString getSession(const QString &sessionId);
     QString getSessionByPID(const uint pid);
-    QString getUser(const uint uid);
+    QString getUser(const uint UID);
     QString getUserByPID(const uint pid);
     void halt(const bool interactive);
     void haltWithFlags(const quint64 flags);
@@ -159,34 +159,34 @@ public slots:
     void hybridSleep(const bool interactive);
     void hybridSleepWithFlags(const quint64 flags);
     int inhibit(const QString &what, const QString &who, const QString &why, const QString &mode);
-    void killSession(const QString &session_id, const QString &who, const int signal_number);
-    void killUser(const uint uid, const int signal_number);
+    void killSession(const QString &sessionId, const QString &who, const int signalNumber);
+    void killUser(const uint uid, const int signalNumber);
     QList<Inhibitor> listInhibitors();
     QList<Seat> listSeats();
     QList<Session> listSessions();
     QList<User> listUsers();
-    void lockSession(const QString &session_id);
+    void lockSession(const QString &sessionId);
     void lockSessions();
     void powerOff(const bool interactive);
     void powerOffWithFlags(const quint64 flags);
     void reboot(const bool interactive);
     void rebootWithFlags(const quint64 flags);
-    void releaseSession(const QString &session_id);
-    void setRebootParameter(const QString &paramter);
+    void releaseSession(const QString &sessionId);
+    void setRebootParameter(const QString &parameter);
     void scheduleShutdown(const QString &type, const quint64 usec);
     void setRebootToBootLoaderEntry(const QString &entry);
     void setRebootToBootLoaderMenu(const quint64 timeout);
-    void setRebootToFirmwareSetup(const bool enbale);
-    void setUserLinger(const uint uid, const bool enable, const bool interactive);
+    void setRebootToFirmwareSetup(const bool enable);
+    void setUserLinger(const uint UID, const bool enable, const bool interactive);
     void setWallMessage(const QString &message, const bool enable = false);
     void suspend(const bool interactive);
     void suspendThenHibernate(const bool interactive);
     void suspendThenHibernateWithFlags(const quint64 flags);
     void suspendWithFlags(const quint64 flags);
-    void terminateSeat(const QString &seat_id);
-    void terminateSession(const QString &session_id);
+    void terminateSeat(const QString &seatId);
+    void terminateSession(const QString &sessionId);
     void terminateUser(const uint uid);
-    void unlockSession(const QString &session_id);
+    void unlockSession(const QString &sessionId);
     void unlockSessions();
 
 private:

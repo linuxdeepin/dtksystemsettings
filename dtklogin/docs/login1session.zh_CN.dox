@@ -309,7 +309,7 @@ session有3种状态，"online","active","closing"。当session已经登陆了�
 @property DLogin1Session::Type 
 @brief 当前session类型的编码
 
-该函数会返回"unspecified"(未指定，给PAM sessions或者其他类似的session)， tty(给 text logins)，或者"x11"/"mir"/"wayland"(图形界面登陆)
+该函数会返回"unspecified"(未指定，给PAM sessions或者其他类似的session)， TTY(给 text logins)，或者"x11"/"mir"/"wayland"(图形界面登陆)
 
 @property DLogin1Session::Seat 
 @brief 编码这个session所处的位置

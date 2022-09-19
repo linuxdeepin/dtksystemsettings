@@ -201,17 +201,17 @@ DLogin1Manager 中定义了登录管理对象的接口。
 @return 报错信息，以字符串返回
 @return 无
 
-@fn void Dtk::DLogin1Manager::activateSession(const QString &session_id)
+@fn void Dtk::DLogin1Manager::activateSession(const QString &sessionId)
 @brief 将具有指定 ID 的会话带到前台
 @return 无
 
-@fn void Dtk::DLogin1Manager::activateSessionOnSeat(const QString &session_id, const QString &seat_id)
+@fn void Dtk::DLogin1Manager::activateSessionOnSeat(const QString &sessionId, const QString &seatId)
 @brief 将指定ID，指定seat的会话带到前台
 @return 无
 
-@fn void Dtk::DLogin1Manager::attachDevice(const QString &seat_id, const QString &sysfs_path, const bool interactive)
+@fn void Dtk::DLogin1Manager::attachDevice(const QString &seatId, const QString &sysfs_path, const bool interactive)
 @brief 可用于将特定设备分配给特定seat。该设备由其/sys/路径标识，并且必须符合分配seat的条件
-@param[in] seat_id: seat_id
+@param[in] seatId: seatId
 @param[in] sysfs_path: 在/sys/fs/目录下硬件所映射的文件路径
 @param[in] interactive: 一个交互式布尔参数可用于控制 polkit 是否应在需要时以交互方式要求用户提供认证凭证
 @return 无
@@ -306,7 +306,7 @@ DLogin1Manager 中定义了登录管理对象的接口。
 @fn std::tuple<QString, String,QString,int,uint,QString,uint,bool> Dtk::DLogin1Manager::createSession(uint uid, uint pid, 
         const QString &service, const QString &type, 
         const QString &_class, const QString &desktop, const QString 
-        &seat_id, uint vtnr, const QString &tty, const QString &display, 
+        &seatId, uint VTNr, const QString &TTY, const QString &display,
         const QString &remote, const QString &remote_user, 
         const QString &remote_host, const QList< SessionProperty > &properties)
 @brief 创建一个会话
@@ -317,14 +317,14 @@ DLogin1Manager 中定义了登录管理对象的接口。
 @param[in] value: 一个交互式布尔参数可用于控制 polkit 是否应在需要时以交互方式要求用户提供认证凭证
 @return 无
 
-@fn QString Dtk::DLogin1Manager::getSeat(const QString &seat_id)
+@fn QString Dtk::DLogin1Manager::getSeat(const QString &seatId)
 @brief 获取seat对象路径
-@param[in] seat_id: seat_id，例如：“seat0”
+@param[in] seatId: seatId，例如：“seat0”
 @return seat对象路径，例如:'/org/freedesktop/login1/seat/seat0'
 
-@fn QString Dtk::DLogin1Manager::getSession(const QString &session_id)
+@fn QString Dtk::DLogin1Manager::getSession(const QString &sessionId)
 @brief 获取session路径
-@param[in] session_id 例如：“2”
+@param[in] sessionId 例如：“2”
 @return session路径，例如：'/org/freedesktop/login1/session/_32'
 
 @fn QString Dtk::DLogin1Manager::getSessionByPID(const uint pid)
@@ -391,10 +391,10 @@ DLogin1Manager 中定义了登录管理对象的接口。
 @note 注释：人类可读字符串的定义是：对用户友好的字符串，通常使用ASCII码中支持的字符，使用英文语法描述当前程序名和原因
 @return 该方法返回一个文件描述符。在此文件描述符及其所有副本关闭时释放锁
 
-@fn void Dtk::DLogin1Manager::killSession(const QString &session_id, const QString &who, const int signal_number)
+@fn void Dtk::DLogin1Manager::killSession(const QString &sessionId, const QString &who, const int signal_number)
 @brief 可用于向会话的一个或所有进程发送 Unix 信号，作为参数，它接受会话 id、字符串“ leader”或“ all”和一个信号编号。
     如果“ leader”通过，则只有会话“ leader”被终止。如果“ all”通过，则会话的所有进程都将被终止。
-@param[in] session_id: 会话id
+@param[in] sessionId: 会话id
 @param[in] who: “leader”或“all”
 @param[in] signal_number: 信号编号
 @note 在shell中输入`kill -l`获取信号编号
@@ -428,9 +428,9 @@ DLogin1Manager 中定义了登录管理对象的接口。
 @note 注意，返回的是一个QList,需要使用[]来获取列表中某个元素
 @return 列出所有的User，以列表的形式。例如：[(1000, 'xzl', '/org/freedesktop/login1/user/_1000')]
 
-@fn void Dtk::DLogin1Manager::lockSession(const QString &session_id)
+@fn void Dtk::DLogin1Manager::lockSession(const QString &sessionId)
 @brief 要求具有指定 ID 的会话激活屏幕锁定
-@param[in] session_id: 会话id
+@param[in] sessionId: 会话id
 @return 无
 
 @fn void Dtk::DLogin1Manager::lockSessions()
@@ -458,9 +458,9 @@ DLogin1Manager 中定义了登录管理对象的接口。
 @param[in] flags: 标志变量
 @return 无
 
-@fn void Dtk::DLogin1Manager::releaseSession(const QString &session_id)
+@fn void Dtk::DLogin1Manager::releaseSession(const QString &sessionId)
 @brief 关闭登录会话
-@param[in] session_id: 会话id
+@param[in] sessionId: 会话id
 @note 这些调用绝不能由客户端直接调用。创建/关闭会话完全是 PAM 及其 [pam_systemd](https://www.freedesktop.org/software/systemd/man/pam_systemd.html#) 模块的工作。
 
 @fn void Dtk::DLogin1Manager::scheduleShutdown(const QString type, const quint64 usec)
@@ -524,14 +524,14 @@ DLogin1Manager 中定义了登录管理对象的接口。
 @param[in] flags: 标志变量
 @return 无
 
-@fn  void Dtk::DLogin1Manager::terminateSeat(const QString &seat_id);
+@fn  void Dtk::DLogin1Manager::terminateSeat(const QString &seatId);
 @brief 可用于强制终止附加到特定seat的所有会话。
-@param[in] seat_id:例如：seat0
+@param[in] seatId:例如：seat0
 @return 无
 
-@fn  void Dtk::DLogin1Manager::terminateSession(const QString session_id)
+@fn  void Dtk::DLogin1Manager::terminateSession(const QString sessionId)
 @brief 可用于强制终止一个特定会话
-@param[in] session_id:会话编号
+@param[in] sessionId:会话编号
 @return 无
 
 @fn  void Dtk::DLogin1Manager::terminateUser(const uint uid)
@@ -539,9 +539,9 @@ DLogin1Manager 中定义了登录管理对象的接口。
 @param[in] uid: 用户编号
 @return 无
 
-@fn void Dtk::DLogin1Manager::unlockSession(const QString &session_id)
+@fn void Dtk::DLogin1Manager::unlockSession(const QString &sessionId)
 @brief 要求具有指定 ID 的会话解除活动的屏幕锁定（如果有）
-@param[in] session_id:会话编号
+@param[in] sessionId:会话编号
 @return 无
 
 @fn void Dtk::DLogin1Manager::unlockSessions()
@@ -558,26 +558,26 @@ DLogin1Manager 中定义了登录管理对象的接口。
     以及延迟抑制器。完成这项工作后，他们应该释放他们的抑制锁，以免进一步延迟操作。
 @param[in] value: 布尔值
 
-@fn void Dtk::DLogin1Manager::PrepareForSleep(const bool value)
-\sa DLogin1Manager::PrepareForShutdown(const bool value)
+@fn void Dtk::DLogin1Manager::prepareForSleep(const bool value)
+\sa DLogin1Manager::prepareForShutdown(const bool value)
 
-@fn void Dtk::DLogin1Manager::SeatNew(const QString &seat_id, const QString &seat_path)
+@fn void Dtk::DLogin1Manager::SeatNew(const QString &seatId, const QString &seat_path)
 @brief 每次创建或删除会话、用户登录或注销或添加或删除seat时都会发送`UserRemoved`、`SeatNew`、`SessionNew`、
 `SeatRemoved`、`SessionRemoved`、`UserNew`信号 。它们每个都包含对象的 ID 和对象路径。
 
-@fn void Dtk::DLogin1Manager::SeatRemoved(const QString &seat_id, const QString &seat_path)
-\sa DLogin1Manager::SeatNew(const QString &seat_id, const QString &seat_path)
+@fn void Dtk::DLogin1Manager::seatRemoved(const QString &seatId, const QString &seat_path)
+\sa DLogin1Manager::SeatNew(const QString &seatId, const QString &seat_path)
  
-@fn void Dtk::DLogin1Manager::SessionNew(const QString &session_id, const QString &session_path)
-\sa DLogin1Manager::SeatNew(const QString &seat_id, const QString &seat_path)
+@fn void Dtk::DLogin1Manager::sessionNew(const QString &sessionId, const QString &session_path)
+\sa DLogin1Manager::SeatNew(const QString &seatId, const QString &seat_path)
  
-@fn void Dtk::DLogin1Manager::SessionRemoved(const QString &session_id, const QString &session_path)
-\sa DLogin1Manager::SeatNew(const QString &seat_id, const QString &seat_path)
+@fn void Dtk::DLogin1Manager::sessionRemoved(const QString &sessionId, const QString &session_path)
+\sa DLogin1Manager::SeatNew(const QString &seatId, const QString &seat_path)
  
-@fn void Dtk::DLogin1Manager::UserNew(const uint uid, const QString &path)
-\sa DLogin1Manager::SeatNew(const QString &seat_id, const QString &seat_path)
+@fn void Dtk::DLogin1Manager::userNew(const uint uid, const QString &path)
+\sa DLogin1Manager::SeatNew(const QString &seatId, const QString &seat_path)
 
-@fn void Dtk::DLogin1Manager::UserRemoved(const uint uid, const QString &path)
-\sa DLogin1Manager::SeatNew(const QString &seat_id, const QString &seat_path)
+@fn void Dtk::DLogin1Manager::userRemoved(const uint uid, const QString &path)
+\sa DLogin1Manager::seatNew(const QString &seatId, const QString &seat_path)
  
 */

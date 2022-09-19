@@ -41,40 +41,40 @@ DLoginManager::DLoginManager(QObject *parent)
 
     // init signals;
     QDBusConnection::systemBus().connect(Service, Path, Interface, "PreparingForShutdown",
-                                         d, SLOT(PrepareForShutdown(const bool)));
+                                         d, SLOT(prepareForShutdown(const bool)));
     QDBusConnection::systemBus().connect(Service, Path, Interface, "PreparingForSleep",
-                                         d, SLOT(PrepareForSleep(const bool)));
-    QDBusConnection::systemBus().connect(Service, Path, Interface, "SeatNew",
-                                         d, SLOT(SeatNew(const QString&, const QDBusObjectPath&)));
-    QDBusConnection::systemBus().connect(Service, Path, Interface, "SeatRemoved",
-                                         d, SLOT(SeatRemoved(const QString&, const QDBusObjectPath&)));
-    QDBusConnection::systemBus().connect(Service, Path, Interface, "SessionNew",
-                                         d, SLOT(SessionNew(const QString&, const QDBusObjectPath&)));
-    QDBusConnection::systemBus().connect(Service, Path, Interface, "SessionRemoved",
-                                         d, SLOT(SessionRemoved(const QString&, const QDBusObjectPath&)));
-    QDBusConnection::systemBus().connect(Service, Path, Interface, "UserNew",
-                                         d, SLOT(UserNew(const uint, const QDBusObjectPath&)));
-    QDBusConnection::systemBus().connect(Service, Path, Interface, "UserRemoved",
-                                         d, SLOT(UserRemoved(const uint, const QDBusObjectPath&)));
-    connect(d, &DLoginManagerPrivate::PrepareForShutdown, this, &DLoginManager::PrepareForShutdown);
-    connect(d, &DLoginManagerPrivate::PrepareForSleep, this, &DLoginManager::PrepareForSleep);
+                                         d, SLOT(prepareForSleep(const bool)));
+    QDBusConnection::systemBus().connect(Service, Path, Interface, "seatNew",
+                                         d, SLOT(seatNew(const QString&, const QDBusObjectPath&)));
+    QDBusConnection::systemBus().connect(Service, Path, Interface, "seatRemoved",
+                                         d, SLOT(seatRemoved(const QString&, const QDBusObjectPath&)));
+    QDBusConnection::systemBus().connect(Service, Path, Interface, "sessionNew",
+                                         d, SLOT(sessionNew(const QString&, const QDBusObjectPath&)));
+    QDBusConnection::systemBus().connect(Service, Path, Interface, "sessionRemoved",
+                                         d, SLOT(sessionRemoved(const QString&, const QDBusObjectPath&)));
+    QDBusConnection::systemBus().connect(Service, Path, Interface, "userNew",
+                                         d, SLOT(userNew(const uint, const QDBusObjectPath&)));
+    QDBusConnection::systemBus().connect(Service, Path, Interface, "userRemoved",
+                                         d, SLOT(userRemoved(const uint, const QDBusObjectPath&)));
+    connect(d, &DLoginManagerPrivate::PrepareForShutdown, this, &DLoginManager::prepareForShutdown);
+    connect(d, &DLoginManagerPrivate::PrepareForSleep, this, &DLoginManager::prepareForSleep);
     connect(d, &DLoginManagerPrivate::SeatNew, this, [this] (const QString &seat_id, const QDBusObjectPath &path) {
-                emit this->SeatNew(seat_id, path.path());
+                emit this->seatNew(seat_id, path.path());
             });
     connect(d, &DLoginManagerPrivate::SeatRemoved, this, [this] (const QString &seat_id, const QDBusObjectPath &path) {
-                emit this->SeatRemoved(seat_id, path.path());
+                emit this->seatRemoved(seat_id, path.path());
             });
     connect(d, &DLoginManagerPrivate::SessionNew, this, [this] (const QString &session_id, const QDBusObjectPath &path) {
-                emit this->SessionNew(session_id, path.path());
+                emit this->sessionNew(session_id, path.path());
             });
     connect(d, &DLoginManagerPrivate::SessionRemoved, this, [this] (const QString &session_id, const QDBusObjectPath &path) {
-                emit this->SessionRemoved(session_id, path.path());
+                emit this->sessionRemoved(session_id, path.path());
             });
     connect(d, &DLoginManagerPrivate::UserNew, this, [this] (const uint uid, const QDBusObjectPath &path) {
-                emit this->UserNew(uid, path.path());
+                emit this->userNew(uid, path.path());
             });
     connect(d, &DLoginManagerPrivate::UserRemoved, this, [this] (const uint uid, const QDBusObjectPath &path) {
-                emit this->UserRemoved(uid, path.path());
+                emit this->userRemoved(uid, path.path());
             });
 }
 
@@ -340,10 +340,10 @@ QString DLoginManager::lastError() const
     return d->m_errorMessage;
 }
 
-void DLoginManager::activateSession(const QString &session_id)
+void DLoginManager::activateSession(const QString &sessionId)
 {
     Q_D(DLoginManager);
-    QVariantList args {QVariant::fromValue(session_id)};
+    QVariantList args {QVariant::fromValue(sessionId)};
     QDBusPendingReply<> reply = d->m_inter->asyncCallWithArgumentList("ActivateSession", args);
     reply.waitForFinished();
     if (!reply.isValid()) {
@@ -352,10 +352,10 @@ void DLoginManager::activateSession(const QString &session_id)
     }
 }
 
-void DLoginManager::activateSessionOnSeat(const QString &session_id, const QString &seat_id)
+void DLoginManager::activateSessionOnSeat(const QString &sessionId, const QString &seatId)
 {
     Q_D(DLoginManager);
-    QVariantList args {QVariant::fromValue(session_id), QVariant::fromValue(seat_id)};
+    QVariantList args {QVariant::fromValue(sessionId), QVariant::fromValue(seatId)};
     QDBusPendingReply<> reply = d->m_inter->asyncCallWithArgumentList("ActivateSessionOnSeat", args);
     reply.waitForFinished();
     if (!reply.isValid()) {
@@ -364,11 +364,11 @@ void DLoginManager::activateSessionOnSeat(const QString &session_id, const QStri
     }
 }
 
-void DLoginManager::attachDevice(const QString &seat_id, const QString &sysfs_path, const bool interactive)
+void DLoginManager::attachDevice(const QString &seatId, const QString &sysfsPath, const bool interactive)
 {
     Q_D(DLoginManager);
-    QVariantList args {QVariant::fromValue(seat_id), QVariant::fromValue(sysfs_path), QVariant::fromValue(interactive)};
-    QDBusPendingReply<> reply = d->m_inter->asyncCallWithArgumentList("attachDevice", {seat_id, sysfs_path, interactive});
+    QVariantList args {QVariant::fromValue(seatId), QVariant::fromValue(sysfsPath), QVariant::fromValue(interactive)};
+    QDBusPendingReply<> reply = d->m_inter->asyncCallWithArgumentList("attachDevice", {seatId, sysfsPath, interactive});
     reply.waitForFinished();
     if (!reply.isValid()) {
         d->m_errorMessage = reply.error().message();
@@ -532,18 +532,18 @@ bool DLoginManager::cancelScheduledShutdown()
     return reply.value();
 }
 
-std::tuple<QString,     // session_id
+std::tuple<QString,     // sessionId
     QString,        // path
     QString,        // runtime_path
     int,            // fifo_fd
     uint,           // uid
-    QString,        // seat_id
-    uint,           // vtnr
+    QString,        // seatId
+    uint,           // VTNr
     bool            // existing
     > DLoginManager::createSession(uint uid, uint pid, const QString &service, const QString &type,
-        const QString &_class, const QString &desktop, const QString &seat_id,
-        uint vtnr, const QString &tty, const QString &display, const QString &remote,
-        const QString &remote_user, const QString &remote_host, const QList<SessionProperty> &properties)
+        const QString &_class, const QString &desktop, const QString &seatId,
+        uint VTNr, const QString &TTY, const QString &display, const QString &remote,
+        const QString &remoteUser, const QString &remoteHost, const QList<SessionProperty> &properties)
 {
     Q_D(DLoginManager);
     QList<SessionProperty_p> properties_p;
@@ -555,9 +555,9 @@ std::tuple<QString,     // session_id
     }
     QVariantList args;
     args << QVariant::fromValue(uid) << QVariant::fromValue(pid) << QVariant::fromValue(service) << QVariant::fromValue(type)
-        << QVariant::fromValue(_class) << QVariant::fromValue(desktop) << QVariant::fromValue(seat_id)
-        << QVariant::fromValue(vtnr) << QVariant::fromValue(tty) << QVariant::fromValue(display) << QVariant::fromValue(remote)
-        << QVariant::fromValue(remote_user) << QVariant::fromValue(remote_host) << QVariant::fromValue(properties_p);
+        << QVariant::fromValue(_class) << QVariant::fromValue(desktop) << QVariant::fromValue(seatId)
+        << QVariant::fromValue(VTNr) << QVariant::fromValue(TTY) << QVariant::fromValue(display) << QVariant::fromValue(remote)
+        << QVariant::fromValue(remoteUser) << QVariant::fromValue(remoteHost) << QVariant::fromValue(properties_p);
     QDBusPendingReply<QString, QDBusObjectPath, QString, QDBusUnixFileDescriptor, uint, QString, uint, bool>
         reply = d->m_inter->asyncCallWithArgumentList(QStringLiteral("CreateSession"), args);
     reply.waitForFinished();
@@ -582,11 +582,11 @@ void DLoginManager::flushDevices(const bool value)
     }
 }
 
-QString DLoginManager::getSeat(const QString &seat_id)
+QString DLoginManager::getSeat(const QString &seatId)
 {
     Q_D(DLoginManager);
     QDBusPendingReply<QDBusObjectPath> reply = d->m_inter->asyncCallWithArgumentList(QStringLiteral("GetSeat"),
-        {QVariant::fromValue(seat_id)});
+        {QVariant::fromValue(seatId)});
     reply.waitForFinished();
     if (!reply.isValid()) {
         d->m_errorMessage = reply.error().message();
@@ -596,11 +596,11 @@ QString DLoginManager::getSeat(const QString &seat_id)
     return reply.value().path();
 }
 
-QString DLoginManager::getSession(const QString &session_id)
+QString DLoginManager::getSession(const QString &sessionId)
 {
     Q_D(DLoginManager);
     QDBusPendingReply<QDBusObjectPath> reply = d->m_inter->asyncCallWithArgumentList(QStringLiteral("GetSession"),
-        {QVariant::fromValue(session_id)});
+        {QVariant::fromValue(sessionId)});
     reply.waitForFinished();
     if (!reply.isValid()) {
         d->m_errorMessage = reply.error().message();
@@ -624,11 +624,11 @@ QString DLoginManager::getSessionByPID(const uint pid)
     return reply.value().path();
 }
 
-QString DLoginManager::getUser(const uint uid)
+QString DLoginManager::getUser(const uint UID)
 {
     Q_D(DLoginManager);
     QDBusPendingReply<QDBusObjectPath> reply = d->m_inter->asyncCallWithArgumentList(QStringLiteral("GetUser"),
-        {QVariant::fromValue(uid)});
+        {QVariant::fromValue(UID)});
     reply.waitForFinished();
     if (!reply.isValid()) {
         d->m_errorMessage = reply.error().message();
@@ -732,11 +732,11 @@ int DLoginManager::inhibit(const QString &what, const QString &who, const QStrin
     return reply.value().fileDescriptor();
 }
 
-void DLoginManager::killSession(const QString &session_id, const QString &who, const int signal_number)
+void DLoginManager::killSession(const QString &sessionId, const QString &who, const int signalNumber)
 {
     Q_D(DLoginManager);
     QDBusPendingReply<> reply = d->m_inter->asyncCallWithArgumentList("KillSession",
-        {QVariant::fromValue(session_id), QVariant::fromValue(who), QVariant::fromValue(signal_number)});
+        {QVariant::fromValue(sessionId), QVariant::fromValue(who), QVariant::fromValue(signalNumber)});
     reply.waitForFinished();
     if (!reply.isValid()) {
         d->m_errorMessage = reply.error().message();
@@ -744,11 +744,11 @@ void DLoginManager::killSession(const QString &session_id, const QString &who, c
     }
 }
 
-void DLoginManager::killUser(const uint uid, const int signal_number)
+void DLoginManager::killUser(const uint uid, const int signalNumber)
 {
     Q_D(DLoginManager);
     QDBusPendingReply<> reply = d->m_inter->asyncCallWithArgumentList(QStringLiteral("KillUser"),
-        {QVariant::fromValue(uid), QVariant::fromValue(signal_number)});
+        {QVariant::fromValue(uid), QVariant::fromValue(signalNumber)});
     reply.waitForFinished();
     if (!reply.isValid()) {
         d->m_errorMessage = reply.error().message();
@@ -795,7 +795,7 @@ QList<Seat> DLoginManager::listSeats()
 
     for (auto &&seat_p : reply.value()) {
         Seat seat;
-        seat.seat_id = seat_p.seat_id;
+        seat.seatId = seat_p.seatId;
         seat.path = seat_p.path.path();
         seats.append(seat);
     }
@@ -817,10 +817,10 @@ QList<Session> DLoginManager::listSessions()
     for (auto &&session_p : reply.value()) {
         Session session;
         session.path = session_p.path.path();
-        session.seat_id = session_p.seat_id;
-        session.session_id = session_p.session_id;
-        session.user_id = session_p.user_id;
-        session.user_name = session_p.user_name;
+        session.seatId = session_p.seatId;
+        session.sessionId = session_p.sessionId;
+        session.userId = session_p.userId;
+        session.userName = session_p.userName;
         sessions.append(session);
     }
     return sessions;
@@ -840,19 +840,19 @@ QList<User> DLoginManager::listUsers()
 
     for (auto &&user_p : reply.value()) {
         User user;
-        user.user_name = user_p.user_name;
-        user.user_id = user_p.user_id;
+        user.userName = user_p.userName;
+        user.userId = user_p.userId;
         user.path = user_p.path.path();
         users.append(user);
     }
     return users;
 }
 
-void DLoginManager::lockSession(const QString &session_id)
+void DLoginManager::lockSession(const QString &sessionId)
 {
     Q_D(DLoginManager);
     QDBusPendingReply<> reply = d->m_inter->asyncCallWithArgumentList(QStringLiteral("LockSession"),
-        {QVariant::fromValue(session_id)});
+        {QVariant::fromValue(sessionId)});
     reply.waitForFinished();
     if (!reply.isValid()) {
         d->m_errorMessage = reply.error().message();
@@ -917,11 +917,11 @@ void DLoginManager::rebootWithFlags(const quint64 flags)
     }
 }
 
-void DLoginManager::releaseSession(const QString &session_id)
+void DLoginManager::releaseSession(const QString &sessionId)
 {
     Q_D(DLoginManager);
     QDBusPendingReply<> reply = d->m_inter->asyncCallWithArgumentList(QStringLiteral("ReleaseSession"),
-        {QVariant::fromValue(session_id)});
+        {QVariant::fromValue(sessionId)});
     reply.waitForFinished();
     if (!reply.isValid()) {
         d->m_errorMessage = reply.error().message();
@@ -929,11 +929,11 @@ void DLoginManager::releaseSession(const QString &session_id)
     }
 }
 
-void DLoginManager::setRebootParameter(const QString &paramter)
+void DLoginManager::setRebootParameter(const QString &parameter)
 {
     Q_D(DLoginManager);
     QDBusPendingReply<> reply = d->m_inter->asyncCallWithArgumentList(QStringLiteral("SetRebootParameter"),
-        {QVariant::fromValue(paramter)});
+        {QVariant::fromValue(parameter)});
     reply.waitForFinished();
     if (!reply.isValid()) {
         d->m_errorMessage = reply.error().message();
@@ -989,11 +989,11 @@ void DLoginManager::setRebootToFirmwareSetup(const bool enable)
     }
 }
 
-void DLoginManager::setUserLinger(const uint uid, const bool enable, const bool interactive)
+void DLoginManager::setUserLinger(const uint UID, const bool enable, const bool interactive)
 {
     Q_D(DLoginManager);
     QDBusPendingReply<> reply = d->m_inter->asyncCallWithArgumentList(QStringLiteral("SetUserLinger"),
-        {QVariant::fromValue(uid), QVariant::fromValue(enable), QVariant::fromValue(interactive)});
+        {QVariant::fromValue(UID), QVariant::fromValue(enable), QVariant::fromValue(interactive)});
     reply.waitForFinished();
     if (!reply.isValid()) {
         d->m_errorMessage = reply.error().message();
@@ -1059,11 +1059,11 @@ void DLoginManager::suspendWithFlags(const quint64 flags)
     }
 }
 
-void DLoginManager::terminateSeat(const QString &seat_id)
+void DLoginManager::terminateSeat(const QString &seatId)
 {
     Q_D(DLoginManager);
     QDBusPendingReply<> reply = d->m_inter->asyncCallWithArgumentList(QStringLiteral("TerminateSeat"),
-        {QVariant::fromValue(seat_id)});
+        {QVariant::fromValue(seatId)});
     reply.waitForFinished();
     if (!reply.isValid()) {
         d->m_errorMessage = reply.error().message();
@@ -1071,11 +1071,11 @@ void DLoginManager::terminateSeat(const QString &seat_id)
     }
 }
 
-void DLoginManager::terminateSession(const QString &session_id)
+void DLoginManager::terminateSession(const QString &sessionId)
 {
     Q_D(DLoginManager);
     QDBusPendingReply<> reply = d->m_inter->asyncCallWithArgumentList(QStringLiteral("TerminateSession"),
-        {QVariant::fromValue(session_id)});
+        {QVariant::fromValue(sessionId)});
     reply.waitForFinished();
     if (!reply.isValid()) {
         d->m_errorMessage = reply.error().message();
@@ -1095,11 +1095,11 @@ void DLoginManager::terminateUser(const uint uid)
     }
 }
 
-void DLoginManager::unlockSession(const QString &session_id)
+void DLoginManager::unlockSession(const QString &sessionId)
 {
     Q_D(DLoginManager);
     QDBusPendingReply<> reply = d->m_inter->asyncCallWithArgumentList(QStringLiteral("UnlockSession"),
-        {QVariant::fromValue(session_id)});
+        {QVariant::fromValue(sessionId)});
     reply.waitForFinished();
     if (!reply.isValid()) {
         d->m_errorMessage = reply.error().message();

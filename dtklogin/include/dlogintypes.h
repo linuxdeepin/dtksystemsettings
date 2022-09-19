@@ -33,23 +33,23 @@ struct Inhibitor
 
 struct Seat
 {
-    QString seat_id;
+    QString seatId;
     QString path;
 };
 
 struct Session
 {
-    QString session_id;
-    uint user_id;
-    QString user_name;
-    QString seat_id;
+    QString sessionId;
+    uint userId;
+    QString userName;
+    QString seatId;
     QString path;
 };
 
 struct User
 {
-    uint user_id;
-    QString user_name;
+    uint userId;
+    QString userName;
     QString path;
 };
 
@@ -57,13 +57,13 @@ typedef Seat SeatPath;
 
 struct SessionPath
 {
-    QString session_id;
+    QString sessionId;
     QString path;
 };
 
 struct UserPath
 {
-    uint user_id;
+    uint userId;
     QString path;
 };
 

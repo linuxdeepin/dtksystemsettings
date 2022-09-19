@@ -107,7 +107,7 @@ QString DLoginSession::state() const
     return qvariant_cast<QString>(d->m_inter->property("State"));
 }
 
-QString DLoginSession::tty() const
+QString DLoginSession::TTY() const
 {
     Q_D(const DLoginSession);
     return qvariant_cast<QString>(d->m_inter->property("TTY"));
@@ -125,7 +125,7 @@ SeatPath DLoginSession::seat() const
     const auto &result = qvariant_cast<SeatPath_p>(d->m_inter->property("Seat"));
     SeatPath seatPath;
     seatPath.path = result.path.path();
-    seatPath.seat_id = result.seat_id;
+    seatPath.seatId = result.seatId;
     return seatPath;
 }
 UserPath DLoginSession::user() const
@@ -134,7 +134,7 @@ UserPath DLoginSession::user() const
     const auto &result = qvariant_cast<UserPath_p>(d->m_inter->property("User"));
     UserPath userPath;
     userPath.path = result.path.path();
-    userPath.user_id = result.user_id;
+    userPath.userId = result.userId;
     return userPath;
 }
 
@@ -149,7 +149,7 @@ uint DLoginSession::leader() const
     Q_D(const DLoginSession);
     return qvariant_cast<uint>(d->m_inter->property("Leader"));
 }
-uint DLoginSession::vtnr() const
+uint DLoginSession::VTNr() const
 {
     Q_D(const DLoginSession);
     return qvariant_cast<uint>(d->m_inter->property("VTNr"));
@@ -195,13 +195,13 @@ void DLoginSession::activate()
     }
 }
 
-void DLoginSession::kill(const QString who, const uint signal_number)
+void DLoginSession::kill(const QString who, const uint signalNumber)
 {
     Q_D(DLoginSession);
     QDBusPendingReply<> reply = d->m_inter->asyncCallWithArgumentList(QStringLiteral("Kill"),
                                                                        {
                                                                            QVariant::fromValue(who),
-                                                                           QVariant::fromValue(signal_number),
+                                                                           QVariant::fromValue(signalNumber),
                                                                        });
     reply.waitForFinished();
     if (!reply.isValid()) {
@@ -212,7 +212,7 @@ void DLoginSession::kill(const QString who, const uint signal_number)
 void DLoginSession::lock()
 {
     Q_D(DLoginSession);
-    QDBusPendingReply<> reply = d->m_inter->asyncCall(QStringLiteral("Lock"));
+    QDBusPendingReply<> reply = d->m_inter->asyncCall(QStringLiteral("locked"));
     reply.waitForFinished();
     if (!reply.isValid()) {
         d->m_errorMessage = reply.error().message();
@@ -332,11 +332,11 @@ void DLoginSession::takeControl(const bool force)
 std::tuple<int,  // fd
            bool  // inactive
            >
-DLoginSession::takeDevice(uint manjor, uint minor)
+DLoginSession::takeDevice(uint major, uint minor)
 {
     Q_D(DLoginSession);
     QDBusPendingReply<QDBusUnixFileDescriptor, bool> reply = d->m_inter->asyncCallWithArgumentList(
-        QStringLiteral("TakeDevice"), {QVariant::fromValue(manjor), QVariant::fromValue(minor)});
+        QStringLiteral("TakeDevice"), {QVariant::fromValue(major), QVariant::fromValue(minor)});
     reply.waitForFinished();
     if (!reply.isValid()) {
         d->m_errorMessage = reply.error().message();
@@ -358,7 +358,7 @@ void DLoginSession::terminate()
 void DLoginSession::unlock()
 {
     Q_D(DLoginSession);
-    QDBusPendingReply<> reply = d->m_inter->asyncCall(QStringLiteral("Unlock"));
+    QDBusPendingReply<> reply = d->m_inter->asyncCall(QStringLiteral("unlocked"));
     reply.waitForFinished();
     if (!reply.isValid()) {
         d->m_errorMessage = reply.error().message();

@@ -42,25 +42,25 @@ struct Inhibitor_p
 
 struct Seat_p
 {
-    QString seat_id;
+    QString seatId;
     QDBusObjectPath path;
     static void registerMetaType();
 };
 
 struct Session_p
 {
-    QString session_id;
-    uint user_id;
-    QString user_name;
-    QString seat_id;
+    QString sessionId;
+    uint userId;
+    QString userName;
+    QString seatId;
     QDBusObjectPath path;
     static void registerMetaType();
 };
 
 struct User_p
 {
-    uint user_id;
-    QString user_name;
+    uint userId;
+    QString userName;
     QDBusObjectPath path;
     static void registerMetaType();
 };
@@ -69,14 +69,14 @@ typedef Seat_p SeatPath_p;
 
 struct SessionPath_p
 {
-    QString session_id;
+    QString sessionId;
     QDBusObjectPath path;
     static void registerMetaType();
 };
 
 struct UserPath_p
 {
-    uint user_id;
+    uint userId;
     QDBusObjectPath path;
     static void registerMetaType();
 };
