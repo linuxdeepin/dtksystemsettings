@@ -29,6 +29,7 @@ target_link_libraries(${BIN_NAME} PRIVATE
     -lpthread
     -lgcov
     -lgtest
+    -lcrypt
 )
 
 if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
