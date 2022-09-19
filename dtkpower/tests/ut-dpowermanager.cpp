@@ -3,7 +3,6 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
 #include <gtest/gtest.h>
-#include "3rdparty/cpp-stub/src/stub.h"
 #include "dpowermanager.h"
 
 DPOWER_USE_NAMESPACE
@@ -23,18 +22,4 @@ public:
 public:
     DPowerManager *m_manager = nullptr;
 };
-
-
-bool lidlsClosed_stub()
-{
-    return true;
-}
-
-
-TEST_F(ut_DPowerManager,DPowerManager)
-{
-    Stub stub;
-    stub.set(ADDR(DPowerManager,lidlsClosed),lidlsClosed_stub);
-    EXPECT_TRUE(m_manager->lidlsClosed());
-}
 

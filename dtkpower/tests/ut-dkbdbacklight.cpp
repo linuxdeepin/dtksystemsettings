@@ -3,7 +3,6 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
 #include <gtest/gtest.h>
-#include "3rdparty/cpp-stub/src/stub.h"
 #include "dkbdbacklight.h"
 
 DPOWER_USE_NAMESPACE
@@ -21,40 +20,4 @@ public:
     DKbdBacklight *m_backlight = nullptr;
 };
 
-uint getBrightness_stub()
-{
-    return 1;
-}
 
-TEST_F(ut_DKdbBacklight,getBrightness)
-{
-    Stub stub;
-    stub.set(ADDR(DKbdBacklight,getBrightness),getBrightness_stub);
-    EXPECT_EQ(m_backlight->getBrightness(),1);
-}
-
-uint getMaxBrightness_stub()
-{
-    return 1;
-}
-
-TEST_F(ut_DKdbBacklight,getMaxBrightness_stub)
-{
-    Stub stub;
-    stub.set(ADDR(DKbdBacklight,getMaxBrightness),getMaxBrightness_stub);
-    EXPECT_EQ(m_backlight->getMaxBrightness(),1);
-}
-
-int a = 0;
-void setBrightness_stub(uint value)
-{
-    a=1;
-}
-
-TEST_F(ut_DKdbBacklight,setBrightness_stub)
-{
-    Stub stub;
-    stub.set(ADDR(DKbdBacklight,setBrightness),setBrightness_stub);
-    m_backlight->setBrightness(1);
-    EXPECT_EQ(a,1);
-}
