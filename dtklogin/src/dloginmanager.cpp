@@ -2,9 +2,9 @@
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
-#include "dlogin1manager.h"
-#include <qdbuspendingreply.h>
+#include "dloginmanager.h"
 #include <qdbusextratypes.h>
+#include <qdbuspendingreply.h>
 #include <qdbusunixfiledescriptor.h>
 #include <qglobal.h>
 #include <qlist.h>
@@ -18,19 +18,19 @@
 #include <tuple>
 
 #include "ddbusinterface.h"
-#include "dlogin1manager_p.h"
-#include "dlogin1types_p.h"
-DLOGIN1_BEGIN_NAMESPACE
+#include "dloginmanager_p.h"
+#include "dlogintypes_p.h"
+DLOGIN_BEGIN_NAMESPACE
 
-DLogin1Manager::DLogin1Manager(QObject *parent)
+DLoginManager::DLoginManager(QObject *parent)
     : QObject(parent)
-    , d_ptr(new DLogin1ManagerPrivate(this))
+    , d_ptr(new DLoginManagerPrivate(this))
 {
     const QString &Service = QStringLiteral("org.freedesktop.login1");
     const QString &Path = QStringLiteral("/org/freedesktop/login1");
     const QString &Interface = QStringLiteral("org.freedesktop.login1.Manager");
 
-    Q_D(DLogin1Manager);
+    Q_D(DLoginManager);
     ScheduledShutdownValue_p::registerMetaType();
     SessionProperty_p::registerMetaType();
     Inhibitor_p::registerMetaType();
@@ -56,191 +56,191 @@ DLogin1Manager::DLogin1Manager(QObject *parent)
                                          d, SLOT(UserNew(const uint, const QDBusObjectPath&)));
     QDBusConnection::systemBus().connect(Service, Path, Interface, "UserRemoved",
                                          d, SLOT(UserRemoved(const uint, const QDBusObjectPath&)));
-    connect(d, &DLogin1ManagerPrivate::PrepareForShutdown, this, &DLogin1Manager::PrepareForShutdown);
-    connect(d, &DLogin1ManagerPrivate::PrepareForSleep, this, &DLogin1Manager::PrepareForSleep);
-    connect(d, &DLogin1ManagerPrivate::SeatNew, this, [this] (const QString &seat_id, const QDBusObjectPath &path) {
+    connect(d, &DLoginManagerPrivate::PrepareForShutdown, this, &DLoginManager::PrepareForShutdown);
+    connect(d, &DLoginManagerPrivate::PrepareForSleep, this, &DLoginManager::PrepareForSleep);
+    connect(d, &DLoginManagerPrivate::SeatNew, this, [this] (const QString &seat_id, const QDBusObjectPath &path) {
                 emit this->SeatNew(seat_id, path.path());
             });
-    connect(d, &DLogin1ManagerPrivate::SeatRemoved, this, [this] (const QString &seat_id, const QDBusObjectPath &path) {
+    connect(d, &DLoginManagerPrivate::SeatRemoved, this, [this] (const QString &seat_id, const QDBusObjectPath &path) {
                 emit this->SeatRemoved(seat_id, path.path());
             });
-    connect(d, &DLogin1ManagerPrivate::SessionNew, this, [this] (const QString &session_id, const QDBusObjectPath &path) {
+    connect(d, &DLoginManagerPrivate::SessionNew, this, [this] (const QString &session_id, const QDBusObjectPath &path) {
                 emit this->SessionNew(session_id, path.path());
             });
-    connect(d, &DLogin1ManagerPrivate::SessionRemoved, this, [this] (const QString &session_id, const QDBusObjectPath &path) {
+    connect(d, &DLoginManagerPrivate::SessionRemoved, this, [this] (const QString &session_id, const QDBusObjectPath &path) {
                 emit this->SessionRemoved(session_id, path.path());
             });
-    connect(d, &DLogin1ManagerPrivate::UserNew, this, [this] (const uint uid, const QDBusObjectPath &path) {
+    connect(d, &DLoginManagerPrivate::UserNew, this, [this] (const uint uid, const QDBusObjectPath &path) {
                 emit this->UserNew(uid, path.path());
             });
-    connect(d, &DLogin1ManagerPrivate::UserRemoved, this, [this] (const uint uid, const QDBusObjectPath &path) {
+    connect(d, &DLoginManagerPrivate::UserRemoved, this, [this] (const uint uid, const QDBusObjectPath &path) {
                 emit this->UserRemoved(uid, path.path());
             });
 }
 
-DLogin1Manager::~DLogin1Manager() {}
+DLoginManager::~DLoginManager() {}
 
 // properties
 
-QStringList DLogin1Manager::bootLoaderEntries() const
+QStringList DLoginManager::bootLoaderEntries() const
 {
-    Q_D(const DLogin1Manager);
+    Q_D(const DLoginManager);
     return qdbus_cast<QStringList>(d->m_inter->property("BootLoaderEntries"));
 }
 
-QStringList DLogin1Manager::killExcludeUsers() const
+QStringList DLoginManager::killExcludeUsers() const
 {
-    Q_D(const DLogin1Manager);
+    Q_D(const DLoginManager);
     return qdbus_cast<QStringList>(d->m_inter->property("KillExcludeUsers"));
 }
 
-QStringList DLogin1Manager::killOnlyUsers() const
+QStringList DLoginManager::killOnlyUsers() const
 {
-    Q_D(const DLogin1Manager);
+    Q_D(const DLoginManager);
     return qdbus_cast<QStringList>(d->m_inter->property("KillOnlyUsers"));
 }
 
-bool DLogin1Manager::docked() const
+bool DLoginManager::docked() const
 {
-    Q_D(const DLogin1Manager);
+    Q_D(const DLoginManager);
     return qdbus_cast<bool>(d->m_inter->property("Docked"));
 }
 
-bool DLogin1Manager::enableWallMessages() const
+bool DLoginManager::enableWallMessages() const
 {
-    Q_D(const DLogin1Manager);
+    Q_D(const DLoginManager);
     return qdbus_cast<bool>(d->m_inter->property("EnableWallMessages"));
 }
 
-void DLogin1Manager::setEnableWallMessages(const bool enable)
+void DLoginManager::setEnableWallMessages(const bool enable)
 {
-    Q_D(const DLogin1Manager);
+    Q_D(const DLoginManager);
     d->m_inter->setProperty("EnableWallMessages", QVariant::fromValue(enable));
 }
 
-bool DLogin1Manager::idleHint() const
+bool DLoginManager::idleHint() const
 {
-    Q_D(const DLogin1Manager);
+    Q_D(const DLoginManager);
     return qdbus_cast<bool>(d->m_inter->property("LdleHint"));
 }
 
-bool DLogin1Manager::killUserProcesses() const
+bool DLoginManager::killUserProcesses() const
 {
-    Q_D(const DLogin1Manager);
+    Q_D(const DLoginManager);
     return qdbus_cast<bool>(d->m_inter->property("KillUserProcesses"));
 }
 
-bool DLogin1Manager::lidClosed() const
+bool DLoginManager::lidClosed() const
 {
-    Q_D(const DLogin1Manager);
+    Q_D(const DLoginManager);
     return qdbus_cast<bool>(d->m_inter->property("LidClosed"));
 }
 
-bool DLogin1Manager::onExternalPower() const
+bool DLoginManager::onExternalPower() const
 {
-    Q_D(const DLogin1Manager);
+    Q_D(const DLoginManager);
     return qdbus_cast<bool>(d->m_inter->property("OnExternalPower"));
 }
 
-bool DLogin1Manager::preparingForShutdown() const
+bool DLoginManager::preparingForShutdown() const
 {
-    Q_D(const DLogin1Manager);
+    Q_D(const DLoginManager);
     return qdbus_cast<bool>(d->m_inter->property("PreparingForShutdown"));
 }
 
-bool DLogin1Manager::preparingForSleep() const
+bool DLoginManager::preparingForSleep() const
 {
-    Q_D(const DLogin1Manager);
+    Q_D(const DLoginManager);
     return qdbus_cast<bool>(d->m_inter->property("PreparingForSleep"));
 }
 
-bool DLogin1Manager::rebootToFirmwareSetup() const
+bool DLoginManager::rebootToFirmwareSetup() const
 {
-    Q_D(const DLogin1Manager);
+    Q_D(const DLoginManager);
     return qdbus_cast<bool>(d->m_inter->property("RebootToFirmwareSetup"));
 }
 
-bool DLogin1Manager::removeIPC() const
+bool DLoginManager::removeIPC() const
 {
-    Q_D(const DLogin1Manager);
+    Q_D(const DLoginManager);
     return qdbus_cast<bool>(d->m_inter->property("RemoveIPC"));
 }
 
-QString DLogin1Manager::blockInhibited() const
+QString DLoginManager::blockInhibited() const
 {
-    Q_D(const DLogin1Manager);
+    Q_D(const DLoginManager);
     return qdbus_cast<QString>(d->m_inter->property("BlockInhibited"));
 }
 
-QString DLogin1Manager::delayInhibited() const
+QString DLoginManager::delayInhibited() const
 {
-    Q_D(const DLogin1Manager);
+    Q_D(const DLoginManager);
     return qdbus_cast<QString>(d->m_inter->property("DelayInhibited"));
 }
 
-QString DLogin1Manager::handleHibernateKey() const
+QString DLoginManager::handleHibernateKey() const
 {
-    Q_D(const DLogin1Manager);
+    Q_D(const DLoginManager);
     return qdbus_cast<QString>(d->m_inter->property("HandleHibernateKey"));
 }
 
-QString DLogin1Manager::handleLidSwitch() const
+QString DLoginManager::handleLidSwitch() const
 {
-    Q_D(const DLogin1Manager);
+    Q_D(const DLoginManager);
     return qdbus_cast<QString>(d->m_inter->property("HandleLidSwitch"));
 }
 
-QString DLogin1Manager::handleLidSwitchDocked() const
+QString DLoginManager::handleLidSwitchDocked() const
 {
-    Q_D(const DLogin1Manager);
+    Q_D(const DLoginManager);
     return qdbus_cast<QString>(d->m_inter->property("HandleLidSwitchDocked"));
 }
 
-QString DLogin1Manager::handleLidSwitchExternalPower() const
+QString DLoginManager::handleLidSwitchExternalPower() const
 {
-    Q_D(const DLogin1Manager);
+    Q_D(const DLoginManager);
     return qdbus_cast<QString>(d->m_inter->property("HandleLidSwitchExternalPower"));
 }
 
-QString DLogin1Manager::handlePowerKey() const
+QString DLoginManager::handlePowerKey() const
 {
-    Q_D(const DLogin1Manager);
+    Q_D(const DLoginManager);
     return qdbus_cast<QString>(d->m_inter->property("HandlePowerKey"));
 }
 
-QString DLogin1Manager::handleSuspendKey() const
+QString DLoginManager::handleSuspendKey() const
 {
-    Q_D(const DLogin1Manager);
+    Q_D(const DLoginManager);
     return qdbus_cast<QString>(d->m_inter->property("HandleSuspendKey"));
 }
 
-QString DLogin1Manager::idleAction() const
+QString DLoginManager::idleAction() const
 {
-    Q_D(const DLogin1Manager);
+    Q_D(const DLoginManager);
     return qdbus_cast<QString>(d->m_inter->property("IdleAction"));
 }
 
-QString DLogin1Manager::rebootParameter() const
+QString DLoginManager::rebootParameter() const
 {
-    Q_D(const DLogin1Manager);
+    Q_D(const DLoginManager);
     return qdbus_cast<QString>(d->m_inter->property("RebootParameter"));
 }
 
-QString DLogin1Manager::rebootToBootLoaderEntry() const
+QString DLoginManager::rebootToBootLoaderEntry() const
 {
-    Q_D(const DLogin1Manager);
+    Q_D(const DLoginManager);
     return qdbus_cast<QString>(d->m_inter->property("RebootToBootLoaderEntry"));
 }
 
-QString DLogin1Manager::wallMessage() const
+QString DLoginManager::wallMessage() const
 {
-    Q_D(const DLogin1Manager);
+    Q_D(const DLoginManager);
     return qdbus_cast<QString>(d->m_inter->property("WallMessage"));
 }
 
-ScheduledShutdownValue DLogin1Manager::scheduledShutdown() const
+ScheduledShutdownValue DLoginManager::scheduledShutdown() const
 {
-    Q_D(const DLogin1Manager);
+    Q_D(const DLoginManager);
     const auto &result = qdbus_cast<ScheduledShutdownValue_p>(d->m_inter->property("ScheduledShutdown"));
     ScheduledShutdownValue value;
     value.type = result.type;
@@ -248,101 +248,101 @@ ScheduledShutdownValue DLogin1Manager::scheduledShutdown() const
     return value;
 }
 
-uint DLogin1Manager::nAutoVTs() const
+uint DLoginManager::nAutoVTs() const
 {
-    Q_D(const DLogin1Manager);
+    Q_D(const DLoginManager);
     return qdbus_cast<uint>(d->m_inter->property("NAutoVTs"));
 }
 
-quint64 DLogin1Manager::holdoffTimeoutUSec() const
+quint64 DLoginManager::holdoffTimeoutUSec() const
 {
-    Q_D(const DLogin1Manager);
+    Q_D(const DLoginManager);
     return qdbus_cast<quint64>(d->m_inter->property("HoldoffTimeoutUSec"));
 }
 
-quint64 DLogin1Manager::idleActionUSec() const
+quint64 DLoginManager::idleActionUSec() const
 {
-    Q_D(const DLogin1Manager);
+    Q_D(const DLoginManager);
     return qdbus_cast<quint64>(d->m_inter->property("IdleActionUSec"));
 }
 
-quint64 DLogin1Manager::idleSinceHint() const
+quint64 DLoginManager::idleSinceHint() const
 {
-    Q_D(const DLogin1Manager);
+    Q_D(const DLoginManager);
     return qdbus_cast<quint64>(d->m_inter->property("IdleSinceHint"));
 }
 
-quint64 DLogin1Manager::idleSinceHintMonotonic() const
+quint64 DLoginManager::idleSinceHintMonotonic() const
 {
-    Q_D(const DLogin1Manager);
+    Q_D(const DLoginManager);
     return qdbus_cast<quint64>(d->m_inter->property("IdleSinceHintMonotonic"));
 }
 
-quint64 DLogin1Manager::inhibitDelayMaxUSec() const
+quint64 DLoginManager::inhibitDelayMaxUSec() const
 {
-    Q_D(const DLogin1Manager);
+    Q_D(const DLoginManager);
     return qdbus_cast<quint64>(d->m_inter->property("InhibitDelayMaxUSec"));
 }
 
-quint64 DLogin1Manager::inhibitorsMax() const
+quint64 DLoginManager::inhibitorsMax() const
 {
-    Q_D(const DLogin1Manager);
+    Q_D(const DLoginManager);
     return qdbus_cast<quint64>(d->m_inter->property("InhibitorsMax"));
 }
 
-quint64 DLogin1Manager::nCurrentInhibitors() const
+quint64 DLoginManager::nCurrentInhibitors() const
 {
-    Q_D(const DLogin1Manager);
+    Q_D(const DLoginManager);
     return qdbus_cast<quint64>(d->m_inter->property("NCurrentInhibitors"));
 }
 
-quint64 DLogin1Manager::nCurrentSessions() const
+quint64 DLoginManager::nCurrentSessions() const
 {
-    Q_D(const DLogin1Manager);
+    Q_D(const DLoginManager);
     return qdbus_cast<quint64>(d->m_inter->property("NCurrentSessions"));
 }
 
-quint64 DLogin1Manager::rebootToBootLoaderMenu() const
+quint64 DLoginManager::rebootToBootLoaderMenu() const
 {
-    Q_D(const DLogin1Manager);
+    Q_D(const DLoginManager);
     return qdbus_cast<quint64>(d->m_inter->property("RebootToBootLoaderMenu"));
 }
 
-quint64 DLogin1Manager::runtimeDirectoryInodesMax() const
+quint64 DLoginManager::runtimeDirectoryInodesMax() const
 {
-    Q_D(const DLogin1Manager);
+    Q_D(const DLoginManager);
     return qdbus_cast<quint64>(d->m_inter->property("RuntimeDirectoryInodesMax"));
 }
 
-quint64 DLogin1Manager::runtimeDirectorySize() const
+quint64 DLoginManager::runtimeDirectorySize() const
 {
-    Q_D(const DLogin1Manager);
+    Q_D(const DLoginManager);
     return qdbus_cast<quint64>(d->m_inter->property("RuntimeDirectorySize"));
 }
 
-quint64 DLogin1Manager::sessionsMax() const
+quint64 DLoginManager::sessionsMax() const
 {
-    Q_D(const DLogin1Manager);
+    Q_D(const DLoginManager);
     return qdbus_cast<quint64>(d->m_inter->property("SessionsMax"));
 }
 
-quint64 DLogin1Manager::userStopDelayUSec() const
+quint64 DLoginManager::userStopDelayUSec() const
 {
-    Q_D(const DLogin1Manager);
+    Q_D(const DLoginManager);
     return qdbus_cast<quint64>(d->m_inter->property("UserStopDelayUSec"));
 }
 
 // public slots
 
-QString DLogin1Manager::lastError() const
+QString DLoginManager::lastError() const
 {
-    Q_D(const DLogin1Manager);
+    Q_D(const DLoginManager);
     return d->m_errorMessage;
 }
 
-void DLogin1Manager::activateSession(const QString &session_id)
+void DLoginManager::activateSession(const QString &session_id)
 {
-    Q_D(DLogin1Manager);
+    Q_D(DLoginManager);
     QVariantList args {QVariant::fromValue(session_id)};
     QDBusPendingReply<> reply = d->m_inter->asyncCallWithArgumentList("ActivateSession", args);
     reply.waitForFinished();
@@ -352,9 +352,9 @@ void DLogin1Manager::activateSession(const QString &session_id)
     }
 }
 
-void DLogin1Manager::activateSessionOnSeat(const QString &session_id, const QString &seat_id)
+void DLoginManager::activateSessionOnSeat(const QString &session_id, const QString &seat_id)
 {
-    Q_D(DLogin1Manager);
+    Q_D(DLoginManager);
     QVariantList args {QVariant::fromValue(session_id), QVariant::fromValue(seat_id)};
     QDBusPendingReply<> reply = d->m_inter->asyncCallWithArgumentList("ActivateSessionOnSeat", args);
     reply.waitForFinished();
@@ -364,9 +364,9 @@ void DLogin1Manager::activateSessionOnSeat(const QString &session_id, const QStr
     }
 }
 
-void DLogin1Manager::attachDevice(const QString &seat_id, const QString &sysfs_path, const bool interactive)
+void DLoginManager::attachDevice(const QString &seat_id, const QString &sysfs_path, const bool interactive)
 {
-    Q_D(DLogin1Manager);
+    Q_D(DLoginManager);
     QVariantList args {QVariant::fromValue(seat_id), QVariant::fromValue(sysfs_path), QVariant::fromValue(interactive)};
     QDBusPendingReply<> reply = d->m_inter->asyncCallWithArgumentList("attachDevice", {seat_id, sysfs_path, interactive});
     reply.waitForFinished();
@@ -376,9 +376,9 @@ void DLogin1Manager::attachDevice(const QString &seat_id, const QString &sysfs_p
     }
 }
 
-QString DLogin1Manager::canHalt()
+QString DLoginManager::canHalt()
 {
-    Q_D(DLogin1Manager);
+    Q_D(DLoginManager);
     QDBusPendingReply<QString> reply = d->m_inter->asyncCall(QStringLiteral("CanHalt"));
     reply.waitForFinished();
     if (!reply.isValid()) {
@@ -389,9 +389,9 @@ QString DLogin1Manager::canHalt()
     return reply.value();
 }
 
-QString DLogin1Manager::canHibernate()
+QString DLoginManager::canHibernate()
 {
-    Q_D(DLogin1Manager);
+    Q_D(DLoginManager);
     QDBusPendingReply<QString> reply = d->m_inter->asyncCall(QStringLiteral("CanHibernate"));
     reply.waitForFinished();
     if (!reply.isValid()) {
@@ -402,9 +402,9 @@ QString DLogin1Manager::canHibernate()
     return reply.value();
 }
 
-QString DLogin1Manager::canHybridSleep()
+QString DLoginManager::canHybridSleep()
 {
-    Q_D(DLogin1Manager);
+    Q_D(DLoginManager);
     QDBusPendingReply<QString> reply = d->m_inter->asyncCall(QStringLiteral("CanHybridSleep"));
     reply.waitForFinished();
     if (!reply.isValid()) {
@@ -415,9 +415,9 @@ QString DLogin1Manager::canHybridSleep()
     return reply.value();
 }
 
-QString DLogin1Manager::canPowerOff()
+QString DLoginManager::canPowerOff()
 {
-    Q_D(DLogin1Manager);
+    Q_D(DLoginManager);
     QDBusPendingReply<QString> reply = d->m_inter->asyncCall(QStringLiteral("CanPowerOff"));
     reply.waitForFinished();
     if (!reply.isValid()) {
@@ -428,9 +428,9 @@ QString DLogin1Manager::canPowerOff()
     return reply.value();
 }
 
-QString DLogin1Manager::canReboot()
+QString DLoginManager::canReboot()
 {
-    Q_D(DLogin1Manager);
+    Q_D(DLoginManager);
     QDBusPendingReply<QString> reply = d->m_inter->asyncCall(QStringLiteral("CanReboot"));
     reply.waitForFinished();
     if (!reply.isValid()) {
@@ -441,9 +441,9 @@ QString DLogin1Manager::canReboot()
     return reply.value();
 }
 
-QString DLogin1Manager::canRebootParameter()
+QString DLoginManager::canRebootParameter()
 {
-    Q_D(DLogin1Manager);
+    Q_D(DLoginManager);
     QDBusPendingReply<QString> reply = d->m_inter->asyncCall(QStringLiteral("CanRebootParameter"));
     reply.waitForFinished();
     if (!reply.isValid()) {
@@ -454,9 +454,9 @@ QString DLogin1Manager::canRebootParameter()
     return reply.value();
 }
 
-QString DLogin1Manager::canRebootToBootLoaderEntry()
+QString DLoginManager::canRebootToBootLoaderEntry()
 {
-    Q_D(DLogin1Manager);
+    Q_D(DLoginManager);
     QDBusPendingReply<QString> reply = d->m_inter->asyncCall(QStringLiteral("CanRebootToBootLoaderEntry"));
     reply.waitForFinished();
     if (!reply.isValid()) {
@@ -467,9 +467,9 @@ QString DLogin1Manager::canRebootToBootLoaderEntry()
     return reply.value();
 }
 
-QString DLogin1Manager::canRebootToBootLoaderMenu()
+QString DLoginManager::canRebootToBootLoaderMenu()
 {
-    Q_D(DLogin1Manager);
+    Q_D(DLoginManager);
     QDBusPendingReply<QString> reply = d->m_inter->asyncCall(QStringLiteral("CanRebootToBootLoaderMenu"));
     reply.waitForFinished();
     if (!reply.isValid()) {
@@ -480,9 +480,9 @@ QString DLogin1Manager::canRebootToBootLoaderMenu()
     return reply.value();
 }
 
-QString DLogin1Manager::canRebootToFirmwareSetup()
+QString DLoginManager::canRebootToFirmwareSetup()
 {
-    Q_D(DLogin1Manager);
+    Q_D(DLoginManager);
     QDBusPendingReply<QString> reply = d->m_inter->asyncCall(QStringLiteral("CanRebootToFirmwareSetup"));
     reply.waitForFinished();
     if (!reply.isValid()) {
@@ -493,9 +493,9 @@ QString DLogin1Manager::canRebootToFirmwareSetup()
     return reply.value();
 }
 
-QString DLogin1Manager::canSuspend()
+QString DLoginManager::canSuspend()
 {
-    Q_D(DLogin1Manager);
+    Q_D(DLoginManager);
     QDBusPendingReply<QString> reply = d->m_inter->asyncCall(QStringLiteral("CanSuspend"));
     reply.waitForFinished();
     if (!reply.isValid()) {
@@ -506,9 +506,9 @@ QString DLogin1Manager::canSuspend()
     return reply.value();
 }
 
-QString DLogin1Manager::canSuspendThenHibernate()
+QString DLoginManager::canSuspendThenHibernate()
 {
-    Q_D(DLogin1Manager);
+    Q_D(DLoginManager);
     QDBusPendingReply<QString> reply = d->m_inter->asyncCall(QStringLiteral("CanSuspendThenHibernate"));
     reply.waitForFinished();
     if (!reply.isValid()) {
@@ -519,9 +519,9 @@ QString DLogin1Manager::canSuspendThenHibernate()
     return reply.value();
 }
 
-bool DLogin1Manager::cancelScheduledShutdown()
+bool DLoginManager::cancelScheduledShutdown()
 {
-    Q_D(DLogin1Manager);
+    Q_D(DLoginManager);
     QDBusPendingReply<bool> reply = d->m_inter->asyncCall(QStringLiteral("CancelScheduledShutdown"));
     reply.waitForFinished();
     if (!reply.isValid()) {
@@ -540,12 +540,12 @@ std::tuple<QString,     // session_id
     QString,        // seat_id
     uint,           // vtnr
     bool            // existing
-    > DLogin1Manager::createSession(uint uid, uint pid, const QString &service, const QString &type,
+    > DLoginManager::createSession(uint uid, uint pid, const QString &service, const QString &type,
         const QString &_class, const QString &desktop, const QString &seat_id,
         uint vtnr, const QString &tty, const QString &display, const QString &remote,
         const QString &remote_user, const QString &remote_host, const QList<SessionProperty> &properties)
 {
-    Q_D(DLogin1Manager);
+    Q_D(DLoginManager);
     QList<SessionProperty_p> properties_p;
     for (auto && property : properties) {
         SessionProperty_p property_p;
@@ -571,9 +571,9 @@ std::tuple<QString,     // session_id
         reply.argumentAt<7>());
 }
 
-void DLogin1Manager::flushDevices(const bool value)
+void DLoginManager::flushDevices(const bool value)
 {
-    Q_D(DLogin1Manager);
+    Q_D(DLoginManager);
     QDBusPendingReply<> reply = d->m_inter->asyncCallWithArgumentList(QStringLiteral("flushDevices"), {QVariant::fromValue(value)});
     reply.waitForFinished();
     if (!reply.isValid()) {
@@ -582,9 +582,9 @@ void DLogin1Manager::flushDevices(const bool value)
     }
 }
 
-QString DLogin1Manager::getSeat(const QString &seat_id)
+QString DLoginManager::getSeat(const QString &seat_id)
 {
-    Q_D(DLogin1Manager);
+    Q_D(DLoginManager);
     QDBusPendingReply<QDBusObjectPath> reply = d->m_inter->asyncCallWithArgumentList(QStringLiteral("GetSeat"),
         {QVariant::fromValue(seat_id)});
     reply.waitForFinished();
@@ -596,9 +596,9 @@ QString DLogin1Manager::getSeat(const QString &seat_id)
     return reply.value().path();
 }
 
-QString DLogin1Manager::getSession(const QString &session_id)
+QString DLoginManager::getSession(const QString &session_id)
 {
-    Q_D(DLogin1Manager);
+    Q_D(DLoginManager);
     QDBusPendingReply<QDBusObjectPath> reply = d->m_inter->asyncCallWithArgumentList(QStringLiteral("GetSession"),
         {QVariant::fromValue(session_id)});
     reply.waitForFinished();
@@ -610,9 +610,9 @@ QString DLogin1Manager::getSession(const QString &session_id)
     return reply.value().path();
 }
 
-QString DLogin1Manager::getSessionByPID(const uint pid)
+QString DLoginManager::getSessionByPID(const uint pid)
 {
-    Q_D(DLogin1Manager);
+    Q_D(DLoginManager);
     QDBusPendingReply<QDBusObjectPath> reply = d->m_inter->asyncCallWithArgumentList(QStringLiteral("GetSessionByPID"),
         {QVariant::fromValue(pid)});
     reply.waitForFinished();
@@ -624,9 +624,9 @@ QString DLogin1Manager::getSessionByPID(const uint pid)
     return reply.value().path();
 }
 
-QString DLogin1Manager::getUser(const uint uid)
+QString DLoginManager::getUser(const uint uid)
 {
-    Q_D(DLogin1Manager);
+    Q_D(DLoginManager);
     QDBusPendingReply<QDBusObjectPath> reply = d->m_inter->asyncCallWithArgumentList(QStringLiteral("GetUser"),
         {QVariant::fromValue(uid)});
     reply.waitForFinished();
@@ -638,9 +638,9 @@ QString DLogin1Manager::getUser(const uint uid)
     return reply.value().path();
 }
 
-QString DLogin1Manager::getUserByPID(const uint pid)
+QString DLoginManager::getUserByPID(const uint pid)
 {
-    Q_D(DLogin1Manager);
+    Q_D(DLoginManager);
     QDBusPendingReply<QDBusObjectPath> reply = d->m_inter->asyncCallWithArgumentList(QStringLiteral("GetUserByPID"),
         {QVariant::fromValue(pid)});
     reply.waitForFinished();
@@ -652,9 +652,9 @@ QString DLogin1Manager::getUserByPID(const uint pid)
     return reply.value().path();
 }
 
-void DLogin1Manager::halt(const bool interactive)
+void DLoginManager::halt(const bool interactive)
 {
-    Q_D(DLogin1Manager);
+    Q_D(DLoginManager);
     QDBusPendingReply<> reply = d->m_inter->asyncCallWithArgumentList("Halt", {QVariant::fromValue(interactive)});
     reply.waitForFinished();
     if (!reply.isValid()) {
@@ -663,9 +663,9 @@ void DLogin1Manager::halt(const bool interactive)
     }
 }
 
-void DLogin1Manager::haltWithFlags(const quint64 flags)
+void DLoginManager::haltWithFlags(const quint64 flags)
 {
-    Q_D(DLogin1Manager);
+    Q_D(DLoginManager);
     QDBusPendingReply<> reply = d->m_inter->asyncCallWithArgumentList("HaltWithFlags", {QVariant::fromValue(flags)});
     reply.waitForFinished();
     if (!reply.isValid()) {
@@ -674,9 +674,9 @@ void DLogin1Manager::haltWithFlags(const quint64 flags)
     }
 }
 
-void DLogin1Manager::hibernate(const bool interactive)
+void DLoginManager::hibernate(const bool interactive)
 {
-    Q_D(DLogin1Manager);
+    Q_D(DLoginManager);
     QDBusPendingReply<> reply = d->m_inter->asyncCallWithArgumentList("Hibernate", {QVariant::fromValue(interactive)});
     reply.waitForFinished();
     if (!reply.isValid()) {
@@ -685,9 +685,9 @@ void DLogin1Manager::hibernate(const bool interactive)
     }
 }
 
-void DLogin1Manager::hibernateWithFlags(const quint64 flags)
+void DLoginManager::hibernateWithFlags(const quint64 flags)
 {
-    Q_D(DLogin1Manager);
+    Q_D(DLoginManager);
     QDBusPendingReply<> reply = d->m_inter->asyncCallWithArgumentList("HibernateWithFlags", {QVariant::fromValue(flags)});
     reply.waitForFinished();
     if (!reply.isValid()) {
@@ -696,9 +696,9 @@ void DLogin1Manager::hibernateWithFlags(const quint64 flags)
     }
 }
 
-void DLogin1Manager::hybridSleep(const bool interactive)
+void DLoginManager::hybridSleep(const bool interactive)
 {
-    Q_D(DLogin1Manager);
+    Q_D(DLoginManager);
     QDBusPendingReply<> reply = d->m_inter->asyncCallWithArgumentList("HybridSleep", {QVariant::fromValue(interactive)});
     reply.waitForFinished();
     if (!reply.isValid()) {
@@ -707,9 +707,9 @@ void DLogin1Manager::hybridSleep(const bool interactive)
     }
 }
 
-void DLogin1Manager::hybridSleepWithFlags(const quint64 flags)
+void DLoginManager::hybridSleepWithFlags(const quint64 flags)
 {
-    Q_D(DLogin1Manager);
+    Q_D(DLoginManager);
     QDBusPendingReply<> reply = d->m_inter->asyncCallWithArgumentList("HybridSleepWithFlags", {QVariant::fromValue(flags)});
     reply.waitForFinished();
     if (!reply.isValid()) {
@@ -718,9 +718,9 @@ void DLogin1Manager::hybridSleepWithFlags(const quint64 flags)
     }
 }
 
-int DLogin1Manager::inhibit(const QString &what, const QString &who, const QString &why, const QString &mode)
+int DLoginManager::inhibit(const QString &what, const QString &who, const QString &why, const QString &mode)
 {
-    Q_D(DLogin1Manager);
+    Q_D(DLoginManager);
     QDBusPendingReply<QDBusUnixFileDescriptor> reply = d->m_inter->asyncCallWithArgumentList(QStringLiteral("Inhibit"),
         {QVariant::fromValue(what), QVariant::fromValue(who), QVariant::fromValue(why), QVariant::fromValue(mode)});
     reply.waitForFinished();
@@ -732,9 +732,9 @@ int DLogin1Manager::inhibit(const QString &what, const QString &who, const QStri
     return reply.value().fileDescriptor();
 }
 
-void DLogin1Manager::killSession(const QString &session_id, const QString &who, const int signal_number)
+void DLoginManager::killSession(const QString &session_id, const QString &who, const int signal_number)
 {
-    Q_D(DLogin1Manager);
+    Q_D(DLoginManager);
     QDBusPendingReply<> reply = d->m_inter->asyncCallWithArgumentList("KillSession",
         {QVariant::fromValue(session_id), QVariant::fromValue(who), QVariant::fromValue(signal_number)});
     reply.waitForFinished();
@@ -744,9 +744,9 @@ void DLogin1Manager::killSession(const QString &session_id, const QString &who, 
     }
 }
 
-void DLogin1Manager::killUser(const uint uid, const int signal_number)
+void DLoginManager::killUser(const uint uid, const int signal_number)
 {
-    Q_D(DLogin1Manager);
+    Q_D(DLoginManager);
     QDBusPendingReply<> reply = d->m_inter->asyncCallWithArgumentList(QStringLiteral("KillUser"),
         {QVariant::fromValue(uid), QVariant::fromValue(signal_number)});
     reply.waitForFinished();
@@ -756,9 +756,9 @@ void DLogin1Manager::killUser(const uint uid, const int signal_number)
     }
 }
 
-QList<Inhibitor> DLogin1Manager::listInhibitors()
+QList<Inhibitor> DLoginManager::listInhibitors()
 {
-    Q_D(DLogin1Manager);
+    Q_D(DLoginManager);
     QDBusPendingReply<QList<Inhibitor_p>> reply = d->m_inter->asyncCall(QStringLiteral("ListInhibitors"));
     reply.waitForFinished();
     QList<Inhibitor> inhibitors;
@@ -781,9 +781,9 @@ QList<Inhibitor> DLogin1Manager::listInhibitors()
     return inhibitors;
 }
 
-QList<Seat> DLogin1Manager::listSeats()
+QList<Seat> DLoginManager::listSeats()
 {
-    Q_D(DLogin1Manager);
+    Q_D(DLoginManager);
     QDBusPendingReply<QList<Seat_p>> reply = d->m_inter->asyncCall(QStringLiteral("ListSeats"));
     reply.waitForFinished();
     QList<Seat> seats;
@@ -802,9 +802,9 @@ QList<Seat> DLogin1Manager::listSeats()
     return seats;
 }
 
-QList<Session> DLogin1Manager::listSessions()
+QList<Session> DLoginManager::listSessions()
 {
-    Q_D(DLogin1Manager);
+    Q_D(DLoginManager);
     QDBusPendingReply<QList<Session_p>> reply = d->m_inter->asyncCall(QStringLiteral("ListSessions"));
     reply.waitForFinished();
     QList<Session> sessions;
@@ -826,9 +826,9 @@ QList<Session> DLogin1Manager::listSessions()
     return sessions;
 }
 
-QList<User> DLogin1Manager::listUsers()
+QList<User> DLoginManager::listUsers()
 {
-    Q_D(DLogin1Manager);
+    Q_D(DLoginManager);
     QDBusPendingReply<QList<User_p>> reply = d->m_inter->asyncCall(QStringLiteral("ListUsers"));
     reply.waitForFinished();
     QList<User> users;
@@ -848,9 +848,9 @@ QList<User> DLogin1Manager::listUsers()
     return users;
 }
 
-void DLogin1Manager::lockSession(const QString &session_id)
+void DLoginManager::lockSession(const QString &session_id)
 {
-    Q_D(DLogin1Manager);
+    Q_D(DLoginManager);
     QDBusPendingReply<> reply = d->m_inter->asyncCallWithArgumentList(QStringLiteral("LockSession"),
         {QVariant::fromValue(session_id)});
     reply.waitForFinished();
@@ -860,9 +860,9 @@ void DLogin1Manager::lockSession(const QString &session_id)
     }
 }
 
-void DLogin1Manager::lockSessions()
+void DLoginManager::lockSessions()
 {
-    Q_D(DLogin1Manager);
+    Q_D(DLoginManager);
     QDBusPendingReply<> reply = d->m_inter->asyncCall(QStringLiteral("LockSessions"));
     reply.waitForFinished();
     if (!reply.isValid()) {
@@ -871,9 +871,9 @@ void DLogin1Manager::lockSessions()
     }
 }
 
-void DLogin1Manager::powerOff(const bool interactive)
+void DLoginManager::powerOff(const bool interactive)
 {
-    Q_D(DLogin1Manager);
+    Q_D(DLoginManager);
     QDBusPendingReply<> reply = d->m_inter->asyncCallWithArgumentList(QStringLiteral("PowerOff"),
         {QVariant::fromValue(interactive)});
     reply.waitForFinished();
@@ -883,9 +883,9 @@ void DLogin1Manager::powerOff(const bool interactive)
     }
 }
 
-void DLogin1Manager::powerOffWithFlags(const quint64 flags)
+void DLoginManager::powerOffWithFlags(const quint64 flags)
 {
-    Q_D(DLogin1Manager);
+    Q_D(DLoginManager);
     QDBusPendingReply<> reply = d->m_inter->asyncCallWithArgumentList("PowerOffWithFlags", {QVariant::fromValue(flags)});
     reply.waitForFinished();
     if (!reply.isValid()) {
@@ -894,9 +894,9 @@ void DLogin1Manager::powerOffWithFlags(const quint64 flags)
     }
 }
 
-void DLogin1Manager::reboot(const bool interactive)
+void DLoginManager::reboot(const bool interactive)
 {
-    Q_D(DLogin1Manager);
+    Q_D(DLoginManager);
     QDBusPendingReply<> reply = d->m_inter->asyncCallWithArgumentList(QStringLiteral("Reboot"),
         {QVariant::fromValue(interactive)});
     reply.waitForFinished();
@@ -906,9 +906,9 @@ void DLogin1Manager::reboot(const bool interactive)
     }
 }
 
-void DLogin1Manager::rebootWithFlags(const quint64 flags)
+void DLoginManager::rebootWithFlags(const quint64 flags)
 {
-    Q_D(DLogin1Manager);
+    Q_D(DLoginManager);
     QDBusPendingReply<> reply = d->m_inter->asyncCallWithArgumentList("RebootWithFlags", {QVariant::fromValue(flags)});
     reply.waitForFinished();
     if (!reply.isValid()) {
@@ -917,9 +917,9 @@ void DLogin1Manager::rebootWithFlags(const quint64 flags)
     }
 }
 
-void DLogin1Manager::releaseSession(const QString &session_id)
+void DLoginManager::releaseSession(const QString &session_id)
 {
-    Q_D(DLogin1Manager);
+    Q_D(DLoginManager);
     QDBusPendingReply<> reply = d->m_inter->asyncCallWithArgumentList(QStringLiteral("ReleaseSession"),
         {QVariant::fromValue(session_id)});
     reply.waitForFinished();
@@ -929,9 +929,9 @@ void DLogin1Manager::releaseSession(const QString &session_id)
     }
 }
 
-void DLogin1Manager::setRebootParameter(const QString &paramter)
+void DLoginManager::setRebootParameter(const QString &paramter)
 {
-    Q_D(DLogin1Manager);
+    Q_D(DLoginManager);
     QDBusPendingReply<> reply = d->m_inter->asyncCallWithArgumentList(QStringLiteral("SetRebootParameter"),
         {QVariant::fromValue(paramter)});
     reply.waitForFinished();
@@ -941,9 +941,9 @@ void DLogin1Manager::setRebootParameter(const QString &paramter)
     }
 }
 
-void DLogin1Manager::scheduleShutdown(const QString &type, const quint64 usec)
+void DLoginManager::scheduleShutdown(const QString &type, const quint64 usec)
 {
-    Q_D(DLogin1Manager);
+    Q_D(DLoginManager);
     QDBusPendingReply<> reply = d->m_inter->asyncCallWithArgumentList(QStringLiteral("ScheduleShutdown"),
         {QVariant::fromValue(type), QVariant::fromValue(usec)});
     reply.waitForFinished();
@@ -953,9 +953,9 @@ void DLogin1Manager::scheduleShutdown(const QString &type, const quint64 usec)
     }
 }
 
-void DLogin1Manager::setRebootToBootLoaderEntry(const QString &entry)
+void DLoginManager::setRebootToBootLoaderEntry(const QString &entry)
 {
-    Q_D(DLogin1Manager);
+    Q_D(DLoginManager);
     QDBusPendingReply<> reply = d->m_inter->asyncCallWithArgumentList(QStringLiteral("SetRebootToBootLoaderEntry"),
         {QVariant::fromValue(entry)});
     reply.waitForFinished();
@@ -965,9 +965,9 @@ void DLogin1Manager::setRebootToBootLoaderEntry(const QString &entry)
     }
 }
 
-void DLogin1Manager::setRebootToBootLoaderMenu(const quint64 timeout)
+void DLoginManager::setRebootToBootLoaderMenu(const quint64 timeout)
 {
-    Q_D(DLogin1Manager);
+    Q_D(DLoginManager);
     QDBusPendingReply<> reply = d->m_inter->asyncCallWithArgumentList(QStringLiteral("SetRebootToBootLoaderMenu"),
         {QVariant::fromValue(timeout)});
     reply.waitForFinished();
@@ -977,9 +977,9 @@ void DLogin1Manager::setRebootToBootLoaderMenu(const quint64 timeout)
     }
 }
 
-void DLogin1Manager::setRebootToFirmwareSetup(const bool enable)
+void DLoginManager::setRebootToFirmwareSetup(const bool enable)
 {
-    Q_D(DLogin1Manager);
+    Q_D(DLoginManager);
     QDBusPendingReply<> reply = d->m_inter->asyncCallWithArgumentList(QStringLiteral("SetRebootToFirmwareSetup"),
         {QVariant::fromValue(enable)});
     reply.waitForFinished();
@@ -989,9 +989,9 @@ void DLogin1Manager::setRebootToFirmwareSetup(const bool enable)
     }
 }
 
-void DLogin1Manager::setUserLinger(const uint uid, const bool enable, const bool interactive)
+void DLoginManager::setUserLinger(const uint uid, const bool enable, const bool interactive)
 {
-    Q_D(DLogin1Manager);
+    Q_D(DLoginManager);
     QDBusPendingReply<> reply = d->m_inter->asyncCallWithArgumentList(QStringLiteral("SetUserLinger"),
         {QVariant::fromValue(uid), QVariant::fromValue(enable), QVariant::fromValue(interactive)});
     reply.waitForFinished();
@@ -1001,9 +1001,9 @@ void DLogin1Manager::setUserLinger(const uint uid, const bool enable, const bool
     }
 }
 
-void DLogin1Manager::setWallMessage(const QString &message, const bool enable)
+void DLoginManager::setWallMessage(const QString &message, const bool enable)
 {
-    Q_D(DLogin1Manager);
+    Q_D(DLoginManager);
     QDBusPendingReply<> reply = d->m_inter->asyncCallWithArgumentList(QStringLiteral("SetWallMessage"),
         {QVariant::fromValue(message), QVariant::fromValue(enable)});
     reply.waitForFinished();
@@ -1013,9 +1013,9 @@ void DLogin1Manager::setWallMessage(const QString &message, const bool enable)
     }
 }
 
-void DLogin1Manager::suspend(const bool interactive)
+void DLoginManager::suspend(const bool interactive)
 {
-    Q_D(DLogin1Manager);
+    Q_D(DLoginManager);
     QDBusPendingReply<> reply = d->m_inter->asyncCallWithArgumentList(QStringLiteral("Suspend"),
         {QVariant::fromValue(interactive)});
     reply.waitForFinished();
@@ -1025,9 +1025,9 @@ void DLogin1Manager::suspend(const bool interactive)
     }
 }
 
-void DLogin1Manager::suspendThenHibernate(const bool interactive)
+void DLoginManager::suspendThenHibernate(const bool interactive)
 {
-    Q_D(DLogin1Manager);
+    Q_D(DLoginManager);
     QDBusPendingReply<> reply = d->m_inter->asyncCallWithArgumentList(QStringLiteral("SuspendThenHibernate"),
         {QVariant::fromValue(interactive)});
     reply.waitForFinished();
@@ -1037,9 +1037,9 @@ void DLogin1Manager::suspendThenHibernate(const bool interactive)
     }
 }
 
-void DLogin1Manager::suspendThenHibernateWithFlags(const quint64 flags)
+void DLoginManager::suspendThenHibernateWithFlags(const quint64 flags)
 {
-    Q_D(DLogin1Manager);
+    Q_D(DLoginManager);
     QDBusPendingReply<> reply = d->m_inter->asyncCallWithArgumentList("SuspendThenHibernateWithFlags", {QVariant::fromValue(flags)});
     reply.waitForFinished();
     if (!reply.isValid()) {
@@ -1048,9 +1048,9 @@ void DLogin1Manager::suspendThenHibernateWithFlags(const quint64 flags)
     }
 }
 
-void DLogin1Manager::suspendWithFlags(const quint64 flags)
+void DLoginManager::suspendWithFlags(const quint64 flags)
 {
-    Q_D(DLogin1Manager);
+    Q_D(DLoginManager);
     QDBusPendingReply<> reply = d->m_inter->asyncCallWithArgumentList("SuspendWithFlags", {QVariant::fromValue(flags)});
     reply.waitForFinished();
     if (!reply.isValid()) {
@@ -1059,9 +1059,9 @@ void DLogin1Manager::suspendWithFlags(const quint64 flags)
     }
 }
 
-void DLogin1Manager::terminateSeat(const QString &seat_id)
+void DLoginManager::terminateSeat(const QString &seat_id)
 {
-    Q_D(DLogin1Manager);
+    Q_D(DLoginManager);
     QDBusPendingReply<> reply = d->m_inter->asyncCallWithArgumentList(QStringLiteral("TerminateSeat"),
         {QVariant::fromValue(seat_id)});
     reply.waitForFinished();
@@ -1071,9 +1071,9 @@ void DLogin1Manager::terminateSeat(const QString &seat_id)
     }
 }
 
-void DLogin1Manager::terminateSession(const QString &session_id)
+void DLoginManager::terminateSession(const QString &session_id)
 {
-    Q_D(DLogin1Manager);
+    Q_D(DLoginManager);
     QDBusPendingReply<> reply = d->m_inter->asyncCallWithArgumentList(QStringLiteral("TerminateSession"),
         {QVariant::fromValue(session_id)});
     reply.waitForFinished();
@@ -1083,9 +1083,9 @@ void DLogin1Manager::terminateSession(const QString &session_id)
     }
 }
 
-void DLogin1Manager::terminateUser(const uint uid)
+void DLoginManager::terminateUser(const uint uid)
 {
-    Q_D(DLogin1Manager);
+    Q_D(DLoginManager);
     QDBusPendingReply<> reply = d->m_inter->asyncCallWithArgumentList(QStringLiteral("TerminateUser"),
         {QVariant::fromValue(uid)});
     reply.waitForFinished();
@@ -1095,9 +1095,9 @@ void DLogin1Manager::terminateUser(const uint uid)
     }
 }
 
-void DLogin1Manager::unlockSession(const QString &session_id)
+void DLoginManager::unlockSession(const QString &session_id)
 {
-    Q_D(DLogin1Manager);
+    Q_D(DLoginManager);
     QDBusPendingReply<> reply = d->m_inter->asyncCallWithArgumentList(QStringLiteral("UnlockSession"),
         {QVariant::fromValue(session_id)});
     reply.waitForFinished();
@@ -1107,9 +1107,9 @@ void DLogin1Manager::unlockSession(const QString &session_id)
     }
 }
 
-void DLogin1Manager::unlockSessions()
+void DLoginManager::unlockSessions()
 {
-    Q_D(DLogin1Manager);
+    Q_D(DLoginManager);
     QDBusPendingReply<> reply = d->m_inter->asyncCall(QStringLiteral("UnlockSessions"));
     reply.waitForFinished();
     if (!reply.isValid()) {
@@ -1117,4 +1117,4 @@ void DLogin1Manager::unlockSessions()
         emit errorMessageChanged(d->m_errorMessage);
     }
 }
-DLOGIN1_END_NAMESPACE
+DLOGIN_END_NAMESPACE

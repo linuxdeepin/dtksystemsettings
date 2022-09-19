@@ -4,18 +4,18 @@
 
 #pragma once
 
+#include "dloginmanager.h"
 #include "namespace.h"
-#include "dlogin1manager.h"
 #include <qobject.h>
 
 class DDBusInterface;
-DLOGIN1_BEGIN_NAMESPACE
+DLOGIN_BEGIN_NAMESPACE
 
-class DLogin1ManagerPrivate : public QObject
+class DLoginManagerPrivate : public QObject
 {
     Q_OBJECT
 public:
-    explicit DLogin1ManagerPrivate(DLogin1Manager *parent = nullptr) : QObject(parent), q_ptr(parent) {}
+    explicit DLoginManagerPrivate(DLoginManager *parent = nullptr) : QObject(parent), q_ptr(parent) {}
 
 signals:
     // private signals
@@ -31,8 +31,8 @@ signals:
 public:
     QString m_errorMessage;
     DDBusInterface *m_inter;
-    DLogin1Manager *q_ptr;
-    Q_DECLARE_PUBLIC(DLogin1Manager)
+    DLoginManager *q_ptr;
+    Q_DECLARE_PUBLIC(DLoginManager)
 };
 
-DLOGIN1_END_NAMESPACE
+DLOGIN_END_NAMESPACE

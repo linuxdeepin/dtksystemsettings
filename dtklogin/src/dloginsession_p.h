@@ -7,20 +7,24 @@
 #include "namespace.h"
 #include <qobject.h>
 
-class DDBusInterface;
-DLOGIN1_BEGIN_NAMESPACE
-class DLogin1User;
 
-class DLogin1UserPrivate : public QObject
+class DDBusInterface;
+DLOGIN_BEGIN_NAMESPACE
+class DLoginSession;
+
+class DLoginSessionPrivate : public QObject
 {
     Q_OBJECT
 public:
-    explicit DLogin1UserPrivate(DLogin1User *parent = nullptr) : q_ptr(parent) {}
+    explicit DLoginSessionPrivate(DLoginSession *parent = nullptr)
+        : q_ptr(parent)
+    {
+    }
 
     QString m_errorMessage;
     DDBusInterface *m_inter;
-    DLogin1User *q_ptr;
-    Q_DECLARE_PUBLIC(DLogin1User)
+    DLoginSession *q_ptr;
+    Q_DECLARE_PUBLIC(DLoginSession)
 };
 
-DLOGIN1_END_NAMESPACE
+DLOGIN_END_NAMESPACE
