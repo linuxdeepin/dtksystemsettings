@@ -3,78 +3,66 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
 #include "dpowermanager.h"
+#include "dbus/dpowermanager_interface.h"
 #include "dpowerdevice.h"
 #include "dpowermanager_p.h"
 #include "namespace.h"
-#include "ddbusinterface.h"
+#include <QDBusObjectPath>
+#include <QSharedPointer>
 #include <cstddef>
 #include <qdbusconnection.h>
 #include <qdbusextratypes.h>
 #include <qdbuspendingreply.h>
 #include <qlist.h>
 #include <qstringliteral.h>
-#include <QSharedPointer>
-#include <QDBusObjectPath>
 
 DPOWER_BEGIN_NAMESPACE
 DPowerManager::DPowerManager(QObject *parent)
     : QObject(parent)
     , d_ptr(new DPowerManagerPrivate(this))
 {
-    const QString &Service = QStringLiteral("org.freedesktop.UPower");
-    const QString &Path = QStringLiteral("/org/freedesktop/UPower");  
-    const QString &Interface = QStringLiteral("org.freedesktop.UPower");
-
-    Q_D(DPowerManager);
-    d->m_inter = new DDBusInterface(Service, Path, Interface, QDBusConnection::systemBus(), d);
 }
 
-DPowerManager::~DPowerManager(){}
+DPowerManager::~DPowerManager() {}
 
 // properties
 bool DPowerManager::lidlsClosed() const
 {
-    Q_D(const DPowerManager);
-    return qdbus_cast<bool>(d->m_inter->property("LidlsClosed"));
+    return d_ptr->m_manager_inter->lidlsClosed();
 }
 
 bool DPowerManager::lidlsPresent() const
 {
-    Q_D(const DPowerManager);
-    return qdbus_cast<bool>(d->m_inter->property("LidlsPresent"));
+    d_ptr->m_manager_inter->lidlsPresent();
 }
 
 bool DPowerManager::onBattery() const
 {
-    Q_D(const DPowerManager);
-    return qdbus_cast<bool>(d->m_inter->property("OnBattery"));
+    d_ptr->m_manager_inter->onBattery();
 }
 
 QString DPowerManager::daemonVersion() const
 {
-    Q_D(const DPowerManager);
-    return qdbus_cast<QString>(d->m_inter->property("DaemonVersion"));
+    return d_ptr->m_manager_inter->daemonVersion();
 }
 
 // pubilc slots
 QString DPowerManager::lastError() const
 {
-    Q_D(const DPowerManager);
-    return d->m_errorMessage;
+    return d_ptr->m_errorMessage;
 }
 
 QStringList DPowerManager::devices()
 {
-    Q_D(DPowerManager);
-    QDBusPendingReply<QList<QDBusObjectPath>> reply = d->m_inter->asyncCall(QStringLiteral("EnumerateDevices"));
+    QDBusPendingReply<QList<QDBusObjectPath>> reply = d_ptr->m_manager_inter->enumerateDevices();
     reply.waitForFinished();
     QStringList devices;
     if (!reply.isValid()) {
-        d->m_errorMessage = reply.error().message();
-        emit errorMessageChanged(d->m_errorMessage);
+        d_ptr->m_errorMessage = reply.error().message();
+        emit errorMessageChanged(d_ptr->m_errorMessage);
         return devices;
     }
-    for (auto &&device_p :reply.value()){
+    for (auto &&device_p : reply.value()) {
         devices.append(device_p.path().mid(32));
     }
     return devices;
@@ -82,12 +70,11 @@ QStringList DPowerManager::devices()
 
 QString DPowerManager::getCriticalAction()
 {
-    Q_D(DPowerManager);
-    QDBusPendingReply<QString> reply = d->m_inter->asyncCall(QStringLiteral("GetCriticalAction"));
+    QDBusPendingReply<QString> reply = d_ptr->m_manager_inter->getCriticalAction();
     reply.waitForFinished();
     if (!reply.isValid()) {
-        d->m_errorMessage = reply.error().message();
-        emit errorMessageChanged(d->m_errorMessage);
+        d_ptr->m_errorMessage = reply.error().message();
+        emit errorMessageChanged(d_ptr->m_errorMessage);
         return reply;
     }
     return reply;
@@ -95,28 +82,26 @@ QString DPowerManager::getCriticalAction()
 
 QSharedPointer<DPowerDevice> DPowerManager::getDisplayDevice()
 {
-    Q_D(DPowerManager);
-    QDBusPendingReply<QDBusObjectPath> reply = d->m_inter->asyncCall(QStringLiteral("GetDisplayDevice"));
+    QDBusPendingReply<QDBusObjectPath> reply = d_ptr->m_manager_inter->getDisplayDevice();
     reply.waitForFinished();
     if (!reply.isValid()) {
-        d->m_errorMessage = reply.error().message();
-        emit errorMessageChanged(d->m_errorMessage);
+        d_ptr->m_errorMessage = reply.error().message();
+        emit errorMessageChanged(d_ptr->m_errorMessage);
         return nullptr;
     }
     QString name = reply.value().path().mid(32);
-    QSharedPointer<DPowerDevice> device(new DPowerDevice(name,nullptr));
+    QSharedPointer<DPowerDevice> device(new DPowerDevice(name, nullptr));
     return device;
 }
 
 QSharedPointer<DPowerDevice> DPowerManager::getDeviceByName(const QString &name)
 {
-    Q_D(DPowerManager);
     if (!devices().contains(name)) {
-        d->m_errorMessage = "Device does not exist";
-        emit errorMessageChanged(d->m_errorMessage);
+        d_ptr->m_errorMessage = "Device does not exist";
+        emit errorMessageChanged(d_ptr->m_errorMessage);
         return nullptr;
     }
-    QSharedPointer<DPowerDevice> device(new DPowerDevice(name,nullptr));
+    QSharedPointer<DPowerDevice> device(new DPowerDevice(name, nullptr));
     return device;
 }
 

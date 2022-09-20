@@ -4,22 +4,24 @@
 
 #pragma once
 
+#include "ddbusinterface.h"
 #include "namespace.h"
 #include <QDBusObjectPath>
+#include <qdbuspendingreply.h>
 #include <qlist.h>
 #include <qobject.h>
 #include <qobjectdefs.h>
+#include <qscopedpointer.h>
+#include <qvariant.h>
 
 DPOWER_BEGIN_NAMESPACE
-class DPowerManagerPrivate;
-class DPowerDevice;
 
-class DPowerManager : public QObject
+class DPowerManager_interface : public QObject
 {
     Q_OBJECT
 public:
-    explicit DPowerManager(QObject *parent = nullptr);
-    virtual ~DPowerManager();
+    explicit DPowerManager_interface(QObject *parent = nullptr);
+    virtual ~DPowerManager_interface();
     // properties
     Q_PROPERTY(bool LidlsClosed READ lidlsClosed)
     Q_PROPERTY(bool LidlsPresent READ lidlsPresent)
@@ -29,21 +31,19 @@ public:
     bool lidlsPresent() const;
     bool onBattery() const;
     QString daemonVersion() const;
-    QSharedPointer<DPowerDevice> getDisplayDevice();
-    QSharedPointer<DPowerDevice> getDeviceByName(const QString &name);
 
 signals:
     void errorMessageChanged(const QString &message);
     void DeviceAdded(const QDBusObjectPath &path);
     void DeviceRemoved(const QDBusObjectPath &path);
 public slots:
-    QString lastError() const;
-    QStringList devices();
-    QString getCriticalAction();
+    QDBusPendingReply<QList<QDBusObjectPath>> enumerateDevices();
+    QDBusPendingReply<QString> getCriticalAction();
+    QDBusPendingReply<QDBusObjectPath> getDisplayDevice();
 
 private:
-    QScopedPointer<DPowerManagerPrivate> d_ptr;
-    Q_DECLARE_PRIVATE(DPowerManager)
+    QString m_errorMessage;
+    QScopedPointer<DDBusInterface> m_inter;
 };
 
 DPOWER_END_NAMESPACE

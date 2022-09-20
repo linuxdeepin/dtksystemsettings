@@ -4,8 +4,10 @@
 
 #pragma once
 
+#include "ddbusinterface.h"
 #include "namespace.h"
 #include <cstddef>
+#include <qdbuspendingreply.h>
 #include <qobject.h>
 #include <qobjectdefs.h>
 #include <qscopedpointer.h>
@@ -13,12 +15,12 @@
 DPOWER_BEGIN_NAMESPACE
 class DKbdBacklightPrivate;
 
-class DKbdBacklight : public QObject
+class DKbdBacklight_interface : public QObject
 {
     Q_OBJECT
 public:
-    explicit DKbdBacklight(QObject *parent = nullptr);
-    virtual ~DKbdBacklight();
+    explicit DKbdBacklight_interface(QObject *parent = nullptr);
+    virtual ~DKbdBacklight_interface();
 
 signals:
     void errorMessageChanged(const QString &message);
@@ -27,13 +29,12 @@ signals:
 
 public slots:
     QString lastError() const;
-    uint getBrightness();
-    uint getMaxBrightness();
-    void setBrightness(uint value);
+    QDBusPendingReply<uint> getBrightness();
+    QDBusPendingReply<uint> getMaxBrightness();
+    QDBusPendingReply<> setBrightness(uint value);
 
 private:
-    QScopedPointer<DKbdBacklightPrivate> d_ptr;
-    Q_DECLARE_PRIVATE(DKbdBacklight)
+    QScopedPointer<DDBusInterface> m_inter;
 };
 
 DPOWER_END_NAMESPACE

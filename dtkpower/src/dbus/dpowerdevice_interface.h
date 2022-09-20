@@ -4,28 +4,24 @@
 
 #pragma once
 
+#include <qdbusconnection.h>
+#include <qdbuspendingreply.h>
 #include <qglobal.h>
-#include <qlist.h>
 #include <qobject.h>
+#include <qvariant.h>
 
-#include <qscopedpointer.h>
-
-#include "dpowermanager.h"
-#include "dpowertypes.h"
+#include "ddbusinterface.h"
+#include "dpowertypes_p.h"
 #include "namespace.h"
-
 DPOWER_BEGIN_NAMESPACE
 
-class DPowerDevicePrivate;
-
-class DPowerDevice : public QObject
+class DPowerDevice_interface : public QObject
 {
     Q_OBJECT
-private:
-    explicit DPowerDevice(const QString &name, QObject *parent = nullptr);
-
 public:
-    virtual ~DPowerDevice();
+    explicit DPowerDevice_interface(const QString &name, QObject *parent = nullptr);
+
+    virtual ~DPowerDevice_interface();
 
     Q_PROPERTY(bool HasHistory READ hasHistory)
     Q_PROPERTY(bool HasStatistics READ hasStatistics)
@@ -42,7 +38,7 @@ public:
     Q_PROPERTY(double Percentage READ percentage NOTIFY PercentageChanged)
     Q_PROPERTY(double Temperature READ temperature)
     Q_PROPERTY(double Voltage READ voltage)
-    Q_PROPERTY(uint ChargeCycles READ chargeCycles)
+    Q_PROPERTY(quint32 ChargeCycles READ chargeCycles)
     Q_PROPERTY(quint64 TimeToEmpty READ timeToEmpty NOTIFY TimeToEmptyChanged)
     Q_PROPERTY(quint64 TimeToFull READ timeToFull NOTIFY TimeToFullChanged)
     Q_PROPERTY(QString IconName READ iconName NOTIFY IconNameChanged)
@@ -50,11 +46,11 @@ public:
     Q_PROPERTY(QString NativePath READ nativePath)
     Q_PROPERTY(QString Serial READ serial)
     Q_PROPERTY(QString Vendor READ vendor)
-    Q_PROPERTY(uint BatteryLevel READ batteryLevel)
-    Q_PROPERTY(uint State READ state)
-    Q_PROPERTY(uint Technology READ technology)
-    Q_PROPERTY(uint Type READ type)
-    Q_PROPERTY(uint WarningLevel READ warningLevel)
+    Q_PROPERTY(quint32 BatteryLevel READ batteryLevel)
+    Q_PROPERTY(quint32 State READ state)
+    Q_PROPERTY(quint32 Technology READ technology)
+    Q_PROPERTY(quint32 Type READ type)
+    Q_PROPERTY(quint32 WarningLevel READ warningLevel)
     Q_PROPERTY(quint64 UpdateTime READ updateTime NOTIFY UpdateTimeChanged)
     Q_PROPERTY(QString DeviceName READ deviceName)
 
@@ -102,15 +98,16 @@ signals:
 
 public slots:
     QString lastError() const;
-    QList<History> getHistory(const QString &type, const uint timespan, const uint resolution);
-    QList<Statistic> getStatistics(const QString &type);
-    void refresh();
+    QDBusPendingReply<QList<History_p>> getHistory(const QString &type, const uint timespan, const uint resolution);
+    QDBusPendingReply<QList<Statistic_p>> getStatistics(const QString &type);
+    QDBusPendingReply<> refresh();
 
 private:
-    QScopedPointer<DPowerDevicePrivate> d_ptr;
-    Q_DECLARE_PRIVATE(DPowerDevice)
+    QScopedPointer<DDBusInterface> m_inter;
+    // Q_DECLARE_PRIVATE(DPowerDevice_interface)
+    QString devicename;
 
-    friend QSharedPointer<DPowerDevice> DPowerManager::getDisplayDevice();
-    friend QSharedPointer<DPowerDevice> DPowerManager::getDeviceByName(const QString &name);
+    // friend QSharedPointer<DPowerDevice_interface> DPowerManager::getDisplayDevice();
+    // friend QSharedPointer<DPowerDevice_interface> DPowerManager::getDeviceByName(const QString &name);
 };
 DPOWER_END_NAMESPACE

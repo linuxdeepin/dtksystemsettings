@@ -12,8 +12,11 @@ class DDBusInterface : public QDBusAbstractInterface
     Q_OBJECT
 
 public:
-    explicit DDBusInterface(const QString &service, const QString &path, const QString &interface = QString(),
-                              const QDBusConnection &connection = QDBusConnection::sessionBus(), QObject *parent = nullptr);
+    explicit DDBusInterface(const QString &service,
+                            const QString &path,
+                            const QString &interface = QString(),
+                            const QDBusConnection &connection = QDBusConnection::sessionBus(),
+                            QObject *parent = nullptr);
     virtual ~DDBusInterface() override;
 
     bool serviceValid() const;
@@ -31,4 +34,3 @@ private:
     Q_DECLARE_PRIVATE(DDBusInterface)
     Q_DISABLE_COPY(DDBusInterface)
 };
-
