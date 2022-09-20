@@ -7,7 +7,7 @@
 #include "namespace.h"
 #include <qobject.h>
 
-DPOWER_BEGIN_NAMESPACE 
+DPOWER_BEGIN_NAMESPACE
 struct History
 {
     uint time;
@@ -20,6 +20,5 @@ struct Statistic
     double value;
     double accuracy;
 };
-
 
 DPOWER_END_NAMESPACE

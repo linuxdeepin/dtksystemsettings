@@ -4,22 +4,23 @@
 
 #pragma once
 
-#include "namespace.h"
 #include "dkbdbacklight.h"
-#include <qobject.h>
 
 class DDBusInterface;
 DPOWER_BEGIN_NAMESPACE
+
+class DKbdBacklight_interface;
 
 class DKbdBacklightPrivate : public QObject
 {
     Q_OBJECT
 public:
-    explicit DKbdBacklightPrivate(DKbdBacklight *parent = nullptr) : QObject(parent),q_ptr(parent){}
+    explicit DKbdBacklightPrivate(DKbdBacklight *parent = nullptr)
+        : QObject(parent)
+        , q_ptr(parent) {}
 
 public:
-    QString m_errorMessage;
-    DDBusInterface *m_inter;
+    DKbdBacklight_interface *m_kb_inter;
     DKbdBacklight *q_ptr;
     Q_DECLARE_PUBLIC(DKbdBacklight)
 

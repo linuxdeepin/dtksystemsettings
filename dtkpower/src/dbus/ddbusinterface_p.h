@@ -18,7 +18,9 @@ public:
     void setServiceValid(bool valid);
 
 private Q_SLOTS:
-    void onPropertiesChanged(const QString &interfaceName, const QVariantMap &changedProperties, const QStringList &invalidatedProperties);
+    void onPropertiesChanged(const QString &interfaceName,
+                             const QVariantMap &changedProperties,
+                             const QStringList &invalidatedProperties);
     void onAsyncPropertyFinished(QDBusPendingCallWatcher *w);
     void onDBusNameHasOwner(bool valid);
     void onDBusNameOwnerChanged(const QString &name, const QString &oldOwner, const QString &newOwner);
@@ -32,4 +34,3 @@ public:
     DDBusInterface *q_ptr;
     Q_DECLARE_PUBLIC(DDBusInterface)
 };
-
