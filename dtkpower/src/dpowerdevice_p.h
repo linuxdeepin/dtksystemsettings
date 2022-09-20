@@ -4,25 +4,26 @@
 
 #pragma once
 
-#include "namespace.h"
 #include "dpowerdevice.h"
-#include <qobject.h>
 
 class DDBusInterface;
 DPOWER_BEGIN_NAMESPACE
+
+class DPowerDevice_interface;
 
 class DPowerDevicePrivate : public QObject
 {
     Q_OBJECT
 public:
-    explicit DPowerDevicePrivate(DPowerDevice *parent = nullptr) : QObject(parent),q_ptr(parent){}
+    explicit DPowerDevicePrivate(DPowerDevice *parent)
+        : q_ptr(parent) {}
+    virtual ~DPowerDevicePrivate() {}
 
 public:
-    QString m_errorMessage;
-    DDBusInterface *m_inter;
-    DPowerDevice *q_ptr;
+    QString                 devicename;
+    DPowerDevice_interface *m_device_inter;
+    DPowerDevice           *q_ptr;
     Q_DECLARE_PUBLIC(DPowerDevice)
-
 };
 
 DPOWER_END_NAMESPACE

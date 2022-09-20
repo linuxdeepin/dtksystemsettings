@@ -4,16 +4,14 @@
 
 #pragma once
 
-#include <cstddef>
 #include <qobject.h>
-#include <qobjectdefs.h>
 #include <qscopedpointer.h>
 #include "namespace.h"
 
 DPOWER_BEGIN_NAMESPACE
 class DKbdBacklightPrivate;
 
-class DKbdBacklight :public QObject
+class DKbdBacklight : public QObject
 {
     Q_OBJECT
 public:
@@ -21,23 +19,17 @@ public:
     virtual ~DKbdBacklight();
 
 signals:
-    void errorMessageChanged(const QString &message);
     void BrightnessChanged(const uint value);
-    void BrightnessChangedWithSource(const uint value ,const QString &source);
+    void BrightnessChangedWithSource(const uint value, const QString &source);
 
 public slots:
-    QString lastError() const;
-    uint getBrightness();
-    uint getMaxBrightness();
+    uint getBrightness() const;
+    uint getMaxBrightness() const;
     void setBrightness(uint value);
+
 private:
     QScopedPointer<DKbdBacklightPrivate> d_ptr;
-    Q_DECLARE_PRIVATE(DKbdBacklight) 
-
+    Q_DECLARE_PRIVATE(DKbdBacklight)
 };
-
-
-
-
 
 DPOWER_END_NAMESPACE
