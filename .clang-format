@@ -7,19 +7,19 @@ AccessModifierOffset: -4
 # 开括号(开圆括号、开尖括号、开方括号)后的对齐: Align, DontAlign, AlwaysBreak(总是在开括号后换行)
 AlignAfterOpenBracket: Align
 # 连续赋值时，对齐所有等号
-AlignConsecutiveAssignments: AcrossEmptyLinesAndComments
+AlignConsecutiveAssignments: None
 # 连续声明时，对齐所有声明的变量名
-AlignConsecutiveDeclarations: AcrossEmptyLinesAndComments
+AlignConsecutiveDeclarations: None
 
 AlignEscapedNewlines: Right
- 
+
 # 左对齐逃脱换行(使用反斜杠换行)的反斜杠
 #AlignEscapedNewlinesLeft: true
 # 水平对齐二元和三元表达式的操作数
 AlignOperands: true
 # 对齐连续的尾随的注释
 AlignTrailingComments: true
- 
+
 # 允许函数声明的所有参数在放在下一行
 AllowAllParametersOfDeclarationOnNextLine: true
 # 允许短的块放在同一行
@@ -32,10 +32,10 @@ AllowShortFunctionsOnASingleLine: Inline
 AllowShortIfStatementsOnASingleLine: false
 # 允许短的循环保持在同一行
 AllowShortLoopsOnASingleLine: false
- 
+
 # 总是在定义返回类型后换行(deprecated)
 AlwaysBreakAfterDefinitionReturnType: None
-# 总是在返回类型后换行: None, All, TopLevel(顶级函数，不包括在类中的函数), 
+# 总是在返回类型后换行: None, All, TopLevel(顶级函数，不包括在类中的函数),
 # AllDefinitions(所有的定义，不包括声明), TopLevelDefinitions(所有的顶级函数的定义)
 AlwaysBreakAfterReturnType: None
 # 总是在多行string字面量前换行
@@ -47,7 +47,7 @@ BinPackArguments: false
 # false表示所有形参要么都在同一行，要么都各自一行
 BinPackParameters: false
 # 大括号换行，只有当BreakBeforeBraces设置为Custom时才有效
-BraceWrapping:   
+BraceWrapping:
   # class定义后面
   AfterClass: true
   # 控制语句后面
@@ -64,7 +64,7 @@ BraceWrapping:
   AfterStruct: true
   # union定义后面
   AfterUnion: true
- 
+
   AfterExternBlock: false
   # catch之前
   BeforeCatch: false
@@ -75,17 +75,17 @@ BraceWrapping:
   SplitEmptyFunction: true
   SplitEmptyRecord: true
   SplitEmptyNamespace: true
- 
+
 # 在二元运算符前换行: None(在操作符后换行), NonAssignment(在非赋值的操作符前换行), All(在操作符前换行)
 BreakBeforeBinaryOperators: None
-# 在大括号前换行: Attach(始终将大括号附加到周围的上下文), Linux(除函数、命名空间和类定义，与Attach类似), 
-#   Mozilla(除枚举、函数、记录定义，与Attach类似), Stroustrup(除函数定义、catch、else，与Attach类似), 
+# 在大括号前换行: Attach(始终将大括号附加到周围的上下文), Linux(除函数、命名空间和类定义，与Attach类似),
+#   Mozilla(除枚举、函数、记录定义，与Attach类似), Stroustrup(除函数定义、catch、else，与Attach类似),
 #   Allman(总是在大括号前换行), GNU(总是在大括号前换行，并对于控制语句的大括号增加额外的缩进), WebKit(在函数前换行), Custom
 #   注：这里认为语句块也属于函数
 BreakBeforeBraces: Custom
 # 在三元运算符前换行
 BreakBeforeTernaryOperators: false
- 
+
 # 在构造函数的初始化列表的逗号前换行
 BreakConstructorInitializersBeforeComma: true
 BreakConstructorInitializers: BeforeColon
@@ -112,7 +112,7 @@ ExperimentalAutoDetectBinPacking: false
 ForEachMacros: [ foreach, Q_FOREACH, BOOST_FOREACH ]
 # 对#include进行排序，匹配了某正则表达式的#include拥有对应的优先级，匹配不到的则默认优先级为INT_MAX(优先级越小排序越靠前)，
 #   可以定义负数优先级从而保证某些#include永远在最前面
-IncludeCategories: 
+IncludeCategories:
   - Regex: '^"(llvm|llvm-c|clang|clang-c)/'
     Priority: 2
   - Regex: '^(<|"(gtest|isl|json)/)'
@@ -121,7 +121,7 @@ IncludeCategories:
     Priority: 1
 # 缩进case标签
 IndentCaseLabels: true
- 
+
 IndentPPDirectives:  AfterHash
 # 缩进宽度
 IndentWidth: 4
@@ -143,8 +143,8 @@ ObjCBlockIndentWidth: 4
 ObjCSpaceAfterProperty: false
 # 在ObjC的protocol列表前添加一个空格
 ObjCSpaceBeforeProtocolList: true
- 
- 
+
+
 # 在call(后对函数调用换行的penalty
 PenaltyBreakBeforeFirstCallParameter: 19
 # 在一个注释中引入换行的penalty
@@ -157,7 +157,7 @@ PenaltyBreakString: 1000
 PenaltyExcessCharacter: 1000000
 # 将函数的返回类型放到它自己的行的penalty
 PenaltyReturnTypeOnItsOwnLine: 60
- 
+
 # 指针和引用的对齐: Left, Right, Middle
 PointerAlignment: Right
 # 允许重新排版注释
@@ -167,9 +167,9 @@ SortIncludes: Never
 
 # 在C风格类型转换后添加空格
 SpaceAfterCStyleCast: false
- 
+
 SpaceAfterTemplateKeyword: true
- 
+
 # 在赋值运算符之前添加空格
 SpaceBeforeAssignmentOperators: true
 # 开圆括号之前添加一个空格: Never, ControlStatements, Always
