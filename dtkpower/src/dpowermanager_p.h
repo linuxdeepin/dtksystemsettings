@@ -8,7 +8,7 @@
 
 DPOWER_BEGIN_NAMESPACE
 
-class DPowerManager_interface;
+class UPowerManagerInterface;
 
 class DPowerManagerPrivate : public QObject
 {
@@ -20,7 +20,7 @@ public:
     void connectDBusSignal();
 
 public:
-    DPowerManager_interface *m_manager_inter;
+    UPowerManagerInterface *m_manager_inter;
     DPowerManager           *q_ptr;
     Q_DECLARE_PUBLIC(DPowerManager)
 };

@@ -9,17 +9,17 @@
 #include <qsharedpointer.h>
 
 #include "dpowerdevice.h"
-#include "dbus/dpowermanager_interface.h"
+#include "dbus/upowermanagerinterface.h"
 
 DPOWER_BEGIN_NAMESPACE
 
 void DPowerManagerPrivate::connectDBusSignal()
 {
     Q_Q(DPowerManager);
-    connect(m_manager_inter, &DPowerManager_interface::DeviceAdded, q, [q](const QDBusObjectPath &path) {
+    connect(m_manager_inter, &UPowerManagerInterface::DeviceAdded, q, [q](const QDBusObjectPath &path) {
         emit q->DeviceAdded(path.path());
     });
-    connect(m_manager_inter, &DPowerManager_interface::DeviceRemoved, q, [q](const QDBusObjectPath &path) {
+    connect(m_manager_inter, &UPowerManagerInterface::DeviceRemoved, q, [q](const QDBusObjectPath &path) {
         emit q->DeviceRemoved(path.path());
     });
 }
@@ -29,7 +29,7 @@ DPowerManager::DPowerManager(QObject *parent)
     , d_ptr(new DPowerManagerPrivate(this))
 {
     Q_D(DPowerManager);
-    d->m_manager_inter = new DPowerManager_interface(this);
+    d->m_manager_inter = new UPowerManagerInterface(this);
 }
 
 DPowerManager::~DPowerManager() {}

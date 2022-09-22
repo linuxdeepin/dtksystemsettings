@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
-#include "dpowertypes_p.h"
+#include "upowertypes_p.h"
 #include <qdbusargument.h>
 #include <qdbusmetatype.h>
 #include <qlist.h>

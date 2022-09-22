@@ -2,14 +2,14 @@
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
-#include "dkbdbacklight_interface.h"
+#include "upowerkbdbacklightinterface.h"
 #include "ddbusinterface.h"
 #include "namespace.h"
 #include <qdbusconnection.h>
 #include <qdbuspendingreply.h>
 
 DPOWER_BEGIN_NAMESPACE
-DKbdBacklight_interface::DKbdBacklight_interface(QObject *parent)
+UPowerKbdBacklightInterface::UPowerKbdBacklightInterface(QObject *parent)
     : QObject(parent)
 {
     const QString &Service = QStringLiteral("org.freedesktop.UPower");
@@ -19,21 +19,21 @@ DKbdBacklight_interface::DKbdBacklight_interface(QObject *parent)
     m_inter.reset(new DDBusInterface(Service, Path, Interface, QDBusConnection::systemBus(), this));
 }
 
-DKbdBacklight_interface::~DKbdBacklight_interface() {}
+UPowerKbdBacklightInterface::~UPowerKbdBacklightInterface() {}
 
 // pubilc slots
 
-QDBusPendingReply<uint> DKbdBacklight_interface::getBrightness() const
+QDBusPendingReply<uint> UPowerKbdBacklightInterface::getBrightness() const
 {
     return m_inter->asyncCall(QStringLiteral("GetBrightness"));
 }
 
-QDBusPendingReply<uint> DKbdBacklight_interface::getMaxBrightness() const
+QDBusPendingReply<uint> UPowerKbdBacklightInterface::getMaxBrightness() const
 {
     return m_inter->asyncCall(QStringLiteral("GetMaxBrightness"));
 }
 
-QDBusPendingReply<> DKbdBacklight_interface::setBrightness(uint value)
+QDBusPendingReply<> UPowerKbdBacklightInterface::setBrightness(uint value)
 {
     return m_inter->asyncCallWithArgumentList("SetBrightness", {QVariant::fromValue(value)});
 }

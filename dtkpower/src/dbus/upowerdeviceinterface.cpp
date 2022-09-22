@@ -2,11 +2,11 @@
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
-#include "dpowerdevice_interface.h"
+#include "upowerdeviceinterface.h"
 #include <qglobal.h>
 #include <qvariant.h>
 DPOWER_BEGIN_NAMESPACE
-DPowerDevice_interface::DPowerDevice_interface(const QString &name, QObject *parent)
+UPowerDeviceInterface::UPowerDeviceInterface(const QString &name, QObject *parent)
     : QObject(parent)
 {
     const QString &Service = QStringLiteral("org.freedesktop.UPower");
@@ -19,155 +19,155 @@ DPowerDevice_interface::DPowerDevice_interface(const QString &name, QObject *par
     m_inter.reset(new DDBusInterface(Service, path, Interface, QDBusConnection::systemBus(), this));
 }
 
-DPowerDevice_interface::~DPowerDevice_interface() {}
+UPowerDeviceInterface::~UPowerDeviceInterface() {}
 
 // properties
-bool DPowerDevice_interface::hasHistory() const
+bool UPowerDeviceInterface::hasHistory() const
 {
     return qdbus_cast<bool>(m_inter->property("HasHistory"));
 }
 
-bool DPowerDevice_interface::hasStatistics() const
+bool UPowerDeviceInterface::hasStatistics() const
 {
     return qdbus_cast<bool>(m_inter->property("HasStatistics"));
 }
 
-bool DPowerDevice_interface::isRechargeable() const
+bool UPowerDeviceInterface::isRechargeable() const
 {
     return qdbus_cast<bool>(m_inter->property("IsRechargeable"));
 }
 
-bool DPowerDevice_interface::online() const
+bool UPowerDeviceInterface::online() const
 {
     return qdbus_cast<bool>(m_inter->property("Online"));
 }
 
-bool DPowerDevice_interface::powerSupply() const
+bool UPowerDeviceInterface::powerSupply() const
 {
     return qdbus_cast<bool>(m_inter->property("PowerSupply"));
 }
 
-double DPowerDevice_interface::capacity() const
+double UPowerDeviceInterface::capacity() const
 {
     return qdbus_cast<double>(m_inter->property("Capacity"));
 }
 
-double DPowerDevice_interface::energy() const
+double UPowerDeviceInterface::energy() const
 {
     return qdbus_cast<double>(m_inter->property("Energy"));
 }
 
-double DPowerDevice_interface::energyEmpty() const
+double UPowerDeviceInterface::energyEmpty() const
 {
     return qdbus_cast<double>(m_inter->property("EnergyEmpty"));
 }
 
-double DPowerDevice_interface::energyFull() const
+double UPowerDeviceInterface::energyFull() const
 {
     return qdbus_cast<double>(m_inter->property("EnergyFull"));
 }
 
-double DPowerDevice_interface::energyFullDesign() const
+double UPowerDeviceInterface::energyFullDesign() const
 {
     return qdbus_cast<double>(m_inter->property("EnergyFullDesign"));
 }
 
-double DPowerDevice_interface::energyRate() const
+double UPowerDeviceInterface::energyRate() const
 {
     return qdbus_cast<double>(m_inter->property("EnergyRate"));
 }
 
-double DPowerDevice_interface::luminosity() const
+double UPowerDeviceInterface::luminosity() const
 {
     return qdbus_cast<double>(m_inter->property("Luminosity"));
 }
 
-double DPowerDevice_interface::percentage() const
+double UPowerDeviceInterface::percentage() const
 {
     return qdbus_cast<double>(m_inter->property("Percentage"));
 }
 
-double DPowerDevice_interface::temperature() const
+double UPowerDeviceInterface::temperature() const
 {
     return qdbus_cast<double>(m_inter->property("Temperature"));
 }
 
-double DPowerDevice_interface::voltage() const
+double UPowerDeviceInterface::voltage() const
 {
     return qdbus_cast<double>(m_inter->property("Voltage"));
 }
 
-qint32 DPowerDevice_interface::chargeCycles() const
+qint32 UPowerDeviceInterface::chargeCycles() const
 {
     return qdbus_cast<qint32>(m_inter->property("ChargeCycles"));
 }
 
-quint64 DPowerDevice_interface::timeToEmpty() const
+quint64 UPowerDeviceInterface::timeToEmpty() const
 {
     return qdbus_cast<quint64>(m_inter->property("TimeToEmpty"));
 }
 
-quint64 DPowerDevice_interface::timeToFull() const
+quint64 UPowerDeviceInterface::timeToFull() const
 {
     return qdbus_cast<quint64>(m_inter->property("TimeToFull"));
 }
 
-QString DPowerDevice_interface::iconName() const
+QString UPowerDeviceInterface::iconName() const
 {
     return qdbus_cast<QString>(m_inter->property("IconName"));
 }
 
-QString DPowerDevice_interface::model() const
+QString UPowerDeviceInterface::model() const
 {
     return qdbus_cast<QString>(m_inter->property("Model"));
 }
 
-QString DPowerDevice_interface::nativePath() const
+QString UPowerDeviceInterface::nativePath() const
 {
     return qdbus_cast<QString>(m_inter->property("NativePath"));
 }
 
-QString DPowerDevice_interface::serial() const
+QString UPowerDeviceInterface::serial() const
 {
     return qdbus_cast<QString>(m_inter->property("NativePath"));
 }
 
-QString DPowerDevice_interface::vendor() const
+QString UPowerDeviceInterface::vendor() const
 {
     return qdbus_cast<QString>(m_inter->property("Vendor"));
 }
 
-quint32 DPowerDevice_interface::batteryLevel() const
+quint32 UPowerDeviceInterface::batteryLevel() const
 {
     return qdbus_cast<quint32>(m_inter->property("BatteryLevel"));
 }
 
-quint32 DPowerDevice_interface::state() const
+quint32 UPowerDeviceInterface::state() const
 {
     return qdbus_cast<quint32>(m_inter->property("State"));
 }
 
-quint32 DPowerDevice_interface::technology() const
+quint32 UPowerDeviceInterface::technology() const
 {
     return qdbus_cast<quint32>(m_inter->property("Technology"));
 }
 
-quint32 DPowerDevice_interface::type() const
+quint32 UPowerDeviceInterface::type() const
 {
     return qdbus_cast<quint32>(m_inter->property("Type"));
 }
 
-quint32 DPowerDevice_interface::warningLevel() const
+quint32 UPowerDeviceInterface::warningLevel() const
 {
     return qdbus_cast<quint32>(m_inter->property("WarningLevel"));
 }
 
-quint64 DPowerDevice_interface::updateTime() const
+quint64 UPowerDeviceInterface::updateTime() const
 {
     return qdbus_cast<quint64>(m_inter->property("UpdateTime"));
 }
 
-QString DPowerDevice_interface::deviceName() const
+QString UPowerDeviceInterface::deviceName() const
 {
     return devicename;
 }
@@ -175,18 +175,18 @@ QString DPowerDevice_interface::deviceName() const
 // pubilc slots
 
 QDBusPendingReply<QList<History_p>>
-DPowerDevice_interface::getHistory(const QString &type, const quint32 timespan, const quint32 resolution) const
+UPowerDeviceInterface::getHistory(const QString &type, const quint32 timespan, const quint32 resolution) const
 {
     return m_inter->asyncCallWithArgumentList(
         "GetHistory", {QVariant::fromValue(type), QVariant::fromValue(timespan), QVariant::fromValue(resolution)});
 }
 
-QDBusPendingReply<QList<Statistic_p>> DPowerDevice_interface::getStatistics(const QString &type) const
+QDBusPendingReply<QList<Statistic_p>> UPowerDeviceInterface::getStatistics(const QString &type) const
 {
     return m_inter->asyncCallWithArgumentList("GetHistory", {QVariant::fromValue(type)});
 }
 
-QDBusPendingReply<> DPowerDevice_interface::refresh()
+QDBusPendingReply<> UPowerDeviceInterface::refresh()
 {
     return m_inter->asyncCall(QStringLiteral("Refresh"));
 }

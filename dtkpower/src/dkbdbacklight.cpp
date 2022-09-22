@@ -8,7 +8,7 @@
 #include <qdebug.h>
 #include <qdbuspendingreply.h>
 
-#include "dbus/dkbdbacklight_interface.h"
+#include "dbus/upowerkbdbacklightinterface.h"
 #include "namespace.h"
 
 DPOWER_BEGIN_NAMESPACE
@@ -17,7 +17,7 @@ DKbdBacklight::DKbdBacklight(QObject *parent)
     , d_ptr(new DKbdBacklightPrivate(this))
 {
     Q_D(DKbdBacklight);
-    d->m_kb_inter = new DKbdBacklight_interface(this);
+    d->m_kb_inter = new UPowerKbdBacklightInterface(this);
 }
 
 DKbdBacklight::~DKbdBacklight() {}
