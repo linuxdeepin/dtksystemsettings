@@ -11,7 +11,6 @@
 #include <QScopedPointer>
 #include <qdbusextratypes.h>
 #include <qscopedpointer.h>
-#include <qtmetamacros.h>
 #include <qdbuspendingreply.h>
 
 DACCOUNTS_BEGIN_NAMESPACE

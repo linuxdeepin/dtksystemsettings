@@ -37,7 +37,7 @@ QList<QByteArray> Dutils::getImageFromDir(const QDir &dir)
 QString Dutils::getUserConfigValue(const QByteArray &username, keyType key)
 {
     QString value;
-    QFileInfo configpath(userConfigDir + username);
+    QFileInfo configpath(UserConfigDir + username);
     if (!configpath.exists() or !configpath.isFile()) {
         return value;
     }
@@ -86,15 +86,15 @@ QString Dutils::getUserConfigKey(keyType key)
 qint64 Dutils::setUserConfigValue(const QByteArray &username, keyType key, const QByteArray &value)
 {
     QDir configDir;
-    if (!configDir.exists(userConfigDir)) {
-        if (!configDir.mkpath(userConfigDir))
+    if (!configDir.exists(UserConfigDir)) {
+        if (!configDir.mkpath(UserConfigDir))
             return 0;
     } else {
-        QFileInfo info(userConfigDir);
+        QFileInfo info(UserConfigDir);
         if (!info.isDir())
             return 0;
     }
-    QFileInfo configFileInfo(userConfigDir + username);
+    QFileInfo configFileInfo(UserConfigDir + username);
     if (configFileInfo.exists() and !configFileInfo.isFile()) {
         return 0;
     }
