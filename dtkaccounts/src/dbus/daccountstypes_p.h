@@ -4,7 +4,6 @@
 
 #pragma once
 
-#include "daccountstypes.h"
 #include "namespace.h"
 #include <qdbusargument.h>
 #include <qglobal.h>
@@ -15,9 +14,9 @@ DACCOUNTS_BEGIN_NAMESPACE
 
 struct LoginHistory_p
 {
-    qint64 login_time;
-    qint64 logout_time;
-    QMap<QString, QVariant> session_info;
+    qint64 loginTime;
+    qint64 logoutTime;
+    QMap<QString, QVariant> sessionInfo;
     static void registerMetaType();
 };
 

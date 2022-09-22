@@ -2,10 +2,9 @@
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
-#include "daccountstypes.h"
 #include "daccountsuser.h"
+#include "daccountstypes.h"
 #include "daccountsuser_p.h"
-#include "dbus/duser.h"
 #include "dbus/dutils.h"
 #include "dglobalconfig.h"
 #include <cstdint>
@@ -19,32 +18,38 @@
 
 DACCOUNTS_BEGIN_NAMESPACE
 
-DAccountsUser::DAccountsUser(const QString& path, QObject *parent)
-: QObject(parent),d_ptr(new DAccountsUserPrivate(path,this))
+DAccountsUser::DAccountsUser(const QString &path, QObject *parent)
+    : QObject(parent)
+    , d_ptr(new DAccountsUserPrivate(path, this))
 {
 }
 
-AccountTypes DAccountsUser::AccountType() const
+AccountTypes DAccountsUser::accountType() const
 {
-    auto typenum = d_ptr->u->accountType();
-    switch(typenum){
-        case 0: return AccountTypes::DEFAULT;
-        case 1: return AccountTypes::ADMIN;
+    auto typenum = d_ptr->m_dUserInter->accountType();
+    switch (typenum) {
+        case 0:
+            return AccountTypes::Default;
+        case 1:
+            return AccountTypes::Admin;
+        case 2:
+            return AccountTypes::Udcp;
     }
-    return AccountTypes::UNKNOWN;
 }
 
-bool DAccountsUser::AutomaticLogin() const
+bool DAccountsUser::automaticLogin() const
 {
-    return d_ptr->u->automaticLogin();
+    Q_D(const DAccountsUser);
+    return d->m_dUserInter->automaticLogin();
 }
 
-QString DAccountsUser::FullName() const
+QString DAccountsUser::fullName() const
 {
-    return d_ptr->u->realName();
+    Q_D(const DAccountsUser);
+    return d->m_dUserInter->realName();
 }
 
-quint64 DAccountsUser::Gid() const
+quint64 DAccountsUser::GID() const
 {
     auto pw = getpwuid(getuid());
     auto gid = pw->pw_gid;
@@ -52,82 +57,75 @@ quint64 DAccountsUser::Gid() const
     return gid;
 }
 
-quint64 DAccountsUser::Uid() const
+quint64 DAccountsUser::UID() const
 {
-    return d_ptr->u->uid();
+    Q_D(const DAccountsUser);
+    return d->m_dUserInter->uid();
 }
 
-QStringList DAccountsUser::Groups() const
+QStringList DAccountsUser::groups() const
 {
     int ngroups = 1;
     QStringList grouplist;
     struct passwd *pw = getpwuid(getuid());
-    gid_t *gs = reinterpret_cast<gid_t*>(malloc(sizeof(gid_t) * ngroups));
-    if(pw == nullptr)
-    {
+    gid_t *gs = reinterpret_cast<gid_t *>(malloc(sizeof(gid_t) * ngroups));
+    if (pw == nullptr) {
         return grouplist;
     }
-    if(gs == nullptr)
-    {
+    if (gs == nullptr) {
         return grouplist;
     }
 
-    if(getgrouplist(pw->pw_name, pw->pw_gid, gs, &ngroups) == -1)
-    {
-        gs = reinterpret_cast<gid_t*>(realloc(gs, sizeof(gid_t) * ngroups));
-        if(gs == nullptr)
-        {
+    if (getgrouplist(pw->pw_name, pw->pw_gid, gs, &ngroups) == -1) {
+        gs = reinterpret_cast<gid_t *>(realloc(gs, sizeof(gid_t) * ngroups));
+        if (gs == nullptr) {
             return grouplist;
         }
-        if(getgrouplist(pw->pw_name, pw->pw_gid, gs, &ngroups) == -1)
-        {
+        if (getgrouplist(pw->pw_name, pw->pw_gid, gs, &ngroups) == -1) {
             return grouplist;
         }
     }
 
-    for(int i = 0; i < ngroups; ++i)
-    {
+    for (int i = 0; i < ngroups; ++i) {
         grouplist.push_back(getgrgid(gs[i])->gr_name);
     }
     free(gs);
     return grouplist;
 }
 
-QList<QByteArray> DAccountsUser::LayoutList() const
+QList<QByteArray> DAccountsUser::layoutList() const
 {
+    Q_D(const DAccountsUser);
     QList<QByteArray> layouts;
-    auto value = Dutils::getUserConfigValue(d_ptr->u->userName().toUtf8(), keyType::LayoutList);
-    if(value.isEmpty())
-    {
+    auto value = Dutils::getUserConfigValue(d->m_dUserInter->userName().toUtf8(), keyType::LayoutList);
+    if (value.isEmpty()) {
         return layouts;
     }
     auto splitlayout = value.split("\\;;");
-    for(const auto& v : splitlayout)
-    {
+    for (const auto &v : splitlayout) {
         layouts.push_back((v + ";").toUtf8());
     }
     return layouts;
 }
 
-QString DAccountsUser::HomeDir() const
+QString DAccountsUser::homeDir() const
 {
-    return d_ptr->u->homeDirectory();
+    Q_D(const DAccountsUser);
+    return d->m_dUserInter->homeDirectory();
 }
 
-QList<QByteArray> DAccountsUser::IconFileList() const
+QList<QByteArray> DAccountsUser::iconFileList() const
 {
     QList<QByteArray> icons;
     QDir icondir(userIconsDir);
     QFileInfo cusdirinfo(userCustomIconsDir);
-    if(!icondir.exists())
-    {
+    if (!icondir.exists()) {
         return icons;
     }
     icondir.setFilter(QDir::Files | QDir::NoDotAndDotDot);
     icondir.setSorting(QDir::NoSort);
     icons.append(Dutils::getImageFromDir(icondir));
-    if(cusdirinfo.exists() and cusdirinfo.isDir())
-    {
+    if (cusdirinfo.exists() and cusdirinfo.isDir()) {
         auto cusdir = QDir(cusdirinfo.absoluteFilePath());
         icondir.setFilter(QDir::Files | QDir::NoDotAndDotDot);
         icondir.setSorting(QDir::NoSort);
@@ -136,196 +134,149 @@ QList<QByteArray> DAccountsUser::IconFileList() const
     return icons;
 }
 
-QByteArray DAccountsUser::IconFile() const
+QByteArray DAccountsUser::iconFile() const
 {
-    return Dutils::getUserConfigValue(d_ptr->u->userName().toUtf8(), keyType::IconFile).toUtf8();
+    Q_D(const DAccountsUser);
+    return Dutils::getUserConfigValue(d->m_dUserInter->userName().toUtf8(), keyType::IconFile).toUtf8();
 }
 
-QByteArray DAccountsUser::Layout() const
+QByteArray DAccountsUser::layout() const
 {
-    return Dutils::getUserConfigValue(d_ptr->u->userName().toUtf8(), keyType::Layout).toUtf8();
+    Q_D(const DAccountsUser);
+    return Dutils::getUserConfigValue(d->m_dUserInter->userName().toUtf8(), keyType::Layout).toUtf8();
 }
 
-QByteArray DAccountsUser::Locale() const
+QByteArray DAccountsUser::locale() const
 {
-    return Dutils::getUserConfigValue(d_ptr->u->userName().toUtf8(), keyType::Locale).toUtf8();
+    Q_D(const DAccountsUser);
+    return Dutils::getUserConfigValue(d->m_dUserInter->userName().toUtf8(), keyType::Locale).toUtf8();
 }
 
-bool DAccountsUser::Locked() const
+bool DAccountsUser::locked() const
 {
-    return d_ptr->u->locked();
+    Q_D(const DAccountsUser);
+    return d->m_dUserInter->locked();
 }
 
-qint32 DAccountsUser::MaxPasswordAge() const
+qint32 DAccountsUser::maxPasswordAge() const
 {
-    auto shadowinfo = getspnam(d_ptr->u->userName().toUtf8().data());
-    if(shadowinfo == nullptr)
+    Q_D(const DAccountsUser);
+    auto shadowinfo = getspnam(d->m_dUserInter->userName().toUtf8().data());
+    if (shadowinfo == nullptr)
         return -1;
     return shadowinfo->sp_max;
 }
 
-QString DAccountsUser::PasswordHint() const
+QString DAccountsUser::passwordHint() const
 {
-    return d_ptr->u->passwordHint();
+    Q_D(const DAccountsUser);
+    return d->m_dUserInter->passwordHint();
 }
 
-QDateTime DAccountsUser::PasswordLastChange() const
+QDateTime DAccountsUser::passwordLastChange() const
 {
-    QDateTime timestamp(QDate(1970,1,1),QTime(0,0,0),QTimeZone::utc());
-    auto shadowinfo = getspnam(d_ptr->u->userName().toUtf8().data());
-    if(shadowinfo != nullptr)
+    Q_D(const DAccountsUser);
+    QDateTime timestamp(QDate(1970, 1, 1), QTime(0, 0, 0), QTimeZone::utc());
+    auto shadowinfo = getspnam(d->m_dUserInter->userName().toUtf8().data());
+    if (shadowinfo != nullptr)
         timestamp = timestamp.addDays(shadowinfo->sp_lstchg);
     return timestamp;
 }
 
-PasswdStatus DAccountsUser::PasswordStatus() const
+PasswdStatus DAccountsUser::passwordStatus() const
 {
-    if(d_ptr->u->locked())
+    Q_D(const DAccountsUser);
+    if (d->m_dUserInter->locked())
         return PasswdStatus::L;
-    auto mode = d_ptr->u->passwordMode();
-    if(mode == 0)
+    auto mode = d->m_dUserInter->passwordMode();
+    if (mode == 0)
         return PasswdStatus::P;
-    else if(mode == 2)
+    else if (mode == 2)
         return PasswdStatus::NP;
-    // 函数不应该执行到这里
-    return PasswdStatus::UNKNOWN;
 }
 
-QString DAccountsUser::Shell() const
+QString DAccountsUser::shell() const
 {
-    return d_ptr->u->shell();
+    Q_D(const DAccountsUser);
+    return d->m_dUserInter->shell();
 }
 
-QByteArray DAccountsUser::UserName() const
+QByteArray DAccountsUser::userName() const
 {
-    return d_ptr->u->userName().toUtf8();
+    Q_D(const DAccountsUser);
+    return d->m_dUserInter->userName().toUtf8();
 }
 
-QByteArray DAccountsUser::Uuid() const
+QByteArray DAccountsUser::UUID() const
 {
-    return Dutils::getUserConfigValue(d_ptr->u->userName().toUtf8(), keyType::UUID).toUtf8();
+    Q_D(const DAccountsUser);
+    return Dutils::getUserConfigValue(d->m_dUserInter->userName().toUtf8(), keyType::UUID).toUtf8();
 }
 
-void DAccountsUser::SetAccountType(AccountTypes type)
+void DAccountsUser::setAccountType(AccountTypes type)
 {
-    if(type == AccountTypes::UNKNOWN)
-        return;
-    d_ptr->u->SetAccountType(static_cast<qint32>(type));
+    Q_D(const DAccountsUser);
+    d->m_dUserInter->setAccountType(static_cast<qint32>(type));
 }
 
-void DAccountsUser::SetAutomaticLogin(bool enabled)
+void DAccountsUser::setAutomaticLogin(bool enabled)
 {
-    d_ptr->u->SetAutomaticLogin(enabled);
+    Q_D(const DAccountsUser);
+    d->m_dUserInter->setAutomaticLogin(enabled);
 }
 
-void DAccountsUser::SetFullName(const QString& fullname)
+void DAccountsUser::setFullName(const QString &fullname)
 {
-    d_ptr->u->SetRealName(fullname);
+    Q_D(const DAccountsUser);
+    d->m_dUserInter->setRealName(fullname);
 }
 
-void DAccountsUser::SetGroups(const QStringList &newgroups)
+void DAccountsUser::setGroups(const QStringList &newgroups)
 {
     QString groups;
-    for(const auto& v : newgroups)
-    {
+    for (const auto &v : newgroups) {
         groups += (v + ",");
     }
     groups = "usermod -G " + groups;
     system(groups.toUtf8());
 }
 
-void DAccountsUser::SetLayoutList(const QList<QByteArray>& newlayouts)
-{
+void DAccountsUser::setLayoutList(const QList<QByteArray> &newlayouts) {}
 
-}
+void DAccountsUser::setHomeDir(const QString &newhomedir) {}
 
-void DAccountsUser::SetHomeDir(const QString &newhomedir)
-{
+void DAccountsUser::setIconFile(const QUrl &newiconURL) {}
 
-}
+void DAccountsUser::setLayout(const QByteArray &newlayout) {}
 
-void DAccountsUser::SetIconFile(const QUrl &newiconURL)
-{
+void DAccountsUser::setLocale(const QByteArray &newlocale) {}
 
-}
+void DAccountsUser::setLocked(bool locked) {}
 
-void DAccountsUser::SetLayout(const QByteArray &newlayout)
-{
+void DAccountsUser::setMaxPasswordAge(int newndays) {}
 
-}
+void DAccountsUser::setPassword(const QByteArray &newpassword) {}
 
-void DAccountsUser::SetLocale(const QByteArray &newlocale)
-{
+void DAccountsUser::setPasswordHint(const QString &newpasswordhint) {}
 
-}
+void DAccountsUser::setShell(const QString &newshellpath) {}
 
-void DAccountsUser::SetLocked(bool locked)
-{
+void DAccountsUser::addGroup(const QString &group) {}
 
-}
+void DAccountsUser::deleteGroup(const QString &group) {}
 
-void DAccountsUser::SetMaxPasswordAge(int newndays)
-{
+void DAccountsUser::deleteIconFile(const QUrl &iconURL) {}
 
-}
+bool DAccountsUser::isPasswordExpired() const {}
 
-void DAccountsUser::SetPassword(const QByteArray &newpassword)
-{
+ReminderInfo DAccountsUser::getReminderInfo() const {}
 
-}
+QList<qint32> DAccountsUser::secretQuestions() const {}
 
-void DAccountsUser::SetPasswordHint(const QString &newpasswordhint)
-{
+void DAccountsUser::setSecretQuestions(const QList<Question> &newquestions) {}
 
-}
+QList<qint32> DAccountsUser::vertifySecretQuestions(const QMap<qint32, QByteArray> &anwsers) {}
 
-void DAccountsUser::SetShell(const QString &newshellpath)
-{
-
-}
-
-void DAccountsUser::AddGroup(const QString &group)
-{
-
-}
-
-void DAccountsUser::DeleteGroup(const QString &group)
-{
-
-}
-
-void DAccountsUser::DeleteIconFile(const QUrl &iconURL)
-{
-
-}
-bool DAccountsUser::IsPasswordExpired() const
-{
-
-}
-
-ReminderInfo DAccountsUser::GetReminderInfo() const
-{
-
-}
-
-QList<qint32> DAccountsUser::SecretQuestions() const
-{
-
-}
-
-void DAccountsUser::SetSecretQuestions(const QList<Question> &newquestions)
-{
-
-}
-
-QList<qint32> DAccountsUser::VertifySecretQuestions(const QMap<qint32, QByteArray> &anwsers)
-{
-
-}
-
-PasswdExpirInfo DAccountsUser::PasswordExpirationInfo(qint64 &dayLeft) const
-{
-
-}
+PasswdExpirInfo DAccountsUser::passwordExpirationInfo(qint64 &dayLeft) const {}
 
 DACCOUNTS_END_NAMESPACE

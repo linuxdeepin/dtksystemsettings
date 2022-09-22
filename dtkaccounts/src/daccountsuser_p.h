@@ -4,20 +4,22 @@
 
 #pragma once
 
-#include "dbus/duser.h"
+#include "dbus/userinterface.h"
+#include "dbus/userddeinterface.h"
 
 DACCOUNTS_BEGIN_NAMESPACE
 
 class DAccountsUser;
 
-class DAccountsUserPrivate: public QObject{
+class DAccountsUserPrivate : public QObject
+{
     Q_OBJECT
 public:
-    explicit DAccountsUserPrivate(const QString& path, DAccountsUser *parent = nullptr);
+    explicit DAccountsUserPrivate(const QString &path, DAccountsUser *parent = nullptr);
     virtual ~DAccountsUserPrivate();
 
     DAccountsUser *q_ptr;
-    DUser *u;
+    DUserInterface *m_dUserInter;
     Q_DECLARE_PUBLIC(DAccountsUser)
 };
 
