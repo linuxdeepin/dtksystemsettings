@@ -11,19 +11,19 @@
 
 DPOWER_BEGIN_NAMESPACE
 
-class UPowerManagerInterface : public QObject
+class DPowerManager_interface : public QObject
 {
     Q_OBJECT
 public:
-    explicit UPowerManagerInterface(QObject *parent = nullptr);
-    virtual ~UPowerManagerInterface();
+    explicit DPowerManager_interface(QObject *parent = nullptr);
+    virtual ~DPowerManager_interface();
     // properties
-    Q_PROPERTY(bool lidIsClosed READ lidIsClosed)
-    Q_PROPERTY(bool lidIsPresent READ lidIsPresent)
-    Q_PROPERTY(bool onBattery READ onBattery)
-    Q_PROPERTY(QString daemonVersion READ daemonVersion)
-    bool lidIsClosed() const;
-    bool lidIsPresent() const;
+    Q_PROPERTY(bool LidlsClosed READ lidlsClosed)
+    Q_PROPERTY(bool LidlsPresent READ lidlsPresent)
+    Q_PROPERTY(bool OnBattery READ onBattery)
+    Q_PROPERTY(QString DaemonVersion READ daemonVersion)
+    bool lidlsClosed() const;
+    bool lidlsPresent() const;
     bool onBattery() const;
     QString daemonVersion() const;
 

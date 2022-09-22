@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
-#include "upowermanagerinterface.h"
+#include "dpowermanager_interface.h"
 #include "dpowertypes.h"
 
 #include <QDBusObjectPath>
@@ -15,7 +15,7 @@
 #include <qstringliteral.h>
 
 DPOWER_BEGIN_NAMESPACE
-UPowerManagerInterface::UPowerManagerInterface(QObject *parent)
+DPowerManager_interface::DPowerManager_interface(QObject *parent)
     : QObject(parent)
 {
     const QString &Service = QStringLiteral("org.freedesktop.UPower");
@@ -25,41 +25,41 @@ UPowerManagerInterface::UPowerManagerInterface(QObject *parent)
     m_inter.reset(new DDBusInterface(Service, Path, Interface, QDBusConnection::systemBus(), this));
 }
 
-UPowerManagerInterface::~UPowerManagerInterface() {}
+DPowerManager_interface::~DPowerManager_interface() {}
 
 // properties
-bool UPowerManagerInterface::lidIsClosed() const
+bool DPowerManager_interface::lidlsClosed() const
 {
-    return qdbus_cast<bool>(m_inter->property("LidIsClosed"));
+    return qdbus_cast<bool>(m_inter->property("LidlsClosed"));
 }
 
-bool UPowerManagerInterface::lidIsPresent() const
+bool DPowerManager_interface::lidlsPresent() const
 {
-    return qdbus_cast<bool>(m_inter->property("LidIsPresent"));
+    return qdbus_cast<bool>(m_inter->property("LidlsPresent"));
 }
 
-bool UPowerManagerInterface::onBattery() const
+bool DPowerManager_interface::onBattery() const
 {
     return qdbus_cast<bool>(m_inter->property("OnBattery"));
 }
 
-QString UPowerManagerInterface::daemonVersion() const
+QString DPowerManager_interface::daemonVersion() const
 {
     return qdbus_cast<QString>(m_inter->property("DaemonVersion"));
 }
 
 // pubilc slots
-QDBusPendingReply<QList<QDBusObjectPath>> UPowerManagerInterface::enumerateDevices() const
+QDBusPendingReply<QList<QDBusObjectPath>> DPowerManager_interface::enumerateDevices() const
 {
     return m_inter->asyncCall(QStringLiteral("EnumerateDevices"));
 }
 
-QDBusPendingReply<QString> UPowerManagerInterface::getCriticalAction() const
+QDBusPendingReply<QString> DPowerManager_interface::getCriticalAction() const
 {
     return m_inter->asyncCall(QStringLiteral("GetCriticalAction"));
 }
 
-QDBusPendingReply<QDBusObjectPath> UPowerManagerInterface::getDisplayDevice() const
+QDBusPendingReply<QDBusObjectPath> DPowerManager_interface::getDisplayDevice() const
 {
     return m_inter->asyncCall(QStringLiteral("GetDisplayDevice"));
 }

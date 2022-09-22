@@ -35,16 +35,16 @@ DPowerManager::DPowerManager(QObject *parent)
 DPowerManager::~DPowerManager() {}
 
 // properties
-bool DPowerManager::lidlsClosed() const
+bool DPowerManager::lidIsClosed() const
 {
     Q_D(const DPowerManager);
-    return d->m_manager_inter->lidlsClosed();
+    return d->m_manager_inter->lidIsClosed();
 }
 
-bool DPowerManager::lidlsPresent() const
+bool DPowerManager::lidIsPresent() const
 {
     Q_D(const DPowerManager);
-    return d->m_manager_inter->lidlsPresent();
+    return d->m_manager_inter->lidIsPresent();
 }
 
 bool DPowerManager::onBattery() const

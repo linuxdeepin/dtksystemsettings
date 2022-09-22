@@ -12,11 +12,11 @@ dpowermanager.h 是对于dbus接口中关于电源设备（包括且不限于：
 @brief DPowerManager class.
 DPowerManager类
 
-@fn bool DPowerManager::lidlsClosed()
+@fn bool DPowerManager::lidIsClosed()
 @brief 笔记本盖子关闭（或者二合一设备关上皮套）通过霍尔传感器读取相关数值
 @return 布尔值，如果为true则笔记本盖子是关上的
 
-@fn bool DPowerManager::lidlsPresent()
+@fn bool DPowerManager::lidIsPresent()
 @brief 笔记本盖子传感器是否有效
 @return 布尔值，如果为true则笔记本盖子上存在霍尔传感器
 
