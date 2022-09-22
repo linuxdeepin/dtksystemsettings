@@ -12,12 +12,12 @@
 DPOWER_BEGIN_NAMESPACE
 class DKbdBacklightPrivate;
 
-class DKbdBacklight_interface : public QObject
+class UPowerKbdBacklightInterface : public QObject
 {
     Q_OBJECT
 public:
-    explicit DKbdBacklight_interface(QObject *parent = nullptr);
-    virtual ~DKbdBacklight_interface();
+    explicit UPowerKbdBacklightInterface(QObject *parent = nullptr);
+    virtual ~UPowerKbdBacklightInterface();
 
 signals:
     void BrightnessChanged(const uint value);

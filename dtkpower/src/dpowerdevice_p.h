@@ -9,7 +9,7 @@
 class DDBusInterface;
 DPOWER_BEGIN_NAMESPACE
 
-class DPowerDevice_interface;
+class UPowerDeviceInterface;
 
 class DPowerDevicePrivate : public QObject
 {
@@ -21,7 +21,7 @@ public:
 
 public:
     QString                 devicename;
-    DPowerDevice_interface *m_device_inter;
+    UPowerDeviceInterface *m_device_inter;
     DPowerDevice           *q_ptr;
     Q_DECLARE_PUBLIC(DPowerDevice)
 };

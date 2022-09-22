@@ -11,12 +11,12 @@
 
 DPOWER_BEGIN_NAMESPACE
 
-class DPowerManager_interface : public QObject
+class UPowerManagerInterface : public QObject
 {
     Q_OBJECT
 public:
-    explicit DPowerManager_interface(QObject *parent = nullptr);
-    virtual ~DPowerManager_interface();
+    explicit UPowerManagerInterface(QObject *parent = nullptr);
+    virtual ~UPowerManagerInterface();
     // properties
     Q_PROPERTY(bool LidlsClosed READ lidlsClosed)
     Q_PROPERTY(bool LidlsPresent READ lidlsPresent)

@@ -12,17 +12,17 @@
 
 #include "namespace.h"
 #include "ddbusinterface.h"
-#include "dpowertypes_p.h"
+#include "upowertypes_p.h"
 DPOWER_BEGIN_NAMESPACE
 
 
-class DPowerDevice_interface : public QObject
+class UPowerDeviceInterface : public QObject
 {
     Q_OBJECT
 public:
-    explicit DPowerDevice_interface(const QString &name, QObject *parent = nullptr);
+    explicit UPowerDeviceInterface(const QString &name, QObject *parent = nullptr);
 
-    virtual ~DPowerDevice_interface();
+    virtual ~UPowerDeviceInterface();
 
     Q_PROPERTY(bool HasHistory READ hasHistory)
     Q_PROPERTY(bool HasStatistics READ hasStatistics)

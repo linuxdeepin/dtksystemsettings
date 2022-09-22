@@ -9,7 +9,7 @@
 #include <qdebug.h>
 
 #include "dpowertypes.h"
-#include "dbus/dpowerdevice_interface.h"
+#include "dbus/upowerdeviceinterface.h"
 
 DPOWER_BEGIN_NAMESPACE
 
@@ -19,7 +19,7 @@ DPowerDevice::DPowerDevice(const QString &name, QObject *parent)
 {
     Q_D(DPowerDevice);
     d->devicename     = name;
-    d->m_device_inter = new DPowerDevice_interface(name, this);
+    d->m_device_inter = new UPowerDeviceInterface(name, this);
 }
 
 DPowerDevice::~DPowerDevice() {}

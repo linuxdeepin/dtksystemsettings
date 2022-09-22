@@ -9,7 +9,7 @@
 class DDBusInterface;
 DPOWER_BEGIN_NAMESPACE
 
-class DKbdBacklight_interface;
+class UPowerKbdBacklightInterface;
 
 class DKbdBacklightPrivate : public QObject
 {
@@ -20,7 +20,7 @@ public:
         , q_ptr(parent) {}
 
 public:
-    DKbdBacklight_interface *m_kb_inter;
+    UPowerKbdBacklightInterface *m_kb_inter;
     DKbdBacklight *q_ptr;
     Q_DECLARE_PUBLIC(DKbdBacklight)
 
