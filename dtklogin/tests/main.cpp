@@ -14,14 +14,9 @@ int main (int argc, char *argv[])
 
     Dtk::Login::DLoginManager manager;
     auto seats = manager.listSeats();
-    if (seats.isEmpty()) {
-        qDebug() << "error:" << manager.lastError();
+    if (!seats.isEmpty()) {
+        qDebug() << "seat0's path:" << seats[0];
         return -1;
     }
-    qDebug() << "seat0's path:" << seats[0].path;
-
-    QObject::connect(&manager, qOverload<const uint, const QString&>(&Dtk::Login::DLoginManager::userNew), [](const uint uid, const QString &path) {
-                         qDebug() << "user added:" << uid << path;
-                     });
     return app.exec();
 }

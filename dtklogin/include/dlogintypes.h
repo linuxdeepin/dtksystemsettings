@@ -27,14 +27,8 @@ struct Inhibitor
     QString who;
     QString why;
     QString mode;
-    uint    uid;
-    uint    pid;
-};
-
-struct Seat
-{
-    QString seatId;
-    QString path;
+    quint32 uid;
+    quint32 pid;
 };
 
 struct Session
@@ -52,8 +46,6 @@ struct User
     QString userName;
     QString path;
 };
-
-typedef Seat SeatPath;
 
 struct SessionPath
 {

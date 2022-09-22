@@ -3,388 +3,362 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
 #include "dloginmanager.h"
+#include "dloginmanager_p.h"
+
 #include <qdbusextratypes.h>
 #include <qdbuspendingreply.h>
-#include <qdbusunixfiledescriptor.h>
 #include <qglobal.h>
 #include <qlist.h>
-#include <qnamespace.h>
-#include <qobjectdefs.h>
-#include <qpair.h>
 #include <qstringliteral.h>
-#include <qvariant.h>
-#include <stdexcept>
-#include <sys/types.h>
-#include <tuple>
+#include <qdebug.h>
+#include <qdbusconnection.h>
 
-#include "ddbusinterface.h"
-#include "dloginmanager_p.h"
-#include "dlogintypes_p.h"
+#include "login1managerinterface.h"
+
 DLOGIN_BEGIN_NAMESPACE
-
 DLoginManager::DLoginManager(QObject *parent)
     : QObject(parent)
     , d_ptr(new DLoginManagerPrivate(this))
 {
-    const QString &Service = QStringLiteral("org.freedesktop.login1");
-    const QString &Path = QStringLiteral("/org/freedesktop/login1");
-    const QString &Interface = QStringLiteral("org.freedesktop.login1.Manager");
+    const QString &Service   = QStringLiteral("org.freedesktop.login1");
+    const QString &Path      = QStringLiteral("/org/freedesktop/login1");
 
     Q_D(DLoginManager);
-    ScheduledShutdownValue_p::registerMetaType();
-    SessionProperty_p::registerMetaType();
-    Inhibitor_p::registerMetaType();
-    Seat_p::registerMetaType();
-    Session_p::registerMetaType();
-    User_p::registerMetaType();
-    d->m_inter = new DDBusInterface(Service, Path, Interface, QDBusConnection::systemBus(), d);
-
-    // init signals;
-    QDBusConnection::systemBus().connect(Service, Path, Interface, "PreparingForShutdown",
-                                         d, SLOT(prepareForShutdown(const bool)));
-    QDBusConnection::systemBus().connect(Service, Path, Interface, "PreparingForSleep",
-                                         d, SLOT(prepareForSleep(const bool)));
-    QDBusConnection::systemBus().connect(Service, Path, Interface, "seatNew",
-                                         d, SLOT(seatNew(const QString&, const QDBusObjectPath&)));
-    QDBusConnection::systemBus().connect(Service, Path, Interface, "seatRemoved",
-                                         d, SLOT(seatRemoved(const QString&, const QDBusObjectPath&)));
-    QDBusConnection::systemBus().connect(Service, Path, Interface, "sessionNew",
-                                         d, SLOT(sessionNew(const QString&, const QDBusObjectPath&)));
-    QDBusConnection::systemBus().connect(Service, Path, Interface, "sessionRemoved",
-                                         d, SLOT(sessionRemoved(const QString&, const QDBusObjectPath&)));
-    QDBusConnection::systemBus().connect(Service, Path, Interface, "userNew",
-                                         d, SLOT(userNew(const uint, const QDBusObjectPath&)));
-    QDBusConnection::systemBus().connect(Service, Path, Interface, "userRemoved",
-                                         d, SLOT(userRemoved(const uint, const QDBusObjectPath&)));
-    connect(d, &DLoginManagerPrivate::PrepareForShutdown, this, &DLoginManager::prepareForShutdown);
-    connect(d, &DLoginManagerPrivate::PrepareForSleep, this, &DLoginManager::prepareForSleep);
-    connect(d, &DLoginManagerPrivate::SeatNew, this, [this] (const QString &seat_id, const QDBusObjectPath &path) {
-                emit this->seatNew(seat_id, path.path());
-            });
-    connect(d, &DLoginManagerPrivate::SeatRemoved, this, [this] (const QString &seat_id, const QDBusObjectPath &path) {
-                emit this->seatRemoved(seat_id, path.path());
-            });
-    connect(d, &DLoginManagerPrivate::SessionNew, this, [this] (const QString &session_id, const QDBusObjectPath &path) {
-                emit this->sessionNew(session_id, path.path());
-            });
-    connect(d, &DLoginManagerPrivate::SessionRemoved, this, [this] (const QString &session_id, const QDBusObjectPath &path) {
-                emit this->sessionRemoved(session_id, path.path());
-            });
-    connect(d, &DLoginManagerPrivate::UserNew, this, [this] (const uint uid, const QDBusObjectPath &path) {
-                emit this->userNew(uid, path.path());
-            });
-    connect(d, &DLoginManagerPrivate::UserRemoved, this, [this] (const uint uid, const QDBusObjectPath &path) {
-                emit this->userRemoved(uid, path.path());
-            });
+    DBusScheduledShutdownValue::registerMetaType();
+    DBusSessionProperty::registerMetaType();
+    DBusInhibitor::registerMetaType();
+    DBusSeat::registerMetaType();
+    DBusSession::registerMetaType();
+    DBusUser::registerMetaType();
+    d->m_inter = new Login1ManagerInterface(Service, Path, QDBusConnection::systemBus(), d);
+    connect(d->m_inter, &Login1ManagerInterface::prepareForShutdown, this, &DLoginManager::prepareForShutdown);
+    connect(d->m_inter, &Login1ManagerInterface::prepareForSleep, this, &DLoginManager::prepareForSleep);
+    connect(d->m_inter, &Login1ManagerInterface::seatNew, this, [=](const QString &seatId, const QString &seatPath) {
+        Q_UNUSED(seatPath)
+        emit this->seatNew(seatId);
+    });
+    connect(d->m_inter, &Login1ManagerInterface::seatRemoved, this, [=](const QString &seatId, const QString &seatPath){
+        Q_UNUSED(seatPath)
+        emit this->seatRemoved(seatId);
+    });
+    connect(d->m_inter, &Login1ManagerInterface::sessionNew, this, [=](const QString &sessionId, const QString &sessionPath) {
+        Q_UNUSED(sessionPath)
+        emit this->sessionNew(sessionId);
+    });
+    connect(d->m_inter, &Login1ManagerInterface::sessionRemoved, this, [=](const QString &sessionId, const QString &sessionPath) {
+        Q_UNUSED(sessionPath)
+        emit this->sessionRemoved(sessionId);
+    });
+    connect(d->m_inter, &Login1ManagerInterface::userNew, this, [=](const uint UID, const QString &userPath) {
+        Q_UNUSED(userPath)
+        emit this->userNew(UID);
+    });
+    connect(d->m_inter, &Login1ManagerInterface::userRemoved, this, [=](const uint UID, const QString &userPath) {
+        Q_UNUSED(userPath);
+        emit this->userRemoved(UID);
+    });
 }
 
-DLoginManager::~DLoginManager() {}
+DLoginManager::~DLoginManager() = default;
 
 // properties
 
 QStringList DLoginManager::bootLoaderEntries() const
 {
     Q_D(const DLoginManager);
-    return qdbus_cast<QStringList>(d->m_inter->property("BootLoaderEntries"));
+    return d->m_inter->bootLoaderEntries();
 }
 
 QStringList DLoginManager::killExcludeUsers() const
 {
     Q_D(const DLoginManager);
-    return qdbus_cast<QStringList>(d->m_inter->property("KillExcludeUsers"));
+    return d->m_inter->killExcludeUsers();
 }
 
 QStringList DLoginManager::killOnlyUsers() const
 {
     Q_D(const DLoginManager);
-    return qdbus_cast<QStringList>(d->m_inter->property("KillOnlyUsers"));
+    return d->m_inter->killOnlyUsers();
 }
 
 bool DLoginManager::docked() const
 {
     Q_D(const DLoginManager);
-    return qdbus_cast<bool>(d->m_inter->property("Docked"));
+    return d->m_inter->docked();
 }
 
 bool DLoginManager::enableWallMessages() const
 {
     Q_D(const DLoginManager);
-    return qdbus_cast<bool>(d->m_inter->property("EnableWallMessages"));
+    return d->m_inter->enableWallMessages();
 }
 
 void DLoginManager::setEnableWallMessages(const bool enable)
 {
     Q_D(const DLoginManager);
-    d->m_inter->setProperty("EnableWallMessages", QVariant::fromValue(enable));
+    d->m_inter->setEnableWallMessages(enable);
 }
 
 bool DLoginManager::idleHint() const
 {
     Q_D(const DLoginManager);
-    return qdbus_cast<bool>(d->m_inter->property("LdleHint"));
+    return d->m_inter->idleHint();
 }
 
 bool DLoginManager::killUserProcesses() const
 {
     Q_D(const DLoginManager);
-    return qdbus_cast<bool>(d->m_inter->property("KillUserProcesses"));
+    return d->m_inter->killUserProcesses();
 }
 
 bool DLoginManager::lidClosed() const
 {
     Q_D(const DLoginManager);
-    return qdbus_cast<bool>(d->m_inter->property("LidClosed"));
+    return d->m_inter->lidClosed();
 }
 
 bool DLoginManager::onExternalPower() const
 {
     Q_D(const DLoginManager);
-    return qdbus_cast<bool>(d->m_inter->property("OnExternalPower"));
+    return d->m_inter->onExternalPower();
 }
 
 bool DLoginManager::preparingForShutdown() const
 {
     Q_D(const DLoginManager);
-    return qdbus_cast<bool>(d->m_inter->property("PreparingForShutdown"));
+    return d->m_inter->preparingForShutdown();
 }
 
 bool DLoginManager::preparingForSleep() const
 {
     Q_D(const DLoginManager);
-    return qdbus_cast<bool>(d->m_inter->property("PreparingForSleep"));
+    return d->m_inter->preparingForSleep();
 }
 
 bool DLoginManager::rebootToFirmwareSetup() const
 {
     Q_D(const DLoginManager);
-    return qdbus_cast<bool>(d->m_inter->property("RebootToFirmwareSetup"));
+    return d->m_inter->rebootToFirmwareSetup();
 }
 
 bool DLoginManager::removeIPC() const
 {
     Q_D(const DLoginManager);
-    return qdbus_cast<bool>(d->m_inter->property("RemoveIPC"));
+    return d->m_inter->removeIPC();
 }
 
 QString DLoginManager::blockInhibited() const
 {
     Q_D(const DLoginManager);
-    return qdbus_cast<QString>(d->m_inter->property("BlockInhibited"));
+    return d->m_inter->blockInhibited();
 }
 
 QString DLoginManager::delayInhibited() const
 {
     Q_D(const DLoginManager);
-    return qdbus_cast<QString>(d->m_inter->property("DelayInhibited"));
+    return d->m_inter->delayInhibited();
 }
 
 QString DLoginManager::handleHibernateKey() const
 {
     Q_D(const DLoginManager);
-    return qdbus_cast<QString>(d->m_inter->property("HandleHibernateKey"));
+    return d->m_inter->handleHibernateKey();
 }
 
 QString DLoginManager::handleLidSwitch() const
 {
     Q_D(const DLoginManager);
-    return qdbus_cast<QString>(d->m_inter->property("HandleLidSwitch"));
+    return d->m_inter->handleLidSwitch();
 }
 
 QString DLoginManager::handleLidSwitchDocked() const
 {
     Q_D(const DLoginManager);
-    return qdbus_cast<QString>(d->m_inter->property("HandleLidSwitchDocked"));
+    return d->m_inter->handleLidSwitchDocked();
 }
 
 QString DLoginManager::handleLidSwitchExternalPower() const
 {
     Q_D(const DLoginManager);
-    return qdbus_cast<QString>(d->m_inter->property("HandleLidSwitchExternalPower"));
+    return d->m_inter->handleLidSwitchExternalPower();
 }
 
 QString DLoginManager::handlePowerKey() const
 {
     Q_D(const DLoginManager);
-    return qdbus_cast<QString>(d->m_inter->property("HandlePowerKey"));
+    return d->m_inter->handlePowerKey();
 }
 
 QString DLoginManager::handleSuspendKey() const
 {
     Q_D(const DLoginManager);
-    return qdbus_cast<QString>(d->m_inter->property("HandleSuspendKey"));
+    return d->m_inter->handleSuspendKey();
 }
 
 QString DLoginManager::idleAction() const
 {
     Q_D(const DLoginManager);
-    return qdbus_cast<QString>(d->m_inter->property("IdleAction"));
+    return d->m_inter->idleAction();
 }
 
 QString DLoginManager::rebootParameter() const
 {
     Q_D(const DLoginManager);
-    return qdbus_cast<QString>(d->m_inter->property("RebootParameter"));
+    return d->m_inter->rebootParameter();
 }
 
 QString DLoginManager::rebootToBootLoaderEntry() const
 {
     Q_D(const DLoginManager);
-    return qdbus_cast<QString>(d->m_inter->property("RebootToBootLoaderEntry"));
+    return d->m_inter->rebootToBootLoaderEntry();
 }
 
 QString DLoginManager::wallMessage() const
 {
     Q_D(const DLoginManager);
-    return qdbus_cast<QString>(d->m_inter->property("WallMessage"));
+    return d->m_inter->wallMessage();
+}
+
+void DLoginManager::setWallMessage(const QString &message)
+{
+    Q_D(DLoginManager);
+    d->m_inter->setWallMessage(message);
 }
 
 ScheduledShutdownValue DLoginManager::scheduledShutdown() const
 {
     Q_D(const DLoginManager);
-    const auto &result = qdbus_cast<ScheduledShutdownValue_p>(d->m_inter->property("ScheduledShutdown"));
+    const auto            &result = d->m_inter->scheduledShutdown();
     ScheduledShutdownValue value;
     value.type = result.type;
     value.usec = result.usec;
     return value;
 }
 
-uint DLoginManager::nAutoVTs() const
+quint32 DLoginManager::nAutoVTs() const
 {
     Q_D(const DLoginManager);
-    return qdbus_cast<uint>(d->m_inter->property("NAutoVTs"));
+    return d->m_inter->nAutoVTs();
 }
 
 quint64 DLoginManager::holdoffTimeoutUSec() const
 {
     Q_D(const DLoginManager);
-    return qdbus_cast<quint64>(d->m_inter->property("HoldoffTimeoutUSec"));
+    return d->m_inter->holdoffTimeoutUSec();
 }
 
 quint64 DLoginManager::idleActionUSec() const
 {
     Q_D(const DLoginManager);
-    return qdbus_cast<quint64>(d->m_inter->property("IdleActionUSec"));
+    return d->m_inter->idleActionUSec();
 }
 
 quint64 DLoginManager::idleSinceHint() const
 {
     Q_D(const DLoginManager);
-    return qdbus_cast<quint64>(d->m_inter->property("IdleSinceHint"));
+    return d->m_inter->idleSinceHint();
 }
 
 quint64 DLoginManager::idleSinceHintMonotonic() const
 {
     Q_D(const DLoginManager);
-    return qdbus_cast<quint64>(d->m_inter->property("IdleSinceHintMonotonic"));
+    return d->m_inter->idleSinceHintMonotonic();
 }
 
 quint64 DLoginManager::inhibitDelayMaxUSec() const
 {
     Q_D(const DLoginManager);
-    return qdbus_cast<quint64>(d->m_inter->property("InhibitDelayMaxUSec"));
+    return d->m_inter->inhibitDelayMaxUSec();
 }
 
 quint64 DLoginManager::inhibitorsMax() const
 {
     Q_D(const DLoginManager);
-    return qdbus_cast<quint64>(d->m_inter->property("InhibitorsMax"));
+    return d->m_inter->inhibitorsMax();
 }
 
 quint64 DLoginManager::nCurrentInhibitors() const
 {
     Q_D(const DLoginManager);
-    return qdbus_cast<quint64>(d->m_inter->property("NCurrentInhibitors"));
+    return d->m_inter->nCurrentInhibitors();
 }
 
 quint64 DLoginManager::nCurrentSessions() const
 {
     Q_D(const DLoginManager);
-    return qdbus_cast<quint64>(d->m_inter->property("NCurrentSessions"));
+    return d->m_inter->nCurrentSessions();
 }
 
 quint64 DLoginManager::rebootToBootLoaderMenu() const
 {
     Q_D(const DLoginManager);
-    return qdbus_cast<quint64>(d->m_inter->property("RebootToBootLoaderMenu"));
+    return d->m_inter->rebootToBootLoaderMenu();
 }
 
 quint64 DLoginManager::runtimeDirectoryInodesMax() const
 {
     Q_D(const DLoginManager);
-    return qdbus_cast<quint64>(d->m_inter->property("RuntimeDirectoryInodesMax"));
+    return d->m_inter->runtimeDirectoryInodesMax();
 }
 
 quint64 DLoginManager::runtimeDirectorySize() const
 {
     Q_D(const DLoginManager);
-    return qdbus_cast<quint64>(d->m_inter->property("RuntimeDirectorySize"));
+    return d->m_inter->runtimeDirectorySize();
 }
 
 quint64 DLoginManager::sessionsMax() const
 {
     Q_D(const DLoginManager);
-    return qdbus_cast<quint64>(d->m_inter->property("SessionsMax"));
+    return d->m_inter->sessionsMax();
 }
 
 quint64 DLoginManager::userStopDelayUSec() const
 {
     Q_D(const DLoginManager);
-    return qdbus_cast<quint64>(d->m_inter->property("UserStopDelayUSec"));
+    return d->m_inter->userStopDelayUSec();
 }
 
 // public slots
 
-QString DLoginManager::lastError() const
-{
-    Q_D(const DLoginManager);
-    return d->m_errorMessage;
-}
-
 void DLoginManager::activateSession(const QString &sessionId)
 {
     Q_D(DLoginManager);
-    QVariantList args {QVariant::fromValue(sessionId)};
-    QDBusPendingReply<> reply = d->m_inter->asyncCallWithArgumentList("ActivateSession", args);
+    QDBusPendingReply<> reply = d->m_inter->activateSession(sessionId);
     reply.waitForFinished();
     if (!reply.isValid()) {
-        d->m_errorMessage = reply.error().message();
-        emit errorMessageChanged(d->m_errorMessage);
+        qWarning() << reply.error().message();
     }
 }
 
 void DLoginManager::activateSessionOnSeat(const QString &sessionId, const QString &seatId)
 {
     Q_D(DLoginManager);
-    QVariantList args {QVariant::fromValue(sessionId), QVariant::fromValue(seatId)};
-    QDBusPendingReply<> reply = d->m_inter->asyncCallWithArgumentList("ActivateSessionOnSeat", args);
+    QDBusPendingReply<> reply = d->m_inter->activateSessionOnSeat(sessionId, seatId);
     reply.waitForFinished();
     if (!reply.isValid()) {
-        d->m_errorMessage = reply.error().message();
-        emit errorMessageChanged(d->m_errorMessage);
+        qWarning() << reply.error().message();
     }
 }
 
 void DLoginManager::attachDevice(const QString &seatId, const QString &sysfsPath, const bool interactive)
 {
     Q_D(DLoginManager);
-    QVariantList args {QVariant::fromValue(seatId), QVariant::fromValue(sysfsPath), QVariant::fromValue(interactive)};
-    QDBusPendingReply<> reply = d->m_inter->asyncCallWithArgumentList("attachDevice", {seatId, sysfsPath, interactive});
+    QDBusPendingReply<> reply = d->m_inter->attachDevice(seatId, sysfsPath, interactive);
     reply.waitForFinished();
     if (!reply.isValid()) {
-        d->m_errorMessage = reply.error().message();
-        emit errorMessageChanged(d->m_errorMessage);
+        qWarning() << reply.error().message();
     }
 }
 
 QString DLoginManager::canHalt()
 {
     Q_D(DLoginManager);
-    QDBusPendingReply<QString> reply = d->m_inter->asyncCall(QStringLiteral("CanHalt"));
+    QDBusPendingReply<QString> reply = d->m_inter->canHalt();
     reply.waitForFinished();
     if (!reply.isValid()) {
-        d->m_errorMessage = reply.error().message();
-        emit errorMessageChanged(d->m_errorMessage);
-        return QString();
+        qWarning() << reply.error().message();
+        return {};
     }
     return reply.value();
 }
@@ -392,12 +366,11 @@ QString DLoginManager::canHalt()
 QString DLoginManager::canHibernate()
 {
     Q_D(DLoginManager);
-    QDBusPendingReply<QString> reply = d->m_inter->asyncCall(QStringLiteral("CanHibernate"));
+    QDBusPendingReply<QString> reply = d->m_inter->canHibernate();
     reply.waitForFinished();
     if (!reply.isValid()) {
-        d->m_errorMessage = reply.error().message();
-        emit errorMessageChanged(d->m_errorMessage);
-        return QString();
+        qWarning() << reply.error().message();
+        return {};
     }
     return reply.value();
 }
@@ -405,12 +378,11 @@ QString DLoginManager::canHibernate()
 QString DLoginManager::canHybridSleep()
 {
     Q_D(DLoginManager);
-    QDBusPendingReply<QString> reply = d->m_inter->asyncCall(QStringLiteral("CanHybridSleep"));
+    QDBusPendingReply<QString> reply = d->m_inter->canHybridSleep();
     reply.waitForFinished();
     if (!reply.isValid()) {
-        d->m_errorMessage = reply.error().message();
-        emit errorMessageChanged(d->m_errorMessage);
-        return QString();
+        qWarning() << reply.error().message();
+        return {};
     }
     return reply.value();
 }
@@ -418,12 +390,11 @@ QString DLoginManager::canHybridSleep()
 QString DLoginManager::canPowerOff()
 {
     Q_D(DLoginManager);
-    QDBusPendingReply<QString> reply = d->m_inter->asyncCall(QStringLiteral("CanPowerOff"));
+    QDBusPendingReply<QString> reply = d->m_inter->canPowerOff();
     reply.waitForFinished();
     if (!reply.isValid()) {
-        d->m_errorMessage = reply.error().message();
-        emit errorMessageChanged(d->m_errorMessage);
-        return QString();
+        qWarning() << reply.error().message();
+        return {};
     }
     return reply.value();
 }
@@ -431,12 +402,11 @@ QString DLoginManager::canPowerOff()
 QString DLoginManager::canReboot()
 {
     Q_D(DLoginManager);
-    QDBusPendingReply<QString> reply = d->m_inter->asyncCall(QStringLiteral("CanReboot"));
+    QDBusPendingReply<QString> reply = d->m_inter->canReboot();
     reply.waitForFinished();
     if (!reply.isValid()) {
-        d->m_errorMessage = reply.error().message();
-        emit errorMessageChanged(d->m_errorMessage);
-        return QString();
+        qWarning() << reply.error().message();
+        return {};
     }
     return reply.value();
 }
@@ -444,12 +414,11 @@ QString DLoginManager::canReboot()
 QString DLoginManager::canRebootParameter()
 {
     Q_D(DLoginManager);
-    QDBusPendingReply<QString> reply = d->m_inter->asyncCall(QStringLiteral("CanRebootParameter"));
+    QDBusPendingReply<QString> reply = d->m_inter->canRebootParameter();
     reply.waitForFinished();
     if (!reply.isValid()) {
-        d->m_errorMessage = reply.error().message();
-        emit errorMessageChanged(d->m_errorMessage);
-        return QString();
+        qWarning() << reply.error().message();
+        return {};
     }
     return reply.value();
 }
@@ -457,12 +426,11 @@ QString DLoginManager::canRebootParameter()
 QString DLoginManager::canRebootToBootLoaderEntry()
 {
     Q_D(DLoginManager);
-    QDBusPendingReply<QString> reply = d->m_inter->asyncCall(QStringLiteral("CanRebootToBootLoaderEntry"));
+    QDBusPendingReply<QString> reply = d->m_inter->canRebootToBootLoaderEntry();
     reply.waitForFinished();
     if (!reply.isValid()) {
-        d->m_errorMessage = reply.error().message();
-        emit errorMessageChanged(d->m_errorMessage);
-        return QString();
+        qWarning() << reply.error().message();
+        return {};
     }
     return reply.value();
 }
@@ -470,12 +438,11 @@ QString DLoginManager::canRebootToBootLoaderEntry()
 QString DLoginManager::canRebootToBootLoaderMenu()
 {
     Q_D(DLoginManager);
-    QDBusPendingReply<QString> reply = d->m_inter->asyncCall(QStringLiteral("CanRebootToBootLoaderMenu"));
+    QDBusPendingReply<QString> reply = d->m_inter->canRebootToBootLoaderMenu();
     reply.waitForFinished();
     if (!reply.isValid()) {
-        d->m_errorMessage = reply.error().message();
-        emit errorMessageChanged(d->m_errorMessage);
-        return QString();
+        qWarning() << reply.error().message();
+        return {};
     }
     return reply.value();
 }
@@ -483,12 +450,11 @@ QString DLoginManager::canRebootToBootLoaderMenu()
 QString DLoginManager::canRebootToFirmwareSetup()
 {
     Q_D(DLoginManager);
-    QDBusPendingReply<QString> reply = d->m_inter->asyncCall(QStringLiteral("CanRebootToFirmwareSetup"));
+    QDBusPendingReply<QString> reply = d->m_inter->canRebootToFirmwareSetup();
     reply.waitForFinished();
     if (!reply.isValid()) {
-        d->m_errorMessage = reply.error().message();
-        emit errorMessageChanged(d->m_errorMessage);
-        return QString();
+        qWarning() << reply.error().message();
+        return {};
     }
     return reply.value();
 }
@@ -496,12 +462,11 @@ QString DLoginManager::canRebootToFirmwareSetup()
 QString DLoginManager::canSuspend()
 {
     Q_D(DLoginManager);
-    QDBusPendingReply<QString> reply = d->m_inter->asyncCall(QStringLiteral("CanSuspend"));
+    QDBusPendingReply<QString> reply = d->m_inter->canSuspend();
     reply.waitForFinished();
     if (!reply.isValid()) {
-        d->m_errorMessage = reply.error().message();
-        emit errorMessageChanged(d->m_errorMessage);
-        return QString();
+        qWarning() << reply.error().message();
+        return {};
     }
     return reply.value();
 }
@@ -509,12 +474,11 @@ QString DLoginManager::canSuspend()
 QString DLoginManager::canSuspendThenHibernate()
 {
     Q_D(DLoginManager);
-    QDBusPendingReply<QString> reply = d->m_inter->asyncCall(QStringLiteral("CanSuspendThenHibernate"));
+    QDBusPendingReply<QString> reply = d->m_inter->canSuspendThenHibernate();
     reply.waitForFinished();
     if (!reply.isValid()) {
-        d->m_errorMessage = reply.error().message();
-        emit errorMessageChanged(d->m_errorMessage);
-        return QString();
+        qWarning() << reply.error().message();
+        return {};
     }
     return reply.value();
 }
@@ -522,76 +486,35 @@ QString DLoginManager::canSuspendThenHibernate()
 bool DLoginManager::cancelScheduledShutdown()
 {
     Q_D(DLoginManager);
-    QDBusPendingReply<bool> reply = d->m_inter->asyncCall(QStringLiteral("CancelScheduledShutdown"));
+    QDBusPendingReply<bool> reply = d->m_inter->cancelScheduledShutdown();
     reply.waitForFinished();
     if (!reply.isValid()) {
-        d->m_errorMessage = reply.error().message();
-        emit errorMessageChanged(d->m_errorMessage);
+        qWarning() << reply.error().message();
         return false;
     }
     return reply.value();
 }
 
-std::tuple<QString,     // sessionId
-    QString,        // path
-    QString,        // runtime_path
-    int,            // fifo_fd
-    uint,           // uid
-    QString,        // seatId
-    uint,           // VTNr
-    bool            // existing
-    > DLoginManager::createSession(uint uid, uint pid, const QString &service, const QString &type,
-        const QString &_class, const QString &desktop, const QString &seatId,
-        uint VTNr, const QString &TTY, const QString &display, const QString &remote,
-        const QString &remoteUser, const QString &remoteHost, const QList<SessionProperty> &properties)
-{
-    Q_D(DLoginManager);
-    QList<SessionProperty_p> properties_p;
-    for (auto && property : properties) {
-        SessionProperty_p property_p;
-        property_p.name = property.name;
-        property_p.var.setVariant(property.var);
-        properties_p.append(property_p);
-    }
-    QVariantList args;
-    args << QVariant::fromValue(uid) << QVariant::fromValue(pid) << QVariant::fromValue(service) << QVariant::fromValue(type)
-        << QVariant::fromValue(_class) << QVariant::fromValue(desktop) << QVariant::fromValue(seatId)
-        << QVariant::fromValue(VTNr) << QVariant::fromValue(TTY) << QVariant::fromValue(display) << QVariant::fromValue(remote)
-        << QVariant::fromValue(remoteUser) << QVariant::fromValue(remoteHost) << QVariant::fromValue(properties_p);
-    QDBusPendingReply<QString, QDBusObjectPath, QString, QDBusUnixFileDescriptor, uint, QString, uint, bool>
-        reply = d->m_inter->asyncCallWithArgumentList(QStringLiteral("CreateSession"), args);
-    reply.waitForFinished();
-    if (!reply.isValid()) {
-        d->m_errorMessage = reply.error().message();
-        emit errorMessageChanged(d->m_errorMessage);
-        return std::tuple<QString, QString, QString, int, uint, QString, uint, bool>();
-    }
-    return std::make_tuple(reply.argumentAt<0>(), reply.argumentAt<1>().path(), reply.argumentAt<2>(),
-        reply.argumentAt<3>().fileDescriptor(), reply.argumentAt<4>(), reply.argumentAt<5>(), reply.argumentAt<6>(),
-        reply.argumentAt<7>());
-}
-
 void DLoginManager::flushDevices(const bool value)
 {
     Q_D(DLoginManager);
-    QDBusPendingReply<> reply = d->m_inter->asyncCallWithArgumentList(QStringLiteral("flushDevices"), {QVariant::fromValue(value)});
+    QDBusPendingReply<> reply =
+        d->m_inter->flushDevices(value);
     reply.waitForFinished();
     if (!reply.isValid()) {
-        d->m_errorMessage = reply.error().message();
-        emit errorMessageChanged(d->m_errorMessage);
+        qWarning() << reply.error().message();
     }
 }
 
 QString DLoginManager::getSeat(const QString &seatId)
 {
     Q_D(DLoginManager);
-    QDBusPendingReply<QDBusObjectPath> reply = d->m_inter->asyncCallWithArgumentList(QStringLiteral("GetSeat"),
-        {QVariant::fromValue(seatId)});
+    QDBusPendingReply<QDBusObjectPath> reply =
+        d->m_inter->getSeat(seatId);
     reply.waitForFinished();
     if (!reply.isValid()) {
-        d->m_errorMessage = reply.error().message();
-        emit errorMessageChanged(d->m_errorMessage);
-        return QString();
+        qWarning() << reply.error().message();
+        return {};
     }
     return reply.value().path();
 }
@@ -599,13 +522,12 @@ QString DLoginManager::getSeat(const QString &seatId)
 QString DLoginManager::getSession(const QString &sessionId)
 {
     Q_D(DLoginManager);
-    QDBusPendingReply<QDBusObjectPath> reply = d->m_inter->asyncCallWithArgumentList(QStringLiteral("GetSession"),
-        {QVariant::fromValue(sessionId)});
+    QDBusPendingReply<QDBusObjectPath> reply =
+        d->m_inter->getSession(sessionId);
     reply.waitForFinished();
     if (!reply.isValid()) {
-        d->m_errorMessage = reply.error().message();
-        emit errorMessageChanged(d->m_errorMessage);
-        return QString();
+        qWarning() << reply.error().message();
+        return {};
     }
     return reply.value().path();
 }
@@ -613,13 +535,12 @@ QString DLoginManager::getSession(const QString &sessionId)
 QString DLoginManager::getSessionByPID(const uint pid)
 {
     Q_D(DLoginManager);
-    QDBusPendingReply<QDBusObjectPath> reply = d->m_inter->asyncCallWithArgumentList(QStringLiteral("GetSessionByPID"),
-        {QVariant::fromValue(pid)});
+    QDBusPendingReply<QDBusObjectPath> reply =
+        d->m_inter->getSessionByPID(pid);
     reply.waitForFinished();
     if (!reply.isValid()) {
-        d->m_errorMessage = reply.error().message();
-        emit errorMessageChanged(d->m_errorMessage);
-        return QString();
+        qWarning() << reply.error().message();
+        return {};
     }
     return reply.value().path();
 }
@@ -627,13 +548,12 @@ QString DLoginManager::getSessionByPID(const uint pid)
 QString DLoginManager::getUser(const uint UID)
 {
     Q_D(DLoginManager);
-    QDBusPendingReply<QDBusObjectPath> reply = d->m_inter->asyncCallWithArgumentList(QStringLiteral("GetUser"),
-        {QVariant::fromValue(UID)});
+    QDBusPendingReply<QDBusObjectPath> reply =
+        d->m_inter->getUser(UID);
     reply.waitForFinished();
     if (!reply.isValid()) {
-        d->m_errorMessage = reply.error().message();
-        emit errorMessageChanged(d->m_errorMessage);
-        return QString();
+        qWarning() << reply.error().message();
+        return {};
     }
     return reply.value().path();
 }
@@ -641,13 +561,12 @@ QString DLoginManager::getUser(const uint UID)
 QString DLoginManager::getUserByPID(const uint pid)
 {
     Q_D(DLoginManager);
-    QDBusPendingReply<QDBusObjectPath> reply = d->m_inter->asyncCallWithArgumentList(QStringLiteral("GetUserByPID"),
-        {QVariant::fromValue(pid)});
+    QDBusPendingReply<QDBusObjectPath> reply =
+        d->m_inter->getUserByPID(pid);
     reply.waitForFinished();
     if (!reply.isValid()) {
-        d->m_errorMessage = reply.error().message();
-        emit errorMessageChanged(d->m_errorMessage);
-        return QString();
+        qWarning() << reply.error().message();
+        return {};
     }
     return reply.value().path();
 }
@@ -655,195 +574,163 @@ QString DLoginManager::getUserByPID(const uint pid)
 void DLoginManager::halt(const bool interactive)
 {
     Q_D(DLoginManager);
-    QDBusPendingReply<> reply = d->m_inter->asyncCallWithArgumentList("Halt", {QVariant::fromValue(interactive)});
+    QDBusPendingReply<> reply = d->m_inter->halt(interactive);
     reply.waitForFinished();
     if (!reply.isValid()) {
-        d->m_errorMessage = reply.error().message();
-        emit errorMessageChanged(d->m_errorMessage);
+        qWarning() << reply.error().message();
     }
 }
 
 void DLoginManager::haltWithFlags(const quint64 flags)
 {
     Q_D(DLoginManager);
-    QDBusPendingReply<> reply = d->m_inter->asyncCallWithArgumentList("HaltWithFlags", {QVariant::fromValue(flags)});
+    QDBusPendingReply<> reply = d->m_inter->haltWithFlags(flags);
     reply.waitForFinished();
     if (!reply.isValid()) {
-        d->m_errorMessage = reply.error().message();
-        emit errorMessageChanged(d->m_errorMessage);
+        qWarning() << reply.error().message();
     }
 }
 
 void DLoginManager::hibernate(const bool interactive)
 {
     Q_D(DLoginManager);
-    QDBusPendingReply<> reply = d->m_inter->asyncCallWithArgumentList("Hibernate", {QVariant::fromValue(interactive)});
+    QDBusPendingReply<> reply = d->m_inter->hibernate(interactive);
     reply.waitForFinished();
     if (!reply.isValid()) {
-        d->m_errorMessage = reply.error().message();
-        emit errorMessageChanged(d->m_errorMessage);
+        qWarning() << reply.error().message();
     }
 }
 
 void DLoginManager::hibernateWithFlags(const quint64 flags)
 {
     Q_D(DLoginManager);
-    QDBusPendingReply<> reply = d->m_inter->asyncCallWithArgumentList("HibernateWithFlags", {QVariant::fromValue(flags)});
+    QDBusPendingReply<> reply = d->m_inter->hibernateWithFlags(flags);
     reply.waitForFinished();
     if (!reply.isValid()) {
-        d->m_errorMessage = reply.error().message();
-        emit errorMessageChanged(d->m_errorMessage);
+        qWarning() << reply.error().message();
     }
 }
 
 void DLoginManager::hybridSleep(const bool interactive)
 {
     Q_D(DLoginManager);
-    QDBusPendingReply<> reply = d->m_inter->asyncCallWithArgumentList("HybridSleep", {QVariant::fromValue(interactive)});
+    QDBusPendingReply<> reply = d->m_inter->hybridSleep(interactive);
     reply.waitForFinished();
     if (!reply.isValid()) {
-        d->m_errorMessage = reply.error().message();
-        emit errorMessageChanged(d->m_errorMessage);
+        qWarning() << reply.error().message();
     }
 }
 
 void DLoginManager::hybridSleepWithFlags(const quint64 flags)
 {
     Q_D(DLoginManager);
-    QDBusPendingReply<> reply = d->m_inter->asyncCallWithArgumentList("HybridSleepWithFlags", {QVariant::fromValue(flags)});
+    QDBusPendingReply<> reply = d->m_inter->hybridSleepWithFlags(flags);
     reply.waitForFinished();
     if (!reply.isValid()) {
-        d->m_errorMessage = reply.error().message();
-        emit errorMessageChanged(d->m_errorMessage);
+        qWarning() << reply.error().message();
     }
 }
 
 int DLoginManager::inhibit(const QString &what, const QString &who, const QString &why, const QString &mode)
 {
     Q_D(DLoginManager);
-    QDBusPendingReply<QDBusUnixFileDescriptor> reply = d->m_inter->asyncCallWithArgumentList(QStringLiteral("Inhibit"),
-        {QVariant::fromValue(what), QVariant::fromValue(who), QVariant::fromValue(why), QVariant::fromValue(mode)});
+    QDBusPendingReply<int> reply = d->m_inter->inhibit(what, who, why, mode);
     reply.waitForFinished();
     if (!reply.isValid()) {
-        d->m_errorMessage = reply.error().message();
-        emit errorMessageChanged(d->m_errorMessage);
+        qWarning() << reply.error().message();
         return -1;
     }
-    return reply.value().fileDescriptor();
+    return reply.value();
 }
 
 void DLoginManager::killSession(const QString &sessionId, const QString &who, const int signalNumber)
 {
     Q_D(DLoginManager);
-    QDBusPendingReply<> reply = d->m_inter->asyncCallWithArgumentList("KillSession",
-        {QVariant::fromValue(sessionId), QVariant::fromValue(who), QVariant::fromValue(signalNumber)});
+    QDBusPendingReply<> reply = d->m_inter->killSession(sessionId, who, signalNumber);
     reply.waitForFinished();
     if (!reply.isValid()) {
-        d->m_errorMessage = reply.error().message();
-        emit errorMessageChanged(d->m_errorMessage);
+        qWarning() << reply.error().message();
     }
 }
 
 void DLoginManager::killUser(const uint uid, const int signalNumber)
 {
     Q_D(DLoginManager);
-    QDBusPendingReply<> reply = d->m_inter->asyncCallWithArgumentList(QStringLiteral("KillUser"),
-        {QVariant::fromValue(uid), QVariant::fromValue(signalNumber)});
+    QDBusPendingReply<> reply = d->m_inter->killUser(uid, signalNumber);
     reply.waitForFinished();
     if (!reply.isValid()) {
-        d->m_errorMessage = reply.error().message();
-        emit errorMessageChanged(d->m_errorMessage);
+        qWarning() << reply.error().message();
     }
 }
 
 QList<Inhibitor> DLoginManager::listInhibitors()
 {
     Q_D(DLoginManager);
-    QDBusPendingReply<QList<Inhibitor_p>> reply = d->m_inter->asyncCall(QStringLiteral("ListInhibitors"));
+    QDBusPendingReply<QList<DBusInhibitor>> reply = d->m_inter->listInhibitors();
     reply.waitForFinished();
     QList<Inhibitor> inhibitors;
     if (!reply.isValid()) {
-        d->m_errorMessage = reply.error().message();
-        emit errorMessageChanged(d->m_errorMessage);
+        qWarning() << reply.error().message();
         return inhibitors;
     }
 
     for (auto &&inhibitor_p : reply.value()) {
         Inhibitor inhibitor;
         inhibitor.mode = inhibitor_p.mode;
-        inhibitor.pid = inhibitor_p.pid;
-        inhibitor.uid = inhibitor_p.uid;
+        inhibitor.pid  = inhibitor_p.pid;
+        inhibitor.uid  = inhibitor_p.uid;
         inhibitor.what = inhibitor_p.what;
-        inhibitor.who = inhibitor_p.who;
-        inhibitor.why = inhibitor_p.why;
+        inhibitor.who  = inhibitor_p.who;
+        inhibitor.why  = inhibitor_p.why;
         inhibitors.append(inhibitor);
     }
     return inhibitors;
 }
 
-QList<Seat> DLoginManager::listSeats()
+QList<QString> DLoginManager::listSeats()
 {
     Q_D(DLoginManager);
-    QDBusPendingReply<QList<Seat_p>> reply = d->m_inter->asyncCall(QStringLiteral("ListSeats"));
+    QDBusPendingReply<QList<DBusSeat>> reply = d->m_inter->listSeats();
     reply.waitForFinished();
-    QList<Seat> seats;
+    QList<QString> seats;
     if (!reply.isValid()) {
-        d->m_errorMessage = reply.error().message();
-        emit errorMessageChanged(d->m_errorMessage);
+        qWarning() << reply.error().message();
         return seats;
     }
-
     for (auto &&seat_p : reply.value()) {
-        Seat seat;
-        seat.seatId = seat_p.seatId;
-        seat.path = seat_p.path.path();
-        seats.append(seat);
+        seats.append(seat_p.seatId);
     }
     return seats;
 }
 
-QList<Session> DLoginManager::listSessions()
+QList<QString> DLoginManager::listSessions()
 {
     Q_D(DLoginManager);
-    QDBusPendingReply<QList<Session_p>> reply = d->m_inter->asyncCall(QStringLiteral("ListSessions"));
+    QDBusPendingReply<QList<DBusSession>> reply = d->m_inter->listSessions();
     reply.waitForFinished();
-    QList<Session> sessions;
+    QList<QString> sessions;
     if (!reply.isValid()) {
-        d->m_errorMessage = reply.error().message();
-        emit errorMessageChanged(d->m_errorMessage);
+        qWarning() << reply.error().message();
         return sessions;
     }
-
     for (auto &&session_p : reply.value()) {
-        Session session;
-        session.path = session_p.path.path();
-        session.seatId = session_p.seatId;
-        session.sessionId = session_p.sessionId;
-        session.userId = session_p.userId;
-        session.userName = session_p.userName;
-        sessions.append(session);
+        sessions.append(session_p.sessionId);
     }
     return sessions;
 }
 
-QList<User> DLoginManager::listUsers()
+QList<quint32> DLoginManager::listUsers()
 {
     Q_D(DLoginManager);
-    QDBusPendingReply<QList<User_p>> reply = d->m_inter->asyncCall(QStringLiteral("ListUsers"));
+    QDBusPendingReply<QList<DBusUser>> reply = d->m_inter->listUsers();
     reply.waitForFinished();
-    QList<User> users;
+    QList<quint32> users;
     if (!reply.isValid()) {
-        d->m_errorMessage = reply.error().message();
-        emit errorMessageChanged(d->m_errorMessage);
+        qWarning() << reply.error().message();
         return users;
     }
-
     for (auto &&user_p : reply.value()) {
-        User user;
-        user.userName = user_p.userName;
-        user.userId = user_p.userId;
-        user.path = user_p.path.path();
-        users.append(user);
+        users.append(user_p.userId);
     }
     return users;
 }
@@ -851,270 +738,236 @@ QList<User> DLoginManager::listUsers()
 void DLoginManager::lockSession(const QString &sessionId)
 {
     Q_D(DLoginManager);
-    QDBusPendingReply<> reply = d->m_inter->asyncCallWithArgumentList(QStringLiteral("LockSession"),
-        {QVariant::fromValue(sessionId)});
+    QDBusPendingReply<> reply =
+        d->m_inter->lockSession(sessionId);
     reply.waitForFinished();
     if (!reply.isValid()) {
-        d->m_errorMessage = reply.error().message();
-        emit errorMessageChanged(d->m_errorMessage);
+        qWarning() << reply.error().message();
     }
 }
 
 void DLoginManager::lockSessions()
 {
     Q_D(DLoginManager);
-    QDBusPendingReply<> reply = d->m_inter->asyncCall(QStringLiteral("LockSessions"));
+    QDBusPendingReply<> reply = d->m_inter->lockSessions();
     reply.waitForFinished();
     if (!reply.isValid()) {
-        d->m_errorMessage = reply.error().message();
-        emit errorMessageChanged(d->m_errorMessage);
+        qWarning() << reply.error().message();
     }
 }
 
 void DLoginManager::powerOff(const bool interactive)
 {
     Q_D(DLoginManager);
-    QDBusPendingReply<> reply = d->m_inter->asyncCallWithArgumentList(QStringLiteral("PowerOff"),
-        {QVariant::fromValue(interactive)});
+    QDBusPendingReply<> reply =
+        d->m_inter->powerOff(interactive);
     reply.waitForFinished();
     if (!reply.isValid()) {
-        d->m_errorMessage = reply.error().message();
-        emit errorMessageChanged(d->m_errorMessage);
+        qWarning() << reply.error().message();
     }
 }
 
 void DLoginManager::powerOffWithFlags(const quint64 flags)
 {
     Q_D(DLoginManager);
-    QDBusPendingReply<> reply = d->m_inter->asyncCallWithArgumentList("PowerOffWithFlags", {QVariant::fromValue(flags)});
+    QDBusPendingReply<> reply = d->m_inter->powerOffWithFlags(flags);
     reply.waitForFinished();
     if (!reply.isValid()) {
-        d->m_errorMessage = reply.error().message();
-        emit errorMessageChanged(d->m_errorMessage);
+        qWarning() << reply.error().message();
     }
 }
 
 void DLoginManager::reboot(const bool interactive)
 {
     Q_D(DLoginManager);
-    QDBusPendingReply<> reply = d->m_inter->asyncCallWithArgumentList(QStringLiteral("Reboot"),
-        {QVariant::fromValue(interactive)});
+    QDBusPendingReply<> reply =
+        d->m_inter->reboot(interactive);
     reply.waitForFinished();
     if (!reply.isValid()) {
-        d->m_errorMessage = reply.error().message();
-        emit errorMessageChanged(d->m_errorMessage);
+        qWarning() << reply.error().message();
     }
 }
 
 void DLoginManager::rebootWithFlags(const quint64 flags)
 {
     Q_D(DLoginManager);
-    QDBusPendingReply<> reply = d->m_inter->asyncCallWithArgumentList("RebootWithFlags", {QVariant::fromValue(flags)});
+    QDBusPendingReply<> reply = d->m_inter->rebootWithFlags(flags);
     reply.waitForFinished();
     if (!reply.isValid()) {
-        d->m_errorMessage = reply.error().message();
-        emit errorMessageChanged(d->m_errorMessage);
+        qWarning() << reply.error().message();
     }
 }
 
 void DLoginManager::releaseSession(const QString &sessionId)
 {
     Q_D(DLoginManager);
-    QDBusPendingReply<> reply = d->m_inter->asyncCallWithArgumentList(QStringLiteral("ReleaseSession"),
-        {QVariant::fromValue(sessionId)});
+    QDBusPendingReply<> reply =
+        d->m_inter->releaseSession(sessionId);
     reply.waitForFinished();
     if (!reply.isValid()) {
-        d->m_errorMessage = reply.error().message();
-        emit errorMessageChanged(d->m_errorMessage);
+        qWarning() << reply.error().message();
     }
 }
 
 void DLoginManager::setRebootParameter(const QString &parameter)
 {
     Q_D(DLoginManager);
-    QDBusPendingReply<> reply = d->m_inter->asyncCallWithArgumentList(QStringLiteral("SetRebootParameter"),
-        {QVariant::fromValue(parameter)});
+    QDBusPendingReply<> reply =
+        d->m_inter->setRebootParameter(parameter);
     reply.waitForFinished();
     if (!reply.isValid()) {
-        d->m_errorMessage = reply.error().message();
-        emit errorMessageChanged(d->m_errorMessage);
+        qWarning() << reply.error().message();
     }
 }
 
 void DLoginManager::scheduleShutdown(const QString &type, const quint64 usec)
 {
     Q_D(DLoginManager);
-    QDBusPendingReply<> reply = d->m_inter->asyncCallWithArgumentList(QStringLiteral("ScheduleShutdown"),
-        {QVariant::fromValue(type), QVariant::fromValue(usec)});
+    QDBusPendingReply<> reply = d->m_inter->scheduleShutdown(type, usec);
     reply.waitForFinished();
     if (!reply.isValid()) {
-        d->m_errorMessage = reply.error().message();
-        emit errorMessageChanged(d->m_errorMessage);
+        qWarning() << reply.error().message();
     }
 }
 
 void DLoginManager::setRebootToBootLoaderEntry(const QString &entry)
 {
     Q_D(DLoginManager);
-    QDBusPendingReply<> reply = d->m_inter->asyncCallWithArgumentList(QStringLiteral("SetRebootToBootLoaderEntry"),
-        {QVariant::fromValue(entry)});
+    QDBusPendingReply<> reply =
+        d->m_inter->setRebootToBootLoaderEntry(entry);
     reply.waitForFinished();
     if (!reply.isValid()) {
-        d->m_errorMessage = reply.error().message();
-        emit errorMessageChanged(d->m_errorMessage);
+        qWarning() << reply.error().message();
     }
 }
 
 void DLoginManager::setRebootToBootLoaderMenu(const quint64 timeout)
 {
     Q_D(DLoginManager);
-    QDBusPendingReply<> reply = d->m_inter->asyncCallWithArgumentList(QStringLiteral("SetRebootToBootLoaderMenu"),
-        {QVariant::fromValue(timeout)});
+    QDBusPendingReply<> reply =
+        d->m_inter->setRebootToBootLoaderMenu(timeout);
     reply.waitForFinished();
     if (!reply.isValid()) {
-        d->m_errorMessage = reply.error().message();
-        emit errorMessageChanged(d->m_errorMessage);
+        qWarning() << reply.error().message();
     }
 }
 
 void DLoginManager::setRebootToFirmwareSetup(const bool enable)
 {
     Q_D(DLoginManager);
-    QDBusPendingReply<> reply = d->m_inter->asyncCallWithArgumentList(QStringLiteral("SetRebootToFirmwareSetup"),
-        {QVariant::fromValue(enable)});
+    QDBusPendingReply<> reply =
+        d->m_inter->setRebootToFirmwareSetup(enable);
     reply.waitForFinished();
     if (!reply.isValid()) {
-        d->m_errorMessage = reply.error().message();
-        emit errorMessageChanged(d->m_errorMessage);
+        qWarning() << reply.error().message();
     }
 }
 
 void DLoginManager::setUserLinger(const uint UID, const bool enable, const bool interactive)
 {
     Q_D(DLoginManager);
-    QDBusPendingReply<> reply = d->m_inter->asyncCallWithArgumentList(QStringLiteral("SetUserLinger"),
-        {QVariant::fromValue(UID), QVariant::fromValue(enable), QVariant::fromValue(interactive)});
+    QDBusPendingReply<> reply = d->m_inter->setUserLinger(UID, enable, interactive);
     reply.waitForFinished();
     if (!reply.isValid()) {
-        d->m_errorMessage = reply.error().message();
-        emit errorMessageChanged(d->m_errorMessage);
+        qWarning() << reply.error().message();
     }
 }
 
-void DLoginManager::setWallMessage(const QString &message, const bool enable)
-{
-    Q_D(DLoginManager);
-    QDBusPendingReply<> reply = d->m_inter->asyncCallWithArgumentList(QStringLiteral("SetWallMessage"),
-        {QVariant::fromValue(message), QVariant::fromValue(enable)});
-    reply.waitForFinished();
-    if (!reply.isValid()) {
-        d->m_errorMessage = reply.error().message();
-        emit errorMessageChanged(d->m_errorMessage);
-    }
-}
 
 void DLoginManager::suspend(const bool interactive)
 {
     Q_D(DLoginManager);
-    QDBusPendingReply<> reply = d->m_inter->asyncCallWithArgumentList(QStringLiteral("Suspend"),
-        {QVariant::fromValue(interactive)});
+    QDBusPendingReply<> reply =
+        d->m_inter->suspend(interactive);
     reply.waitForFinished();
     if (!reply.isValid()) {
-        d->m_errorMessage = reply.error().message();
-        emit errorMessageChanged(d->m_errorMessage);
+        qWarning() << reply.error().message();
     }
 }
 
 void DLoginManager::suspendThenHibernate(const bool interactive)
 {
     Q_D(DLoginManager);
-    QDBusPendingReply<> reply = d->m_inter->asyncCallWithArgumentList(QStringLiteral("SuspendThenHibernate"),
-        {QVariant::fromValue(interactive)});
+    QDBusPendingReply<> reply =
+        d->m_inter->suspendThenHibernate(interactive);
     reply.waitForFinished();
     if (!reply.isValid()) {
-        d->m_errorMessage = reply.error().message();
-        emit errorMessageChanged(d->m_errorMessage);
+        qWarning() << reply.error().message();
     }
 }
 
 void DLoginManager::suspendThenHibernateWithFlags(const quint64 flags)
 {
     Q_D(DLoginManager);
-    QDBusPendingReply<> reply = d->m_inter->asyncCallWithArgumentList("SuspendThenHibernateWithFlags", {QVariant::fromValue(flags)});
+    QDBusPendingReply<> reply =
+        d->m_inter->suspendThenHibernateWithFlags(flags);
     reply.waitForFinished();
     if (!reply.isValid()) {
-        d->m_errorMessage = reply.error().message();
-        emit errorMessageChanged(d->m_errorMessage);
+        qWarning() << reply.error().message();
     }
 }
 
 void DLoginManager::suspendWithFlags(const quint64 flags)
 {
     Q_D(DLoginManager);
-    QDBusPendingReply<> reply = d->m_inter->asyncCallWithArgumentList("SuspendWithFlags", {QVariant::fromValue(flags)});
+    QDBusPendingReply<> reply = d->m_inter->suspendWithFlags(flags);
     reply.waitForFinished();
     if (!reply.isValid()) {
-        d->m_errorMessage = reply.error().message();
-        emit errorMessageChanged(d->m_errorMessage);
+        qWarning() << reply.error().message();
     }
 }
 
 void DLoginManager::terminateSeat(const QString &seatId)
 {
     Q_D(DLoginManager);
-    QDBusPendingReply<> reply = d->m_inter->asyncCallWithArgumentList(QStringLiteral("TerminateSeat"),
-        {QVariant::fromValue(seatId)});
+    QDBusPendingReply<> reply =
+        d->m_inter->terminateSeat(seatId);
     reply.waitForFinished();
     if (!reply.isValid()) {
-        d->m_errorMessage = reply.error().message();
-        emit errorMessageChanged(d->m_errorMessage);
+        qWarning() << reply.error().message();
     }
 }
 
 void DLoginManager::terminateSession(const QString &sessionId)
 {
     Q_D(DLoginManager);
-    QDBusPendingReply<> reply = d->m_inter->asyncCallWithArgumentList(QStringLiteral("TerminateSession"),
-        {QVariant::fromValue(sessionId)});
+    QDBusPendingReply<> reply =
+        d->m_inter->terminateSession(sessionId);
     reply.waitForFinished();
     if (!reply.isValid()) {
-        d->m_errorMessage = reply.error().message();
-        emit errorMessageChanged(d->m_errorMessage);
+        qWarning() << reply.error().message();
     }
 }
 
 void DLoginManager::terminateUser(const uint uid)
 {
     Q_D(DLoginManager);
-    QDBusPendingReply<> reply = d->m_inter->asyncCallWithArgumentList(QStringLiteral("TerminateUser"),
-        {QVariant::fromValue(uid)});
+    QDBusPendingReply<> reply =
+        d->m_inter->terminateUser(QString::number(uid));
     reply.waitForFinished();
     if (!reply.isValid()) {
-        d->m_errorMessage = reply.error().message();
-        emit errorMessageChanged(d->m_errorMessage);
+        qWarning() << reply.error().message();
     }
 }
 
 void DLoginManager::unlockSession(const QString &sessionId)
 {
     Q_D(DLoginManager);
-    QDBusPendingReply<> reply = d->m_inter->asyncCallWithArgumentList(QStringLiteral("UnlockSession"),
-        {QVariant::fromValue(sessionId)});
+    QDBusPendingReply<> reply =
+        d->m_inter->unlockSession(sessionId);
     reply.waitForFinished();
     if (!reply.isValid()) {
-        d->m_errorMessage = reply.error().message();
-        emit errorMessageChanged(d->m_errorMessage);
+        qWarning() << reply.error().message();
     }
 }
 
 void DLoginManager::unlockSessions()
 {
     Q_D(DLoginManager);
-    QDBusPendingReply<> reply = d->m_inter->asyncCall(QStringLiteral("UnlockSessions"));
+    QDBusPendingReply<> reply = d->m_inter->unlockSessions();
     reply.waitForFinished();
     if (!reply.isValid()) {
-        d->m_errorMessage = reply.error().message();
-        emit errorMessageChanged(d->m_errorMessage);
+        qWarning() << reply.error().message();
     }
 }
 DLOGIN_END_NAMESPACE

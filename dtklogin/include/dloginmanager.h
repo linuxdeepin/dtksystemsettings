@@ -7,7 +7,6 @@
 #include <qobject.h>
 
 #include <qscopedpointer.h>
-#include <tuple>
 
 #include "dlogintypes.h"
 #include "namespace.h"
@@ -21,12 +20,12 @@ class DLoginManager : public QObject
     Q_OBJECT
 public:
     explicit DLoginManager(QObject *parent = nullptr);
-    virtual ~DLoginManager();
+    ~DLoginManager() override;
 
-    Q_PROPERTY(QStringList bootLoaderEntries READ bootLoaderEntries)
-    Q_PROPERTY(QStringList killExcludeUsers READ killExcludeUsers)
-    Q_PROPERTY(QStringList killOnlyUsers READ killOnlyUsers)
-    Q_PROPERTY(bool docked READ docked)
+    Q_PROPERTY(QStringList bootLoaderEntries READ bootLoaderEntries);
+    Q_PROPERTY(QStringList killExcludeUsers READ killExcludeUsers);
+    Q_PROPERTY(QStringList killOnlyUsers READ killOnlyUsers);
+    Q_PROPERTY(bool docked READ docked);
     Q_PROPERTY(bool enableWallMessages READ enableWallMessages WRITE setEnableWallMessages);
     Q_PROPERTY(bool idleHint READ idleHint);
     Q_PROPERTY(bool killUserProcesses READ killUserProcesses);
@@ -49,7 +48,7 @@ public:
     Q_PROPERTY(QString rebootToBootLoaderEntry READ rebootToBootLoaderEntry);
     Q_PROPERTY(QString wallMessage READ wallMessage WRITE setWallMessage);
     Q_PROPERTY(ScheduledShutdownValue scheduledShutdown READ scheduledShutdown);
-    Q_PROPERTY(uint nAutoVTs READ nAutoVTs);
+    Q_PROPERTY(quint32 nAutoVTs READ nAutoVTs);
     Q_PROPERTY(quint64 holdoffTimeoutUSec READ holdoffTimeoutUSec);
     Q_PROPERTY(quint64 idleActionUSec READ idleActionUSec);
     Q_PROPERTY(quint64 idleSinceHint READ idleSinceHint);
@@ -90,8 +89,9 @@ public:
     QString rebootParameter() const;
     QString rebootToBootLoaderEntry() const;
     QString wallMessage() const;
+    void setWallMessage(const QString &message);
     ScheduledShutdownValue scheduledShutdown() const;
-    uint nAutoVTs() const;
+    quint32 nAutoVTs() const;
     quint64 holdoffTimeoutUSec() const;
     quint64 idleActionUSec() const;
     quint64 idleSinceHint() const;
@@ -107,18 +107,16 @@ public:
     quint64 userStopDelayUSec() const;
 
 signals:
-    void errorMessageChanged(const QString &message);
     void prepareForShutdown(const bool value);
     void prepareForSleep(const bool value);
-    void seatNew(const QString &seatId, const QString &seatPath);
-    void seatRemoved(const QString &seatId, const QString &seatPath);
-    void sessionNew(const QString &sessionId, const QString &sessionPath);
-    void sessionRemoved(const QString &sessionId, const QString &sessionPath);
-    void userNew(const uint UID, const QString &path);
-    void userRemoved(const uint UID, const QString &path);
+    void seatNew(const QString &seatId);
+    void seatRemoved(const QString &seatId);
+    void sessionNew(const QString &sessionId);
+    void sessionRemoved(const QString &sessionId);
+    void userNew(const uint UID);
+    void userRemoved(const uint UID);
 
 public slots:
-    QString lastError() const;
     void activateSession(const QString &sessionId);
     void activateSessionOnSeat(const QString &sessionId, const QString &seatId);
     void attachDevice(const QString &seatId, const QString &sysfsPath, const bool interactive);
@@ -134,18 +132,6 @@ public slots:
     QString canSuspend();
     QString canSuspendThenHibernate();
     bool cancelScheduledShutdown();
-    std::tuple<QString,     // sessionId
-            QString,        // path
-            QString,        // runtime_path
-            int,            // fifo_fd
-            uint,           // uid
-            QString,        // seatId
-            uint,           // VTNr
-            bool            // existing
-            > createSession(uint uid, uint pid, const QString &service, const QString &type,
-                    const QString &_class, const QString &desktop, const QString &seatId,
-                    uint VTNr, const QString &TTY, const QString &display, const QString &remote,
-                    const QString &remoteUser, const QString &remoteHost, const QList<SessionProperty> &properties);
     void flushDevices(const bool value);
     QString getSeat(const QString &seatId);
     QString getSession(const QString &sessionId);
@@ -161,10 +147,10 @@ public slots:
     int inhibit(const QString &what, const QString &who, const QString &why, const QString &mode);
     void killSession(const QString &sessionId, const QString &who, const int signalNumber);
     void killUser(const uint uid, const int signalNumber);
-    QList<Inhibitor> listInhibitors();
-    QList<Seat> listSeats();
-    QList<Session> listSessions();
-    QList<User> listUsers();
+    QList<DLOGIN_NAMESPACE::Inhibitor> listInhibitors();
+    QList<QString> listSeats();
+    QList<QString> listSessions();
+    QList<quint32> listUsers();
     void lockSession(const QString &sessionId);
     void lockSessions();
     void powerOff(const bool interactive);
@@ -178,7 +164,6 @@ public slots:
     void setRebootToBootLoaderMenu(const quint64 timeout);
     void setRebootToFirmwareSetup(const bool enable);
     void setUserLinger(const uint UID, const bool enable, const bool interactive);
-    void setWallMessage(const QString &message, const bool enable = false);
     void suspend(const bool interactive);
     void suspendThenHibernate(const bool interactive);
     void suspendThenHibernateWithFlags(const quint64 flags);
