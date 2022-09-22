@@ -6,15 +6,15 @@
 
 DACCOUNTS_BEGIN_NAMESPACE
 
-DAccountsUserPrivate::DAccountsUserPrivate(const QString& path, DAccountsUser *parent): 
-    q_ptr(parent),u(new DUser(path,this))
+DAccountsUserPrivate::DAccountsUserPrivate(const QString &path, DAccountsUser *parent)
+    : q_ptr(parent)
+    , m_dUserInter(new DUserInterface(path, this))
 {
-
 }
 
 DAccountsUserPrivate::~DAccountsUserPrivate()
 {
-    delete u;
+    delete m_dUserInter;
 }
 
 DACCOUNTS_END_NAMESPACE

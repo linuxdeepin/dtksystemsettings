@@ -4,7 +4,6 @@
 
 #pragma once
 
-#include "passwd.h"
 #include "namespace.h"
 #include "daccountstypes.h"
 #include <QString>
@@ -16,12 +15,13 @@
 
 DACCOUNTS_BEGIN_NAMESPACE
 
-struct Dutils{
-    static QString encryptPassword(const QString& password);
-    static QList<QByteArray> getImageFromDir(const QDir& dir);
-    static QString getUserConfigValue(const QByteArray& username, keyType key);
+struct Dutils
+{
+    static QString encryptPassword(const QString &password);
+    static QList<QByteArray> getImageFromDir(const QDir &dir);
+    static QString getUserConfigValue(const QByteArray &username, keyType key);
     static QString getUserConfigKey(keyType type);
-    static int64_t setUserConfigValue(const QByteArray& username, keyType key, const QByteArray& value);
+    static qint64 setUserConfigValue(const QByteArray &username, keyType key, const QByteArray &value);
 };
 
 DACCOUNTS_END_NAMESPACE

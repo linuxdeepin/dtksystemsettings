@@ -14,46 +14,34 @@ DACCOUNTS_BEGIN_NAMESPACE
 // DBus Custom Type
 struct LoginHistory
 {
-    qint64 login_time;
-    qint64 logout_time;
-    QMap<QString, QVariant> session_info;
+    qint64 loginTime;
+    qint64 logoutTime;
+    QMap<QString, QVariant> sessionInfo;
 };
 
 // Common Custom Type
 
-enum class AccountTypes : qint32 {
-    DEFAULT = 0,
-    ADMIN = 1,
-    UNKNOWN = 2
+enum class AccountTypes : qint32 { Default = 0, Admin, Udcp };
+
+enum class keyType {
+    IconFile,
+    Layout,
+    LayoutList,
+    Locale,
+    UUID,
 };
 
-enum class keyType{
-        IconFile,
-        Layout,
-        LayoutList,
-        Locale,
-        UUID,
-};
+enum class PasswdStatus { P, NP, L };
 
-enum class PasswdStatus{
-    P,
-    NP,
-    L,
-    UNKNOWN
-};
+enum class PasswdExpirInfo { NOR, CLO, EXP };
 
-enum class PasswdExpirInfo{
-    NOR,
-    CLO,
-    EXP,
-    UNKNOWN
-};
-
-struct Question{
+struct Question
+{
     qint32 questionIndex;
     QByteArray encryptQuestion;
 };
-struct shadowInfo{
+struct ShadowInfo
+{
     qint32 lastChange;
     qint32 min;
     qint32 max;
@@ -61,18 +49,20 @@ struct shadowInfo{
     qint32 inactive;
     qint32 expired;
 };
-struct loginUtmpx{
+struct LoginUtmpx
+{
     QByteArray inittabID;
-    QByteArray Line;
-    QByteArray Host;
-    QByteArray Address;
-    QByteArray Time;
+    QByteArray line;
+    QByteArray host;
+    QByteArray address;
+    QByteArray time;
 };
-struct ReminderInfo{
+struct ReminderInfo
+{
     QByteArray userName;
-    shadowInfo spent;
-    loginUtmpx currentLogin;
-    loginUtmpx lastLogin; 
+    ShadowInfo spent;
+    LoginUtmpx currentLogin;
+    LoginUtmpx lastLogin;
     qint32 failCountSinceLastLogin;
 };
 

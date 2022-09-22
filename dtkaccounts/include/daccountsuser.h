@@ -19,81 +19,81 @@ class DAccountsUser : public QObject
 {
     Q_OBJECT
     friend class DAccountsManager;
+
 public:
     virtual ~DAccountsUser() = default;
 
-    Q_PROPERTY(AccountTypes accountType READ AccountType WRITE SetAccountType)
-    Q_PROPERTY(bool automaticLogin READ AutomaticLogin WRITE SetAutomaticLogin)
-    Q_PROPERTY(QString fullName READ FullName WRITE SetFullName)
-    Q_PROPERTY(quint64 GID READ Gid)
-    Q_PROPERTY(quint64 UID READ Uid)
-    Q_PROPERTY(QStringList groups READ Groups WRITE SetGroups)
-    Q_PROPERTY(QList<QByteArray> layoutList READ LayoutList WRITE SetLayoutList)
-    Q_PROPERTY(QString homeDir READ HomeDir WRITE SetHomeDir)
-    Q_PROPERTY(QList<QByteArray> iconFileList READ IconFileList)
-    Q_PROPERTY(QUrl iconFile READ IconFile WRITE SetIconFile)
-    Q_PROPERTY(QByteArray layout READ Layout WRITE SetLayout)
-    Q_PROPERTY(QByteArray locale READ Locale WRITE SetLocale)
-    Q_PROPERTY(bool locked READ Locked WRITE SetLocked)
-    Q_PROPERTY(qint32 maxPasswordAge READ MaxPasswordAge WRITE SetMaxPasswordAge)
-    Q_PROPERTY(QString passwordHint READ PasswordHint WRITE SetPasswordHint)
-    Q_PROPERTY(QDateTime passwordLastChange READ PasswordLastChange)
-    Q_PROPERTY(PasswdStatus passwordStatus READ PasswordStatus)
-    Q_PROPERTY(QString shell READ Shell WRITE SetShell)
-    Q_PROPERTY(QByteArray UUID READ Uuid)
-    Q_PROPERTY(QByteArray userName READ UserName)
+    Q_PROPERTY(AccountTypes accountType READ accountType WRITE setAccountType)
+    Q_PROPERTY(bool automaticLogin READ automaticLogin WRITE setAutomaticLogin)
+    Q_PROPERTY(QString fullName READ fullName WRITE setFullName)
+    Q_PROPERTY(quint64 GID READ GID)
+    Q_PROPERTY(quint64 UID READ UID)
+    Q_PROPERTY(QStringList groups READ groups WRITE setGroups)
+    Q_PROPERTY(QList<QByteArray> layoutList READ layoutList WRITE setLayoutList)
+    Q_PROPERTY(QString homeDir READ homeDir WRITE setHomeDir)
+    Q_PROPERTY(QList<QByteArray> iconFileList READ iconFileList)
+    Q_PROPERTY(QUrl iconFile READ iconFile WRITE setIconFile)
+    Q_PROPERTY(QByteArray layout READ layout WRITE setLayout)
+    Q_PROPERTY(QByteArray locale READ locale WRITE setLocale)
+    Q_PROPERTY(bool locked READ locked WRITE setLocked)
+    Q_PROPERTY(qint32 maxPasswordAge READ maxPasswordAge WRITE setMaxPasswordAge)
+    Q_PROPERTY(QString passwordHint READ passwordHint WRITE setPasswordHint)
+    Q_PROPERTY(QDateTime passwordLastChange READ passwordLastChange)
+    Q_PROPERTY(PasswdStatus passwordStatus READ passwordStatus)
+    Q_PROPERTY(QString shell READ shell WRITE setShell)
+    Q_PROPERTY(QByteArray UUID READ UUID)
+    Q_PROPERTY(QByteArray userName READ userName)
 
-    AccountTypes AccountType() const;
-    bool AutomaticLogin() const;
-    QString FullName() const;
-    quint64 Gid() const;
-    quint64 Uid() const;
-    QStringList Groups() const;
-    QList<QByteArray> LayoutList() const;
-    QString HomeDir() const;
-    QList<QByteArray> IconFileList() const;
-    QByteArray IconFile() const;
-    QByteArray Layout() const;
-    QByteArray Locale() const;
-    bool Locked() const;
-    qint32 MaxPasswordAge() const;
-    QString PasswordHint() const;
-    QDateTime PasswordLastChange() const;
-    PasswdStatus PasswordStatus() const;
-    QString Shell() const;
-    QByteArray Uuid() const;
-    QByteArray UserName() const;
+    AccountTypes accountType() const;
+    bool automaticLogin() const;
+    QString fullName() const;
+    quint64 GID() const;
+    quint64 UID() const;
+    QStringList groups() const;
+    QList<QByteArray> layoutList() const;
+    QString homeDir() const;
+    QList<QByteArray> iconFileList() const;
+    QByteArray iconFile() const;
+    QByteArray layout() const;
+    QByteArray locale() const;
+    bool locked() const;
+    qint32 maxPasswordAge() const;
+    QString passwordHint() const;
+    QDateTime passwordLastChange() const;
+    PasswdStatus passwordStatus() const;
+    QString shell() const;
+    QByteArray UUID() const;
+    QByteArray userName() const;
 
-    void SetAccountType(AccountTypes newtype);
-    void SetAutomaticLogin(bool enabled);
-    void SetFullName(const QString& newfullname);
-    void SetGroups(const QStringList& newgroups);
-    void SetLayoutList(const QList<QByteArray>& newlayouts);
-    void SetHomeDir(const QString& newhomedir);
-    void SetIconFile(const QUrl& newiconURL);
-    void SetLayout(const QByteArray& newlayout);
-    void SetLocale(const QByteArray& newlocale);
-    void SetLocked(bool locked);
-    void SetMaxPasswordAge(int newndays);
-    void SetPassword(const QByteArray& newpassword);
-    void SetPasswordHint(const QString& newpasswordhint);
-    void SetShell(const QString& newshellpath);
+    void setAccountType(AccountTypes newtype);
+    void setAutomaticLogin(bool enabled);
+    void setFullName(const QString &newfullname);
+    void setGroups(const QStringList &newgroups);
+    void setLayoutList(const QList<QByteArray> &newlayouts);
+    void setHomeDir(const QString &newhomedir);
+    void setIconFile(const QUrl &newiconURL);
+    void setLayout(const QByteArray &newlayout);
+    void setLocale(const QByteArray &newlocale);
+    void setLocked(bool locked);
+    void setMaxPasswordAge(int newndays);
+    void setPassword(const QByteArray &newpassword);
+    void setPasswordHint(const QString &newpasswordhint);
+    void setShell(const QString &newshellpath);
 
-    void AddGroup(const QString& group);
-    void DeleteGroup(const QString& group);
-    void DeleteIconFile(const QUrl& iconURL);
-    bool IsPasswordExpired() const;
-    ReminderInfo GetReminderInfo() const;
-    QList<qint32> SecretQuestions() const;
-    void SetSecretQuestions(const QList<Question>& newquestions);
-    QList<qint32> VertifySecretQuestions(const QMap<qint32, QByteArray>& anwsers);
-    PasswdExpirInfo PasswordExpirationInfo(qint64& dayLeft) const;
+    void addGroup(const QString &group);
+    void deleteGroup(const QString &group);
+    void deleteIconFile(const QUrl &iconURL);
+    bool isPasswordExpired() const;
+    ReminderInfo getReminderInfo() const;
+    QList<qint32> secretQuestions() const;
+    void setSecretQuestions(const QList<Question> &newquestions);
+    QList<qint32> vertifySecretQuestions(const QMap<qint32, QByteArray> &anwsers);
+    PasswdExpirInfo passwordExpirationInfo(qint64 &dayLeft) const;
 
 private:
-    explicit DAccountsUser(const QString& path, QObject *parent = nullptr);
+    explicit DAccountsUser(const QString &path, QObject *parent = nullptr);
     QScopedPointer<DAccountsUserPrivate> d_ptr;
     Q_DECLARE_PRIVATE(DAccountsUser)
 };
-
 
 DACCOUNTS_END_NAMESPACE

@@ -4,10 +4,10 @@
 
 #pragma once
 
-constexpr auto defaultUserIconFilePath = "file:///var/lib/AccountsService/icons/default.png";
-constexpr auto defaultUserBackgroundDir = "/usr/share/wallpapers/deepin/";
-constexpr auto configDir = "/var/lib/AccountsService/";
-constexpr auto userConfigDir = "/var/lib/AccountsService/deepin/users/";
-constexpr auto userIconsDir  = "/var/lib/AccountsService/icons/";
-constexpr auto userCustomIconsDir = "/var/lib/AccountsService/icons/local/";
-constexpr auto userSecretQuestionsDir = "/var/lib/dde-daemon/secret-question/";
+constexpr auto DefaultUserIconFilePath = "file:///var/lib/AccountsService/icons/default.png";
+constexpr auto DefaultUserBackgroundDir = "/usr/share/wallpapers/deepin/";
+constexpr auto ConfigDir = "/var/lib/AccountsService/";
+constexpr auto UserConfigDir = "/var/lib/AccountsService/deepin/users/";
+constexpr auto UserIconsDir = "/var/lib/AccountsService/icons/";
+constexpr auto UserCustomIconsDir = "/var/lib/AccountsService/icons/local/";
+constexpr auto UserSecretQuestionsDir = "/var/lib/dde-daemon/secret-question/";
