@@ -8,7 +8,6 @@
 #include <QList>
 #include <QObject>
 #include <QScopedPointer>
-#include <qtmetamacros.h>
 #include "ddbusinterface.h"
 #include "daccountstypes.h"
 

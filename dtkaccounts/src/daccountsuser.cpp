@@ -10,6 +10,7 @@
 #include <cstdint>
 #include <grp.h>
 #include <pwd.h>
+#include <qglobal.h>
 #include <qlist.h>
 #include <qdatetime.h>
 #include <qtimezone.h>
@@ -60,7 +61,7 @@ quint64 DAccountsUser::GID() const
 quint64 DAccountsUser::UID() const
 {
     Q_D(const DAccountsUser);
-    return d->m_dUserInter->uid();
+    return d->m_dUserInter->UID();
 }
 
 QStringList DAccountsUser::groups() const
@@ -117,8 +118,8 @@ QString DAccountsUser::homeDir() const
 QList<QByteArray> DAccountsUser::iconFileList() const
 {
     QList<QByteArray> icons;
-    QDir icondir(userIconsDir);
-    QFileInfo cusdirinfo(userCustomIconsDir);
+    QDir icondir(UserIconsDir);
+    QFileInfo cusdirinfo(UserCustomIconsDir);
     if (!icondir.exists()) {
         return icons;
     }
@@ -241,42 +242,101 @@ void DAccountsUser::setGroups(const QStringList &newgroups)
     system(groups.toUtf8());
 }
 
-void DAccountsUser::setLayoutList(const QList<QByteArray> &newlayouts) {}
+void DAccountsUser::setLayoutList(const QList<QByteArray> &newlayouts)
+{
+    Q_UNUSED(newlayouts)
+}
 
-void DAccountsUser::setHomeDir(const QString &newhomedir) {}
+void DAccountsUser::setHomeDir(const QString &newhomedir)
+{
+    Q_UNUSED(newhomedir)
+}
 
-void DAccountsUser::setIconFile(const QUrl &newiconURL) {}
+void DAccountsUser::setIconFile(const QUrl &newiconURL)
+{
+    Q_UNUSED(newiconURL)
+}
 
-void DAccountsUser::setLayout(const QByteArray &newlayout) {}
+void DAccountsUser::setLayout(const QByteArray &newlayout)
+{
+    Q_UNUSED(newlayout)
+}
 
-void DAccountsUser::setLocale(const QByteArray &newlocale) {}
+void DAccountsUser::setLocale(const QByteArray &newlocale)
+{
+    Q_UNUSED(newlocale)
+}
 
-void DAccountsUser::setLocked(bool locked) {}
+void DAccountsUser::setLocked(bool locked)
+{
+    Q_UNUSED(locked)
+}
 
-void DAccountsUser::setMaxPasswordAge(int newndays) {}
+void DAccountsUser::setMaxPasswordAge(int newndays)
+{
+    Q_UNUSED(newndays)
+}
 
-void DAccountsUser::setPassword(const QByteArray &newpassword) {}
+void DAccountsUser::setPassword(const QByteArray &newpassword)
+{
+    Q_UNUSED(newpassword)
+}
 
-void DAccountsUser::setPasswordHint(const QString &newpasswordhint) {}
+void DAccountsUser::setPasswordHint(const QString &newpasswordhint)
+{
+    Q_UNUSED(newpasswordhint)
+}
 
-void DAccountsUser::setShell(const QString &newshellpath) {}
+void DAccountsUser::setShell(const QString &newshellpath)
+{
+    Q_UNUSED(newshellpath)
+}
 
-void DAccountsUser::addGroup(const QString &group) {}
+void DAccountsUser::addGroup(const QString &group)
+{
+    Q_UNUSED(group)
+}
 
-void DAccountsUser::deleteGroup(const QString &group) {}
+void DAccountsUser::deleteGroup(const QString &group)
+{
+    Q_UNUSED(group)
+}
 
-void DAccountsUser::deleteIconFile(const QUrl &iconURL) {}
+void DAccountsUser::deleteIconFile(const QUrl &iconURL)
+{
+    Q_UNUSED(iconURL)
+}
 
-bool DAccountsUser::isPasswordExpired() const {}
+bool DAccountsUser::isPasswordExpired() const
+{
+    return false;
+}
 
-ReminderInfo DAccountsUser::getReminderInfo() const {}
+ReminderInfo DAccountsUser::getReminderInfo() const
+{
+    return ReminderInfo{};
+}
 
-QList<qint32> DAccountsUser::secretQuestions() const {}
+QList<qint32> DAccountsUser::secretQuestions() const
+{
+    return QList<qint32>();
+}
 
-void DAccountsUser::setSecretQuestions(const QList<Question> &newquestions) {}
+void DAccountsUser::setSecretQuestions(const QList<Question> &newquestions)
+{
+    Q_UNUSED(newquestions)
+}
 
-QList<qint32> DAccountsUser::vertifySecretQuestions(const QMap<qint32, QByteArray> &anwsers) {}
+QList<qint32> DAccountsUser::vertifySecretQuestions(const QMap<qint32, QByteArray> &anwsers)
+{
+    Q_UNUSED(anwsers)
+    return QList<qint32>();
+}
 
-PasswdExpirInfo DAccountsUser::passwordExpirationInfo(qint64 &dayLeft) const {}
+PasswdExpirInfo DAccountsUser::passwordExpirationInfo(qint64 &dayLeft) const
+{
+    Q_UNUSED(dayLeft)
+    return PasswdExpirInfo::CLO;
+}
 
 DACCOUNTS_END_NAMESPACE
