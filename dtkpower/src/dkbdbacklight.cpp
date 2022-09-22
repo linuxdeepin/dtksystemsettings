@@ -23,7 +23,7 @@ DKbdBacklight::DKbdBacklight(QObject *parent)
 DKbdBacklight::~DKbdBacklight() {}
 
 // pubilc slots
-uint DKbdBacklight::getBrightness() const
+uint DKbdBacklight::brightness() const
 {
     Q_D(const DKbdBacklight);
     QDBusPendingReply<uint> reply = d->m_kb_inter->getBrightness();
@@ -35,7 +35,7 @@ uint DKbdBacklight::getBrightness() const
     return reply.value();
 }
 
-uint DKbdBacklight::getMaxBrightness() const
+uint DKbdBacklight::maxBrightness() const
 {
     Q_D(const DKbdBacklight);
     QDBusPendingReply<uint> reply = d->m_kb_inter->getMaxBrightness();

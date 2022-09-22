@@ -20,36 +20,36 @@ class DPowerDevice : public QObject
 public:
     virtual ~DPowerDevice();
 
-    Q_PROPERTY(bool HasHistory READ hasHistory)
-    Q_PROPERTY(bool HasStatistics READ hasStatistics)
-    Q_PROPERTY(bool IsRechargeable READ isRechargeable)
-    Q_PROPERTY(bool Online READ online)
-    Q_PROPERTY(bool PowerSupply READ powerSupply)
-    Q_PROPERTY(double Capacity READ capacity)
-    Q_PROPERTY(double Energy READ energy NOTIFY EnergyChanged)
-    Q_PROPERTY(double EnergyEmpty READ energyEmpty)
-    Q_PROPERTY(double EnergyFull READ energyFull)
-    Q_PROPERTY(double EnergyFullDesign READ energyFullDesign)
-    Q_PROPERTY(double EnergyRate READ energyRate NOTIFY EnergyRateChanged)
-    Q_PROPERTY(double Luminosity READ luminosity)
-    Q_PROPERTY(double Percentage READ percentage NOTIFY PercentageChanged)
-    Q_PROPERTY(double Temperature READ temperature)
-    Q_PROPERTY(double Voltage READ voltage)
-    Q_PROPERTY(uint ChargeCycles READ chargeCycles)
-    Q_PROPERTY(quint64 TimeToEmpty READ timeToEmpty NOTIFY TimeToEmptyChanged)
-    Q_PROPERTY(quint64 TimeToFull READ timeToFull NOTIFY TimeToFullChanged)
-    Q_PROPERTY(QString IconName READ iconName NOTIFY IconNameChanged)
-    Q_PROPERTY(QString Model READ model)
-    Q_PROPERTY(QString NativePath READ nativePath)
-    Q_PROPERTY(QString Serial READ serial)
-    Q_PROPERTY(QString Vendor READ vendor)
-    Q_PROPERTY(uint BatteryLevel READ batteryLevel)
-    Q_PROPERTY(uint State READ state)
-    Q_PROPERTY(uint Technology READ technology)
-    Q_PROPERTY(uint Type READ type)
-    Q_PROPERTY(uint WarningLevel READ warningLevel)
-    Q_PROPERTY(quint64 UpdateTime READ updateTime NOTIFY UpdateTimeChanged)
-    Q_PROPERTY(QString DeviceName READ deviceName)
+    Q_PROPERTY(bool hasHistory READ hasHistory)
+    Q_PROPERTY(bool hasStatistics READ hasStatistics)
+    Q_PROPERTY(bool isRechargeable READ isRechargeable)
+    Q_PROPERTY(bool online READ online)
+    Q_PROPERTY(bool powerSupply READ powerSupply)
+    Q_PROPERTY(double capacity READ capacity)
+    Q_PROPERTY(double energy READ energy NOTIFY energyChanged)
+    Q_PROPERTY(double energyEmpty READ energyEmpty)
+    Q_PROPERTY(double energyFull READ energyFull)
+    Q_PROPERTY(double energyFullDesign READ energyFullDesign)
+    Q_PROPERTY(double energyRate READ energyRate NOTIFY energyRateChanged)
+    Q_PROPERTY(double luminosity READ luminosity)
+    Q_PROPERTY(double percentage READ percentage NOTIFY percentageChanged)
+    Q_PROPERTY(double temperature READ temperature)
+    Q_PROPERTY(double voltage READ voltage)
+    Q_PROPERTY(uint chargeCycles READ chargeCycles)
+    Q_PROPERTY(quint64 timeToEmpty READ timeToEmpty NOTIFY timeToEmptyChanged)
+    Q_PROPERTY(quint64 timeToFull READ timeToFull NOTIFY timeToFullChanged)
+    Q_PROPERTY(QString iconName READ iconName NOTIFY iconNameChanged)
+    Q_PROPERTY(QString model READ model)
+    Q_PROPERTY(QString nativePath READ nativePath)
+    Q_PROPERTY(QString serial READ serial)
+    Q_PROPERTY(QString vendor READ vendor)
+    Q_PROPERTY(uint batteryLevel READ batteryLevel)
+    Q_PROPERTY(uint state READ state)
+    Q_PROPERTY(uint technology READ technology)
+    Q_PROPERTY(uint type READ type)
+    Q_PROPERTY(uint warningLevel READ warningLevel)
+    Q_PROPERTY(quint64 updateTime READ updateTime NOTIFY updateTimeChanged)
+    Q_PROPERTY(QString deviceName READ deviceName)
 
     bool hasHistory() const;
     bool hasStatistics() const;
@@ -83,17 +83,17 @@ public:
     QString deviceName() const;
 
 signals:
-    void UpdateTimeChanged(const quint64 value);
-    void PercentageChanged(const double value);
-    void TimeToEmptyChanged(const quint64 value);
-    void TimeToFullChanged(const quint64 value);
-    void EnergyRateChanged(const double value);
-    void EnergyChanged(const double value);
-    void IconNameChanged(const QString &value);
+    void updateTimeChanged(const quint64 value);
+    void percentageChanged(const double value);
+    void timeToEmptyChanged(const quint64 value);
+    void timeToFullChanged(const quint64 value);
+    void energyRateChanged(const double value);
+    void energyChanged(const double value);
+    void iconNameChanged(const QString &value);
 
 public slots:
-    QList<History> getHistory(const QString &type, const uint timespan, const uint resolution) const;
-    QList<Statistic> getStatistics(const QString &type) const;
+    QList<History> history(const QString &type, const uint timespan, const uint resolution) const;
+    QList<Statistic> statistics(const QString &type) const;
     void refresh();
 
 private:
@@ -103,7 +103,7 @@ private:
     explicit DPowerDevice(const QString &name, QObject *parent = nullptr);
     Q_DISABLE_COPY(DPowerDevice)
 
-    friend QSharedPointer<DPowerDevice> DPowerManager::getDisplayDevice() const;
-    friend QSharedPointer<DPowerDevice> DPowerManager::getDeviceByName(const QString &name) const;
+    friend QSharedPointer<DPowerDevice> DPowerManager::displayDevice() const;
+    friend QSharedPointer<DPowerDevice> DPowerManager::findDeviceByName(const QString &name) const;
 };
 DPOWER_END_NAMESPACE

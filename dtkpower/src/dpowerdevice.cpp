@@ -207,7 +207,7 @@ QString DPowerDevice::deviceName() const
 }
 
 // pubilc slots
-QList<History> DPowerDevice::getHistory(const QString &type, const uint timespan, const uint resolution) const
+QList<History> DPowerDevice::history(const QString &type, const uint timespan, const uint resolution) const
 {
     Q_D(const DPowerDevice);
     QDBusPendingReply<QList<History_p>> reply = d->m_device_inter->getHistory(type, timespan, resolution);
@@ -228,7 +228,7 @@ QList<History> DPowerDevice::getHistory(const QString &type, const uint timespan
     return historys;
 }
 
-QList<Statistic> DPowerDevice::getStatistics(const QString &type) const
+QList<Statistic> DPowerDevice::statistics(const QString &type) const
 {
     Q_D(const DPowerDevice);
     QDBusPendingReply<QList<Statistic_p>> reply = d->m_device_inter->getStatistics(type);

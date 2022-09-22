@@ -19,12 +19,12 @@ public:
     virtual ~DKbdBacklight();
 
 signals:
-    void BrightnessChanged(const uint value);
-    void BrightnessChangedWithSource(const uint value, const QString &source);
+    void brightnessChanged(const uint value);
+    void brightnessChangedWithSource(const uint value, const QString &source);
 
 public slots:
-    uint getBrightness() const;
-    uint getMaxBrightness() const;
+    uint brightness() const;
+    uint maxBrightness() const;
     void setBrightness(uint value);
 
 private:

@@ -17,10 +17,10 @@ void DPowerManagerPrivate::connectDBusSignal()
 {
     Q_Q(DPowerManager);
     connect(m_manager_inter, &UPowerManagerInterface::DeviceAdded, q, [q](const QDBusObjectPath &path) {
-        emit q->DeviceAdded(path.path());
+        emit q->deviceAdded(path.path());
     });
     connect(m_manager_inter, &UPowerManagerInterface::DeviceRemoved, q, [q](const QDBusObjectPath &path) {
-        emit q->DeviceRemoved(path.path());
+        emit q->deviceRemoved(path.path());
     });
 }
 
@@ -35,13 +35,13 @@ DPowerManager::DPowerManager(QObject *parent)
 DPowerManager::~DPowerManager() {}
 
 // properties
-bool DPowerManager::lidlsClosed() const
+bool DPowerManager::lidIsClosed() const
 {
     Q_D(const DPowerManager);
     return d->m_manager_inter->lidlsClosed();
 }
 
-bool DPowerManager::lidlsPresent() const
+bool DPowerManager::lidIsPresent() const
 {
     Q_D(const DPowerManager);
     return d->m_manager_inter->lidlsPresent();
@@ -76,7 +76,7 @@ QStringList DPowerManager::devices() const
     return devices;
 }
 
-QString DPowerManager::getCriticalAction() const
+QString DPowerManager::criticalAction() const
 {
     Q_D(const DPowerManager);
     QDBusPendingReply<QString> reply = d->m_manager_inter->getCriticalAction();
@@ -88,7 +88,7 @@ QString DPowerManager::getCriticalAction() const
     return reply;
 }
 
-QSharedPointer<DPowerDevice> DPowerManager::getDisplayDevice() const
+QSharedPointer<DPowerDevice> DPowerManager::displayDevice() const
 {
     Q_D(const DPowerManager);
     QDBusPendingReply<QDBusObjectPath> reply = d->m_manager_inter->getDisplayDevice();
@@ -102,7 +102,7 @@ QSharedPointer<DPowerDevice> DPowerManager::getDisplayDevice() const
     return device;
 }
 
-QSharedPointer<DPowerDevice> DPowerManager::getDeviceByName(const QString &name) const
+QSharedPointer<DPowerDevice> DPowerManager::findDeviceByName(const QString &name) const
 {
     if (!devices().contains(name)) {
         qWarning() << QStringLiteral("Device does not exist");
