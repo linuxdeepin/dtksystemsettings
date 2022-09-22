@@ -7,10 +7,15 @@
 #include "namespace.h"
 #include <qobject.h>
 
+#define MAIN_SECTION        "Desktop Entry"
+#define KEY_HIDDEN          "Hidden"
+#define KEY_ONLY_SHOW_IN    "OnlyShowIn"
+#define KEY_NOT_SHOW_IN     "NotShowIn"
 
 class DDBusInterface;
 DLOGIN_BEGIN_NAMESPACE
 class DLoginSession;
+class Login1SessionInterface;
 
 class DLoginSessionPrivate : public QObject
 {
@@ -21,8 +26,7 @@ public:
     {
     }
 
-    QString m_errorMessage;
-    DDBusInterface *m_inter;
+    Login1SessionInterface *m_inter;
     DLoginSession *q_ptr;
     Q_DECLARE_PUBLIC(DLoginSession)
 };

@@ -10,6 +10,7 @@
 class DDBusInterface;
 DLOGIN_BEGIN_NAMESPACE
 class DLoginSeat;
+class Login1SeatInterface;
 
 class DLoginSeatPrivate : public QObject
 {
@@ -17,8 +18,8 @@ class DLoginSeatPrivate : public QObject
 public:
     explicit DLoginSeatPrivate(DLoginSeat *parent = nullptr) : q_ptr(parent) {}
 
-    QString m_errorMessage;
-    DDBusInterface *m_inter;
+private:
+    Login1SeatInterface *m_inter;
     DLoginSeat *q_ptr;
     Q_DECLARE_PUBLIC(DLoginSeat)
 };

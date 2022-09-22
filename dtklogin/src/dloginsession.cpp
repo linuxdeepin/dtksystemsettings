@@ -4,27 +4,33 @@
 
 #include "dloginsession.h"
 
-#include "ddbusinterface.h"
 #include "dloginsession_p.h"
-#include "dlogintypes_p.h"
-#include <QDBusError>
 #include <qdbuspendingreply.h>
-#include <qdbusunixfiledescriptor.h>
+#include <qdir.h>
 #include <qobject.h>
+#include <qprocess.h>
+#include <qsettings.h>
 #include <qvariant.h>
+#include <qdebug.h>
+#include <qdbusconnection.h>
+
+#include "login1sessioninterface.h"
 DLOGIN_BEGIN_NAMESPACE
 
 DLoginSession::DLoginSession(const QString &path, QObject *parent)
     : QObject(parent)
     , d_ptr(new DLoginSessionPrivate(this))
 {
-    const QString &Service = QStringLiteral("org.freedesktop.login1");
-    const QString &Interface = QStringLiteral("org.freedesktop.login1.Session");
+    const QString &Service   = QStringLiteral("org.freedesktop.login1");
 
     Q_D(DLoginSession);
-    SeatPath_p::registerMetaType();
-    UserPath_p::registerMetaType();
-    d->m_inter = new DDBusInterface(Service, path, Interface, QDBusConnection::systemBus(), this);
+    DBusSeatPath::registerMetaType();
+    DBusUserPath::registerMetaType();
+    d->m_inter = new Login1SessionInterface(Service, path, QDBusConnection::systemBus(), this);
+    connect(d->m_inter, &Login1SessionInterface::locked, this, &DLoginSession::locked);
+    connect(d->m_inter, &Login1SessionInterface::pauseDevice, this, &DLoginSession::pauseDevice);
+    connect(d->m_inter, &Login1SessionInterface::resumeDevice, this, &DLoginSession::resumeDevice);
+    connect(d->m_inter, &Login1SessionInterface::unlocked, this, &DLoginSession::unlocked);
 }
 
 DLoginSession::~DLoginSession(){};
@@ -32,300 +38,248 @@ DLoginSession::~DLoginSession(){};
 bool DLoginSession::active() const
 {
     Q_D(const DLoginSession);
-    return qvariant_cast<bool>(d->m_inter->property("Active"));
+    return d->m_inter->active();
 }
 
 bool DLoginSession::idleHint() const
 {
     Q_D(const DLoginSession);
-    return qvariant_cast<bool>(d->m_inter->property("IdleHint"));
+    return d->m_inter->idleHint();
 }
 
 bool DLoginSession::lockedHint() const
 {
     Q_D(const DLoginSession);
-    return qvariant_cast<bool>(d->m_inter->property("LockedHint"));
+    return d->m_inter->lockedHint();
 }
 
 bool DLoginSession::remote() const
 {
     Q_D(const DLoginSession);
-    return qvariant_cast<bool>(d->m_inter->property("Remote"));
+    return d->m_inter->remote();
 }
 QString DLoginSession::_class() const
 {
     Q_D(const DLoginSession);
-    return qvariant_cast<QString>(d->m_inter->property("Class"));
+    return d->m_inter->_class();
 }
 QString DLoginSession::desktop() const
 {
     Q_D(const DLoginSession);
-    return qvariant_cast<QString>(d->m_inter->property("Desktop"));
+    return d->m_inter->desktop();
 }
 QString DLoginSession::display() const
 {
     Q_D(const DLoginSession);
-    return qvariant_cast<QString>(d->m_inter->property("Display"));
+    return d->m_inter->display();
 }
 QString DLoginSession::id() const
 {
     Q_D(const DLoginSession);
-    return qvariant_cast<QString>(d->m_inter->property("Id"));
+    return d->m_inter->id();
 }
 QString DLoginSession::name() const
 {
     Q_D(const DLoginSession);
-    return qvariant_cast<QString>(d->m_inter->property("Name"));
+    return d->m_inter->name();
 }
 
 QString DLoginSession::remoteHost() const
 {
     Q_D(const DLoginSession);
-    return qvariant_cast<QString>(d->m_inter->property("RemoteHost"));
+    return d->m_inter->remoteHost();
 }
 QString DLoginSession::remoteUser() const
 {
     Q_D(const DLoginSession);
-    return qvariant_cast<QString>(d->m_inter->property("RemoteUser"));
+    return d->m_inter->remoteUser();
 }
 
 QString DLoginSession::scope() const
 {
     Q_D(const DLoginSession);
-    return qvariant_cast<QString>(d->m_inter->property("Scope"));
+    return d->m_inter->scope();
 }
 
 QString DLoginSession::service() const
 {
     Q_D(const DLoginSession);
-    return qvariant_cast<QString>(d->m_inter->property("Service"));
+    return d->m_inter->service();
 }
 
 QString DLoginSession::state() const
 {
     Q_D(const DLoginSession);
-    return qvariant_cast<QString>(d->m_inter->property("State"));
+    return d->m_inter->state();
 }
 
 QString DLoginSession::TTY() const
 {
     Q_D(const DLoginSession);
-    return qvariant_cast<QString>(d->m_inter->property("TTY"));
+    return d->m_inter->TTY();
 }
 
 QString DLoginSession::type() const
 {
     Q_D(const DLoginSession);
-    return qvariant_cast<QString>(d->m_inter->property("Type"));
+    return d->m_inter->type();
 }
 
-SeatPath DLoginSession::seat() const
+QString DLoginSession::seat() const
 {
     Q_D(const DLoginSession);
-    const auto &result = qvariant_cast<SeatPath_p>(d->m_inter->property("Seat"));
-    SeatPath seatPath;
-    seatPath.path = result.path.path();
-    seatPath.seatId = result.seatId;
-    return seatPath;
+    const auto &result = d->m_inter->seat();
+    return result.seatId;
 }
-UserPath DLoginSession::user() const
+quint32 DLoginSession::user() const
 {
     Q_D(const DLoginSession);
-    const auto &result = qvariant_cast<UserPath_p>(d->m_inter->property("User"));
-    UserPath userPath;
-    userPath.path = result.path.path();
-    userPath.userId = result.userId;
-    return userPath;
+    const auto &result = d->m_inter->user();
+    return result.userId;
 }
 
-uint DLoginSession::audit() const
+quint32 DLoginSession::audit() const
 {
     Q_D(const DLoginSession);
-    return qvariant_cast<uint>(d->m_inter->property("Audit"));
+    return d->m_inter->audit();
 }
 
-uint DLoginSession::leader() const
+quint32 DLoginSession::leader() const
 {
     Q_D(const DLoginSession);
-    return qvariant_cast<uint>(d->m_inter->property("Leader"));
+    return d->m_inter->leader();
 }
-uint DLoginSession::VTNr() const
+quint32 DLoginSession::VTNr() const
 {
     Q_D(const DLoginSession);
-    return qvariant_cast<uint>(d->m_inter->property("VTNr"));
+    return d->m_inter->VTNr();
 }
 
 quint64 DLoginSession::idleSinceHint() const
 {
     Q_D(const DLoginSession);
-    return qvariant_cast<quint64>(d->m_inter->property("IdleSinceHint"));
+    return d->m_inter->idleSinceHint();
 }
 
 quint64 DLoginSession::idleSinceHintMonotonic() const
 {
     Q_D(const DLoginSession);
-    return qvariant_cast<quint64>(d->m_inter->property("IdleSinceHintMonotonic"));
+    return d->m_inter->idleSinceHintMonotonic();
 }
 
 quint64 DLoginSession::timestamp() const
 {
     Q_D(const DLoginSession);
-    return qvariant_cast<quint64>(d->m_inter->property("Timestamp"));
+    return d->m_inter->timestamp();
 }
 quint64 DLoginSession::timestampMonotonic() const
 {
     Q_D(const DLoginSession);
-    return qvariant_cast<quint64>(d->m_inter->property("TimestampMonotonic"));
-}
-
-QString DLoginSession::lastError() const
-{
-    Q_D(const DLoginSession);
-    return d->m_errorMessage;
+    return d->m_inter->timestampMonotonic();
 }
 
 void DLoginSession::activate()
 {
     Q_D(DLoginSession);
-    QDBusPendingReply<> reply = d->m_inter->asyncCall(QStringLiteral("Activate"));
+    QDBusPendingReply<> reply = d->m_inter->activate();
     reply.waitForFinished();
     if (!reply.isValid()) {
-        d->m_errorMessage = reply.error().message();
-        emit errorMessageChanged(d->m_errorMessage);
+        qWarning() << reply.error().message();
     }
 }
 
 void DLoginSession::kill(const QString &who, const uint signalNumber)
 {
     Q_D(DLoginSession);
-    QDBusPendingReply<> reply = d->m_inter->asyncCallWithArgumentList(QStringLiteral("Kill"),
-                                                                       {
-                                                                           QVariant::fromValue(who),
-                                                                           QVariant::fromValue(signalNumber),
-                                                                       });
+    QDBusPendingReply<> reply = d->m_inter->kill(who, signalNumber);
     reply.waitForFinished();
     if (!reply.isValid()) {
-        d->m_errorMessage = reply.error().message();
-        emit errorMessageChanged(d->m_errorMessage);
+        qWarning() << reply.error().message();
     }
 }
 void DLoginSession::lock()
 {
     Q_D(DLoginSession);
-    QDBusPendingReply<> reply = d->m_inter->asyncCall(QStringLiteral("locked"));
+    QDBusPendingReply<> reply = d->m_inter->lock();
     reply.waitForFinished();
     if (!reply.isValid()) {
-        d->m_errorMessage = reply.error().message();
-        emit errorMessageChanged(d->m_errorMessage);
+        qWarning() << reply.error().message();
     }
 }
 void DLoginSession::pauseDeviceComplete(const uint major, const uint minor)
 {
     Q_D(DLoginSession);
-    QDBusPendingReply<> reply = d->m_inter->asyncCallWithArgumentList(QStringLiteral("pauseDeviceComplete"),
-                                                                       {
-                                                                           QVariant::fromValue(major),
-                                                                           QVariant::fromValue(minor),
-                                                                       });
+    QDBusPendingReply<> reply = d->m_inter->pauseDeviceComplete(major, minor);
     reply.waitForFinished();
     if (!reply.isValid()) {
-        d->m_errorMessage = reply.error().message();
-        emit errorMessageChanged(d->m_errorMessage);
+        qWarning() << reply.error().message();
     }
 }
 void DLoginSession::releaseControl()
 {
     Q_D(DLoginSession);
-    QDBusPendingReply<> reply = d->m_inter->asyncCall(QStringLiteral("ReleaseControl"));
+    QDBusPendingReply<> reply = d->m_inter->releaseControl();
     reply.waitForFinished();
     if (!reply.isValid()) {
-        d->m_errorMessage = reply.error().message();
-        emit errorMessageChanged(d->m_errorMessage);
+        qWarning() << reply.error().message();
     }
 }
 void DLoginSession::releaseDevice(const uint major, const uint minor)
 {
     Q_D(DLoginSession);
-    QDBusPendingReply<> reply = d->m_inter->asyncCallWithArgumentList(QStringLiteral("ReleaseDevice"),
-                                                                       {
-                                                                           QVariant::fromValue(major),
-                                                                           QVariant::fromValue(minor),
-                                                                       });
+    QDBusPendingReply<> reply = d->m_inter->releaseDevice(major, minor);
     reply.waitForFinished();
     if (!reply.isValid()) {
-        d->m_errorMessage = reply.error().message();
-        emit errorMessageChanged(d->m_errorMessage);
+        qWarning() << reply.error().message();
     }
 }
 
 void DLoginSession::setBrightness(const QString &subsystem, const QString &name, const uint brightness)
 {
     Q_D(DLoginSession);
-    QDBusPendingReply<> reply = d->m_inter->asyncCallWithArgumentList(QStringLiteral("SetBrightness"),
-                                                                       {
-                                                                           QVariant::fromValue(subsystem),
-                                                                           QVariant::fromValue(name),
-                                                                           QVariant::fromValue(brightness),
-                                                                       });
+    QDBusPendingReply<> reply = d->m_inter->setBrightness(subsystem, name, brightness);
     reply.waitForFinished();
     if (!reply.isValid()) {
-        d->m_errorMessage = reply.error().message();
-        emit errorMessageChanged(d->m_errorMessage);
+        qWarning() << reply.error().message();
     }
 }
 
 void DLoginSession::setIdleHint(const bool idle)
 {
     Q_D(DLoginSession);
-    QDBusPendingReply<> reply = d->m_inter->asyncCallWithArgumentList(QStringLiteral("SetIdleHint"),
-                                                                       {
-                                                                           QVariant::fromValue(idle),
-                                                                       });
+    QDBusPendingReply<> reply = d->m_inter->setIdleHint(idle);
     reply.waitForFinished();
     if (!reply.isValid()) {
-        d->m_errorMessage = reply.error().message();
-        emit errorMessageChanged(d->m_errorMessage);
+        qWarning() << reply.error().message();
     }
 }
 void DLoginSession::setLockedHint(const bool locked)
 {
     Q_D(DLoginSession);
-    QDBusPendingReply<> reply = d->m_inter->asyncCallWithArgumentList(QStringLiteral("SetLockedHint"),
-                                                                       {
-                                                                           QVariant::fromValue(locked),
-                                                                       });
+    QDBusPendingReply<> reply = d->m_inter->setLockedHint(locked);
     reply.waitForFinished();
     if (!reply.isValid()) {
-        d->m_errorMessage = reply.error().message();
-        emit errorMessageChanged(d->m_errorMessage);
+        qWarning() << reply.error().message();
     }
 }
 
 void DLoginSession::setType(const QString &type)
 {
     Q_D(DLoginSession);
-    QDBusPendingReply<> reply = d->m_inter->asyncCallWithArgumentList(QStringLiteral("SetType"),
-                                                                       {
-                                                                           QVariant::fromValue(type),
-                                                                       });
+    QDBusPendingReply<> reply = d->m_inter->setType(type);
     reply.waitForFinished();
     if (!reply.isValid()) {
-        d->m_errorMessage = reply.error().message();
-        emit errorMessageChanged(d->m_errorMessage);
+        qWarning() << reply.error().message();
     }
 }
 
 void DLoginSession::takeControl(const bool force)
 {
     Q_D(DLoginSession);
-    QDBusPendingReply<> reply = d->m_inter->asyncCallWithArgumentList(QStringLiteral("TakeControl"),
-                                                                       {
-                                                                           QVariant::fromValue(force),
-                                                                       });
+    QDBusPendingReply<> reply = d->m_inter->takeControl(force);
     reply.waitForFinished();
     if (!reply.isValid()) {
-        d->m_errorMessage = reply.error().message();
-        emit errorMessageChanged(d->m_errorMessage);
+        qWarning() << reply.error().message();
     }
 }
 
@@ -335,34 +289,132 @@ std::tuple<int,  // fd
 DLoginSession::takeDevice(uint major, uint minor)
 {
     Q_D(DLoginSession);
-    QDBusPendingReply<QDBusUnixFileDescriptor, bool> reply = d->m_inter->asyncCallWithArgumentList(
-        QStringLiteral("TakeDevice"), {QVariant::fromValue(major), QVariant::fromValue(minor)});
+    QDBusPendingReply<int, bool> reply = d->m_inter->takeDevice(major, minor);
     reply.waitForFinished();
     if (!reply.isValid()) {
-        d->m_errorMessage = reply.error().message();
-        emit errorMessageChanged(d->m_errorMessage);
+        qWarning() << reply.error().message();
         return std::tuple<int, bool>();
     }
-    return std::make_tuple<int, bool>(reply.argumentAt<0>().fileDescriptor(), reply.argumentAt<1>());
+    return std::make_tuple<int, bool>(reply.argumentAt<0>(), reply.argumentAt<1>());
 }
 void DLoginSession::terminate()
 {
     Q_D(DLoginSession);
-    QDBusPendingReply<> reply = d->m_inter->asyncCall(QStringLiteral("Terminate"));
+    QDBusPendingReply<> reply = d->m_inter->terminate();
     reply.waitForFinished();
     if (!reply.isValid()) {
-        d->m_errorMessage = reply.error().message();
-        emit errorMessageChanged(d->m_errorMessage);
+        qWarning() << reply.error().message();
     }
 }
 void DLoginSession::unlock()
 {
     Q_D(DLoginSession);
-    QDBusPendingReply<> reply = d->m_inter->asyncCall(QStringLiteral("unlocked"));
+    QDBusPendingReply<> reply = d->m_inter->unlock();
     reply.waitForFinished();
     if (!reply.isValid()) {
-        d->m_errorMessage = reply.error().message();
-        emit errorMessageChanged(d->m_errorMessage);
+        qWarning() << reply.error().message();
     }
 }
+
+QStringList DLoginSession::autostartList()
+{
+    // Get autostart directories
+    QStringList autostartPaths;
+    QStringList autostartApps;
+    // First get current login user's dir
+    QString     defaultUserConfigDir;
+    QString     homeDir = QProcessEnvironment::systemEnvironment().value("HOME");
+    if (!homeDir.isEmpty()) {
+        defaultUserConfigDir = homeDir + "/.config";
+    }
+    QString configuredUserConfigDir = QProcessEnvironment::systemEnvironment().value("XDG_CONFIG_HOME");
+    if (!configuredUserConfigDir.isEmpty() && !QDir::isAbsolutePath(configuredUserConfigDir)) {
+        autostartPaths.append(QDir::cleanPath(configuredUserConfigDir + "/autostart"));
+    } else {
+        autostartPaths.append(QDir::cleanPath(defaultUserConfigDir + "/autostart"));
+    }
+    // Get system config dir
+    QString     defaultSystemConfigDir("/etc/xdg");
+    QString     configuredSystemConfigDirsVar = QProcessEnvironment::systemEnvironment().value("XDG_CONFIG_DIRS");
+    QStringList configuredSystemConfigDirs    = configuredUserConfigDir.split(":", Qt::SkipEmptyParts);
+    foreach (const QString &configuredSystemConfigDir, configuredSystemConfigDirs) {
+        if (!QDir::isAbsolutePath(configuredSystemConfigDir)) {
+            configuredSystemConfigDirs.removeAll(configuredSystemConfigDir);
+        }
+    }
+    if (configuredSystemConfigDirs.isEmpty()) {
+        autostartPaths.append(QDir::cleanPath(defaultSystemConfigDir + "/autostart"));
+    } else {
+        foreach (const QString &configuredSystemConfigDir, configuredSystemConfigDirs) {
+            autostartPaths.append(QDir::cleanPath(configuredSystemConfigDir + "/autostart"));
+        }
+    }
+    // Traverse directories, get autostart apps
+    foreach (const QString &autostartPath, autostartPaths) {
+        QDir autostartDir(autostartPath);
+        if (autostartDir.exists()) {
+            autostartDir.setNameFilters({"*.desktop"});
+            QFileInfoList fileInfoList = autostartDir.entryInfoList(QDir::Files);
+            foreach (const QFileInfo &fileInfo, fileInfoList) {
+                bool      addFlag = false;
+                QSettings desktopFile(fileInfo.absoluteFilePath(), QSettings::IniFormat);
+                desktopFile.beginGroup(MAIN_SECTION);
+                bool hidden = desktopFile.value(KEY_HIDDEN).toBool();
+                if (hidden) {
+                    continue;
+                }
+                QString     desktopEnv      = QProcessEnvironment::systemEnvironment().value("XDG_CURRENT_DESKTOP");
+                QStringList currentDesktops = desktopEnv.split(":", Qt::SkipEmptyParts);
+                QStringList onlyShowIn      = desktopFile.value(KEY_ONLY_SHOW_IN).toStringList();
+                QStringList notShowIn       = desktopFile.value(KEY_NOT_SHOW_IN).toStringList();
+                if (!onlyShowIn.isEmpty()) {
+                    foreach (const QString &currentDesktop, currentDesktops) {
+                        if (onlyShowIn.contains(currentDesktop)) {
+                            addFlag = true;
+                            break;
+                        }
+                    }
+                } else {
+                    addFlag = true;
+                    if (!notShowIn.isEmpty()) {
+                        foreach (const QString &currentDesktop, currentDesktops) {
+                            if (notShowIn.contains(currentDesktop)) {
+                                addFlag = false;
+                                break;
+                            }
+                        }
+                    }
+                }
+                foreach (const QString &app, autostartApps) {
+                    QFileInfo appFile(app);
+                    if (appFile.fileName() == fileInfo.fileName()) {
+                        addFlag = false;
+                    }
+                }
+                if (addFlag) {
+                    autostartApps.append(fileInfo.absoluteFilePath());
+                }
+                desktopFile.endGroup();
+            }
+        }
+    }
+    return autostartApps;
+}
+
+bool DLoginSession::isAutostart(const QString &fileName)
+{
+    Q_UNUSED(fileName);
+    return false;
+}
+
+bool DLoginSession::removeAutostart(const QString &fileName)
+{
+    Q_UNUSED(fileName)
+    return false;
+}
+bool DLoginSession::enableAutostartWatch()
+{
+    return false;
+}
+
 DLOGIN_END_NAMESPACE

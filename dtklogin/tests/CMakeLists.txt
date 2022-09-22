@@ -21,6 +21,7 @@ target_include_directories(${BIN_NAME} PUBLIC
     Qt5::Core
     Qt5::DBus
     ../include
+    ../src/dbus
 )
 
 target_link_libraries(${BIN_NAME} PRIVATE

@@ -3,14 +3,16 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
 #include "dloginuser.h"
-
-#include "ddbusinterface.h"
-#include "dlogintypes.h"
-#include "dlogintypes_p.h"
 #include "dloginuser_p.h"
+
 #include <qdbuspendingreply.h>
 #include <qlist.h>
 #include <qobject.h>
+#include <qdebug.h>
+#include <qdbusconnection.h>
+
+#include "dlogintypes_p.h"
+#include "login1userinterface.h"
 
 DLOGIN_BEGIN_NAMESPACE
 DLoginUser::DLoginUser(const QString &path, QObject *parent)
@@ -18,146 +20,130 @@ DLoginUser::DLoginUser(const QString &path, QObject *parent)
     , d_ptr(new DLoginUserPrivate(this))
 {
     const QString &Service = QStringLiteral("org.freedesktop.login1");
-    const QString &Interface = QStringLiteral("org.freedesktop.login1.User");
 
-    SessionPath_p::registerMetaType();
+    DBusSessionPath::registerMetaType();
 
     Q_D(DLoginUser);
-    d->m_inter = new DDBusInterface(Service, path, Interface, QDBusConnection::systemBus(), this);
+    d->m_inter = new Login1UserInterface(Service, path, QDBusConnection::systemBus(), this);
 }
 
 DLoginUser::~DLoginUser() {}
 
-QList<SessionPath> DLoginUser::sessions() const
+QList<QString> DLoginUser::sessions() const
 {
     Q_D(const DLoginUser);
-    const auto &result = qdbus_cast<QList<SessionPath_p>>(d->m_inter->property("Sessions"));
-    QList<SessionPath> sessions;
-    for (auto && session_p : result) {
-        SessionPath session;
-        session.sessionId = session_p.sessionId;
-        session.path =session_p.path.path();
-        sessions.append(session);
+    const auto &result = d->m_inter->sessions();
+    QList<QString> sessionIds;
+    for (auto && sessionPath : result) {
+        sessionIds.append(sessionPath.sessionId);
     }
-    return sessions;
+    return sessionIds;
 }
 
 bool DLoginUser::idleHint() const
 {
     Q_D(const DLoginUser);
-    return qdbus_cast<bool>(d->m_inter->property("IdleHint"));
+    return d->m_inter->idleHint();
 }
 
 bool DLoginUser::linger() const
 {
     Q_D(const DLoginUser);
-    return qdbus_cast<bool>(d->m_inter->property("Linger"));
+    return d->m_inter->linger();
 }
 
 QString DLoginUser::name() const
 {
     Q_D(const DLoginUser);
-    return qdbus_cast<QString>(d->m_inter->property("Name"));
+    return d->m_inter->name();
 }
 
 QString DLoginUser::runtimePath() const
 {
     Q_D(const DLoginUser);
-    return qdbus_cast<QString>(d->m_inter->property("RuntimePath"));
+    return d->m_inter->runtimePath();
 }
 
 QString DLoginUser::service() const
 {
     Q_D(const DLoginUser);
-    return qdbus_cast<QString>(d->m_inter->property("Service"));
+    return d->m_inter->service();
 }
 
 QString DLoginUser::slice() const
 {
     Q_D(const DLoginUser);
-    return qdbus_cast<QString>(d->m_inter->property("Slice"));
+    return d->m_inter->slice();
 }
 
 QString DLoginUser::state() const
 {
     Q_D(const DLoginUser);
-    return qdbus_cast<QString>(d->m_inter->property("State"));
+    return d->m_inter->state();
 }
 
-SessionPath DLoginUser::display() const
+QString DLoginUser::display() const
 {
     Q_D(const DLoginUser);
-    const auto &result = qdbus_cast<SessionPath_p>(d->m_inter->property("Display"));
-    SessionPath session;
-    session.path = result.path.path();
-    session.sessionId = result.sessionId;
-    return session;
+    const auto &result = d->m_inter->display();
+    return result.sessionId;
 }
 
-uint DLoginUser::GID() const
+quint32 DLoginUser::GID() const
 {
     Q_D(const DLoginUser);
-    return qdbus_cast<uint>(d->m_inter->property("GID"));
+    return d->m_inter->GID();
 }
 
-uint DLoginUser::UID() const
+quint32 DLoginUser::UID() const
 {
     Q_D(const DLoginUser);
-    return qdbus_cast<uint>(d->m_inter->property("UID"));
+    return d->m_inter->UID();
 }
 
 quint64 DLoginUser::idleSinceHint() const
 {
     Q_D(const DLoginUser);
-    return qdbus_cast<quint64>(d->m_inter->property("IdleSinceHint"));
+    return d->m_inter->idleSinceHint();
 }
 
 quint64 DLoginUser::idleSinceHintMonotonic() const
 {
     Q_D(const DLoginUser);
-    return qdbus_cast<quint64>(d->m_inter->property("IdleSinceHintMonotonic"));
+    return d->m_inter->idleSinceHintMonotonic();
 }
 
 quint64 DLoginUser::timestamp() const
 {
     Q_D(const DLoginUser);
-    return qdbus_cast<quint64>(d->m_inter->property("Timestamp"));
+    return d->m_inter->timestamp();
 }
 
 quint64 DLoginUser::timestampMonotonic() const
 {
     Q_D(const DLoginUser);
-    return qdbus_cast<quint64>(d->m_inter->property("TimestampMonotonic"));
+    return d->m_inter->timestampMonotonic();
 }
 
 // public slots
 
-QString DLoginUser::lastError() const
-{
-    Q_D(const DLoginUser);
-    return d->m_errorMessage;
-}
-
 void DLoginUser::kill(const int signalNumber)
 {
     Q_D(DLoginUser);
-    QVariantList args {QVariant::fromValue(signalNumber)};
-    QDBusPendingReply<> reply = d->m_inter->asyncCallWithArgumentList("Kill", args);
+    QDBusPendingReply<> reply = d->m_inter->kill(signalNumber);
     reply.waitForFinished();
     if (!reply.isValid()) {
-        d->m_errorMessage = reply.error().message();
-        emit errorMessageChanged(d->m_errorMessage);
+        qWarning() << reply.error().message();
     }
 }
 
 void DLoginUser::terminate()
 {
     Q_D(DLoginUser);
-    QDBusPendingReply<> reply = d->m_inter->asyncCall("Terminate");
+    QDBusPendingReply<> reply = d->m_inter->terminate();
     reply.waitForFinished();
     if (!reply.isValid()) {
-        d->m_errorMessage = reply.error().message();
-        emit errorMessageChanged(d->m_errorMessage);
+        qWarning() << reply.error().message();
     }
 }
 
