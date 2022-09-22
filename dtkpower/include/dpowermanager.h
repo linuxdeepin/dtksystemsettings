@@ -18,24 +18,24 @@ public:
     explicit DPowerManager(QObject *parent = nullptr);
     virtual ~DPowerManager();
     // properties
-    Q_PROPERTY(bool LidlsClosed READ lidlsClosed)
-    Q_PROPERTY(bool LidlsPresent READ lidlsPresent)
-    Q_PROPERTY(bool OnBattery READ onBattery)
-    Q_PROPERTY(QString DaemonVersion READ daemonVersion)
-    bool lidlsClosed() const;
-    bool lidlsPresent() const;
+    Q_PROPERTY(bool lidIsClosed READ lidIsClosed)
+    Q_PROPERTY(bool lidIsPresent READ lidIsPresent)
+    Q_PROPERTY(bool onBattery READ onBattery)
+    Q_PROPERTY(QString daemonVersion READ daemonVersion)
+    bool lidIsClosed() const;
+    bool lidIsPresent() const;
     bool onBattery() const;
     QString daemonVersion() const;
-    QSharedPointer<DPowerDevice> getDisplayDevice() const;
-    QSharedPointer<DPowerDevice> getDeviceByName(const QString &name) const;
+    QSharedPointer<DPowerDevice> displayDevice() const;
+    QSharedPointer<DPowerDevice> findDeviceByName(const QString &name) const;
 
 signals:
-    void DeviceAdded(const QString &name);
-    void DeviceRemoved(const QString &name);
+    void deviceAdded(const QString &name);
+    void deviceRemoved(const QString &name);
 
 public slots:
     QStringList devices() const;
-    QString getCriticalAction() const;
+    QString criticalAction() const;
 
 private:
     QScopedPointer<DPowerManagerPrivate> d_ptr;
