@@ -727,6 +727,13 @@ void DLoginManager::unlockSessions()
         qWarning() << reply.error().message();
     }
 }
+
+void DLoginManager::logout()
+{
+    QSharedPointer<DLoginSession> session = currentSession();
+    session->terminate();
+}
+
 QSharedPointer<DLoginSeat> DLoginManager::currentSeat()
 {
     const QString &Path = QStringLiteral("/org/freedesktop/login1/seat/self");
