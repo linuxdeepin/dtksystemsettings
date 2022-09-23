@@ -21,25 +21,36 @@ struct LoginHistory
 
 // Common Custom Type
 
-enum class AccountTypes : qint32 { Default = 0, Admin, Udcp };
+enum class AccountTypes : qint32 {
+    Default = 0,  //普通账户
+    Admin,        //管理员
+    Udcp,         //域管账户
+    Unknown       //未知
+};
 
 enum class keyType {
-    IconFile,
-    Layout,
-    LayoutList,
-    Locale,
-    UUID,
+    IconFile,    //图标路径
+    Layout,      //布局
+    LayoutList,  //历史布局
+    Locale,      //本地化
+    UUID,        //用户的UUID
+    Unknown      //未知
 };
 
-enum class PasswdStatus { P, NP, L };
-
-enum class PasswdExpirInfo { NOR, CLO, EXP };
-
-struct Question
-{
-    qint32 questionIndex;
-    QByteArray encryptQuestion;
+enum class PasswdStatus {
+    P,       //有密码
+    NP,      //无密码
+    L,       //账户被锁定
+    Unknown  //未知
 };
+
+enum class PasswdExpirInfo {
+    Normal,   //没有过期
+    Closed,   //将要过期
+    Expired,  //已过期
+    Unknown   //未知
+};
+
 struct ShadowInfo
 {
     qint32 lastChange;
@@ -49,6 +60,7 @@ struct ShadowInfo
     qint32 inactive;
     qint32 expired;
 };
+
 struct LoginUtmpx
 {
     QByteArray inittabID;
@@ -57,6 +69,7 @@ struct LoginUtmpx
     QByteArray address;
     QByteArray time;
 };
+
 struct ReminderInfo
 {
     QByteArray userName;

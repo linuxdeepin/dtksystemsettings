@@ -86,7 +86,7 @@ public:
     bool isPasswordExpired() const;
     ReminderInfo getReminderInfo() const;
     QList<qint32> secretQuestions() const;
-    void setSecretQuestions(const QList<Question> &newquestions);
+    void setSecretQuestions(const QMap<qint32, QByteArray> &newquestions);
     QList<qint32> vertifySecretQuestions(const QMap<qint32, QByteArray> &anwsers);
     PasswdExpirInfo passwordExpirationInfo(qint64 &dayLeft) const;
 
