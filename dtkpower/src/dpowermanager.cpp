@@ -47,6 +47,11 @@ bool DPowerManager::lidIsPresent() const
     return d->m_manager_inter->lidlsPresent();
 }
 
+bool DPowerManager::hasBattery() const
+{
+    return !devices().isEmpty();
+}
+
 bool DPowerManager::onBattery() const
 {
     Q_D(const DPowerManager);
@@ -110,6 +115,15 @@ QSharedPointer<DPowerDevice> DPowerManager::findDeviceByName(const QString &name
     }
     QSharedPointer<DPowerDevice> device(new DPowerDevice(name, nullptr));
     return device;
+}
+
+void DPowerManager::refresh()
+{
+    const auto &names = devices();
+    for (const auto &name : names) {
+        auto device = findDeviceByName(name);
+        device->refresh();
+    }
 }
 
 DPOWER_END_NAMESPACE

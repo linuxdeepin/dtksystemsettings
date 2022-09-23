@@ -20,10 +20,12 @@ public:
     // properties
     Q_PROPERTY(bool lidIsClosed READ lidIsClosed)
     Q_PROPERTY(bool lidIsPresent READ lidIsPresent)
+    Q_PROPERTY(bool hasBattery READ hasBattery)
     Q_PROPERTY(bool onBattery READ onBattery)
     Q_PROPERTY(QString daemonVersion READ daemonVersion)
     bool lidIsClosed() const;
     bool lidIsPresent() const;
+    bool hasBattery() const;
     bool onBattery() const;
     QString daemonVersion() const;
     QSharedPointer<DPowerDevice> displayDevice() const;
@@ -36,6 +38,7 @@ signals:
 public slots:
     QStringList devices() const;
     QString criticalAction() const;
+    void refresh();
 
 private:
     QScopedPointer<DPowerManagerPrivate> d_ptr;
