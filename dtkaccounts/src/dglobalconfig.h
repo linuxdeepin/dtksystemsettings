@@ -4,8 +4,6 @@
 
 #pragma once
 
-constexpr auto DefaultUserIconFilePath = "file:///var/lib/AccountsService/icons/default.png";
-constexpr auto DefaultUserBackgroundDir = "/usr/share/wallpapers/deepin/";
 constexpr auto ConfigDir = "/var/lib/AccountsService/";
 constexpr auto UserConfigDir = "/var/lib/AccountsService/deepin/users/";
 constexpr auto UserIconsDir = "/var/lib/AccountsService/icons/";

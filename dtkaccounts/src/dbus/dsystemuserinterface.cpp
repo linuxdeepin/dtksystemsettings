@@ -2,154 +2,172 @@
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
-#include "systemuserinterface.h"
+#include "dsystemuserinterface.h"
 
 DACCOUNTS_BEGIN_NAMESPACE
 
-DUserSystemInterface::DUserSystemInterface(const QString &path, QObject *parent)
+DSystemUserInterface::DSystemUserInterface(const QString &path, QObject *parent)
     : QObject(parent)
 {
     const QString &Service = QStringLiteral("com.deepin.daemon.Accounts");
     const QString &Interface = QStringLiteral("com.deepin.daemon.Accounts.User");
+
+    ReminderInfo_p::registerMetaType();
+
     m_inter.reset(new DDBusInterface(Service, path, Interface, QDBusConnection::systemBus(), this));
 };
 
-bool DUserSystemInterface::automaticLogin() const
+bool DSystemUserInterface::automaticLogin() const
 {
     return qdbus_cast<bool>(m_inter->property("AutomaticLogin"));
 }
 
-bool DUserSystemInterface::noPasswdLogin() const
+bool DSystemUserInterface::noPasswdLogin() const
 {
     return qdbus_cast<bool>(m_inter->property("NoPasswdLogin"));
 }
 
-qint32 DUserSystemInterface::accountType() const
+qint32 DSystemUserInterface::accountType() const
 {
     return qdbus_cast<qint32>(m_inter->property("AccountType"));
 }
 
-qint32 DUserSystemInterface::maxPasswordAge() const
+qint32 DSystemUserInterface::maxPasswordAge() const
 {
     return qdbus_cast<qint32>(m_inter->property("MaxPasswordAge"));
 }
 
-QStringList DUserSystemInterface::iconList() const
+QStringList DSystemUserInterface::iconList() const
 {
     return qdbus_cast<QStringList>(m_inter->property("IconList"));
 }
 
-QStringList DUserSystemInterface::historyLayout() const
+QStringList DSystemUserInterface::historyLayout() const
 {
     return qdbus_cast<QStringList>(m_inter->property("HistoryLayout"));
 }
 
-QStringList DUserSystemInterface::groups() const
+QStringList DSystemUserInterface::groups() const
 {
     return qdbus_cast<QStringList>(m_inter->property("Groups"));
 }
 
-QString DUserSystemInterface::iconFile() const
+QString DSystemUserInterface::iconFile() const
 {
     return qdbus_cast<QString>(m_inter->property("IconFile"));
 }
 
-QString DUserSystemInterface::layout() const
+QString DSystemUserInterface::layout() const
 {
     return qdbus_cast<QString>(m_inter->property("Layout"));
 }
 
-QString DUserSystemInterface::locale() const
+QString DSystemUserInterface::locale() const
 {
     return qdbus_cast<QString>(m_inter->property("Locale"));
 }
 
-QString DUserSystemInterface::passwordHint() const
+bool DSystemUserInterface::locked() const
+{
+    return qdbus_cast<bool>(m_inter->property("Locked"));
+}
+
+QString DSystemUserInterface::passwordHint() const
 {
     return qdbus_cast<QString>(m_inter->property("PasswordHint"));
 }
 
-QDBusPendingReply<ReminderInfo_p> DUserSystemInterface::getReminderInfo() const
+QString DSystemUserInterface::UUID() const
+{
+    return qdbus_cast<QString>(m_inter->property("UUID"));
+}
+
+QDBusPendingReply<ReminderInfo_p> DSystemUserInterface::getReminderInfo() const
 {
     return m_inter->asyncCall("GetReminderinfo");
 }
 
-QDBusPendingReply<QList<qint32>> DUserSystemInterface::getSecretQuestions() const
+QDBusPendingReply<QList<qint32>> DSystemUserInterface::getSecretQuestions() const
 {
     return m_inter->asyncCall("GetSecretQuestions");
 }
 
-QDBusPendingReply<void> DUserSystemInterface::addGroup(const QString &group)
+QDBusPendingReply<void> DSystemUserInterface::addGroup(const QString &group)
 {
     return m_inter->asyncCallWithArgumentList("AddGroup", {QVariant::fromValue(group)});
 }
 
-QDBusPendingReply<void> DUserSystemInterface::deleteGroup(const QString &group)
+QDBusPendingReply<void> DSystemUserInterface::deleteGroup(const QString &group)
 {
     return m_inter->asyncCallWithArgumentList("DeleteGroup", {QVariant::fromValue(group)});
 }
 
-QDBusPendingReply<void> DUserSystemInterface::deleteIconFile(const QString &icon)
+QDBusPendingReply<void> DSystemUserInterface::deleteIconFile(const QString &icon)
 {
     return m_inter->asyncCallWithArgumentList("DeleteIconFile", {QVariant::fromValue(icon)});
 }
 
-QDBusPendingReply<void> DUserSystemInterface::enableNoPasswdLogin(const bool enabled)
+QDBusPendingReply<void> DSystemUserInterface::enableNoPasswdLogin(const bool enabled)
 {
     return m_inter->asyncCallWithArgumentList("EnableNoPasswdLogin", {QVariant::fromValue(enabled)});
 }
 
-QDBusPendingReply<void> DUserSystemInterface::setAutomaticLogin(const bool enabled)
+QDBusPendingReply<void> DSystemUserInterface::setAutomaticLogin(const bool enabled)
 {
     return m_inter->asyncCallWithArgumentList("SetAutomaticLogin", {QVariant::fromValue(enabled)});
 }
 
-QDBusPendingReply<void> DUserSystemInterface::setHistoryLayout(const QStringList &list)
+QDBusPendingReply<void> DSystemUserInterface::setHistoryLayout(const QStringList &list)
 {
     return m_inter->asyncCallWithArgumentList("SetHistoryLayout", {QVariant::fromValue(list)});
 }
 
-QDBusPendingReply<void> DUserSystemInterface::setIconFile(const QString &iconURI)
+QDBusPendingReply<void> DSystemUserInterface::setIconFile(const QString &iconURI)
 {
     return m_inter->asyncCallWithArgumentList("SetIconFile", {QVariant::fromValue(iconURI)});
 }
 
-QDBusPendingReply<void> DUserSystemInterface::setLayout(const QString &layout)
+QDBusPendingReply<void> DSystemUserInterface::setLayout(const QString &layout)
 {
     return m_inter->asyncCallWithArgumentList("SetLayout", {QVariant::fromValue(layout)});
 }
 
-QDBusPendingReply<void> DUserSystemInterface::setGroups(const QStringList &groups)
+QDBusPendingReply<void> DSystemUserInterface::setLocked(const bool locked)
+{
+    return m_inter->asyncCallWithArgumentList("SetLocked", {QVariant::fromValue(locked)});
+}
+
+QDBusPendingReply<void> DSystemUserInterface::setGroups(const QStringList &groups)
 {
     return m_inter->asyncCallWithArgumentList("SetGroups", {QVariant::fromValue(groups)});
 }
 
-QDBusPendingReply<void> DUserSystemInterface::setLocale(const QString &locale)
+QDBusPendingReply<void> DSystemUserInterface::setLocale(const QString &locale)
 {
     return m_inter->asyncCallWithArgumentList("SetLocale", {QVariant::fromValue(locale)});
 }
 
-QDBusPendingReply<void> DUserSystemInterface::setMaxPasswordAge(qint32 nDays)
+QDBusPendingReply<void> DSystemUserInterface::setMaxPasswordAge(qint32 nDays)
 {
     return m_inter->asyncCallWithArgumentList("SetPasswordAge", {QVariant::fromValue(nDays)});
 }
 
-QDBusPendingReply<void> DUserSystemInterface::setPassword(const QString &password)
+QDBusPendingReply<void> DSystemUserInterface::setPassword(const QString &password)
 {
     return m_inter->asyncCallWithArgumentList("SetPassword", {QVariant::fromValue(password)});
 }
 
-QDBusPendingReply<void> DUserSystemInterface::setPasswordHint(const QString &hint)
+QDBusPendingReply<void> DSystemUserInterface::setPasswordHint(const QString &hint)
 {
     return m_inter->asyncCallWithArgumentList("SetPasswordHint", {QVariant::fromValue(hint)});
 }
 
-QDBusPendingReply<void> DUserSystemInterface::setSecretQuestions(const QMap<qint32, QByteArray> &list)
+QDBusPendingReply<void> DSystemUserInterface::setSecretQuestions(const QMap<qint32, QByteArray> &list)
 {
     return m_inter->asyncCallWithArgumentList("SetSecretQuestions", {QVariant::fromValue(list)});
 }
 
-QDBusPendingReply<QList<qint32>> DUserSystemInterface::verifySecretQuestions(const QMap<qint32, QString> &anwsers)
+QDBusPendingReply<QList<qint32>> DSystemUserInterface::verifySecretQuestions(const QMap<qint32, QString> &anwsers)
 {
     return m_inter->asyncCallWithArgumentList("VerifySecretQuestions", {QVariant::fromValue(anwsers)});
 }

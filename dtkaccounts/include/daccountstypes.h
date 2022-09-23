@@ -6,7 +6,6 @@
 
 #include "namespace.h"
 #include <QMap>
-#include <QString>
 #include <QVariant>
 
 DACCOUNTS_BEGIN_NAMESPACE
@@ -22,33 +21,33 @@ struct LoginHistory
 // Common Custom Type
 
 enum class AccountTypes : qint32 {
-    Default = 0,  //普通账户
-    Admin,        //管理员
-    Udcp,         //域管账户
-    Unknown       //未知
+    Default = 0,  // 普通账户
+    Admin,        // 管理员
+    Udcp,         // 域管账户
+    Unknown       // 未知
 };
 
 enum class keyType {
-    IconFile,    //图标路径
-    Layout,      //布局
-    LayoutList,  //历史布局
-    Locale,      //本地化
-    UUID,        //用户的UUID
-    Unknown      //未知
+    IconFile,    // 图标路径
+    Layout,      // 布局
+    LayoutList,  // 历史布局
+    Locale,      // 本地化
+    UUID,        // 用户的UUID
+    Unknown      // 未知
 };
 
 enum class PasswdStatus {
-    P,       //有密码
-    NP,      //无密码
-    L,       //账户被锁定
-    Unknown  //未知
+    P,       // 有密码
+    NP,      // 无密码
+    L,       // 账户被锁定
+    Unknown  // 未知
 };
 
 enum class PasswdExpirInfo {
-    Normal,   //没有过期
-    Closed,   //将要过期
-    Expired,  //已过期
-    Unknown   //未知
+    Normal,   // 没有过期
+    Closed,   // 将要过期
+    Expired,  // 已过期
+    Unknown   // 未知
 };
 
 struct ShadowInfo
@@ -77,6 +76,13 @@ struct ReminderInfo
     LoginUtmpx currentLogin;
     LoginUtmpx lastLogin;
     qint32 failCountSinceLastLogin;
+};
+
+struct ValidMsg
+{
+    bool valid;
+    qint32 code;
+    QString msg;
 };
 
 DACCOUNTS_END_NAMESPACE

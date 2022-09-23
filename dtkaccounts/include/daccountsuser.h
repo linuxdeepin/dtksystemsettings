@@ -5,11 +5,8 @@
 #pragma once
 
 #include "daccountstypes.h"
-#include "namespace.h"
-#include <qobject.h>
-#include <qscopedpointer.h>
-#include <qurl.h>
-#include <qdatetime.h>
+#include <QDateTime>
+#include <QUrl>
 
 DACCOUNTS_BEGIN_NAMESPACE
 
@@ -18,12 +15,11 @@ class DAccountsUserPrivate;
 class DAccountsUser : public QObject
 {
     Q_OBJECT
-    friend class DAccountsManager;
 
 public:
-    virtual ~DAccountsUser() = default;
+    virtual ~DAccountsUser();
 
-    Q_PROPERTY(AccountTypes accountType READ accountType WRITE setAccountType)
+    Q_PROPERTY(AccountTypes accountType READ accountType)
     Q_PROPERTY(bool automaticLogin READ automaticLogin WRITE setAutomaticLogin)
     Q_PROPERTY(QString fullName READ fullName WRITE setFullName)
     Q_PROPERTY(quint64 GID READ GID)
@@ -43,6 +39,9 @@ public:
     Q_PROPERTY(QString shell READ shell WRITE setShell)
     Q_PROPERTY(QByteArray UUID READ UUID)
     Q_PROPERTY(QByteArray userName READ userName)
+    Q_PROPERTY(bool noPasswdLogin READ noPasswdLogin WRITE setNopasswdLogin)
+    Q_PROPERTY(QDateTime loginTime READ loginTime)
+    Q_PROPERTY(QDateTime createdTime READ createdTime)
 
     AccountTypes accountType() const;
     bool automaticLogin() const;
@@ -64,8 +63,12 @@ public:
     QString shell() const;
     QByteArray UUID() const;
     QByteArray userName() const;
+    bool noPasswdLogin() const;
+    QDateTime loginTime() const;
+    QDateTime createdTime() const;
 
-    void setAccountType(AccountTypes newtype);
+public slots:
+
     void setAutomaticLogin(bool enabled);
     void setFullName(const QString &newfullname);
     void setGroups(const QStringList &newgroups);
@@ -74,11 +77,12 @@ public:
     void setIconFile(const QUrl &newiconURL);
     void setLayout(const QByteArray &newlayout);
     void setLocale(const QByteArray &newlocale);
-    void setLocked(bool locked);
-    void setMaxPasswordAge(int newndays);
+    void setLocked(const bool locked);
+    void setMaxPasswordAge(const int newndays);
     void setPassword(const QByteArray &newpassword);
     void setPasswordHint(const QString &newpasswordhint);
     void setShell(const QString &newshellpath);
+    void setNopasswdLogin(const bool enabled);
 
     void addGroup(const QString &group);
     void deleteGroup(const QString &group);
@@ -87,13 +91,15 @@ public:
     ReminderInfo getReminderInfo() const;
     QList<qint32> secretQuestions() const;
     void setSecretQuestions(const QMap<qint32, QByteArray> &newquestions);
-    QList<qint32> vertifySecretQuestions(const QMap<qint32, QByteArray> &anwsers);
+    QList<qint32> vertifySecretQuestions(const QMap<qint32, QString> &anwsers);
     PasswdExpirInfo passwordExpirationInfo(qint64 &dayLeft) const;
 
 private:
-    explicit DAccountsUser(const QString &path, QObject *parent = nullptr);
+    explicit DAccountsUser(const quint64 uid, QObject *parent = nullptr);
     QScopedPointer<DAccountsUserPrivate> d_ptr;
+    friend class DAccountsManager;
     Q_DECLARE_PRIVATE(DAccountsUser)
+    Q_DISABLE_COPY(DAccountsUser)
 };
 
 DACCOUNTS_END_NAMESPACE

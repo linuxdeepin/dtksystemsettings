@@ -3,36 +3,10 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
 #include "dutils.h"
-#include "passwd.h"
-#include "../dglobalconfig.h"
-#include <qfileinfo.h>
+#include <QDir>
+#include "dglobalconfig.h"
 
 DACCOUNTS_BEGIN_NAMESPACE
-
-QString Dutils::encryptPassword(const QString &password)
-{
-    return QString(mkpasswd(password.toStdString().c_str()));
-}
-
-QList<QByteArray> Dutils::getImageFromDir(const QDir &dir)
-{
-    QList<QByteArray> icons;
-    auto list = dir.entryInfoList();
-    if (list.empty()) {
-        return icons;
-    }
-    QMimeDatabase db;
-    for (const auto &v : list) {
-        QMimeType type = db.mimeTypeForFile(v);
-        if (!type.isValid() or !type.name().startsWith("image/"))
-            continue;
-        auto filepath = v.absoluteFilePath();
-        if (filepath.contains(QRegularExpression("[\\x4e00-\\x9fa5]+")))
-            continue;
-        icons.push_back(("file://" + v.absoluteFilePath()).toUtf8());
-    }
-    return icons;
-}
 
 QString Dutils::getUserConfigValue(const QByteArray &username, keyType key)
 {
