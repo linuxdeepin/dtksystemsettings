@@ -13,15 +13,17 @@
 #include <qvariant.h>
 #include <qdebug.h>
 #include <qdbusconnection.h>
+#include <qdatetime.h>
 
 #include "login1sessioninterface.h"
+#include "dloginutils.h"
 DLOGIN_BEGIN_NAMESPACE
 
 DLoginSession::DLoginSession(const QString &path, QObject *parent)
     : QObject(parent)
     , d_ptr(new DLoginSessionPrivate(this))
 {
-    const QString &Service   = QStringLiteral("org.freedesktop.login1");
+    const QString &Service = QStringLiteral("org.freedesktop.login1");
 
     Q_D(DLoginSession);
     DBusSeatPath::registerMetaType();
@@ -58,10 +60,10 @@ bool DLoginSession::remote() const
     Q_D(const DLoginSession);
     return d->m_inter->remote();
 }
-QString DLoginSession::_class() const
+SessionClass DLoginSession::sessionClass() const
 {
     Q_D(const DLoginSession);
-    return d->m_inter->_class();
+    return Utils::stringToSessionClass(d->m_inter->sessionClass());
 }
 QString DLoginSession::desktop() const
 {
@@ -107,10 +109,10 @@ QString DLoginSession::service() const
     return d->m_inter->service();
 }
 
-QString DLoginSession::state() const
+SessionState DLoginSession::state() const
 {
     Q_D(const DLoginSession);
-    return d->m_inter->state();
+    return Utils::stringToSessionState(d->m_inter->state());
 }
 
 QString DLoginSession::TTY() const
@@ -119,10 +121,10 @@ QString DLoginSession::TTY() const
     return d->m_inter->TTY();
 }
 
-QString DLoginSession::type() const
+SessionType DLoginSession::type() const
 {
     Q_D(const DLoginSession);
-    return d->m_inter->type();
+    return Utils::stringToSessionType(d->m_inter->type());
 }
 
 QString DLoginSession::seat() const
@@ -155,27 +157,27 @@ quint32 DLoginSession::VTNr() const
     return d->m_inter->VTNr();
 }
 
-quint64 DLoginSession::idleSinceHint() const
+QDateTime DLoginSession::idleSinceHint() const
 {
     Q_D(const DLoginSession);
-    return d->m_inter->idleSinceHint();
+    return QDateTime::fromMSecsSinceEpoch(d->m_inter->idleSinceHint());
 }
 
-quint64 DLoginSession::idleSinceHintMonotonic() const
+QDateTime DLoginSession::idleSinceHintMonotonic() const
 {
     Q_D(const DLoginSession);
-    return d->m_inter->idleSinceHintMonotonic();
+    return QDateTime::fromMSecsSinceEpoch(d->m_inter->idleSinceHintMonotonic());
 }
 
-quint64 DLoginSession::timestamp() const
+QDateTime DLoginSession::createdTime() const
 {
     Q_D(const DLoginSession);
-    return d->m_inter->timestamp();
+    return QDateTime::fromMSecsSinceEpoch(d->m_inter->timestamp());
 }
-quint64 DLoginSession::timestampMonotonic() const
+QDateTime DLoginSession::createdTimeMonotonic() const
 {
     Q_D(const DLoginSession);
-    return d->m_inter->timestampMonotonic();
+    return QDateTime::fromMSecsSinceEpoch(d->m_inter->timestampMonotonic());
 }
 
 void DLoginSession::activate()
@@ -322,8 +324,8 @@ QStringList DLoginSession::autostartList()
     QStringList autostartPaths;
     QStringList autostartApps;
     // First get current login user's dir
-    QString     defaultUserConfigDir;
-    QString     homeDir = QProcessEnvironment::systemEnvironment().value("HOME");
+    QString defaultUserConfigDir;
+    QString homeDir = QProcessEnvironment::systemEnvironment().value("HOME");
     if (!homeDir.isEmpty()) {
         defaultUserConfigDir = homeDir + "/.config";
     }
@@ -334,9 +336,9 @@ QStringList DLoginSession::autostartList()
         autostartPaths.append(QDir::cleanPath(defaultUserConfigDir + "/autostart"));
     }
     // Get system config dir
-    QString     defaultSystemConfigDir("/etc/xdg");
-    QString     configuredSystemConfigDirsVar = QProcessEnvironment::systemEnvironment().value("XDG_CONFIG_DIRS");
-    QStringList configuredSystemConfigDirs    = configuredUserConfigDir.split(":", Qt::SkipEmptyParts);
+    QString defaultSystemConfigDir("/etc/xdg");
+    QString configuredSystemConfigDirsVar = QProcessEnvironment::systemEnvironment().value("XDG_CONFIG_DIRS");
+    QStringList configuredSystemConfigDirs = configuredUserConfigDir.split(":", Qt::SkipEmptyParts);
     foreach (const QString &configuredSystemConfigDir, configuredSystemConfigDirs) {
         if (!QDir::isAbsolutePath(configuredSystemConfigDir)) {
             configuredSystemConfigDirs.removeAll(configuredSystemConfigDir);
@@ -356,17 +358,17 @@ QStringList DLoginSession::autostartList()
             autostartDir.setNameFilters({"*.desktop"});
             QFileInfoList fileInfoList = autostartDir.entryInfoList(QDir::Files);
             foreach (const QFileInfo &fileInfo, fileInfoList) {
-                bool      addFlag = false;
+                bool addFlag = false;
                 QSettings desktopFile(fileInfo.absoluteFilePath(), QSettings::IniFormat);
                 desktopFile.beginGroup(MAIN_SECTION);
                 bool hidden = desktopFile.value(KEY_HIDDEN).toBool();
                 if (hidden) {
                     continue;
                 }
-                QString     desktopEnv      = QProcessEnvironment::systemEnvironment().value("XDG_CURRENT_DESKTOP");
+                QString desktopEnv = QProcessEnvironment::systemEnvironment().value("XDG_CURRENT_DESKTOP");
                 QStringList currentDesktops = desktopEnv.split(":", Qt::SkipEmptyParts);
-                QStringList onlyShowIn      = desktopFile.value(KEY_ONLY_SHOW_IN).toStringList();
-                QStringList notShowIn       = desktopFile.value(KEY_NOT_SHOW_IN).toStringList();
+                QStringList onlyShowIn = desktopFile.value(KEY_ONLY_SHOW_IN).toStringList();
+                QStringList notShowIn = desktopFile.value(KEY_NOT_SHOW_IN).toStringList();
                 if (!onlyShowIn.isEmpty()) {
                     foreach (const QString &currentDesktop, currentDesktops) {
                         if (onlyShowIn.contains(currentDesktop)) {

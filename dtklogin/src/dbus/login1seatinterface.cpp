@@ -9,10 +9,10 @@
 #include <qdbuspendingreply.h>
 
 DLOGIN_BEGIN_NAMESPACE
-Login1SeatInterface::Login1SeatInterface(const QString         &service,
-                                         const QString         &path,
+Login1SeatInterface::Login1SeatInterface(const QString &service,
+                                         const QString &path,
                                          const QDBusConnection &connection,
-                                         QObject               *parent)
+                                         QObject *parent)
     : QObject(parent)
     , m_interface(new DDBusInterface(service, path, staticInterfaceName(), connection, this))
 {

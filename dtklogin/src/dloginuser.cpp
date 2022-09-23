@@ -13,6 +13,7 @@
 
 #include "dlogintypes_p.h"
 #include "login1userinterface.h"
+#include "dloginutils.h"
 
 DLOGIN_BEGIN_NAMESPACE
 DLoginUser::DLoginUser(const QString &path, QObject *parent)
@@ -34,7 +35,7 @@ QList<QString> DLoginUser::sessions() const
     Q_D(const DLoginUser);
     const auto &result = d->m_inter->sessions();
     QList<QString> sessionIds;
-    for (auto && sessionPath : result) {
+    for (auto &&sessionPath : result) {
         sessionIds.append(sessionPath.sessionId);
     }
     return sessionIds;
@@ -76,10 +77,10 @@ QString DLoginUser::slice() const
     return d->m_inter->slice();
 }
 
-QString DLoginUser::state() const
+UserState DLoginUser::state() const
 {
     Q_D(const DLoginUser);
-    return d->m_inter->state();
+    return Utils::stringToUserState(d->m_inter->state());
 }
 
 QString DLoginUser::display() const
@@ -101,28 +102,28 @@ quint32 DLoginUser::UID() const
     return d->m_inter->UID();
 }
 
-quint64 DLoginUser::idleSinceHint() const
+QDateTime DLoginUser::idleSinceHint() const
 {
     Q_D(const DLoginUser);
-    return d->m_inter->idleSinceHint();
+    return QDateTime::fromMSecsSinceEpoch(d->m_inter->idleSinceHint());
 }
 
-quint64 DLoginUser::idleSinceHintMonotonic() const
+QDateTime DLoginUser::idleSinceHintMonotonic() const
 {
     Q_D(const DLoginUser);
-    return d->m_inter->idleSinceHintMonotonic();
+    return QDateTime::fromMSecsSinceEpoch(d->m_inter->idleSinceHintMonotonic());
 }
 
-quint64 DLoginUser::timestamp() const
+QDateTime DLoginUser::loginTime() const
 {
     Q_D(const DLoginUser);
-    return d->m_inter->timestamp();
+    return QDateTime::fromMSecsSinceEpoch(d->m_inter->timestamp());
 }
 
-quint64 DLoginUser::timestampMonotonic() const
+QDateTime DLoginUser::loginTimeMonotonic() const
 {
     Q_D(const DLoginUser);
-    return d->m_inter->timestampMonotonic();
+    return QDateTime::fromMSecsSinceEpoch(d->m_inter->timestampMonotonic());
 }
 
 // public slots

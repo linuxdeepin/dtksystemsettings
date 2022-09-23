@@ -13,11 +13,6 @@ dlogin1manager.h 中定义了登录管理对象的接口。
 
 DLogin1Manager 中定义了登录管理对象的接口。
 
-@fn QStringList Dtk::DLogin1Manager::bootLoaderEntries() const
-@brief 属性包含引导加载程序条目的列表。这包括配置中定义的引导加载程序条目以及引导加载程序报告的任何其他加载程序条目
-\sa [systemd-boot](https://www.freedesktop.org/software/systemd/man/systemd-boot.html#)
-@note 注意，返回的是一个QList,需要使用[]来获取列表中某个元素
-@return 引导加载程序条目的列表
 
 @fn QStringList Dtk::DLogin1Manager::killExcludeUsers() const
 @brief 读取 KillExcludeUsers 属性。
@@ -37,14 +32,6 @@ DLogin1Manager 中定义了登录管理对象的接口。
 @brief 如果机器被连接到一个底座或者拓展坞（包含usbhub）上，Docked取值为true
 @return 布尔值
 
-@fn bool Dtk::DLogin1Manager::enableWallMessages() const
-@brief 如果机器开启了关机原因信息记录则返回true，这个由设置项setEnableWallMessages方法进行设置。
-\sa Dtk::DLogin1Manager::setEnableWallMessages(const bool enable)
-@return 布尔值
-
-@fn void Dtk::DLogin1Manager::setEnableWallMessages(const bool enable)
-@brief 开启关机原因信息记录
-@return 布尔值
 
 @fn bool Dtk::DLogin1Manager::idleHint() const
 @brief 反映系统的空闲提示状态。如果系统空闲则为True
@@ -59,9 +46,6 @@ DLogin1Manager 中定义了登录管理对象的接口。
 @brief 当（笔记本电脑）的盖子关闭时，LidClosed为true。
 @return 布尔值
 
-@fn bool Dtk::DLogin1Manager::onExternalPower() const
-@brief 当机器连接到外部电源时为true
-@return 布尔值
 
 @fn bool Dtk::DLogin1Manager::preparingForShutdown() const
 @brief 在两个PrepareForShutdown和PrepareForSleep信号的间隔期间分别为真
@@ -71,9 +55,6 @@ DLogin1Manager 中定义了登录管理对象的接口。
 @brief 在两个PrepareForShutdown和PrepareForSleep信号的间隔期间分别为真
 @return 布尔值
 
-@fn bool Dtk::DLogin1Manager::rebootToFirmwareSetup() const
-@brief 配置重启后从引导加载程序执行的操作：进入固件设置模式，如果是则返回true
-@return 布尔值
 
 @fn bool Dtk::DLogin1Manager::removeIPC() const
 @brief 返回一个属性设置，当用户完全注销时，属于用户的System V和POSIX IPC对象是否应被删除。
@@ -83,7 +64,7 @@ DLogin1Manager 中定义了登录管理对象的接口。
 @return 布尔值
 
 @fn QString Dtk::DLogin1Manager::blockInhibited() const
-@brief 读取各个模式的当前活动锁: 
+@brief 读取各个模式的当前活动锁:
 @return  例如："handle-power-key"、"handle-suspend-key" 、"handle-lid-switch"
 
 @fn QString Dtk::DLogin1Manager::delayInhibited() const
@@ -118,19 +99,6 @@ DLogin1Manager 中定义了登录管理对象的接口。
 @brief 读取系统空闲时采取的行动 （默认是忽略）
 @return 默认："ignore"，可以是关机或者睡眠等其他电源管理状态。
 
-@fn QString Dtk::DLogin1Manager::rebootParameter() const
-@brief RebootParameter属性显示使用上述SetRebootParameter()方法设置的值
-\sa Dtk::DLogin1Manager::setRebootParameter(const QString &paramter)
-@return SetRebootParameter()方法设置的值
-
-@fn QString Dtk::DLogin1Manager::rebootToBootLoaderEntry() const
-@brief 显示配置重启后从引导加载程序执行的操作
-\sa Dtk::DLogin1Manager::setRebootToBootLoaderEntry(const QString &entry)
-@return setRebootToBootLoaderEntry()方法设置的值
-
-@fn QString Dtk::DLogin1Manager::wallMessage() const
-@brief 读取系统关机时是否展示瀑布流信息 可以使用setWallMessage方法进行写入，默认为空
-@return 默认为空 
 
 @fn ScheduledShutdownValue Dtk::DLogin1Manager::scheduledShutdown() const
 @brief 读取scheduledShutdown的值，返回两个参数，第一个电源管理状态名，第二个是unix时间戳（精确到微秒），可以使用scheduleShutdown方法进行写入。
@@ -173,9 +141,6 @@ DLogin1Manager 中定义了登录管理对象的接口。
 @brief 读取当前注册的会话数量
 @return 数字
 
-@fn quint64 Dtk::DLogin1Manager::rebootToBootLoaderMenu() const
-@brief 当用SetRebootToBootLoaderMenu选择了正确的重启后操作时，RebootToBootLoaderMenu真。
-@return 数字
 
 @fn quint64 Dtk::DLogin1Manager::runtimeDirectoryInodesMax() const
 @brief 设置每个登录用户的$XDG_RUNTIME_DIR运行时目录的大小限制。
@@ -195,11 +160,6 @@ DLogin1Manager 中定义了登录管理对象的接口。
 @return 数字
 
 
-
-@fn QString Dtk::DLogin1Manager::lastError() const
-@brief 获取最后一个报错信息
-@return 报错信息，以字符串返回
-@return 无
 
 @fn void Dtk::DLogin1Manager::activateSession(const QString &sessionId)
 @brief 将具有指定 ID 的会话带到前台
@@ -223,7 +183,7 @@ DLogin1Manager 中定义了登录管理对象的接口。
 @retval no: 表示该操作可用，但不允许用户执行该操作。
 @retval challenge: 返回，操作可用，但必须经过授权。
 
-@fn QString Dtk::DLogin1Manager::canHibernate() 
+@fn QString Dtk::DLogin1Manager::canHibernate()
 @brief 获取当前用户下计算机是否支持休眠
 @note 休眠：将内存中数据保存到磁盘并将机器关闭
 @retval na: 该操作不可用，因为硬件、内核或驱动程序不支持它。
@@ -253,35 +213,6 @@ DLogin1Manager 中定义了登录管理对象的接口。
 @retval no: 表示该操作可用，但不允许用户执行该操作。
 @retval challenge: 返回，操作可用，但必须经过授权。
 
-@fn QString Dtk::DLogin1Manager::canRebootParameter()
-@brief 获取当前用户能否为后续重新启动操作设置参数。
-\sa [reboot](https://man7.org/linux/man-pages/man2/reboot.2.html)
-\sa [systemctl](https://www.freedesktop.org/software/systemd/man/systemctl.html#)
-@retval na: 该操作不可用，因为硬件、内核或驱动程序不支持它。
-@retval yes: 表示支持该操作，用户无需进一步认证即可执行该操作。
-@retval no: 表示该操作可用，但不允许用户执行该操作。
-@retval challenge: 返回，操作可用，但必须经过授权。
-
-@fn QString Dtk::DLogin1Manager::canRebootToBootLoaderEntry()
-@brief 获取当前用户下计算机是否支持重启到bootloader
-@retval na: 该操作不可用，因为硬件、内核或驱动程序不支持它。
-@retval yes: 表示支持该操作，用户无需进一步认证即可执行该操作。
-@retval no: 表示该操作可用，但不允许用户执行该操作。
-@retval challenge: 返回，操作可用，但必须经过授权。
-
-@fn QString Dtk::DLogin1Manager::canRebootToBootLoaderMenu()
-@brief 获取当前用户下计算机是否支持重启到bootloaderMenu
-@retval na: 该操作不可用，因为硬件、内核或驱动程序不支持它。
-@retval yes: 表示支持该操作，用户无需进一步认证即可执行该操作。
-@retval no: 表示该操作可用，但不允许用户执行该操作。
-@retval challenge: 返回，操作可用，但必须经过授权。
-
-@fn QString Dtk::DLogin1Manager::canRebootToFirmwareSetup()
-@brief 获取当前用户下计算机是否支持重启到固件设置页（BIOS Setting）
-@retval na: 该操作不可用，因为硬件、内核或驱动程序不支持它。
-@retval yes: 表示支持该操作，用户无需进一步认证即可执行该操作。
-@retval no: 表示该操作可用，但不允许用户执行该操作。
-@retval challenge: 返回，操作可用，但必须经过授权。
 
 @fn QString Dtk::DLogin1Manager::canSuspend()
 @brief 获取当前用户下计算机是否支持挂起
@@ -303,14 +234,6 @@ DLogin1Manager 中定义了登录管理对象的接口。
 @retval true: 计划了关机操作并且被此操作取消
 @retval false: 未计划关机操作
 
-@fn std::tuple<QString, String,QString,int,uint,QString,uint,bool> Dtk::DLogin1Manager::createSession(uint uid, uint pid, 
-        const QString &service, const QString &type, 
-        const QString &_class, const QString &desktop, const QString 
-        &seatId, uint VTNr, const QString &TTY, const QString &display,
-        const QString &remote, const QString &remote_user, 
-        const QString &remote_host, const QList< SessionProperty > &properties)
-@brief 创建一个会话
-@note 这些调用绝不能由客户端直接调用。创建/关闭会话完全是 PAM 及其 [pam_systemd](https://www.freedesktop.org/software/systemd/man/pam_systemd.html#) 模块的工作。
 
 @fn void Dtk::DLogin1Manager::flushDevices(const bool value)
 @brief 删除设备的所有显式seat分配，将所有分配重置为自动默认值
@@ -347,44 +270,28 @@ DLogin1Manager 中定义了登录管理对象的接口。
 @param[in] interactive: 一个交互式布尔参数可用于控制 polkit 是否应在需要时以交互方式要求用户提供认证凭证
 @return 无
 
-@fn void Dtk::DLogin1Manager::haltWithFlags(const quint64 flags)
-@brief 计算机暂停操作，并且附加flags运行
-@note 
-`#define SD_LOGIND_ROOT_CHECK_INHIBITORS  (UINT64_C(1) << 0)`
-`#define SD_LOGIND_KEXEC_REBOOT           (UINT64_C(1) << 1)`
-    当`flags`为 0 时，这些方法的行为就像没有flag的版本一样。
-    设置 (0x01)时`SD_LOGIND_ROOT_CHECK_INHIBITORS`，特权用户也可以使用活动抑制器。
-    当`SD_LOGIND_KEXEC_REBOOT` 设置 (0x02)时，`rebootWithFlags()`如果加载了 kexec 内核，
-    则执行 kexec reboot。
-@param[in] flags: 标志变量
-@return 无
+
 
 @fn void Dtk::DLogin1Manager::hibernate(const bool interactive)
 @brief 计算机执行休眠操作，休眠（将内存中数据保存到磁盘并将机器关闭）
 @param[in] interactive: 一个交互式布尔参数可用于控制 polkit 是否应在需要时以交互方式要求用户提供认证凭证
 @return 无
 
-@fn Dtk::DLogin1Manager::hibernateWithFlags(const quint64 flags)
-\sa Dtk::DLogin1Manager::haltWithFlags(const quint64 flags)
-@param[in] flags: 标志变量
-@return 无
+
 
 @fn void Dtk::DLogin1Manager::hybridSleep(const bool interactive)
 @brief 计算机执行混合睡眠，混合睡眠模式，即系统既休眠又挂起
 @param[in] interactive: 一个交互式布尔参数可用于控制 polkit 是否应在需要时以交互方式要求用户提供认证凭证
 @return 无
 
-@fn Dtk::DLogin1Manager::hybridSleepWithFlags(const quint64 flags)
-\sa Dtk::DLogin1Manager::haltWithFlags(const quint64 flags)
-@param[in] flags: 标志变量
-@return 无
+
 
 @fn int Dtk::DLogin1Manager::inhibit(const QString &what, const QString &who, const QString &why, const QString &mode)
 @brief 创建一个抑制锁，抑制锁：一个程序可以阻止或延迟系统休眠或关机
 \sa [freedesktop中关于抑制锁的介绍](https://www.freedesktop.org/wiki/Software/systemd/inhibit/)
-@param[in] what: "shutdown"(重启/关机/kexec), "sleep"(休眠), "idle"(空闲), "handle-power-key"(按下电源键), 
+@param[in] what: "shutdown"(重启/关机/kexec), "sleep"(休眠), "idle"(空闲), "handle-power-key"(按下电源键),
                 "handle-suspend-key"(按下休眠键), "handle-hibernate-key"(按下休眠键), "handle-lid-switch"(合上盖子)。
-                 中的一个或多个，用冒号分隔，用于禁止关机/重启、挂起/休眠、自动空闲逻辑或硬件密钥处理。默认值是 "idle:sleep:shutdown" 
+                 中的一个或多个，用冒号分隔，用于禁止关机/重启、挂起/休眠、自动空闲逻辑或硬件密钥处理。默认值是 "idle:sleep:shutdown"
 @param[in] who: 应该是一个简短的人类可读字符串，用于标识获取锁的应用程序, 若未设置， 则使用被执行的命令行字符串。
 @param[in] why: 应该是一个简短的人类可读字符串，用于标识获取锁的原因。
 @param[in] mode: 应该是“ block”或“delay“它代表是否应将禁止视为强制性或是否应将操作延迟到某个最大时间。
@@ -443,20 +350,14 @@ DLogin1Manager 中定义了登录管理对象的接口。
 @return 无
 
 
-@fn Dtk::DLogin1Manager::powerOffWithFlags(const quint64 flags)
-\sa Dtk::DLogin1Manager::haltWithFlags(const quint64 flags)
-@param[in] flags: 标志变量
-@return 无
+
 
 @fn void Dtk::DLogin1Manager::reboot(const bool interactive)
 @brief 重启
 @param[in] interactive: 一个交互式布尔参数可用于控制 polkit 是否应在需要时以交互方式要求用户提供认证凭证
 @return 无
 
-@fn Dtk::DLogin1Manager::rebootWithFlags(const quint64 flags)
-\sa Dtk::DLogin1Manager::haltWithFlags(const quint64 flags)
-@param[in] flags: 标志变量
-@return 无
+
 
 @fn void Dtk::DLogin1Manager::releaseSession(const QString &sessionId)
 @brief 关闭登录会话
@@ -464,31 +365,15 @@ DLogin1Manager 中定义了登录管理对象的接口。
 @note 这些调用绝不能由客户端直接调用。创建/关闭会话完全是 PAM 及其 [pam_systemd](https://www.freedesktop.org/software/systemd/man/pam_systemd.html#) 模块的工作。
 
 @fn void Dtk::DLogin1Manager::scheduleShutdown(const QString type, const quint64 usec)
-@brief 在一定时间后定时关机 
+@brief 在一定时间后定时关机
 @param[in] type: 关机操作类型，可以是"poweroff"、"dry-poweroff"、"reboot"、"dry-reboot"、"halt "和 "dry-halt "之一
 @param[in] usec: Unix时间戳，从1970.1.1零点开始到现在的微秒时间
 @return 无
 
-@fn void Dtk::DLogin1Manager::setRebootParameter(const QString &paramter)
-@brief 为后续重新启动操作设置参数
-\sa Dtk::DLogin1Manager::canRebootParameter()
-@return 无
 
 
-@fn void Dtk::DLogin1Manager::setRebootToBootLoaderEntry(const QString &entry)
-@param 配置重启后从引导加载程序执行的操作：特定引导加载程序条目。
-\sa [systemctl](https://www.freedesktop.org/software/systemd/man/systemctl.html#)
-@return 无
 
-@fn void Dtk::DLogin1Manager::setRebootToBootLoaderMenu(const quint64 timeout)
-@param 配置重启后从引导加载程序执行的操作：引导加载程序菜单
-\sa [systemctl](https://www.freedesktop.org/software/systemd/man/systemctl.html#)
-@return 无
 
-@fn void Dtk::DLogin1Manager::setRebootToFirmwareSetup(const bool enbale)
-@brief 配置重启后从引导加载程序执行的操作：进入固件设置模式
-@param[in] enable: 布尔值控制是否开启此项功能
-@return 无
 
 @fn void Dtk::DLogin1Manager::setUserLinger(const uint uid, const bool enable, const bool interactive)
 @brief 启用或禁用用户滞留。如果启用，将保留用户的运行时目录，并且他们可以在注销时继续运行进程。如果禁用，运行时目录会在他们注销后立即消失
@@ -498,11 +383,7 @@ DLogin1Manager 中定义了登录管理对象的接口。
 @note 请注意，用户滞留状态会持久性地保存在磁盘上。
 @return 无
 
-@fn void Dtk::DLogin1Manager::setWallMessage(const QString &message, const bool enable = false);
-@brief 设置墙消息（关机瀑布流）。（将发送到所有终端并存储在 [utmp](https://man7.org/linux/man-pages/man5/utmp.5.html))记录中的消息）以进行后续计划的关闭操作。
-@param[in] message: 指定将包含在关闭消息中的关闭原因（并且可能为空）
-@param[in] enable: 控制此功能开关
-@return 无
+
 
 @fn void Dtk::DLogin1Manager::suspend(const bool interactive)
 @brief 计算机执行挂起操作（系统状态保存到 RAM 并关闭 CPU）
@@ -514,15 +395,9 @@ DLogin1Manager 中定义了登录管理对象的接口。
 @param[in] interactive: 一个交互式布尔参数可用于控制 polkit 是否应在需要时以交互方式要求用户提供认证凭证
 @return 无
 
-@fn Dtk::DLogin1Manager::suspendThenHibernateWithFlags(const quint64 flags)
-\sa Dtk::DLogin1Manager::haltWithFlags(const quint64 flags)
-@param[in] flags: 标志变量
-@return 无
 
-@fn Dtk::DLogin1Manager::suspendWithFlags(const quint64 flags)
-\sa Dtk::DLogin1Manager::haltWithFlags(const quint64 flags)
-@param[in] flags: 标志变量
-@return 无
+
+
 
 @fn  void Dtk::DLogin1Manager::terminateSeat(const QString &seatId);
 @brief 可用于强制终止附加到特定seat的所有会话。
@@ -548,9 +423,6 @@ DLogin1Manager 中定义了登录管理对象的接口。
 @brief 要求所有会话停用其屏幕锁定
 @return 无
 
-@fn void Dtk::DLogin1Manager::errorMessageChanged(const QString &message)
-@brief 信号，传递错误信息
-@param[in] message: 错误信息
 
 @fn void Dtk::DLogin1Manager::PrepareForShutdown(const bool value)
 @brief PrepareForShutdown()和PrepareForSleep()信号在系统关闭之前（使用参数“ true” ）或之后（使用参数“ false”）发送，
@@ -567,17 +439,17 @@ DLogin1Manager 中定义了登录管理对象的接口。
 
 @fn void Dtk::DLogin1Manager::seatRemoved(const QString &seatId, const QString &seat_path)
 \sa DLogin1Manager::SeatNew(const QString &seatId, const QString &seat_path)
- 
+
 @fn void Dtk::DLogin1Manager::sessionNew(const QString &sessionId, const QString &session_path)
 \sa DLogin1Manager::SeatNew(const QString &seatId, const QString &seat_path)
- 
+
 @fn void Dtk::DLogin1Manager::sessionRemoved(const QString &sessionId, const QString &session_path)
 \sa DLogin1Manager::SeatNew(const QString &seatId, const QString &seat_path)
- 
+
 @fn void Dtk::DLogin1Manager::userNew(const uint uid, const QString &path)
 \sa DLogin1Manager::SeatNew(const QString &seatId, const QString &seat_path)
 
 @fn void Dtk::DLogin1Manager::userRemoved(const uint uid, const QString &path)
 \sa DLogin1Manager::seatNew(const QString &seatId, const QString &seat_path)
- 
+
 */

@@ -6,10 +6,10 @@
 #include <qdbusconnection.h>
 #include "ddbusinterface.h"
 DLOGIN_BEGIN_NAMESPACE
-Login1SessionInterface::Login1SessionInterface(const QString         &service,
-                                               const QString         &path,
+Login1SessionInterface::Login1SessionInterface(const QString &service,
+                                               const QString &path,
                                                QDBusConnection connection,
-                                               QObject               *parent)
+                                               QObject *parent)
     : QObject(parent)
     , m_interface(new DDBusInterface(service, path, staticInterfaceName(), connection, this))
 {
@@ -18,8 +18,10 @@ Login1SessionInterface::Login1SessionInterface(const QString         &service,
 
     // Relay signals
     connection.connect(service, path, staticInterfaceName(), "Lock", this, SLOT(locked()));
-    connection.connect(service, path, staticInterfaceName(), "PauseDevice", this, SLOT(pauseDevice(quint32, quint32, const QString &)));
-    connection.connect(service, path, staticInterfaceName(), "ResumeDevice", this, SLOT(resumeDevice(const quint32, const quint32, const int)));
+    connection.connect(
+        service, path, staticInterfaceName(), "PauseDevice", this, SLOT(pauseDevice(quint32, quint32, const QString &)));
+    connection.connect(
+        service, path, staticInterfaceName(), "ResumeDevice", this, SLOT(resumeDevice(const quint32, const quint32, const int)));
     connection.connect(service, path, staticInterfaceName(), "Unlock", this, SLOT(unlocked()));
 }
 Login1SessionInterface::~Login1SessionInterface() = default;
@@ -43,7 +45,7 @@ bool Login1SessionInterface::remote() const
 {
     return qvariant_cast<bool>(m_interface->property("Remote"));
 }
-QString Login1SessionInterface::_class() const
+QString Login1SessionInterface::sessionClass() const
 {
     return qvariant_cast<QString>(m_interface->property("Class"));
 }
@@ -147,7 +149,8 @@ QDBusPendingReply<> Login1SessionInterface::activate()
 }
 QDBusPendingReply<> Login1SessionInterface::kill(const QString &who, qint32 signalNumber)
 {
-    QDBusPendingReply<> reply = m_interface->asyncCallWithArgumentList(QLatin1String("Kill"), {QVariant::fromValue(who), signalNumber});
+    QDBusPendingReply<> reply =
+        m_interface->asyncCallWithArgumentList(QLatin1String("Kill"), {QVariant::fromValue(who), signalNumber});
     return reply;
 }
 QDBusPendingReply<> Login1SessionInterface::lock()
@@ -172,7 +175,8 @@ QDBusPendingReply<> Login1SessionInterface::releaseDevice(const quint32 major, c
 }
 QDBusPendingReply<> Login1SessionInterface::setBrightness(const QString &subsystem, const QString &name, const quint32 brightness)
 {
-    QDBusPendingReply reply =m_interface->asyncCallWithArgumentList(QLatin1String("SetBrightness"), {QVariant::fromValue(subsystem), QVariant::fromValue(name), brightness});
+    QDBusPendingReply reply = m_interface->asyncCallWithArgumentList(
+        QLatin1String("SetBrightness"), {QVariant::fromValue(subsystem), QVariant::fromValue(name), brightness});
     return reply;
 }
 QDBusPendingReply<> Login1SessionInterface::setIdleHint(const bool idle)

@@ -5,10 +5,10 @@
 #include "login1userinterface.h"
 #include "ddbusinterface.h"
 DLOGIN_BEGIN_NAMESPACE
-Login1UserInterface::Login1UserInterface(const QString         &service,
-                                         const QString         &path,
+Login1UserInterface::Login1UserInterface(const QString &service,
+                                         const QString &path,
                                          const QDBusConnection &connection,
-                                         QObject               *parent)
+                                         QObject *parent)
     : QObject(parent)
     , m_interface(new DDBusInterface(service, path, staticInterfaceName(), connection, this))
 {

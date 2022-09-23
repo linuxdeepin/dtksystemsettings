@@ -16,10 +16,10 @@ class Login1SeatInterface : public QObject
 public:
     static inline const char *staticInterfaceName() { return "org.freedesktop.login1.Seat"; }
 
-    Login1SeatInterface(const QString         &service,
-                        const QString         &path,
+    Login1SeatInterface(const QString &service,
+                        const QString &path,
                         const QDBusConnection &connection,
-                        QObject               *parent = nullptr);
+                        QObject *parent = nullptr);
     ~Login1SeatInterface() override;
 
     Q_PROPERTY(QList<DBusSessionPath> sessions READ sessions);
@@ -32,13 +32,13 @@ public:
     Q_PROPERTY(quint64 idleSinceHintMonotonic READ idleSinceHintMonotonic);
 
     QList<DBusSessionPath> sessions() const;
-    bool                   canGraphical() const;
-    bool                   canTTY() const;
-    bool                   idleHint() const;
-    QString                id() const;
-    DBusSessionPath        activeSession() const;
-    quint64                idleSinceHint() const;
-    quint64                idleSinceHintMonotonic() const;
+    bool canGraphical() const;
+    bool canTTY() const;
+    bool idleHint() const;
+    QString id() const;
+    DBusSessionPath activeSession() const;
+    quint64 idleSinceHint() const;
+    quint64 idleSinceHintMonotonic() const;
 
 public slots:
     QDBusPendingReply<> activateSession(const QString &sessionId);

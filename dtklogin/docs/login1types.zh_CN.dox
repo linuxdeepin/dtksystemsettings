@@ -23,8 +23,8 @@ dlogin1types.h 中定义了login1组件需要使用到的一些自定义数据�
 @param who: 发出抑制器的对象
 @param why: 为何发出抑制器
 @param mode: 抑制器模式
-@param uid: 用户id
-@param pid: 进程id
+@param UID: 用户id
+@param PID: 进程id
 
 @struct Dtk::Login1::Seat
 @param seatId: seat编号,例如:“seat0”
