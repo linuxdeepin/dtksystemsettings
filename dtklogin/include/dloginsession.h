@@ -82,7 +82,7 @@ signals:
     void resumeDevice(const quint32 value, const quint32 device, const int descriptor);
     void unlocked();
     void autostartAdded(const QString &fileName);
-    void autostartDeleted(const QString &fileName);
+    void autostartRemoved(const QString &fileName);
 
 public slots:
     void activate();
@@ -106,6 +106,7 @@ public slots:
     QStringList autostartList();
     bool isAutostart(const QString &fileName);
     bool removeAutostart(const QString &fileName);
+    bool addAutostart(const QString &fileName);
     bool enableAutostartWatch();
 
 private:
