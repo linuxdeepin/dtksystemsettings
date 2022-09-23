@@ -7,10 +7,10 @@
 #include "namespace.h"
 #include <qobject.h>
 
-#define MAIN_SECTION        "Desktop Entry"
-#define KEY_HIDDEN          "Hidden"
-#define KEY_ONLY_SHOW_IN    "OnlyShowIn"
-#define KEY_NOT_SHOW_IN     "NotShowIn"
+#define MAIN_SECTION "Desktop Entry"
+#define KEY_HIDDEN "Hidden"
+#define KEY_ONLY_SHOW_IN "OnlyShowIn"
+#define KEY_NOT_SHOW_IN "NotShowIn"
 
 class DDBusInterface;
 DLOGIN_BEGIN_NAMESPACE

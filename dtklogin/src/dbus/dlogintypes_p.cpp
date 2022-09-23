@@ -7,7 +7,7 @@
 
 DLOGIN_BEGIN_NAMESPACE
 
-QDBusArgument &operator<< (QDBusArgument &arg, const DBusScheduledShutdownValue &value)
+QDBusArgument &operator<<(QDBusArgument &arg, const DBusScheduledShutdownValue &value)
 {
     arg.beginStructure();
     arg << value.type;
@@ -16,7 +16,7 @@ QDBusArgument &operator<< (QDBusArgument &arg, const DBusScheduledShutdownValue 
     return arg;
 }
 
-const QDBusArgument &operator>> (const QDBusArgument &arg, DBusScheduledShutdownValue &value)
+const QDBusArgument &operator>>(const QDBusArgument &arg, DBusScheduledShutdownValue &value)
 {
     arg.beginStructure();
     arg >> value.type;
@@ -25,7 +25,7 @@ const QDBusArgument &operator>> (const QDBusArgument &arg, DBusScheduledShutdown
     return arg;
 }
 
-QDBusArgument &operator<< (QDBusArgument &arg, const DBusSessionProperty &property)
+QDBusArgument &operator<<(QDBusArgument &arg, const DBusSessionProperty &property)
 {
     arg.beginStructure();
     arg << property.name;
@@ -34,7 +34,7 @@ QDBusArgument &operator<< (QDBusArgument &arg, const DBusSessionProperty &proper
     return arg;
 }
 
-const QDBusArgument &operator>> (const QDBusArgument &arg, DBusSessionProperty &property)
+const QDBusArgument &operator>>(const QDBusArgument &arg, DBusSessionProperty &property)
 {
     arg.beginStructure();
     arg >> property.name;
@@ -43,33 +43,33 @@ const QDBusArgument &operator>> (const QDBusArgument &arg, DBusSessionProperty &
     return arg;
 }
 
-QDBusArgument &operator<< (QDBusArgument &arg, const DBusInhibitor &inhibitor)
+QDBusArgument &operator<<(QDBusArgument &arg, const DBusInhibitor &inhibitor)
 {
     arg.beginStructure();
     arg << inhibitor.what;
     arg << inhibitor.who;
     arg << inhibitor.why;
     arg << inhibitor.mode;
-    arg << inhibitor.uid;
-    arg << inhibitor.pid;
+    arg << inhibitor.UID;
+    arg << inhibitor.PID;
     arg.endStructure();
     return arg;
 }
 
-const QDBusArgument &operator>> (const QDBusArgument &arg, DBusInhibitor &inhibitor)
+const QDBusArgument &operator>>(const QDBusArgument &arg, DBusInhibitor &inhibitor)
 {
     arg.beginStructure();
     arg >> inhibitor.what;
     arg >> inhibitor.who;
     arg >> inhibitor.why;
     arg >> inhibitor.mode;
-    arg >> inhibitor.uid;
-    arg >> inhibitor.pid;
+    arg >> inhibitor.UID;
+    arg >> inhibitor.PID;
     arg.endStructure();
     return arg;
 }
 
-QDBusArgument &operator<< (QDBusArgument &arg, const DBusSeat &seat)
+QDBusArgument &operator<<(QDBusArgument &arg, const DBusSeat &seat)
 {
     arg.beginStructure();
     arg << seat.seatId;
@@ -78,7 +78,7 @@ QDBusArgument &operator<< (QDBusArgument &arg, const DBusSeat &seat)
     return arg;
 }
 
-const QDBusArgument &operator>> (const QDBusArgument &arg, DBusSeat &seat)
+const QDBusArgument &operator>>(const QDBusArgument &arg, DBusSeat &seat)
 {
     arg.beginStructure();
     arg >> seat.seatId;
@@ -87,7 +87,7 @@ const QDBusArgument &operator>> (const QDBusArgument &arg, DBusSeat &seat)
     return arg;
 }
 
-QDBusArgument &operator<< (QDBusArgument &arg, const DBusSession &session)
+QDBusArgument &operator<<(QDBusArgument &arg, const DBusSession &session)
 {
     arg.beginStructure();
     arg << session.sessionId;
@@ -99,7 +99,7 @@ QDBusArgument &operator<< (QDBusArgument &arg, const DBusSession &session)
     return arg;
 }
 
-const QDBusArgument &operator>> (const QDBusArgument &arg, DBusSession &session)
+const QDBusArgument &operator>>(const QDBusArgument &arg, DBusSession &session)
 {
     arg.beginStructure();
     arg >> session.sessionId;
@@ -111,7 +111,7 @@ const QDBusArgument &operator>> (const QDBusArgument &arg, DBusSession &session)
     return arg;
 }
 
-QDBusArgument &operator<< (QDBusArgument &arg, const DBusUser &user)
+QDBusArgument &operator<<(QDBusArgument &arg, const DBusUser &user)
 {
     arg.beginStructure();
     arg << user.userId;
@@ -121,7 +121,7 @@ QDBusArgument &operator<< (QDBusArgument &arg, const DBusUser &user)
     return arg;
 }
 
-const QDBusArgument &operator>> (const QDBusArgument &arg, DBusUser &user)
+const QDBusArgument &operator>>(const QDBusArgument &arg, DBusUser &user)
 {
     arg.beginStructure();
     arg >> user.userId;
@@ -131,7 +131,7 @@ const QDBusArgument &operator>> (const QDBusArgument &arg, DBusUser &user)
     return arg;
 }
 
-QDBusArgument &operator<< (QDBusArgument &arg, const DBusSessionPath &path)
+QDBusArgument &operator<<(QDBusArgument &arg, const DBusSessionPath &path)
 {
     arg.beginStructure();
     arg << path.sessionId;
@@ -140,7 +140,7 @@ QDBusArgument &operator<< (QDBusArgument &arg, const DBusSessionPath &path)
     return arg;
 }
 
-const QDBusArgument &operator>> (const QDBusArgument &arg, DBusSessionPath &path)
+const QDBusArgument &operator>>(const QDBusArgument &arg, DBusSessionPath &path)
 {
     arg.beginStructure();
     arg >> path.sessionId;
@@ -149,7 +149,7 @@ const QDBusArgument &operator>> (const QDBusArgument &arg, DBusSessionPath &path
     return arg;
 }
 
-QDBusArgument &operator<< (QDBusArgument &arg, const DBusUserPath &path)
+QDBusArgument &operator<<(QDBusArgument &arg, const DBusUserPath &path)
 {
     arg.beginStructure();
     arg << path.userId;
@@ -158,7 +158,7 @@ QDBusArgument &operator<< (QDBusArgument &arg, const DBusUserPath &path)
     return arg;
 }
 
-const QDBusArgument &operator>> (const QDBusArgument &arg, DBusUserPath &path)
+const QDBusArgument &operator>>(const QDBusArgument &arg, DBusUserPath &path)
 {
     arg.beginStructure();
     arg >> path.userId;

@@ -18,7 +18,11 @@ class DLoginManagerPrivate : public QObject
 {
     Q_OBJECT
 public:
-    explicit DLoginManagerPrivate(DLoginManager *parent = nullptr) : QObject(parent), q_ptr(parent) {}
+    explicit DLoginManagerPrivate(DLoginManager *parent = nullptr)
+        : QObject(parent)
+        , q_ptr(parent)
+    {
+    }
 
 public:
     Login1ManagerInterface *m_inter;

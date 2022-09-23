@@ -11,6 +11,7 @@
 #include <qobject.h>
 #include <qdebug.h>
 #include <qdbusconnection.h>
+#include <qdatetime.h>
 
 #include "login1seatinterface.h"
 
@@ -31,7 +32,7 @@ QList<QString> DLoginSeat::sessions() const
     Q_D(const DLoginSeat);
     const auto &result = d->m_inter->sessions();
     QList<QString> sessionIds;
-    for (auto sessionPath : result) {
+    for (const auto &sessionPath : result) {
         sessionIds.append(sessionPath.sessionId);
     }
     return sessionIds;
@@ -61,30 +62,28 @@ QString DLoginSeat::id() const
     return d->m_inter->id();
 }
 
-
 QString DLoginSeat::activeSession() const
 {
     Q_D(const DLoginSeat);
-    const auto & result = d->m_inter->activeSession();
+    const auto &result = d->m_inter->activeSession();
     return result.sessionId;
 }
 
-quint64 DLoginSeat::idleSinceHint() const
+QDateTime DLoginSeat::idleSinceHint() const
 {
     Q_D(const DLoginSeat);
-    return d->m_inter->idleSinceHint();
+    return QDateTime::fromMSecsSinceEpoch(d->m_inter->idleSinceHint());
 }
 
-quint64 DLoginSeat::idleSinceHintMonotonic() const
+QDateTime DLoginSeat::idleSinceHintMonotonic() const
 {
     Q_D(const DLoginSeat);
-    return d->m_inter->idleSinceHintMonotonic();
+    return QDateTime::fromMSecsSinceEpoch(d->m_inter->idleSinceHintMonotonic());
 }
 
 void DLoginSeat::activateSession(const QString &sessionId)
 {
     Q_D(DLoginSeat);
-    QVariantList args {QVariant::fromValue(sessionId)};
     QDBusPendingReply<> reply = d->m_inter->activateSession(sessionId);
     reply.waitForFinished();
     if (!reply.isValid()) {
@@ -132,5 +131,5 @@ void DLoginSeat::terminate()
     }
 }
 
-DLoginSeat::~DLoginSeat() {}
+DLoginSeat::~DLoginSeat() = default;
 DLOGIN_END_NAMESPACE

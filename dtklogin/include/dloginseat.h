@@ -15,9 +15,9 @@ class DLoginSeatPrivate;
 class DLoginSeat : public QObject
 {
     Q_OBJECT
+
 public:
-    explicit DLoginSeat(const QString &path, QObject *parent = nullptr);
-    virtual ~DLoginSeat();
+    ~DLoginSeat() override;
 
     Q_PROPERTY(QList<QString> sessions READ sessions);
     Q_PROPERTY(bool canGraphical READ canGraphical);
@@ -25,8 +25,8 @@ public:
     Q_PROPERTY(bool idleHint READ idleHint);
     Q_PROPERTY(QString id READ id);
     Q_PROPERTY(QString activeSession READ activeSession);
-    Q_PROPERTY(quint64 idleSinceHint READ idleSinceHint);
-    Q_PROPERTY(quint64 idleSinceHintMonotonic READ idleSinceHintMonotonic);
+    Q_PROPERTY(QDateTime idleSinceHint READ idleSinceHint);
+    Q_PROPERTY(QDateTime idleSinceHintMonotonic READ idleSinceHintMonotonic);
 
     bool canGraphical() const;
     bool canTTY() const;
@@ -34,8 +34,8 @@ public:
     QList<QString> sessions() const;
     QString id() const;
     QString activeSession() const;
-    quint64 idleSinceHint() const;
-    quint64 idleSinceHintMonotonic() const;
+    QDateTime idleSinceHint() const;
+    QDateTime idleSinceHintMonotonic() const;
 
 public slots:
     void activateSession(const QString &sessionId);
@@ -45,6 +45,8 @@ public slots:
     void terminate();
 
 private:
+    friend class DLoginManager;
+    explicit DLoginSeat(const QString &path, QObject *parent = nullptr);
     QScopedPointer<DLoginSeatPrivate> d_ptr;
     Q_DECLARE_PRIVATE(DLoginSeat)
 };

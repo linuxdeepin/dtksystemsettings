@@ -15,17 +15,17 @@ class Login1SessionInterface : public QObject
 public:
     static inline const char *staticInterfaceName() { return "org.freedesktop.login1.Session"; }
 
-    explicit Login1SessionInterface(const QString         &service,
-                                    const QString         &path,
+    explicit Login1SessionInterface(const QString &service,
+                                    const QString &path,
                                     QDBusConnection connection,
-                                    QObject               *parent = nullptr);
+                                    QObject *parent = nullptr);
     ~Login1SessionInterface() override;
 
     Q_PROPERTY(bool active READ active);
     Q_PROPERTY(bool idleHint READ idleHint);
     Q_PROPERTY(bool lockedHint READ lockedHint);
     Q_PROPERTY(bool remote READ remote);
-    Q_PROPERTY(QString _class READ _class);
+    Q_PROPERTY(QString sessionClass READ sessionClass);
     Q_PROPERTY(QString desktop READ desktop);
     Q_PROPERTY(QString display READ display);
     Q_PROPERTY(QString id READ id);
@@ -51,32 +51,32 @@ public:
     Q_PROPERTY(quint64 timestamp READ timestamp);
     Q_PROPERTY(quint64 timestampMonotonic READ timestampMonotonic);
 
-    bool         active() const;
-    bool         idleHint() const;
-    bool         lockedHint() const;
-    bool         remote() const;
-    QString      _class() const;
-    QString      desktop() const;
-    QString      display() const;
-    QString      id() const;
-    QString      name() const;
-    QString      remoteHost() const;
-    QString      remoteUser() const;
-    QString      scope() const;
-    QString      service() const;
-    QString      state() const;
-    QString      TTY() const;
-    QString      type() const;
+    bool active() const;
+    bool idleHint() const;
+    bool lockedHint() const;
+    bool remote() const;
+    QString sessionClass() const;
+    QString desktop() const;
+    QString display() const;
+    QString id() const;
+    QString name() const;
+    QString remoteHost() const;
+    QString remoteUser() const;
+    QString scope() const;
+    QString service() const;
+    QString state() const;
+    QString TTY() const;
+    QString type() const;
     DBusSeatPath seat() const;
     DBusUserPath user() const;
-    quint32      audit() const;
-    quint32      leader() const;
-    quint32      VTNr() const;
+    quint32 audit() const;
+    quint32 leader() const;
+    quint32 VTNr() const;
 
-    quint64      idleSinceHint() const;
-    quint64      idleSinceHintMonotonic() const;
-    quint64      timestamp() const;
-    quint64      timestampMonotonic() const;
+    quint64 idleSinceHint() const;
+    quint64 idleSinceHintMonotonic() const;
+    quint64 timestamp() const;
+    quint64 timestampMonotonic() const;
 signals:
     void locked();
     void pauseDevice(const quint32 value, const quint32 device, const QString &location);
@@ -96,8 +96,8 @@ public slots:
     QDBusPendingReply<> setType(const QString &type);
     QDBusPendingReply<> takeControl(bool force);
     QDBusPendingReply<int, bool> takeDevice(quint32 major, quint32 minor);
-    QDBusPendingReply<>                              terminate();
-    QDBusPendingReply<>                              unlock();
+    QDBusPendingReply<> terminate();
+    QDBusPendingReply<> unlock();
 
 private:
     DDBusInterface *m_interface;

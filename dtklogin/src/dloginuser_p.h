@@ -16,7 +16,10 @@ class DLoginUserPrivate : public QObject
 {
     Q_OBJECT
 public:
-    explicit DLoginUserPrivate(DLoginUser *parent = nullptr) : q_ptr(parent) {}
+    explicit DLoginUserPrivate(DLoginUser *parent = nullptr)
+        : q_ptr(parent)
+    {
+    }
 
 private:
     Login1UserInterface *m_inter;

@@ -7,6 +7,7 @@
 #include <qobject.h>
 
 #include "namespace.h"
+#include "dlogintypes.h"
 
 DLOGIN_BEGIN_NAMESPACE
 
@@ -15,14 +16,14 @@ class DLoginSessionPrivate;
 class DLoginSession : public QObject
 {
     Q_OBJECT
+
 public:
-    explicit DLoginSession(const QString &path, QObject *parent = nullptr);
     virtual ~DLoginSession();
     Q_PROPERTY(bool active READ active);
     Q_PROPERTY(bool idleHint READ idleHint);
     Q_PROPERTY(bool lockedHint READ lockedHint);
     Q_PROPERTY(bool remote READ remote);
-    Q_PROPERTY(QString _class READ _class);
+    Q_PROPERTY(SessionClass sessionClass READ sessionClass);
     Q_PROPERTY(QString desktop READ desktop);
     Q_PROPERTY(QString display READ display);
     Q_PROPERTY(QString id READ id);
@@ -31,10 +32,10 @@ public:
     Q_PROPERTY(QString remoteUser READ remoteUser);
     Q_PROPERTY(QString scope READ scope);
     Q_PROPERTY(QString service READ service);
-    Q_PROPERTY(QString state READ state);
+    Q_PROPERTY(SessionState state READ state);
     // Why TTY?
     Q_PROPERTY(QString TTY READ TTY);
-    Q_PROPERTY(QString type READ type);
+    Q_PROPERTY(SessionType type READ type);
 
     Q_PROPERTY(QString seat READ seat);
     Q_PROPERTY(quint32 user READ user);
@@ -43,16 +44,16 @@ public:
     Q_PROPERTY(quint32 leader READ leader);
     Q_PROPERTY(quint32 VTNr READ VTNr);
 
-    Q_PROPERTY(quint64 idleSinceHint READ idleSinceHint);
-    Q_PROPERTY(quint64 idleSinceHintMonotonic READ idleSinceHintMonotonic);
-    Q_PROPERTY(quint64 timestamp READ timestamp);
-    Q_PROPERTY(quint64 timestampMonotonic READ timestampMonotonic);
+    Q_PROPERTY(QDateTime idleSinceHint READ idleSinceHint);
+    Q_PROPERTY(QDateTime idleSinceHintMonotonic READ idleSinceHintMonotonic);
+    Q_PROPERTY(QDateTime createdTime READ createdTime);
+    Q_PROPERTY(QDateTime createdTimeMonotonic READ createdTimeMonotonic);
 
     bool active() const;
     bool idleHint() const;
     bool lockedHint() const;
     bool remote() const;
-    QString _class() const;
+    SessionClass sessionClass() const;
     QString desktop() const;
     QString display() const;
     QString id() const;
@@ -61,19 +62,19 @@ public:
     QString remoteUser() const;
     QString scope() const;
     QString service() const;
-    QString state() const;
+    SessionState state() const;
     QString TTY() const;
-    QString type() const;
+    SessionType type() const;
     QString seat() const;
     quint32 user() const;
     quint32 audit() const;
     quint32 leader() const;
     quint32 VTNr() const;
 
-    quint64 idleSinceHint() const;
-    quint64 idleSinceHintMonotonic() const;
-    quint64 timestamp() const;
-    quint64 timestampMonotonic() const;
+    QDateTime idleSinceHint() const;
+    QDateTime idleSinceHintMonotonic() const;
+    QDateTime createdTime() const;
+    QDateTime createdTimeMonotonic() const;
 
 signals:
     void locked();
@@ -108,6 +109,8 @@ public slots:
     bool enableAutostartWatch();
 
 private:
+    friend class DLoginManager;
+    explicit DLoginSession(const QString &path, QObject *parent = nullptr);
     QScopedPointer<DLoginSessionPrivate> d_ptr;
     Q_DECLARE_PRIVATE(DLoginSession)
 };

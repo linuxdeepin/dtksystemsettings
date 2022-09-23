@@ -8,10 +8,10 @@
 #include <qmetatype.h>
 DLOGIN_BEGIN_NAMESPACE
 
-Login1ManagerInterface::Login1ManagerInterface(const QString         &service,
-                                               const QString         &path,
+Login1ManagerInterface::Login1ManagerInterface(const QString &service,
+                                               const QString &path,
                                                QDBusConnection connection,
-                                               QObject               *parent)
+                                               QObject *parent)
     : QObject(parent)
     , m_interface(new DDBusInterface(service, path, staticInterfaceName(), connection, this))
 {
@@ -24,12 +24,22 @@ Login1ManagerInterface::Login1ManagerInterface(const QString         &service,
     // Relay signals
     connection.connect(service, path, staticInterfaceName(), "PrepareForShutdown", this, SLOT(prepareForShutdown(bool)));
     connection.connect(service, path, staticInterfaceName(), "PrepareForSleep", this, SLOT(prepareForSleep(bool)));
-    connection.connect(service, path, staticInterfaceName(), "SeatNew", this, SLOT(seatNew(const QString &, const QDBusObjectPath &)));
-    connection.connect(service, path, staticInterfaceName(), "SeatRemoved", this, SLOT(seatRemoved(const QString &, const QDBusObjectPath &)));
-    connection.connect(service, path, staticInterfaceName(), "SessionNew", this, SLOT(sessionNew(const QString &, const QDBusObjectPath &)));
-    connection.connect(service, path, staticInterfaceName(), "SessionRemoved", this, SLOT(sessionRemoved(const QString &, const QDBusObjectPath &)));
-    connection.connect(service, path, staticInterfaceName(), "UserNew", this, SLOT(userNew(const QString &, const QDBusObjectPath &)));
-    connection.connect(service, path, staticInterfaceName(), "UserRemoved", this, SLOT(userRemoved(const QString &, const QDBusObjectPath &)));
+    connection.connect(
+        service, path, staticInterfaceName(), "SeatNew", this, SLOT(seatNew(const QString &, const QDBusObjectPath &)));
+    connection.connect(
+        service, path, staticInterfaceName(), "SeatRemoved", this, SLOT(seatRemoved(const QString &, const QDBusObjectPath &)));
+    connection.connect(
+        service, path, staticInterfaceName(), "SessionNew", this, SLOT(sessionNew(const QString &, const QDBusObjectPath &)));
+    connection.connect(service,
+                       path,
+                       staticInterfaceName(),
+                       "SessionRemoved",
+                       this,
+                       SLOT(sessionRemoved(const QString &, const QDBusObjectPath &)));
+    connection.connect(
+        service, path, staticInterfaceName(), "UserNew", this, SLOT(userNew(const QString &, const QDBusObjectPath &)));
+    connection.connect(
+        service, path, staticInterfaceName(), "UserRemoved", this, SLOT(userRemoved(const QString &, const QDBusObjectPath &)));
 }
 
 Login1ManagerInterface::~Login1ManagerInterface() = default;
@@ -170,7 +180,6 @@ void Login1ManagerInterface::setWallMessage(const QString &wallMessage)
 {
     m_interface->setProperty("WallMessage", QVariant::fromValue(wallMessage));
 }
-
 
 DBusScheduledShutdownValue Login1ManagerInterface::scheduledShutdown() const
 {

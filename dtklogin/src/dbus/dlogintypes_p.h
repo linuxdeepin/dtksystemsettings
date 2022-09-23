@@ -35,8 +35,8 @@ struct DBusInhibitor
     QString who;
     QString why;
     QString mode;
-    uint    uid;
-    uint    pid;
+    quint32 UID;
+    quint32 PID;
     static void registerMetaType();
 };
 
@@ -107,4 +107,3 @@ Q_DECLARE_METATYPE(DLOGIN_NAMESPACE::DBusSession)
 Q_DECLARE_METATYPE(DLOGIN_NAMESPACE::DBusUser)
 Q_DECLARE_METATYPE(DLOGIN_NAMESPACE::DBusSessionPath)
 Q_DECLARE_METATYPE(DLOGIN_NAMESPACE::DBusUserPath)
-

@@ -7,6 +7,7 @@
 #include <qobject.h>
 
 #include "namespace.h"
+#include "dlogintypes.h"
 
 DLOGIN_BEGIN_NAMESPACE
 
@@ -16,8 +17,7 @@ class DLoginUser : public QObject
 {
     Q_OBJECT
 public:
-    explicit DLoginUser(const QString &path, QObject *parent = nullptr);
-    virtual ~DLoginUser();
+    ~DLoginUser() override;
 
     Q_PROPERTY(QList<QString> sessions READ sessions);
     Q_PROPERTY(bool idleHint READ idleHint);
@@ -26,14 +26,14 @@ public:
     Q_PROPERTY(QString runtimePath READ runtimePath);
     Q_PROPERTY(QString service READ service);
     Q_PROPERTY(QString slice READ slice);
-    Q_PROPERTY(QString state READ state);
+    Q_PROPERTY(UserState state READ state);
     Q_PROPERTY(QString display READ display);
     Q_PROPERTY(quint32 GID READ GID);
     Q_PROPERTY(quint32 UID READ UID);
-    Q_PROPERTY(quint64 idleSinceHint READ idleSinceHint);
-    Q_PROPERTY(quint64 idleSinceHintMonotonic READ idleSinceHintMonotonic);
-    Q_PROPERTY(quint64 timestamp READ timestamp);
-    Q_PROPERTY(quint64 timestampMonotonic READ timestampMonotonic);
+    Q_PROPERTY(QDateTime idleSinceHint READ idleSinceHint);
+    Q_PROPERTY(QDateTime idleSinceHintMonotonic READ idleSinceHintMonotonic);
+    Q_PROPERTY(QDateTime loginTime READ loginTime);
+    Q_PROPERTY(QDateTime loginTimeMonotonic READ loginTimeMonotonic);
 
     QList<QString> sessions() const;
     bool idleHint() const;
@@ -42,20 +42,22 @@ public:
     QString runtimePath() const;
     QString service() const;
     QString slice() const;
-    QString state() const;
+    UserState state() const;
     QString display() const;
     quint32 GID() const;
     quint32 UID() const;
-    quint64 idleSinceHint() const;
-    quint64 idleSinceHintMonotonic() const;
-    quint64 timestamp() const;
-    quint64 timestampMonotonic() const;
+    QDateTime idleSinceHint() const;
+    QDateTime idleSinceHintMonotonic() const;
+    QDateTime loginTime() const;
+    QDateTime loginTimeMonotonic() const;
 
 public slots:
     void kill(const int signalNumber);
     void terminate();
 
 private:
+    explicit DLoginUser(const QString &path, QObject *parent = nullptr);
+    friend class DLoginManager;
     QScopedPointer<DLoginUserPrivate> d_ptr;
     Q_DECLARE_PRIVATE(DLoginUser)
 };

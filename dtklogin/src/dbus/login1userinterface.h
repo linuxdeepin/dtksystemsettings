@@ -13,10 +13,10 @@ class Login1UserInterface : public QObject
     Q_OBJECT
 public:
     static inline const char *staticInterfaceName() { return "org.freedesktop.login1.User"; }
-    Login1UserInterface(const QString         &service,
-                        const QString         &path,
+    Login1UserInterface(const QString &service,
+                        const QString &path,
                         const QDBusConnection &connection,
-                        QObject               *parent = nullptr);
+                        QObject *parent = nullptr);
     ~Login1UserInterface() override;
 
     Q_PROPERTY(QList<DBusSessionPath> sessions READ sessions);
@@ -36,20 +36,20 @@ public:
     Q_PROPERTY(quint64 timestampMonotonic READ timestampMonotonic);
 
     QList<DBusSessionPath> sessions() const;
-    bool                   idleHint() const;
-    bool                   linger() const;
-    QString                name() const;
-    QString                runtimePath() const;
-    QString                service() const;
-    QString                slice() const;
-    QString                state() const;
-    DBusSessionPath        display() const;
-    quint32                GID() const;
-    quint32                UID() const;
-    quint64                idleSinceHint() const;
-    quint64                idleSinceHintMonotonic() const;
-    quint64                timestamp() const;
-    quint64                timestampMonotonic() const;
+    bool idleHint() const;
+    bool linger() const;
+    QString name() const;
+    QString runtimePath() const;
+    QString service() const;
+    QString slice() const;
+    QString state() const;
+    DBusSessionPath display() const;
+    quint32 GID() const;
+    quint32 UID() const;
+    quint64 idleSinceHint() const;
+    quint64 idleSinceHintMonotonic() const;
+    quint64 timestamp() const;
+    quint64 timestampMonotonic() const;
 public slots:
     QDBusPendingReply<> kill(int signalNumber);
     QDBusPendingReply<> terminate();
