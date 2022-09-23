@@ -4,23 +4,20 @@
 
 #pragma once
 
-#include <QtGlobal>
-#include <QList>
-#include <QObject>
-#include <QScopedPointer>
-#include <qdbuspendingreply.h>
 #include "ddbusinterface.h"
 #include "daccountstypes_p.h"
+#include <QDBusPendingReply>
+#include <QStringList>
 
 DACCOUNTS_BEGIN_NAMESPACE
 
-class DUserSystemInterface : public QObject
+class DSystemUserInterface : public QObject
 {
     Q_OBJECT
 
 public:
-    explicit DUserSystemInterface(const QString &path, QObject *parent = nullptr);
-    virtual ~DUserSystemInterface() = default;
+    explicit DSystemUserInterface(const QString &path, QObject *parent = nullptr);
+    virtual ~DSystemUserInterface() = default;
 
     Q_PROPERTY(bool AutomaticLogin READ automaticLogin WRITE setAutomaticLogin NOTIFY AutomaticLoginChanged)
     Q_PROPERTY(qint32 AccountType READ accountType NOTIFY AccountTypeChanged)
@@ -33,6 +30,8 @@ public:
     Q_PROPERTY(qint32 MaxPasswordAge READ maxPasswordAge WRITE setMaxPasswordAge NOTIFY MaxPasswordAgeChanged)
     Q_PROPERTY(bool NoPasswdLogin READ noPasswdLogin WRITE enableNoPasswdLogin NOTIFY NoPasswdLoginChanged)
     Q_PROPERTY(QString PasswordHint READ passwordHint WRITE setPasswordHint NOTIFY PasswordHintChanged)
+    Q_PROPERTY(bool Locked READ locked WRITE setLocked NOTIFY LockedChanged)
+    Q_PROPERTY(QString UUID READ UUID NOTIFY UUIDChanged)
 
     bool automaticLogin() const;
     qint32 accountType() const;
@@ -42,9 +41,11 @@ public:
     QString layout() const;
     QStringList groups() const;
     QString locale() const;
+    bool locked() const;
     qint32 maxPasswordAge() const;
     bool noPasswdLogin() const;
     QString passwordHint() const;
+    QString UUID() const;
 
 public slots:
     QDBusPendingReply<void> addGroup(const QString &group);
@@ -59,6 +60,7 @@ public slots:
     QDBusPendingReply<void> setLayout(const QString &layout);
     QDBusPendingReply<void> setGroups(const QStringList &groups);
     QDBusPendingReply<void> setLocale(const QString &locale);
+    QDBusPendingReply<void> setLocked(const bool locked);
     QDBusPendingReply<void> setMaxPasswordAge(qint32 nDays);
     QDBusPendingReply<void> setPassword(const QString &password);
     QDBusPendingReply<void> setPasswordHint(const QString &hint);
@@ -74,9 +76,11 @@ signals:
     void IconFileChanged(const QString iconURI);
     void LayoutChanged(const QString layout);
     void LocaleChanged(const QString locale);
+    void LockedChanged(const bool locked);
     void MaxPasswordAgeChanged(const qint32 nDays);
     void NoPasswdLoginChanged(const bool enabled);
     void PasswordHintChanged(const QString passwordHint);
+    void UUIDChanged(const QString UUID);
 
 private:
     QScopedPointer<DDBusInterface> m_inter;

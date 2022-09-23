@@ -3,14 +3,9 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
 #include "daccountstypes_p.h"
-#include "ddbusinterface.h"
-#include "userinterface.h"
-#include "dutils.h"
-#include <qdbusconnection.h>
-#include <qdbusinterface.h>
-#include <qdbuspendingreply.h>
-#include <qstringliteral.h>
-#include <qvariant.h>
+#include "duserinterface.h"
+#include "../passwd.h"
+#include "../dutils.h"
 
 DACCOUNTS_BEGIN_NAMESPACE
 
@@ -34,7 +29,7 @@ QList<LoginHistory> DUserInterface::loginHistorys() const
         LoginHistory history;
         history.loginTime = history_p.loginTime;
         history.logoutTime = history_p.logoutTime;
-        history.sessionInfo = std::move(history_p.sessionInfo);
+        history.sessionInfo = history_p.sessionInfo;
         loginHistory.push_back(std::move(history));
     }
     return loginHistory;
@@ -196,7 +191,7 @@ QDBusPendingReply<void> DUserInterface::setLocked(bool locked)
 
 QDBusPendingReply<void> DUserInterface::setPassword(const QString &password, const QString &hint)
 {
-    QVariantList args{QVariant::fromValue(Dutils::encryptPassword(password)), QVariant::fromValue(hint)};
+    QVariantList args{QVariant::fromValue(encryptPassword(password)), QVariant::fromValue(hint)};
     return m_inter->asyncCallWithArgumentList("SetPassword", args);
 }
 
@@ -234,6 +229,11 @@ QDBusPendingReply<void> DUserInterface::setXSession(const QString &x_session)
 {
     QVariantList args{QVariant::fromValue(x_session)};
     return m_inter->asyncCallWithArgumentList("SetXSession", args);
+}
+
+QString DUserInterface::encryptPassword(const QString &password) const
+{
+    return QString(mkpasswd(password.toStdString().c_str()));
 }
 
 DACCOUNTS_END_NAMESPACE

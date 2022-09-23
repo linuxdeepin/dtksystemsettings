@@ -4,11 +4,9 @@
 
 #pragma once
 
-#include <QtGlobal>
-#include <QList>
-#include <QObject>
+#include <QDBusPendingReply>
+#include <QStringList>
 #include <QScopedPointer>
-#include <qdbuspendingreply.h>
 #include "ddbusinterface.h"
 #include "daccountstypes.h"
 
@@ -20,12 +18,22 @@ class DSystemAccountsInterface : public QObject
 
 public:
     explicit DSystemAccountsInterface(QObject *parent = nullptr);
-    virtual ~DSystemAccountsInterface() = default;
+    ~DSystemAccountsInterface() = default;
 
 public slots:
-    QDBusPendingReply<QDBusObjectPath> createUser(const QString &name, const QString fullName, qint32 accountType);
+    QDBusPendingReply<QDBusObjectPath> createUser(const QString &name, const QString &fullName, qint32 accountType);
     QDBusPendingReply<void> deleteUser(const QString &name, bool rmFiles);
     QDBusPendingReply<QStringList> getPresetGroups(qint32 accountType);
+    QDBusPendingReply<bool, QString, qint32> isPasswordValid(const QString &password);
+    QDBusPendingReply<bool, QString, qint32> isUsernameValid(const QString &username);
+
+signals:
+    void ReceivedUserAdded(QString path);
+    void ReceivedUserDeleted(QString path);
+
+private slots:
+    void receiveUserAdded(QString user);
+    void receiveUserDeleted(QString user);
 
 private:
     QScopedPointer<DDBusInterface> m_inter;

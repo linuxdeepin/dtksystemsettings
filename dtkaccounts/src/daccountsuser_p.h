@@ -4,8 +4,9 @@
 
 #pragma once
 
-#include "dbus/userinterface.h"
-#include "dbus/systemuserinterface.h"
+#include "dbus/duserinterface.h"
+#include "dbus/dsystemuserinterface.h"
+#include <QDir>
 
 DACCOUNTS_BEGIN_NAMESPACE
 
@@ -15,11 +16,15 @@ class DAccountsUserPrivate : public QObject
 {
     Q_OBJECT
 public:
-    explicit DAccountsUserPrivate(const QString &path, DAccountsUser *parent = nullptr);
-    virtual ~DAccountsUserPrivate();
+    explicit DAccountsUserPrivate(const quint64 uid, DAccountsUser *parent = nullptr);
+    ~DAccountsUserPrivate() = default;
+
+    QList<QByteArray> getImageFromDir(const QDir &dir) const;
+    qint64 getCreatedTimeFromFile(const QString &file) const;
 
     DAccountsUser *q_ptr;
     DUserInterface *m_dUserInter;
+    DSystemUserInterface *m_dSystemUserInter;
     Q_DECLARE_PUBLIC(DAccountsUser)
 };
 

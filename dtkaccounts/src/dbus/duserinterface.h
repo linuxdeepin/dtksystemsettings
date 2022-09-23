@@ -4,14 +4,9 @@
 
 #pragma once
 
-#include <QtGlobal>
-#include <QList>
-#include <QObject>
-#include <QScopedPointer>
-#include <tuple>
+#include <QDBusPendingReply>
 #include "daccountstypes.h"
 #include "ddbusinterface.h"
-#include <qdbuspendingreply.h>
 
 DACCOUNTS_BEGIN_NAMESPACE
 
@@ -21,7 +16,7 @@ class DUserInterface : public QObject
 
 public:
     explicit DUserInterface(const QString &path, QObject *parent = nullptr);
-    virtual ~DUserInterface() = default;
+    ~DUserInterface() = default;
 
     Q_PROPERTY(QList<LoginHistory> LoginHistory READ loginHistorys)
     Q_PROPERTY(bool automaticLogin READ automaticLogin)
@@ -97,6 +92,7 @@ private slots:
     void receiveChanged();
 
 private:
+    QString encryptPassword(const QString &password) const;
     QScopedPointer<DDBusInterface> m_inter;
 };
 

@@ -2,14 +2,12 @@
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
-#include "accountsinterface.h"
-#include "ddbusinterface.h"
-#include <QVariant>
-#include <qdbusconnection.h>
+#include "daccountsinterface.h"
+#include <QDBusConnection>
 
 DACCOUNTS_BEGIN_NAMESPACE
 
-DAccounts::DAccounts(QObject *parent)
+DAccountsInterface::DAccountsInterface(QObject *parent)
     : QObject(parent)
 {
     const QString &Service = QStringLiteral("org.freedesktop.Accounts");
@@ -20,59 +18,60 @@ DAccounts::DAccounts(QObject *parent)
     QDBusConnection::systemBus().connect(Service, Path, Interface, "UserDeleted", this, "receiveUserDeleted");
 }
 
-QString DAccounts::daemonVersion() const
+QString DAccountsInterface::daemonVersion() const
 {
     return qdbus_cast<QString>(m_inter->property("DaemonVersion"));
 }
 
-QDBusPendingReply<QDBusObjectPath> DAccounts::cacheUser(const QString &name)
+QDBusPendingReply<QDBusObjectPath> DAccountsInterface::cacheUser(const QString &name)
 {
     QVariantList args{QVariant::fromValue(name)};
     return m_inter->asyncCallWithArgumentList("CacheUser", args);
 }
 
-QDBusPendingReply<QDBusObjectPath> DAccounts::createUser(const QString &name, const QString &fullname, const qint32 accountType)
+QDBusPendingReply<QDBusObjectPath>
+DAccountsInterface::createUser(const QString &name, const QString &fullname, const qint32 accountType)
 {
     QVariantList args{QVariant::fromValue(name), QVariant::fromValue(fullname), QVariant::fromValue(accountType)};
     return m_inter->asyncCallWithArgumentList("CreateUser", args);
 }
 
-QDBusPendingReply<void> DAccounts::deleteUser(const qint64 id, const bool removeFiles)
+QDBusPendingReply<void> DAccountsInterface::deleteUser(const qint64 id, const bool removeFiles)
 {
     QVariantList args{QVariant::fromValue(id), QVariant::fromValue(removeFiles)};
     auto userPath = findUserById(id);
     return m_inter->asyncCallWithArgumentList("DeleteUser", args);
 }
 
-QDBusPendingReply<QString> DAccounts::findUserById(const qint64 id)
+QDBusPendingReply<QDBusObjectPath> DAccountsInterface::findUserById(const qint64 id)
 {
     QVariantList args{QVariant::fromValue(id)};
     return m_inter->asyncCallWithArgumentList("FindUserById", args);
 }
 
-QDBusPendingReply<QString> DAccounts::findUserByName(const QString &name)
+QDBusPendingReply<QDBusObjectPath> DAccountsInterface::findUserByName(const QString &name)
 {
     QVariantList args{QVariant::fromValue(name)};
     return m_inter->asyncCallWithArgumentList("FindUserByName", args);
 }
 
-QDBusPendingReply<QList<QDBusObjectPath>> DAccounts::listCachedUsers()
+QDBusPendingReply<QList<QDBusObjectPath>> DAccountsInterface::listCachedUsers()
 {
     return m_inter->asyncCall("ListCachedUsers");
 }
 
-QDBusPendingReply<void> DAccounts::uncacheUser(const QString &name)
+QDBusPendingReply<void> DAccountsInterface::uncacheUser(const QString &name)
 {
     QVariantList args{QVariant::fromValue(name)};
     return m_inter->asyncCallWithArgumentList("UncacheUser", args);
 }
 
-void DAccounts::receiveUserAdded(QDBusObjectPath user)
+void DAccountsInterface::receiveUserAdded(const QDBusObjectPath &user)
 {
     emit ReceivedUserAdded(user.path().toUtf8());
 }
 
-void DAccounts::receiveUserDeleted(QDBusObjectPath user)
+void DAccountsInterface::receiveUserDeleted(const QDBusObjectPath &user)
 {
     emit ReceivedUserDeleted(user.path().toUtf8());
 }
