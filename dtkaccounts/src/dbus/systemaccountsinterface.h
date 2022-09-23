@@ -1,0 +1,34 @@
+// SPDX-FileCopyrightText: 2022 Uniontech Software Technology Co., Ltd.
+//
+// SPDX-License-Identifier: LGPL-3.0-or-later
+
+#pragma once
+
+#include <QtGlobal>
+#include <QList>
+#include <QObject>
+#include <QScopedPointer>
+#include <qdbuspendingreply.h>
+#include "ddbusinterface.h"
+#include "daccountstypes.h"
+
+DACCOUNTS_BEGIN_NAMESPACE
+
+class DSystemAccountsInterface : public QObject
+{
+    Q_OBJECT
+
+public:
+    explicit DSystemAccountsInterface(QObject *parent = nullptr);
+    virtual ~DSystemAccountsInterface() = default;
+
+public slots:
+    QDBusPendingReply<QDBusObjectPath> createUser(const QString &name, const QString fullName, qint32 accountType);
+    QDBusPendingReply<void> deleteUser(const QString &name, bool rmFiles);
+    QDBusPendingReply<QStringList> getPresetGroups(qint32 accountType);
+
+private:
+    QScopedPointer<DDBusInterface> m_inter;
+};
+
+DACCOUNTS_END_NAMESPACE

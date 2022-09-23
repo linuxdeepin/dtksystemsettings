@@ -5,7 +5,7 @@
 #pragma once
 
 #include "dbus/userinterface.h"
-#include "dbus/userddeinterface.h"
+#include "dbus/systemuserinterface.h"
 
 DACCOUNTS_BEGIN_NAMESPACE
 

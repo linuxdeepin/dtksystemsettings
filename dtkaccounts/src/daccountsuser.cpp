@@ -35,6 +35,8 @@ AccountTypes DAccountsUser::accountType() const
             return AccountTypes::Admin;
         case 2:
             return AccountTypes::Udcp;
+        default:
+            return AccountTypes::Unknown;  //函数不应该运行到这里
     }
 }
 
@@ -194,6 +196,8 @@ PasswdStatus DAccountsUser::passwordStatus() const
         return PasswdStatus::P;
     else if (mode == 2)
         return PasswdStatus::NP;
+    //函数不应该运行到这里
+    return PasswdStatus::Unknown;
 }
 
 QString DAccountsUser::shell() const
@@ -322,7 +326,7 @@ QList<qint32> DAccountsUser::secretQuestions() const
     return QList<qint32>();
 }
 
-void DAccountsUser::setSecretQuestions(const QList<Question> &newquestions)
+void DAccountsUser::setSecretQuestions(const QMap<qint32, QByteArray> &newquestions)
 {
     Q_UNUSED(newquestions)
 }
@@ -336,7 +340,7 @@ QList<qint32> DAccountsUser::vertifySecretQuestions(const QMap<qint32, QByteArra
 PasswdExpirInfo DAccountsUser::passwordExpirationInfo(qint64 &dayLeft) const
 {
     Q_UNUSED(dayLeft)
-    return PasswdExpirInfo::CLO;
+    return PasswdExpirInfo::Unknown;
 }
 
 DACCOUNTS_END_NAMESPACE

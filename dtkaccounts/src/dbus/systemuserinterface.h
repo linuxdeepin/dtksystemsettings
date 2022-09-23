@@ -1,0 +1,85 @@
+// SPDX-FileCopyrightText: 2022 Uniontech Software Technology Co., Ltd.
+//
+// SPDX-License-Identifier: LGPL-3.0-or-later
+
+#pragma once
+
+#include <QtGlobal>
+#include <QList>
+#include <QObject>
+#include <QScopedPointer>
+#include <qdbuspendingreply.h>
+#include "ddbusinterface.h"
+#include "daccountstypes_p.h"
+
+DACCOUNTS_BEGIN_NAMESPACE
+
+class DUserSystemInterface : public QObject
+{
+    Q_OBJECT
+
+public:
+    explicit DUserSystemInterface(const QString &path, QObject *parent = nullptr);
+    virtual ~DUserSystemInterface() = default;
+
+    Q_PROPERTY(bool AutomaticLogin READ automaticLogin WRITE setAutomaticLogin NOTIFY AutomaticLoginChanged)
+    Q_PROPERTY(qint32 AccountType READ accountType NOTIFY AccountTypeChanged)
+    Q_PROPERTY(QStringList Groups READ groups WRITE setGroups NOTIFY GroupsChanged)
+    Q_PROPERTY(QStringList HistoryLayout READ historyLayout WRITE setHistoryLayout NOTIFY HistoryLayoutChanged)
+    Q_PROPERTY(QStringList IconList READ iconList NOTIFY IconListChanged)
+    Q_PROPERTY(QString IconFile READ iconFile WRITE setIconFile NOTIFY IconFileChanged)
+    Q_PROPERTY(QString Layout READ layout WRITE setLayout NOTIFY LayoutChanged)
+    Q_PROPERTY(QString Locale READ locale WRITE setLocale NOTIFY LocaleChanged)
+    Q_PROPERTY(qint32 MaxPasswordAge READ maxPasswordAge WRITE setMaxPasswordAge NOTIFY MaxPasswordAgeChanged)
+    Q_PROPERTY(bool NoPasswdLogin READ noPasswdLogin WRITE enableNoPasswdLogin NOTIFY NoPasswdLoginChanged)
+    Q_PROPERTY(QString PasswordHint READ passwordHint WRITE setPasswordHint NOTIFY PasswordHintChanged)
+
+    bool automaticLogin() const;
+    qint32 accountType() const;
+    QStringList iconList() const;
+    QStringList historyLayout() const;
+    QString iconFile() const;
+    QString layout() const;
+    QStringList groups() const;
+    QString locale() const;
+    qint32 maxPasswordAge() const;
+    bool noPasswdLogin() const;
+    QString passwordHint() const;
+
+public slots:
+    QDBusPendingReply<void> addGroup(const QString &group);
+    QDBusPendingReply<void> deleteGroup(const QString &group);
+    QDBusPendingReply<void> deleteIconFile(const QString &icon);
+    QDBusPendingReply<void> enableNoPasswdLogin(const bool enabled);
+    QDBusPendingReply<ReminderInfo_p> getReminderInfo() const;
+    QDBusPendingReply<QList<qint32>> getSecretQuestions() const;
+    QDBusPendingReply<void> setAutomaticLogin(const bool enabled);
+    QDBusPendingReply<void> setHistoryLayout(const QStringList &list);
+    QDBusPendingReply<void> setIconFile(const QString &iconURI);
+    QDBusPendingReply<void> setLayout(const QString &layout);
+    QDBusPendingReply<void> setGroups(const QStringList &groups);
+    QDBusPendingReply<void> setLocale(const QString &locale);
+    QDBusPendingReply<void> setMaxPasswordAge(qint32 nDays);
+    QDBusPendingReply<void> setPassword(const QString &password);
+    QDBusPendingReply<void> setPasswordHint(const QString &hint);
+    QDBusPendingReply<void> setSecretQuestions(const QMap<qint32, QByteArray> &list);
+    QDBusPendingReply<QList<qint32>> verifySecretQuestions(const QMap<qint32, QString> &anwsers);
+
+signals:
+    void AutomaticLoginChanged(const bool enabled);
+    void AccountTypeChanged(const qint32 type);
+    void GroupsChanged(const QStringList groups);
+    void HistoryLayoutChanged(const QStringList list);
+    void IconListChanged(const QStringList list);
+    void IconFileChanged(const QString iconURI);
+    void LayoutChanged(const QString layout);
+    void LocaleChanged(const QString locale);
+    void MaxPasswordAgeChanged(const qint32 nDays);
+    void NoPasswdLoginChanged(const bool enabled);
+    void PasswordHintChanged(const QString passwordHint);
+
+private:
+    QScopedPointer<DDBusInterface> m_inter;
+};
+
+DACCOUNTS_END_NAMESPACE
