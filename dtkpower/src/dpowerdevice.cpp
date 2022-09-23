@@ -38,6 +38,12 @@ bool DPowerDevice::hasStatistics() const
     return d->m_device_inter->hasStatistics();
 }
 
+bool DPowerDevice::isPresent() const
+{
+    Q_D(const DPowerDevice);
+    return d->m_device_inter->isPresent();
+}
+
 bool DPowerDevice::isRechargeable() const
 {
     Q_D(const DPowerDevice);

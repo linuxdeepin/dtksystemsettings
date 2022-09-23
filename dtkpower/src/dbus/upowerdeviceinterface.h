@@ -26,6 +26,7 @@ public:
 
     Q_PROPERTY(bool HasHistory READ hasHistory)
     Q_PROPERTY(bool HasStatistics READ hasStatistics)
+    Q_PROPERTY(bool IsPresent READ isPresent)
     Q_PROPERTY(bool IsRechargeable READ isRechargeable)
     Q_PROPERTY(bool Online READ online)
     Q_PROPERTY(bool PowerSupply READ powerSupply)
@@ -58,6 +59,7 @@ public:
 
     bool hasHistory() const;
     bool hasStatistics() const;
+    bool isPresent() const;
     bool isRechargeable() const;
     bool online() const;
     bool powerSupply() const;

@@ -32,6 +32,11 @@ bool UPowerDeviceInterface::hasStatistics() const
     return qdbus_cast<bool>(m_inter->property("HasStatistics"));
 }
 
+bool UPowerDeviceInterface::isPresent() const
+{
+    return qdbus_cast<bool>(m_inter->property("IsPresent"));
+}
+
 bool UPowerDeviceInterface::isRechargeable() const
 {
     return qdbus_cast<bool>(m_inter->property("IsRechargeable"));
