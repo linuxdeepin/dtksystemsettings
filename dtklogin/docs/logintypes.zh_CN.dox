@@ -4,20 +4,20 @@
 
 /*!
 @~chinese
-@file dlogin1types.h
-dlogin1types.h 中定义了login1组件需要使用到的一些自定义数据结构。
+@file dlogintypes.h
+dlogintypes.h 中定义了login1组件需要使用到的一些自定义数据结构。
 
-@struct Dtk::Login1::ScheduledShutdownValue
+@struct Dtk::Login::ScheduledShutdownValue
 @brief 定义定时关机所用数据结构
 @param type: 电源管理类型：关机操作类型，可以是"poweroff"、"dry-poweroff"、"reboot"、"dry-reboot"、"halt "和 "dry-halt "之一
 @param usec: Unix时间戳，从1970年1月1日零点到现在的微秒数
 
-@struct Dtk::Login1::SessionProperty
+@struct Dtk::Login::SessionProperty
 @brief 定义Session所用的数据结构
 @param name: Session名
 @param var
 
-@struct Dtk::Login1::Inhibitor
+@struct Dtk::Login::Inhibitor
 @brief 一个结构数组
 @param what: 电源模式（关机，待机，休眠等）
 @param who: 发出抑制器的对象
@@ -26,30 +26,30 @@ dlogin1types.h 中定义了login1组件需要使用到的一些自定义数据�
 @param UID: 用户id
 @param PID: 进程id
 
-@struct Dtk::Login1::Seat
+@struct Dtk::Login::Seat
 @param seatId: seat编号,例如:“seat0”
 @param path: seat路径
 
-@struct Dtk::Login1::Session
+@struct Dtk::Login::Session
 @param sessionId: 会话编号
 @param userId: 用户编号
 @param username: 用户名
 @param seatId: seat编号,例如:“seat0”
 @param path: 路径
 
-@struct Dtk::Login1::User
+@struct Dtk::Login::User
 @param userId: 用户编号
 @param username: 用户名
 @param path: 路径
 
-@struct Dtk::Login1::SeatPath
-\sa Dtk::Login1::Seat
+@struct Dtk::Login::SeatPath
+\sa Dtk::Login::Seat
 
-@struct Dtk::Login1::SessionPath
+@struct Dtk::Login::SessionPath
 @param sessionId: 会话编号
 @param path: 路径
 
-@struct Dtk::Login1::UserPath
+@struct Dtk::Login::UserPath
 @param userId: 用户编号
 @param path: 路径
 
