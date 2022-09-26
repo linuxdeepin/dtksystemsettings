@@ -169,8 +169,8 @@ signals:
     void seatRemoved(const QString &seatId, const QString &seatPath);
     void sessionNew(const QString &sessionId, const QString &sessionPath);
     void sessionRemoved(const QString &sessionId, const QString &sessionPath);
-    void userNew(const uint UID, const QString &path);
-    void userRemoved(const uint UID, const QString &path);
+    void userNew(const quint32 UID, const QString &path);
+    void userRemoved(const quint32 UID, const QString &path);
 
 private:
     DDBusInterface *m_interface;

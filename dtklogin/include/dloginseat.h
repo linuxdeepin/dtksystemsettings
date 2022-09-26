@@ -42,7 +42,6 @@ public slots:
     void switchTo(const uint VTNr);
     void switchToNext();
     void switchToPrevious();
-    void terminate();
 
 private:
     friend class DLoginManager;

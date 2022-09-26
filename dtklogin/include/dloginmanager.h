@@ -104,7 +104,6 @@ signals:
 public slots:
     void activateSession(const QString &sessionId);
     void activateSessionOnSeat(const QString &sessionId, const QString &seatId);
-    void attachDevice(const QString &seatId, const QString &sysfsPath, const bool interactive);
     ExecuteStatus canHalt();
     ExecuteStatus canHibernate();
     ExecuteStatus canHybridSleep();
@@ -113,7 +112,6 @@ public slots:
     ExecuteStatus canSuspend();
     ExecuteStatus canSuspendThenHibernate();
     bool cancelScheduledShutdown();
-    void flushDevices(const bool interactive);
     QSharedPointer<DLoginSeat> findSeatById(const QString &seatId);
     QSharedPointer<DLoginSession> findSessionById(const QString &sessionId);
     QSharedPointer<DLoginSession> findSessionByPID(const quint32 PID);
@@ -133,7 +131,6 @@ public slots:
     void lockSessions();
     void powerOff(const bool interactive = false);
     void reboot(const bool interactive = false);
-    void releaseSession(const QString &sessionId);
     void scheduleShutdown(const QString &type, const quint64 usec);
     void setUserLinger(const quint32 UID, const bool enable, const bool interactive);
     void suspend(const bool interactive = false);
@@ -141,8 +138,6 @@ public slots:
     void terminateSeat(const QString &seatId);
     void terminateSession(const QString &sessionId);
     void terminateUser(const quint32 uid);
-    void unlockSession(const QString &sessionId);
-    void unlockSessions();
     void logout();
     QSharedPointer<DLoginSeat> currentSeat();
     QSharedPointer<DLoginSession> currentSession();

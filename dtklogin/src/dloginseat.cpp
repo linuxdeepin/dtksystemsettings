@@ -121,15 +121,5 @@ void DLoginSeat::switchToPrevious()
     }
 }
 
-void DLoginSeat::terminate()
-{
-    Q_D(DLoginSeat);
-    QDBusPendingReply<> reply = d->m_inter->terminate();
-    reply.waitForFinished();
-    if (!reply.isValid()) {
-        qWarning() << reply.error().message();
-    }
-}
-
 DLoginSeat::~DLoginSeat() = default;
 DLOGIN_END_NAMESPACE

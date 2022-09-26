@@ -13,6 +13,7 @@ DLOGIN_BEGIN_NAMESPACE
 class DLoginSession;
 class Login1SessionInterface;
 class StartManagerInterface;
+class SessionManagerInterface;
 
 class DLoginSessionPrivate : public QObject
 {
@@ -23,8 +24,12 @@ public:
     {
     }
 
+    bool enableAutostartWatch();
+
+private:
     Login1SessionInterface *m_inter;
     StartManagerInterface *m_startManagerInter;
+    SessionManagerInterface *m_sessionManagerInter;
     DLoginSession *q_ptr;
     QFileSystemWatcher *m_fileWatcher;
     Q_DECLARE_PUBLIC(DLoginSession)
