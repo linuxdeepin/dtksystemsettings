@@ -1,7 +1,3 @@
-// SPDX-FileCopyrightText: 2022 Uniontech Software Technology Co., Ltd.
-//
-// SPDX-License-Identifier: LGPL-3.0-or-later
-
 /*!
 @~chinese
 @file duser.h
@@ -105,7 +101,7 @@ duser.h是对于一组用于管理用户账户属性和相关信息的D-BUS接�
 @param[in] message 错误信息
 @return 空
 
-@fn QString DUser::lastError() const 
+@fn QString DUser::lastError() const
 @brief 上一次的错误信息
 @return 空
 
@@ -127,7 +123,7 @@ duser.h是对于一组用于管理用户账户属性和相关信息的D-BUS接�
 @fn void DUser::SetEmail(const QString &email)
 @brief 设置当前用户的邮箱
 @parma[in] email 一个代表邮箱地址的字符串
-@attention 在账户服务中设置的邮箱地址与邮箱客户端中设置的邮箱地址中不同时，邮件客户端可能默认设置地址为此处的配置 
+@attention 在账户服务中设置的邮箱地址与邮箱客户端中设置的邮箱地址中不同时，邮件客户端可能默认设置地址为此处的配置
 @return 空
 
 @fn void DUser::SetHomeDirectory(const QString &homedir)

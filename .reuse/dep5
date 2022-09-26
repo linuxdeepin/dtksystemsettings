@@ -1,7 +1,7 @@
 Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
-Upstream-Name: dframework
-Upstream-Contact: guoyao <guoyao@uniontech.com>
-Source: https://github.com/Groveer/dframework
+Upstream-Name: dtksystemsettings
+Upstream-Contact: UnionTech Software Technology Co., Ltd.
+Source: https://github.com/linuxdeepin/dtksystemsettings
 
 # Config files
 Files: .clang-format *.in
@@ -9,9 +9,9 @@ Copyright: None
 License: CC0-1.0
 
 # docs
-Files: *.md
-Copyright: None
-License: CC0-1.0
+Files: *.md *.dox
+Copyright: UnionTech Software Technology Co., Ltd.
+License: CC-BY-4.0
 
 # debian
 Files: debian/*
