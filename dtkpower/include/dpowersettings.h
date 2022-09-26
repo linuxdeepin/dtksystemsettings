@@ -23,8 +23,6 @@ public:
                    autoPowerSavingOnBatteryChanged);
     Q_PROPERTY(bool autoPowerSavingWhenBatteryLow READ autoPowerSavingWhenBatteryLow WRITE setAutoPowerSavingWhenBatteryLow NOTIFY
                    autoPowerSavingWhenBatteryLowChanged);
-    Q_PROPERTY(QString powerSavingBrightnessData READ powerSavingBrightnessData WRITE setPowerSavingBrightnessData NOTIFY
-                   powerSavingBrightnessDataChanged);
     Q_PROPERTY(quint32 powerSavingBrightnessDropPercent READ powerSavingBrightnessDropPercent WRITE
                    setPowerSavingBrightnessDropPercent NOTIFY powerSavingBrightnessDropPercentChanged);
     Q_PROPERTY(qint32 batteryLidClosedAction READ batteryLidClosedAction WRITE setBatteryLidClosedAction NOTIFY
@@ -63,8 +61,6 @@ public:
     void setAutoPowerSavingOnBattery(const bool enabled);
     bool autoPowerSavingWhenBatteryLow() const;
     void setAutoPowerSavingWhenBatteryLow(const bool enabled);
-    QString powerSavingBrightnessData() const;
-    void setPowerSavingBrightnessData(const QString &data);
     quint32 powerSavingBrightnessDropPercent() const;
     void setPowerSavingBrightnessDropPercent(const quint32 value);
     qint32 batteryLidClosedAction() const;
@@ -107,7 +103,6 @@ signals:
     void modeChanged(const QString &mode);
     void autoPowerSavingOnBatteryChanged(const bool enabled);
     void autoPowerSavingWhenBatteryLowChanged(const bool enabled);
-    void powerSavingBrightnessDataChanged(const QString &data);
     void powerSavingBrightnessDropPercentChanged(const quint32 value);
     void batteryLidClosedActionChanged(const qint32 value);
     void batteryLockDelayChanged(const qint32 value);
