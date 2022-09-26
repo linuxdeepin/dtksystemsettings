@@ -286,16 +286,6 @@ void DLoginManager::activateSessionOnSeat(const QString &sessionId, const QStrin
     }
 }
 
-void DLoginManager::attachDevice(const QString &seatId, const QString &sysfsPath, const bool interactive)
-{
-    Q_D(DLoginManager);
-    QDBusPendingReply<> reply = d->m_inter->attachDevice(seatId, sysfsPath, interactive);
-    reply.waitForFinished();
-    if (!reply.isValid()) {
-        qWarning() << reply.error().message();
-    }
-}
-
 ExecuteStatus DLoginManager::canHalt()
 {
     Q_D(DLoginManager);
@@ -390,16 +380,6 @@ bool DLoginManager::cancelScheduledShutdown()
         return false;
     }
     return reply.value();
-}
-
-void DLoginManager::flushDevices(const bool interactive)
-{
-    Q_D(DLoginManager);
-    QDBusPendingReply<> reply = d->m_inter->flushDevices(interactive);
-    reply.waitForFinished();
-    if (!reply.isValid()) {
-        qWarning() << reply.error().message();
-    }
 }
 
 QSharedPointer<DLoginSeat> DLoginManager::findSeatById(const QString &seatId)
@@ -628,16 +608,6 @@ void DLoginManager::reboot(const bool interactive)
     }
 }
 
-void DLoginManager::releaseSession(const QString &sessionId)
-{
-    Q_D(DLoginManager);
-    QDBusPendingReply<> reply = d->m_inter->releaseSession(sessionId);
-    reply.waitForFinished();
-    if (!reply.isValid()) {
-        qWarning() << reply.error().message();
-    }
-}
-
 void DLoginManager::scheduleShutdown(const QString &type, const quint64 usec)
 {
     Q_D(DLoginManager);
@@ -702,26 +672,6 @@ void DLoginManager::terminateUser(const quint32 uid)
 {
     Q_D(DLoginManager);
     QDBusPendingReply<> reply = d->m_inter->terminateUser(QString::number(uid));
-    reply.waitForFinished();
-    if (!reply.isValid()) {
-        qWarning() << reply.error().message();
-    }
-}
-
-void DLoginManager::unlockSession(const QString &sessionId)
-{
-    Q_D(DLoginManager);
-    QDBusPendingReply<> reply = d->m_inter->unlockSession(sessionId);
-    reply.waitForFinished();
-    if (!reply.isValid()) {
-        qWarning() << reply.error().message();
-    }
-}
-
-void DLoginManager::unlockSessions()
-{
-    Q_D(DLoginManager);
-    QDBusPendingReply<> reply = d->m_inter->unlockSessions();
     reply.waitForFinished();
     if (!reply.isValid()) {
         qWarning() << reply.error().message();

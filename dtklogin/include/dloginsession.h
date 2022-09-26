@@ -21,7 +21,7 @@ public:
     virtual ~DLoginSession();
     Q_PROPERTY(bool active READ active);
     Q_PROPERTY(bool idleHint READ idleHint);
-    Q_PROPERTY(bool lockedHint READ lockedHint);
+    Q_PROPERTY(bool locked READ locked WRITE setLocked NOTIFY lockedChanged);
     Q_PROPERTY(bool remote READ remote);
     Q_PROPERTY(SessionClass sessionClass READ sessionClass);
     Q_PROPERTY(QString desktop READ desktop);
@@ -51,7 +51,7 @@ public:
 
     bool active() const;
     bool idleHint() const;
-    bool lockedHint() const;
+    bool locked() const;
     bool remote() const;
     SessionClass sessionClass() const;
     QString desktop() const;
@@ -77,37 +77,23 @@ public:
     QDateTime createdTimeMonotonic() const;
 
 signals:
-    void locked();
-    void pauseDevice(const quint32 value, const quint32 device, const QString &location);
-    void resumeDevice(const quint32 value, const quint32 device, const int descriptor);
-    void unlocked();
+    void lockedChanged(const bool locked);
     void autostartAdded(const QString &fileName);
     void autostartRemoved(const QString &fileName);
 
 public slots:
     void activate();
-    void kill(const QString &who, const uint signalNumber);
+    void kill(const QString &who, const qint32 signalNumber);
     void lock();
-    void pauseDeviceComplete(const uint major, const uint minor);
-    void releaseControl();
-    void releaseDevice(const uint major, const uint minor);
-    void setBrightness(const QString &subsystem, const QString &name, const uint brightness);
     void setIdleHint(const bool idle);
-    void setLockedHint(const bool locked);
+    void setLocked(const bool locked);
     void setType(const QString &type);
-    void takeControl(const bool force);
-    std::tuple<int,  // fd
-               bool  // inactive
-               >
-    takeDevice(uint major, uint minor);
     void terminate();
-    void unlock();
     // Previous StartManager interfaces
     QStringList autostartList();
     bool isAutostart(const QString &fileName);
     bool removeAutostart(const QString &fileName);
     bool addAutostart(const QString &fileName);
-    bool enableAutostartWatch();
 
 private:
     friend class DLoginManager;
