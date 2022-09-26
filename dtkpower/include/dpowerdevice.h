@@ -5,6 +5,7 @@
 #pragma once
 
 #include <qscopedpointer.h>
+#include <qdatetime.h>
 
 #include "dpowertypes.h"
 #include "namespace.h"
@@ -19,37 +20,37 @@ class DPowerDevice : public QObject
 public:
     virtual ~DPowerDevice();
 
-    Q_PROPERTY(bool hasHistory READ hasHistory)
-    Q_PROPERTY(bool hasStatistics READ hasStatistics)
-    Q_PROPERTY(bool IsPresent READ isPresent)
-    Q_PROPERTY(bool isRechargeable READ isRechargeable)
-    Q_PROPERTY(bool online READ online)
-    Q_PROPERTY(bool powerSupply READ powerSupply)
-    Q_PROPERTY(double capacity READ capacity)
-    Q_PROPERTY(double energy READ energy NOTIFY energyChanged)
-    Q_PROPERTY(double energyEmpty READ energyEmpty)
-    Q_PROPERTY(double energyFull READ energyFull)
-    Q_PROPERTY(double energyFullDesign READ energyFullDesign)
-    Q_PROPERTY(double energyRate READ energyRate NOTIFY energyRateChanged)
-    Q_PROPERTY(double luminosity READ luminosity)
-    Q_PROPERTY(double percentage READ percentage NOTIFY percentageChanged)
-    Q_PROPERTY(double temperature READ temperature)
-    Q_PROPERTY(double voltage READ voltage)
-    Q_PROPERTY(uint chargeCycles READ chargeCycles)
-    Q_PROPERTY(quint64 timeToEmpty READ timeToEmpty NOTIFY timeToEmptyChanged)
-    Q_PROPERTY(quint64 timeToFull READ timeToFull NOTIFY timeToFullChanged)
-    Q_PROPERTY(QString iconName READ iconName NOTIFY iconNameChanged)
-    Q_PROPERTY(QString model READ model)
-    Q_PROPERTY(QString nativePath READ nativePath)
-    Q_PROPERTY(QString serial READ serial)
-    Q_PROPERTY(QString vendor READ vendor)
-    Q_PROPERTY(uint batteryLevel READ batteryLevel)
-    Q_PROPERTY(uint state READ state)
-    Q_PROPERTY(uint technology READ technology)
-    Q_PROPERTY(uint type READ type)
-    Q_PROPERTY(uint warningLevel READ warningLevel)
-    Q_PROPERTY(quint64 updateTime READ updateTime NOTIFY updateTimeChanged)
-    Q_PROPERTY(QString deviceName READ deviceName)
+    Q_PROPERTY(bool hasHistory READ hasHistory);
+    Q_PROPERTY(bool hasStatistics READ hasStatistics);
+    Q_PROPERTY(bool IsPresent READ isPresent);
+    Q_PROPERTY(bool isRechargeable READ isRechargeable);
+    Q_PROPERTY(bool online READ online);
+    Q_PROPERTY(bool powerSupply READ powerSupply);
+    Q_PROPERTY(double capacity READ capacity);
+    Q_PROPERTY(double energy READ energy NOTIFY energyChanged);
+    Q_PROPERTY(double energyEmpty READ energyEmpty);
+    Q_PROPERTY(double energyFull READ energyFull);
+    Q_PROPERTY(double energyFullDesign READ energyFullDesign);
+    Q_PROPERTY(double energyRate READ energyRate NOTIFY energyRateChanged);
+    Q_PROPERTY(double luminosity READ luminosity);
+    Q_PROPERTY(double percentage READ percentage NOTIFY percentageChanged);
+    Q_PROPERTY(double temperature READ temperature);
+    Q_PROPERTY(double voltage READ voltage);
+    Q_PROPERTY(uint chargeCycles READ chargeCycles);
+    Q_PROPERTY(quint64 timeToEmpty READ timeToEmpty NOTIFY timeToEmptyChanged);
+    Q_PROPERTY(quint64 timeToFull READ timeToFull NOTIFY timeToFullChanged);
+    Q_PROPERTY(QString iconName READ iconName NOTIFY iconNameChanged);
+    Q_PROPERTY(QString model READ model);
+    Q_PROPERTY(QString nativePath READ nativePath);
+    Q_PROPERTY(QString serial READ serial);
+    Q_PROPERTY(QString vendor READ vendor);
+    Q_PROPERTY(uint batteryLevel READ batteryLevel);
+    Q_PROPERTY(uint state READ state);
+    Q_PROPERTY(uint technology READ technology);
+    Q_PROPERTY(uint type READ type);
+    Q_PROPERTY(uint warningLevel READ warningLevel);
+    Q_PROPERTY(QDateTime updateTime READ updateTime NOTIFY updateTimeChanged);
+    Q_PROPERTY(QString deviceName READ deviceName);
 
     bool hasHistory() const;
     bool hasStatistics() const;
@@ -80,7 +81,7 @@ public:
     quint32 technology() const;
     quint32 type() const;
     quint32 warningLevel() const;
-    quint64 updateTime() const;  // TODO:更换为qdatetime
+    QDateTime updateTime() const;
     QString deviceName() const;
 
 signals:

@@ -187,9 +187,11 @@ DPowerDevice类
     - **4:** 临界
     - **5:** Action
 
-@fn quint64 DPowerDevice::updateTime()
+@fn QDateTime DPowerDevice::updateTime()
 @brief 从电源读取数据的时间点 (从世界协调时1970年1月1日开始的0:00秒)。（本质还是unix时间戳）
-@return 无符号长整数
+@return 返回为一个qdatetime对象
+\sa [QDateTime使用方法](https://doc.qt.io/qt-5/qdatetime.html)
+@note 返回的时间并不直接可用，返回是是世界标准时间GMT，需要根据实际情况调整时区增减
 
 
 @fn QString DPowerDevice::lastError()
