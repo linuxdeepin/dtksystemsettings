@@ -25,10 +25,6 @@ void DPowerSettingsPrivate::connectDBusSignal()
             q,
             &DPowerSettings::autoPowerSavingWhenBatteryLowChanged);
     connect(m_systemPowerInter,
-            &SystemPowerInterface::PowerSavingModeBrightnessDataChanged,
-            q,
-            &DPowerSettings::powerSavingBrightnessDataChanged);
-    connect(m_systemPowerInter,
             &SystemPowerInterface::PowerSavingModeBrightnessDropPercentChanged,
             q,
             &DPowerSettings::powerSavingBrightnessDropPercentChanged);
@@ -154,18 +150,6 @@ void DPowerSettings::setAutoPowerSavingWhenBatteryLow(const bool enabled)
 {
     Q_D(DPowerSettings);
     d->m_systemPowerInter->setPowerSavingModeAutoWhenBatteryLow(enabled);
-}
-
-QString DPowerSettings::powerSavingBrightnessData() const
-{
-    Q_D(const DPowerSettings);
-    return d->m_systemPowerInter->powerSavingModeBrightnessData();
-}
-
-void DPowerSettings::setPowerSavingBrightnessData(const QString &data)
-{
-    Q_D(DPowerSettings);
-    d->m_systemPowerInter->setPowerSavingModeBrightnessData(data);
 }
 
 quint32 DPowerSettings::powerSavingBrightnessDropPercent() const

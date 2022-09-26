@@ -23,8 +23,6 @@ public:
     Q_PROPERTY(bool PowerSavingModeAuto READ powerSavingModeAuto WRITE setPowerSavingModeAuto NOTIFY PowerSavingModeAutoChanged);
     Q_PROPERTY(bool PowerSavingModeAutoWhenBatteryLow READ powerSavingModeAutoWhenBatteryLow WRITE
                    setPowerSavingModeAutoWhenBatteryLow NOTIFY PowerSavingModeAutoWhenBatteryLowChanged);
-    Q_PROPERTY(QString PowerSavingModeBrightnessData READ powerSavingModeBrightnessData WRITE
-                   setPowerSavingModeBrightnessData NOTIFY PowerSavingModeBrightnessDataChanged);
     Q_PROPERTY(quint32 PowerSavingModeBrightnessDropPercent READ powerSavingModeBrightnessDropPercent WRITE
                    setPowerSavingModeBrightnessDropPercent NOTIFY PowerSavingModeBrightnessDropPercentChanged);
     inline QString cpuGovernor() const { return qdbus_cast<QString>(m_inter->property("CpuGovernor")); }
@@ -37,10 +35,6 @@ public:
     inline void setPowerSavingModeAutoWhenBatteryLow(const bool value) {
         m_inter->setProperty("PowerSavingModeAutWhenBatteryLow", QVariant::fromValue(value));
     }
-    inline QString powerSavingModeBrightnessData() const { return qdbus_cast<QString>(m_inter->property("PowerSavingModeBrightnessData")); }
-    inline void setPowerSavingModeBrightnessData(const QString &value) {
-        m_inter->setProperty("PowerSavingModeBrightnessData", QVariant::fromValue(value));
-    }
     inline quint32 powerSavingModeBrightnessDropPercent() const { return qdbus_cast<quint32>(m_inter->property("PowerSavingModeBrightnessDropPercent")); }
     inline void setPowerSavingModeBrightnessDropPercent(const quint32 &value) {
         m_inter->setProperty("PowerSavingModeBrightnessDropPercent", QVariant::fromValue(value));
@@ -51,7 +45,6 @@ signals:
     void ModeChanged(const QString &value);
     void PowerSavingModeAutoChanged(const bool value);
     void PowerSavingModeAutoWhenBatteryLowChanged(const bool value);
-    void PowerSavingModeBrightnessDataChanged(const QString &value);
     void PowerSavingModeBrightnessDropPercentChanged(const quint32 value);
 
 public slots:
