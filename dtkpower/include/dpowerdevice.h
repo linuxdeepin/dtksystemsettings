@@ -6,7 +6,6 @@
 
 #include <qscopedpointer.h>
 
-#include "dpowermanager.h"
 #include "dpowertypes.h"
 #include "namespace.h"
 
@@ -105,7 +104,6 @@ private:
     explicit DPowerDevice(const QString &name, QObject *parent = nullptr);
     Q_DISABLE_COPY(DPowerDevice)
 
-    friend QSharedPointer<DPowerDevice> DPowerManager::displayDevice() const;
-    friend QSharedPointer<DPowerDevice> DPowerManager::findDeviceByName(const QString &name) const;
+    friend class DPowerManager;
 };
 DPOWER_END_NAMESPACE
