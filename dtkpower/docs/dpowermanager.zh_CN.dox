@@ -24,18 +24,23 @@ DPowerManager类
 @brief 系统是否使用电池电源运行
 @return 布尔值
 
-@fn QString DPowerManager::daemonVersion() 
+@fn QString DPowerManager::daemonVersion()
 @brief 守护程序版本
 @return 返回upower守护程序版本
 
-@fn QStringList DPowerManager::enumerateDevices()
-@brief 枚举电源设备，将此计算机上的电源设备以QStringList的方式列举
-@return 返回电源设备列表
+@fn QSharedPointer<DPowerDevice> DPowerManager::displayDevice()
+@brief 当前显示的电源设备（这是一个表示要在桌面环境中显示的状态图标的复合设备，docker栏显示的电源图标指向的电源设备）
+@return 返回一个device对象
 
-@fn QString DPowerManager::getDisplayDevice()
-@brief 获取对象“DisplayDevice”，这是一个表示要在桌面环境中显示的状态图标的复合设备。您也可以直接访问该对象，因为它的路径为 /org/freedesktop/UPower/devices/DisplayDevice。
-    将定义以下标准 org.freedesktop.UPower.Device 属性（仅IsPresent具有特殊含义）
-@return 返回被display的设备路径：一般情况：`/org/freedesktop/UPower/devices/DisplayDevice`
+@fn QSharedPointer<DPowerDevice> DPowerManager::findDeviceByName(const QString &name)
+@brief 通过设备名创建设备对象
+@param[in] 传入设备名，设备名获取见 DPowerManager::devices()
+@note 注意，请使用DPowerManager::devices() 返回的电源设备名称，若不符将会返回一个nullptr.
+@return 返回一个device对象
+
+@fn QStringList DPowerManager::devices()
+@brief 枚举电源设备，将此计算机上的电源设备以QStringList的方式列举
+@return 将电源设备名称作为列表返回
 
 @fn QString DPowerManager::getCriticalAction()
 @brief 获取当电源严重不足的情况下，电脑采取的操作

@@ -53,22 +53,22 @@ DPowerDevice类
 @brief 电源中当前可用的能量 (以Wh为单位)
 @note 仅当type属性类型具有值`battery`时，此属性才有效
 @return 双精度浮点数
- 
+
 @fn double DPowerDevice::energyEmpty()
 @brief 当电源被认为是空的时，电源中的能量 (以Wh为单位)
 @note 仅当type属性类型具有值`battery`时，此属性才有效
 @return 双精度浮点数
- 
+
 @fn double DPowerDevice::energyFull()
 @brief 当电源被认为充满时，电源中的能量 (以Wh为单位)
 @note 仅当type属性类型具有值`battery`时，此属性才有效
 @return 双精度浮点数
- 
+
 @fn double DPowerDevice::energyFullDesign()
 @brief电池设计的最大容量，以Wh作为单位
 @note 仅当type属性类型具有值`battery`时，此属性才有效
 @return 双精度浮点数
- 
+
 @fn double DPowerDevice::energyRate()
 @brief 电源消耗的能量，以W为单位。如果是正数，电源正在放电，如果是负数，电源正在充电
 @note 仅当type属性类型具有值`battery`时，此属性才有效
@@ -134,7 +134,7 @@ DPowerDevice类
 @fn uint DPowerDevice::batteryLevel()
 @brief 不报告百分比而是报告粗略电池电量的设备的电池电量。如果该值为None，
     则该设备不支持粗略的电池报告，应改用百分比
-@return 
+@return
     - **0:** 未知
     - **1:** 无（电池不使用粗略级别的电池报告）
     - **3:** 低
@@ -146,19 +146,19 @@ DPowerDevice类
 @fn uint DPowerDevice::state()
 @brief 电池电量状态
 @note 仅当type属性类型具有值`battery`时，此属性才有效
-@return 
-    - **0:** 未知    
-    - **1:** 充电    
-    - **2:** 未充电    
-    - **3:** 空    
-    - **4:** 充满电    
-    - **5:** 待充电    
-    - **6:** 待放电    
+@return
+    - **0:** 未知
+    - **1:** 充电
+    - **2:** 未充电
+    - **3:** 空
+    - **4:** 充满电
+    - **5:** 待充电
+    - **6:** 待放电
 
 @fn uint DPowerDevice::technology()
 @brief 电池使用技术
 @note 仅当type属性类型具有值`battery`时，此属性才有效
-@return 
+@return
     - **0:** 未知
     - **1:** 锂离子
     - **2:** 锂聚合物电池
@@ -170,7 +170,7 @@ DPowerDevice类
 @fn uint DPowerDevice::type()
 @brief 电源类型
 @note power-supply 如果该值设置为“电池”，则在将其视为笔记本电脑电池之前 ，您需要验证该属性的值是否为“真”。否则，它很可能是未知类型设备的电池。
-@return 
+@return
     - **0:** Unknown
     - **1:** 线路电源
     - **2:** 电池
@@ -183,7 +183,7 @@ DPowerDevice类
 
 @fn uint DPowerDevice::warningLevel()
 @brief 电池警告级别
-@return 
+@return
     - **0:** 未知
     - **1:** 无
     - **2:** 放电（仅适用于UPS不间断电源）
