@@ -1,0 +1,181 @@
+// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+//
+// SPDX-License-Identifier: LGPL-3.0-or-later
+
+/*!
+@~chinese
+@file dpowersettings.h
+
+dpowersettings类是对于dde桌面环境下的电源设备进行电源模式设置和屏幕亮度调整的类，目前依赖于dde-daemon进行实现
+
+@class Dtk::Power::DPowerSettings dpowersettings.h
+@brief DPowerSettings class.
+DPowerSettings类
+
+@fn QString DPowerSettings::cpuGovernor() const
+@brief 获取当前cpu电源策略
+@return 返回字符串，为当前cpu电源策略
+
+@fn QString DPowerSettings::mode() const
+@brief 获取当前系统电源策略
+@note 系统电源策略不等同与cpu电源策略，系统电源策略是指的是整个平台的设置，包括网卡cpu、gpu和屏幕亮度
+@return 返回字符串，为当前系统电源策略
+
+@fn QString DPowerSettings::setMode(const QString &mode)
+@brief 设置当前系统电源策略
+@note 系统电源策略不等同与cpu电源策略，系统电源策略是指的是整个平台的设置，包括网卡cpu、gpu和屏幕亮度
+@param[in] mode: 电源策略：performance(性能优先) balance(平衡) powersave(节能)
+
+@fn bool DPowerSettings::autoPowerSavingOnBattery() const
+@brief 是否开启在使用电池的时候开启自动节能模式，断开ac电源之后自动调整电源模式到节能
+@return 布尔值
+
+@fn void DPowerSettings::setAutoPowerSavingOnBattery(const bool enabled)
+@brief 设置开启在使用电池的时候开启自动节能模式，断开ac电源之后自动调整电源模式到节能
+@param[in] 布尔值，默认为enabled
+
+@fn bool DPowerSettings::autoPowerSavingWhenBatteryLow() const
+@brief 是否开启在使用电池且电量低的时候开启自动节能模式，电池电量低将自动调整电源模式到节能
+@return 布尔值
+
+@fn void DPowerSettings::setAutoPowerSavingOnBattery(const bool enabled)
+@brief 设置开启在使用电池且电量低的时候开启自动节能模式，电池电量低将自动调整电源模式到节能
+@param[in] 布尔值，默认为enabled
+
+@fn QString DPowerSettings::powerSavingBrightnessData()
+@brief 获取亮度设置信息，亮度设置信息有屏幕信息和其他内容。
+@return 字符串
+
+    // QString powerSavingBrightnessData() const;
+    // void setPowerSavingBrightnessData(const QString &data);
+    // quint32 powerSavingBrightnessDropPercent() const;
+    // void setPowerSavingBrightnessDropPercent(const quint32 value);
+
+
+@fn qint32 DPowerSettings::batteryLidClosedAction() const
+@brief 获取使用电池时笔记本盖子关闭时的行为
+@return 返回一个枚举类型 //TODO:确认枚举
+
+@fn void DPowerSettings::setBatteryLidClosedAction(const qint32 value)
+@brief 设置使用电池时笔记本盖子关闭行为
+@param[in] 传入一个int值 //TODO:确认枚举
+
+@fn qint32 DPowerSettings::batteryLockDelay() const
+@brief 使用电池的时锁屏延时
+@return
+
+@fn void DPowerSettings::setBatteryLockDelay(const qint32 value)
+@brief 设置使用电池时锁屏延时
+
+
+@fn qint32 DPowerSettings::batteryPressPowerBtnAction() const
+@brief 使用电池时电源按钮被按下的行为
+@return
+
+@fn void DPowerSettings::setBatteryPressPowerBtnAction(const qint32 value)
+@brief 设置使用电池时电源按钮按下的行为
+
+@fn qint32 DPowerSettings::batteryScreenBlackDelay() const
+@brief 使用电池时关闭屏幕延时
+@return 延时时间
+
+@fn void DPowerSettings::setBatteryScreenBlackDelay(const qint32 value)
+@brief 设置使用电池时关闭屏幕延时
+@param[in] 延时时间
+
+@fn qint32 DPowerSettings::batteryScreensaverDelay() const
+@brief 使用电池时屏幕变暗省电的延时
+@return 延时时间
+
+@fn void DPowerSettings::setBatteryScreensaverDelay(const qint32 value)
+@brief 设置使用电池时屏幕变暗省电延时
+@param[in] 延时时间
+
+@fn qint32 DPowerSettings::batterySleepDelay() const
+@brief 使用电池时休眠延时
+@return 延时时间
+
+@fn void DPowerSettings::setBatterySleepDelay(const qint32 value)
+@brief 设置使用电池时休眠延时
+@pragma[in] 延时时间
+
+@fn qint32 DPowerSettings::linePowerLidClosedAction() const
+@brief 获取使用电源时笔记本盖子关闭时的行为
+@return 返回一个枚举类型 //TODO:确认枚举
+
+@fn void DPowerSettings::setLinePowerLidClosedAction(const qint32 value)
+@brief 设置使用电源时笔记本盖子关闭行为
+@param[in] 传入一个int值 //TODO:确认枚举
+
+@fn qint32 DPowerSettings::linePowerLockDelay() const
+@brief 使用电源的时锁屏延时
+@return
+
+@fn void DPowerSettings::setLinePowerLockDelay(const qint32 value)
+@brief 设置使用电源时锁屏延时
+
+
+@fn qint32 DPowerSettings::linePowerPressPowerBtnAction() const
+@brief 使用电源时电源按钮被按下的行为
+@return
+
+@fn void DPowerSettings::setLinePowerPressPowerBtnAction(const qint32 value)
+@brief 设置使用电源时电源按钮按下的行为
+
+@fn qint32 DPowerSettings::linePowerScreenBlackDelay() const
+@brief 使用电源时关闭屏幕延时
+@return 延时时间
+
+@fn void DPowerSettings::setLinePowerScreenBlackDelay(const qint32 value)
+@brief 设置使用电源时关闭屏幕延时
+@param[in] 延时时间
+
+@fn qint32 DPowerSettings::linePowerScreensaverDelay() const
+@brief 使用电源时屏幕变暗省电的延时
+@return 延时时间
+
+@fn void DPowerSettings::setLinePowerScreensaverDelay(const qint32 value)
+@brief 设置使用电源时屏幕变暗省电延时
+@param[in] 延时时间
+
+@fn qint32 DPowerSettings::linePowerSleepDelay() const
+@brief 使用电源时休眠延时
+@return 延时时间
+
+@fn void DPowerSettings::setLinePowerSleepDelay(const qint32 value)
+@brief 设置使用电源时休眠延时
+@pragma[in] 延时时间
+
+@fn qint32 DPowerSettings::lowPowerAutoSleepThreshold() const
+//TODO: 不知道含义
+
+@fn void DPowerSettings::setLowPowerAutoSleepThreshold(const qint32 value)
+//TODO: 不知道含义
+
+@fn bool DPowerSettings::lowPowerNotifyEnable() const
+@brief 是否打开低电量通知
+@return 返回布尔值
+
+@fn void DPowerSettings::setLowPowerNotifyEnable(const bool value)
+@brief 设置打开低电量通知
+@param[in] 布尔值
+
+@fn qint32 DPowerSettings::lowPowerNotifyThreshold() const
+//TODO: 不知道含义
+
+@fn void DPowerSettings::setLowPowerNotifyThreshold(const qint32 value)
+//TODO: 不知道含义
+
+@fn bool DPowerSettings::screenBlackLock() const
+@brief 关闭屏幕并锁屏
+
+@fn void DPowerSettings::setScreenBlackLock(const bool value)
+@brief 设置关闭屏幕并锁屏
+//TODO: 不知道含义
+
+@fn bool DPowerSettings::sleepLock() const
+//TODO: 不知道含义
+
+@fn void DPowerSettings::setSleepLock(const bool value)
+//TODO: 不知道含义
+*/
