@@ -15,7 +15,6 @@ class DKbdBacklight : public QObject
 {
     Q_OBJECT
 public:
-    explicit DKbdBacklight(QObject *parent = nullptr);
     virtual ~DKbdBacklight();
 
 signals:
@@ -30,6 +29,11 @@ public slots:
 private:
     QScopedPointer<DKbdBacklightPrivate> d_ptr;
     Q_DECLARE_PRIVATE(DKbdBacklight)
+
+    explicit DKbdBacklight(QObject *parent = nullptr);
+    Q_DISABLE_COPY(DKbdBacklight)
+
+    friend class DPowerManager;
 };
 
 DPOWER_END_NAMESPACE

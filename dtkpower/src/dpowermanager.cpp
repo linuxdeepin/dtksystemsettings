@@ -7,8 +7,11 @@
 
 #include <qdebug.h>
 #include <qsharedpointer.h>
+#include <qdbusconnection.h>
+#include <qdbusreply.h>
 
 #include "dpowerdevice.h"
+#include "dkbdbacklight.h"
 #include "dbus/upowermanagerinterface.h"
 
 DPOWER_BEGIN_NAMESPACE
@@ -56,6 +59,22 @@ bool DPowerManager::onBattery() const
 {
     Q_D(const DPowerManager);
     return d->m_manager_inter->onBattery();
+}
+
+bool DPowerManager::supportKbdBacklight() const
+{
+    const QString &service = QStringLiteral("org.freedesktop.UPower");
+    const QString &path = QStringLiteral("/org/freedesktop/UPower");
+    const QString &interface = QStringLiteral("org.freedesktop.DBus.Introspectable");
+
+    QDBusMessage message = QDBusMessage::createMethodCall(service, path, interface, "Introspect");
+    QDBusConnection connection = QDBusConnection::systemBus();
+    QDBusReply<QString> reply = connection.call(message);
+    if (!reply.isValid()) {
+        qWarning() << reply.error().message();
+        return false;
+    }
+    return reply.value().contains("KbdBacklight");
 }
 
 QString DPowerManager::daemonVersion() const
@@ -115,6 +134,15 @@ QSharedPointer<DPowerDevice> DPowerManager::findDeviceByName(const QString &name
     }
     QSharedPointer<DPowerDevice> device(new DPowerDevice(name, nullptr));
     return device;
+}
+
+QSharedPointer<DKbdBacklight> DPowerManager::kbdBacklight() const
+{
+    if (!supportKbdBacklight()) {
+        qWarning() << "this devicec not support 'KbdBacklight'!";
+        return nullptr;
+    }
+    return QSharedPointer<DKbdBacklight>(new DKbdBacklight());
 }
 
 void DPowerManager::refresh()

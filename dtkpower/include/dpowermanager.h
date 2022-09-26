@@ -10,6 +10,7 @@
 DPOWER_BEGIN_NAMESPACE
 class DPowerManagerPrivate;
 class DPowerDevice;
+class DKbdBacklight;
 
 class DPowerManager : public QObject
 {
@@ -22,14 +23,17 @@ public:
     Q_PROPERTY(bool lidIsPresent READ lidIsPresent)
     Q_PROPERTY(bool hasBattery READ hasBattery)
     Q_PROPERTY(bool onBattery READ onBattery)
+    Q_PROPERTY(bool supportKbdBacklight READ supportKbdBacklight)
     Q_PROPERTY(QString daemonVersion READ daemonVersion)
     bool lidIsClosed() const;
     bool lidIsPresent() const;
     bool hasBattery() const;
     bool onBattery() const;
+    bool supportKbdBacklight() const;
     QString daemonVersion() const;
     QSharedPointer<DPowerDevice> displayDevice() const;
     QSharedPointer<DPowerDevice> findDeviceByName(const QString &name) const;
+    QSharedPointer<DKbdBacklight> kbdBacklight() const;
 
 signals:
     void deviceAdded(const QString &name);
