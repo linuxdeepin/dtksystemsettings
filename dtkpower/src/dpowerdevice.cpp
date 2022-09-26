@@ -200,10 +200,10 @@ quint32 DPowerDevice::warningLevel() const
     return d->m_device_inter->warningLevel();
 }
 
-quint64 DPowerDevice::updateTime() const
+QDateTime DPowerDevice::updateTime() const
 {
     Q_D(const DPowerDevice);
-    return d->m_device_inter->updateTime();
+    return QDateTime::fromSecsSinceEpoch(d->m_device_inter->updateTime());
 }
 
 QString DPowerDevice::deviceName() const
