@@ -17,6 +17,8 @@ include_directories(
     "../src/dbus"
 )
 
+add_definitions(-DUSE_FAKE_INTERFACE)
+
 add_executable(${BIN_NAME}
     ${INCLUDE_FILES}
     ${SRCS}

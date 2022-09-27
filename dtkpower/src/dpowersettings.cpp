@@ -6,6 +6,7 @@
 #include "dpowersettings.h"
 
 #include <qsharedpointer.h>
+#include <qdebug.h>
 
 #include "dbus/systempowerinterface.h"
 #include "dbus/daemonpowerinterface.h"
@@ -371,6 +372,10 @@ void DPowerSettings::setSleepLock(const bool value)
 void DPowerSettings::reset()
 {
     Q_D(DPowerSettings);
-    d->m_daemonPowerInter->reset();
+    auto reply = d->m_daemonPowerInter->reset();
+    reply.waitForFinished();
+    if (!reply.isValid()) {
+        qWarning() << reply.error().message();
+    }
 }
 DPOWER_END_NAMESPACE
