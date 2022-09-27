@@ -5,7 +5,8 @@
 #include "daccountsuser.h"
 #include "daccountsuser_p.h"
 #include <QMimeDatabase>
-#include <qregularexpression.h>
+#include <QDebug>
+#include <QRegularExpression>
 #include <grp.h>
 #include <pwd.h>
 #include <sys/stat.h>

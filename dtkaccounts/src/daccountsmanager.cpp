@@ -4,6 +4,7 @@
 
 #include "daccountsmanager.h"
 #include "daccountsmanager_p.h"
+#include <QDebug>
 #include <grp.h>
 #include "daccountsuser.h"
 
