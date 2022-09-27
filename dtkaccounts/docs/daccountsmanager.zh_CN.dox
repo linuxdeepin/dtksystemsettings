@@ -25,7 +25,7 @@ daccountsmanager.h是对于一组用于查询和管理用户帐户信息的D-BUS
 @param[in] id 要查找的用户的uid
 @return 一个指向由该用户实例化的DAccountsUser的QSharedPointer
 
-@fn QSharedPointer<DAccountsUser> DAccountsManager::FindUserByName(const QString &name)
+@fn QSharedPointer<DAccountsUser> DAccountsManager::findUserByName(const QString &name)
 @brief 使用用户名来寻找用户
 @param[in] name 要查找的用户的用户名
 @return 一个指向由该用户实例化的DAccountsUser的QSharedPointer
