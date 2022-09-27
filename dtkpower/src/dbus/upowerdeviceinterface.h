@@ -86,7 +86,7 @@ public:
     quint32 technology() const;
     quint32 type() const;
     quint32 warningLevel() const;
-    quint64 updateTime() const;//TODO:更换为qdatetime
+    quint64 updateTime() const;
     QString deviceName() const;
 
 signals:
