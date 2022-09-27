@@ -1,7 +1,7 @@
 /*!
 @~chinese
 @file dlogintypes.h
-dlogintypes.h 中定义了login1组件需要使用到的一些自定义数据结构。
+dlogintypes.h 中定义了login组件需要使用到的一些自定义数据结构。
 
 @struct Dtk::Login::ScheduledShutdownValue
 @brief 定义定时关机所用数据结构

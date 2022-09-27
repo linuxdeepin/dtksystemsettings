@@ -47,9 +47,9 @@ public:
     quint32 GID() const;
     quint32 UID() const;
     QDateTime idleSinceHint() const;
-    QDateTime idleSinceHintMonotonic() const;
+    QDateTime idleSinceHintMonotonic() const;//FIXME:类型错误
     QDateTime loginTime() const;
-    QDateTime loginTimeMonotonic() const;
+    QDateTime loginTimeMonotonic() const;//FIXME：类型错误
 
 public slots:
     void kill(const int signalNumber);

@@ -20,109 +20,74 @@ Login1User类中定义了用户管理的接口
 
 @fn bool DLoginUser::idleHint() const
 @brief 当前用户的空闲状态
-
 @return 用户空闲状态的布尔值
 
 @fn bool DLoginUser::linger() const
 @brief 用户滞留
-
-
 @return 用户滞留的状态
 
 @fn QString DLoginUser::name() const
 @brief name
-
-
 @return 用户名
 
 @fn QString DLoginUser::runtimePath() const
 @brief 返回用户runtime路径
-
-
 @return 用户运行时路径
 
 @fn QString DLoginUser::service() const
 @brief 包含该用户的systemd的服务单元名称
-
 @return 用户当前的systemd服务单元名称
 
 @fn QString DLoginUser::state() const
 @brief 用户当前状态名称
-
 @return 以字符串形式返回用户当前状态信息
 
 @fn QString DLoginUser::slice() const
 @brief 用户systemd切片的单元名称
-
 @return 以字符串形式返回用户当前单元切片单元名称
 
-@fn SessionPath DLoginUser::display() const
-@brief User的session id和路径
-
-@return 返回 User的 session id和路径
+@fn QString DLoginUser::display() const
+@brief User的session id
+@return 返回 User的 session id
 
 @fn QString DLoginUser::GID() const
 @brief 用户组id
-
 @return 用户组的id
 
 @fn QString DLoginUser::UID() const
 @brief 用户id
-
 @return 用户id
 
-@fn quint64 DLoginUser::idleSinceHint() const
-@brief 从该User开始空闲后的CLOCK_REALTIME时间戳
-
-@return 从User开始空闲后经过的CLOCK_REALTIME 时间
+@fn QDateTime DLoginUser::idleSinceHint() const
+@brief 从该User开始空闲后的时间点
+@return 从该User开始空闲后的时间点
 
 
 @fn quint64 DLoginUser::idleSinceHintMonotonic() const
-@brief 从该User开始空闲后的CLOCK_MONOTONIC时间戳
+@brief 从该User开始空闲后到现在过去的时间
+@return 从该User开始空闲后到现在过去的时间
 
-@return 从User开始空闲后经过的CLOCK_MONOTONIC 时间
+@fn QDateTime DLoginUser::loginTime() const
+@brief 最后一次登陆的时间点
+@return 用户最后一次登陆的时间点
 
-@fn quint64 DLoginUser::createdTime() const
-@brief 用户登陆以来经过的CLOCK_REALTIME时间
+@fn quint64 DLoginUser::loginTimeMonotonic() const
+@brief 用户自登陆到现在过去的时间
+@return 用户自登陆到现在过去的时间
 
-@return 用户自登陆以来的CLOCK_REALTIME 时间
-
-@fn quint64 DLoginUser::createdTimeMonotonic() const
-@brief 用户自登陆以来的CLOCK_MONOTONIC时间
-
-
-@return 用户自登陆以来的CLOCK_MONOTONIC 时间
-
-@fn void DLoginUser::errorMessageChanged(const QString &message)
-@brief 当接口连接错误后发送信号
-
-发送接口连接的错误信息
-
-@fn QString DLoginUser::lastError() const
-@brief 上一次的错误信息
-
-存储上一次错误信息并返回
-
-@return 上一次错误信息
 
 @fn void DLoginUser::kill(const int signal_number);
-@brief 杀死进程
-
+@brief 发送unix信号
 对应Dbus上的kill信号，功能同manager的的KillUser一样，向用户所有进程发送Unix信号，需要信号编号，杀死进程
-
 @fn void DLoginUser::terminate()
 @brief 强制终止用户所有进程
-
 对应DBus上对应的Terminate 信号，强制终止该用户的所有进程。
 
 @property DLoginUser::Sessions
 @brief 当前用户所有当前会话的结构数组
-
 Session是一个包含用户当前所有session的结构数组，每个结构都由ID和对象路径组成
-
 @property DLoginUser::IdleHint
 @brief 当前用户的空闲状态
-
 返回当前用户是否空闲，针对当前特定用户
 
 @property DLoginUser::Linger

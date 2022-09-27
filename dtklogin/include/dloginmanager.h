@@ -69,7 +69,7 @@ public:
     bool removeIPC() const;
     QString blockInhibited() const;
     QString delayInhibited() const;
-    PowerOffAction handleHibernateKey() const;
+    PowerOffAction handleHibernateKey() const; //TODO:需要修改类型名为：PowerAction
     PowerOffAction handleLidSwitch() const;
     PowerOffAction handleLidSwitchDocked() const;
     PowerOffAction handleLidSwitchExternalPower() const;

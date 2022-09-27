@@ -35,11 +35,11 @@ public:
     QString id() const;
     QString activeSession() const;
     QDateTime idleSinceHint() const;
-    QDateTime idleSinceHintMonotonic() const;
+    QDateTime idleSinceHintMonotonic() const; //FIXME:类型错误
 
 public slots:
     void activateSession(const QString &sessionId);
-    void switchTo(const uint VTNr);
+    void switchTo(const uint VTNr); //FIXME:是否考虑传入参数换为quint32
     void switchToNext();
     void switchToPrevious();
 
