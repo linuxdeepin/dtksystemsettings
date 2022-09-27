@@ -9,18 +9,6 @@ loginsession.h 中定义了会话管理的接口
 
 DLoginSession 中定义了会话管理的接口
 
-@fn DLoginSession::DLoginSession(const QString &path, QObject *parent=nullptr)
-@brief 构造函数
-
-传入Login1Session 的path和parent进行构造
-
-@fn QString DLoginSession::lastError() const
-@brief 上一次的错误信息
-
-存储上一次错误信息并返回
-
-@return 上一次错误信息
-
 @fn bool DLoginSession::active() const
 @brief 读取 active 属性
 
@@ -31,7 +19,7 @@ DLoginSession 中定义了会话管理的接口
 
 @return DLoginSession 闲置状态
 
-@fn bool DLoginSession::lockedHint() const
+@fn bool DLoginSession::locked() const
 @brief 读取session的锁定状态
 
 @return session的锁定状态
@@ -41,207 +29,161 @@ DLoginSession 中定义了会话管理的接口
 
 @return session是否是远程
 
-@fn QString DLoginSession::_class() const
-@brief 返回session的class
-
-@return session的会话类型
+@fn SessionClass DLoginSession::sessionClass() const
+@brief 返回session的class类型
+@return session的会话类型 如 User, Greeter, LockScreen, Unknown中的任意一种
 
 
 @fn QString DLoginSession::desktop() const
 @brief 返回当前session正在运行的桌面环境(如果是已知的话)
-
 @return 当前session桌面环境的名字
 
 
 @fn QString DLoginSession::display() const
 @brief 返回x11显示名字的编码
-
 @return 图形并且x11登陆的显示名称
 
 
 @fn QString DLoginSession::id() const
 @brief 编码当前session的id
-
 @return session的id
 
 @fn QString DLoginSession::name() const
 @brief 用户名称
-
 @return 当前登陆用户名称
 
 @fn QString DLoginSession::remoteHost() const
 @brief 远程用户的host名称
-
 @return 远程系统的host名
 
 @fn QString DLoginSession::remoteUser() const
 @brief 远程session的用户名
-
 @return 远程session的用户名
 
 
 @fn QString DLoginSession::scope() const
 @brief 当前session的scope名字
-
 @return 当前scope 名字
 
 @fn QString DLoginSession::service() const
 @brief 返回注册使用身份认证的服务
-
 @return 注册了这个session的PAM服务
 
-@fn QString DLoginSession::state() const
+@fn SessionState DLoginSession::state() const
 @brief 编码session的状态
-
-@return session的状态
+@return session的状态 Online, Active, Closing, Unknown 其中一种
 
 @fn QString DLoginSession::tty() const
 @brief 如果为文本登陆返回对应内核的tty路径
 
 @return 文本登陆时候对应内核的tty路径
 
-@fn QString DLoginSession::type() const
-@brief 当前session类型的编码
-
+@fn SessionType DLoginSession::type() const
+@brief 当前session类型的编码 TTY, X11, Mir, Wayland, Unspecified其中一种
 @return 当前session 类型的编码
 
 @fn QString DLoginSession::seat() const
 @brief 编码这个session所处的位置
-
-
 @return 当前session所处的位置
 
-@fn QString DLoginSession::user() const
+@fn quint32 DLoginSession::user() const
 @brief 编码此会话所属用户的用户 ID
+@return 返回一个Unix UID
 
-@return 包含一个Unix UID和对象路径的结构体
 
-
-@fn uint DLoginSession::audit() const
+@fn quint32 DLoginSession::audit() const
 @brief 返回此session ID的内核审计会话
-
-
 @return 该session的内核审计会话 ID
 
-@fn uint DLoginSession::leader() const
+@fn quint32 DLoginSession::leader() const
 @brief 注册当前session进程的编码
-
 @return 注册了当前session进程的编码
 
 
-@fn uint DLoginSession::vtnr() const
+@fn quint32 DLoginSession::VTNr() const
 @brief 当前session的虚拟终端号
-
 @return 当前session的虚拟终端号
 
 
-@fn quint64 DLoginSession::idleSinceHint() const
+@fn QDateTime DLoginSession::idleSinceHint() const
 @brief session空闲状态
-
 @return session的空闲状态
 
 
-@fn quint64 DLoginSession::idleSinceHintMonotonic() const
+@fn QDateTime DLoginSession::idleSinceHintMonotonic() const
 @brief session空闲状态
-
 @return session的空闲状态
 
 
-@fn quint64 DLoginSession::timestamp() const
-@brief 返回对系统时间的最佳猜测
+@fn QDateTime DLoginSession::timestamp() const
+@brief 返回对系统时间
+@return 对系统时间的
 
-@return 对系统时间的最佳猜测
-
-@fn quint64 DLoginSession::timestampMonotonic() const
-@brief 来自过去某个任意固定点以来经过的绝对挂钟时间
-
-
-@return 返回来自过去某个任意固定点以来经过的绝对挂钟时间
+@fn QDateTime DLoginSession::timestampMonotonic() const
+@brief 来自过去某个任意固定点以来经过的绝对时间
+@return 返回来自过去某个任意固定点以来经过的绝对时间
 
 @fn void DLoginSession::activate()
 @brief 对 Manger对象的相应调用
-
-对应Login1上的Activate方法，类似Manger对象的相应调用
+对应Login上的Activate方法，类似Manger对象的相应调用
 
 @fn void DLoginSession::kill(const QString who, const uint signal_number)
 @brief 和Manager相应对象调用类似
-
-对应Login1上的Kill方法，和Manager对象相应调用类似
+对应Login上的Kill方法，和Manager对象相应调用类似
 
 @fn void DLoginSession::lock()
 @brief 和Manager相应对象调用类似
-
-对应Login1上的Kill方法，和Manager对象相应调用类似
+对应Login上的Kill方法，和Manager对象相应调用类似
 
 @fn void DLoginSession::pauseDeviceComplete(const uint major, const uint minor)
-@brief 受到信号后暂停设备
-
+@brief 收到信号后暂停设备
 运行session 控制器在接收到PauseDevice("pause")信号后同步暂停设备。强制信号(或者在一个超时信号后)由systemd-logind自动异步完成
-
-@fn void DLoginSession::releaseControl()
-@brief 放弃对session的控制
-
-该方法对应login1中的ReleaseDevice()方法。此方法会关闭D-Bus连接也会隐式释放控制权。同时会释放所有通过TakeDevice申请所有权的设备
-
-@fn void DLoginSession::releaseDevice(const uint manjor, const uint minor)
-@brief 在takeDevice后重新release对设备的控制。
-
-在takeDevice后重新release对设备的控制。
-
-@fn void DLoginSession::setBrightness(const QString &subsystem, const QString &name ,const uint brightness)
-@brief 设置亮度
-
-对应Login1上的SetBrightness方法。这个方式旨在提供给桌面环境使用，允许非特权程序以受控的方式访问硬件设置。其中subsystem指定内核子系统，"backlight"或者"leds",name参数指定子程序下的设备名称。。brightness指定亮度。这个范围由各个驱动程序定义，请参考 /sys/class/subsystem/name/max_brightness
 
 @fn void DLoginSession::setIdleHint(const bool idle)
 @brief 改变session的空闲状态
-
 由session对象调用时候以便更改会话的空闲状态
 
-@fn void DLoginSession::setLockedHint(const bool locked)
+@fn void DLoginSession::setLocked(const bool locked)
 @brief 设置session的锁定状态
-
-对应Login1上的SetLockedHint()方法，可以用于将锁定提示设置为锁定，也就是说session是否被锁定的信息。这个可以由桌面环境告诉systemd-logind 什么时候锁定会话
+对应Login上的SetLockedHint()方法，可以用于将锁定提示设置为锁定，也就是说session是否被锁定的信息。这个可以由桌面环境告诉systemd-logind 什么时候锁定会话
 
 @fn void DLoginSession::setType(const QString &type)
 @brief 更改session的类型
-
-对应Login1上的SetType() 方法。该方法允许动态改变会话类型，只能由session当前的控制器调用。如果尚未调用TakeControl()方法，这个方法会失效。此外，一旦控制被释放，session类型会重置，或者使用ReleaseControl方法或者关闭D-Bus连接可以实现重置的效果。这个应该有助于防止session进入不一致的状态，比如控制器崩溃时候。唯一的参数 argument type是指的新的session 类型。
-
-@fn void DLoginSession::takeControl(const bool force)
-@brief 允许一个进程对该会话进行独占的托管设备访问控制
-
-对应Login1上的TakeControl()方法。该方法允许会话进行独占的设备访问控制。任何时候只有一个D-Bus的连接可以作为给定会话的控制器。如果设置了force参数(仅限root)，现有的控制器会被提出并且被替换。否则，如果已经有了控制器，这个方法会失败。注意，这个方法仅限于将有效UID设置会会话用户或者root的D-Bus 用户
-
-@fn std::tupe<int,bool> DLoginSession::takeDevice(unit manjor, uint minor)
-@brief 获取特定设备的文件描述符
-
-对应Login1 上的TakeDevice() 方法。TakeDevice() 允许会话控制器获取特定设备的文件描述符。传入字符设备的主次编号，systemd-logind 将返回该设备的文件描述符。当前仅支持一组有限的设备类型（但可以扩展）如果会话处于非活动状态，systemd-logind 会自动使文件描述符静音，并在会话再次激活时恢复它。这保证了会话只有在会话处于活动状态时才能访问会话设备。请注意，这种撤销/恢复机制是异步的，并且可能在任何给定时间发生。这仅适用于连接到给定会话座位的设备。  进程不需要直接访问设备节点。systemd-logind 只要求您成为活动会话控制器（请参阅 TakeControl()）。另请注意，任何设备只能请求一次。只要您不释放它，进一步的 TakeDevice() 调用就会失败。
-@return 文件描述符
+对应Login上的SetType() 方法。该方法允许动态改变会话类型，只能由session当前的控制器调用。如果尚未调用TakeControl()方法，这个方法会失效。此外，一旦控制被释放，session类型会重置，或者使用ReleaseControl方法或者关闭D-Bus连接可以实现重置的效果。这个应该有助于防止session进入不一致的状态，比如控制器崩溃时候。唯一的参数 argument type是指的新的session 类型。
 
 @fn void DLoginSession::terminate()
 @brief 和Manger对象的相应工作方式类似
-
 和Manger对象的相应工作方式类似
 
 @fn void DLoginSession::unlock()
 @brief 和Manger对象的相应工作方式类似
-
 和Manger对象的相应工作方式类似
 
-@fn void DLoginSession::errorMessageChanged(const QString &message)
-@brief 当接口连接错误后发送信号
+@fn QStringList DLoginSession::autostartList();
+@brief 列出所有自启动应用名
+@return 返回一个列表
 
-发送接口连接的错误信息
+@fn bool DLoginSession::isAutostart(const QString &fileName);
+@brief 是否自动启动
+@pragma[in] fileName：传入一个文件名将判断这个文件是否自动启动
+@return 布尔值
+
+@fn bool DLoginSession::removeAutostart(const QString &fileName);
+@brief 移除自动启动
+@pragma[in] fileName：传入一个文件名将移除这个文件的自动启动
+@return 布尔值，操作是否成功
+
+@fn bool DLoginSession::addAutostart(const QString &fileName);
+@brief 添加自动启动
+@pragma[in] fileName：传入一个文件名将添加这个文件的自动启动
+@return 布尔值，操作是否成功
 
 @property DLoginSession::Active
 @brief 是否活动状态
-
 Acitve是一个布尔类型，如果为真代表这个session为活跃状态。这说明，正在最前面显示。这个字段在这里有趣State字段是半冗余的。
 
 @property DLoginSession::IdleHint
 @brief 该会话的空闲提示状态
-
 封装了当前session idle hint 状态，和整个manager对象上各个属性如何为整个对象运作类似
 
 @property DLoginSession::LockedHint
@@ -277,7 +219,6 @@ _class() 函数编码。它是"user"(给普通的用户会话)，"greeter"给显
 
 @property DLoginSession::RemoteHost
 @brief  远程用户的host名称
-
 如果当前session是远程,返回远程系统的host名，否则返回空
 
 @property DLoginSession::RemoteUser
@@ -334,7 +275,6 @@ session有3种状态，"online","active","closing"。当session已经登陆了�
 
 @property DLoginSession::IdleSinceHintMonotonic
 @brief session空闲状态
-
 描述session的空闲状态,类似于管理器对象上各个属性如何为整个系统执行操作
 
 @property DLoginSession::Timestamp
