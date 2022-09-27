@@ -44,7 +44,7 @@ AccountTypes DAccountsUser::accountType() const
         case 2:
             return AccountTypes::Udcp;
         default:
-            return AccountTypes::Unknown;  // 函数不应该运行到这里
+            return AccountTypes::Unknown;  // function should not be executed here
     }
 }
 
@@ -179,31 +179,32 @@ QString DAccountsUser::passwordHint() const
 QDateTime DAccountsUser::passwordLastChange() const
 {
     Q_D(const DAccountsUser);
+    QDateTime lstch = QDateTime::fromSecsSinceEpoch(0);
     auto reply = d->m_dUserInter->getPasswordExpirationPolicy();
     reply.waitForFinished();
     if (!reply.isValid()) {
         qWarning() << reply.error().message();
-        return QDateTime::fromSecsSinceEpoch(0);
+        return lstch;
     }
     auto value = reply.argumentAt(1);
     if (!value.isNull()) {
         qWarning() << "can't get passwordLastChange: last_change_time null";
-        return QDateTime::fromSecsSinceEpoch(0);
+        return lstch;
     }
-    return QDateTime::fromSecsSinceEpoch(value.toLongLong());
+    return lstch.addDays(value.toInt());
 }
 
 PasswdStatus DAccountsUser::passwordStatus() const
 {
     Q_D(const DAccountsUser);
     if (d->m_dUserInter->locked())
-        return PasswdStatus::L;
+        return PasswdStatus::Locked;
     auto mode = d->m_dUserInter->passwordMode();
     if (mode == 0)
-        return PasswdStatus::P;
+        return PasswdStatus::Password;
     else if (mode == 2)
-        return PasswdStatus::NP;
-    // 函数不应该运行到这里
+        return PasswdStatus::NoPassword;
+    // function should not be executed here
     return PasswdStatus::Unknown;
 }
 
@@ -359,7 +360,7 @@ void DAccountsUser::setMaxPasswordAge(const int newndays)
 void DAccountsUser::setPassword(const QByteArray &newpassword)
 {
     Q_D(const DAccountsUser);
-    auto reply = d->m_dSystemUserInter->setPassword(newpassword);
+    auto reply = d->m_dSystemUserInter->setPassword(Dutils::encryptPassword(newpassword));
     reply.waitForFinished();
     if (!reply.isValid())
         qWarning() << reply.error().message();

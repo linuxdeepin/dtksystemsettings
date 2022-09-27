@@ -69,7 +69,7 @@ public:
 
 public slots:
 
-    void setAutomaticLogin(bool enabled);
+    void setAutomaticLogin(const bool enabled);
     void setFullName(const QString &newfullname);
     void setGroups(const QStringList &newgroups);
     void setLayoutList(const QList<QByteArray> &newlayouts);
