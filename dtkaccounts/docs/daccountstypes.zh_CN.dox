@@ -1,0 +1,44 @@
+/*!
+@~chinese
+@file daccountstypes.h
+
+在daccountstypes.h中定义了一些dtkaccounts模块中所用到的自定义类型。
+
+@struct Dtk::Accounts::LoginHistory
+@brief 登录历史相关信息
+@param loginTime 登录时间的时间戳
+@param logoutTime 登出时间的时间戳，如果session正在运行则返回0
+@param sessionInfo 会话的一些附加信息
+
+@struct Dtk::Accounts::ShadowInfo
+@brief 存储/etc/shadow文件中的一些信息，在V20中使用dde-daemon的接口获取值
+@param lastChange 从1970.1.1开始算密码最后一次更改的天数
+@param min 最少多少天可以更改密码
+@param max 最多多少天之后必须更改密码
+@param warn 密码过期前几天开始警告用户密码即将过期
+@param inactive 密码过期几天后把该账户视为不活跃账户并且禁用
+@param expired 从1970.1.1开始算账户被禁用的天数
+
+@struct Dtk::Accounts::LoginUtmpx
+@brief 其他系统相关的登录信息
+@param inittabID inittab的id
+@param line tty的设备名
+@param host 远程主机的名字
+@param address 远程主机的IP地址，可能为ipv4或ipv6地址
+@param time 登录的时间，单位为秒的时间戳
+
+@struct Dtk::Accounts::ReminderInfo
+@brief 当前用户的一些登录信息
+@param username 用户名
+@param spent 用户密码信息
+@param currentLogin 本次登录
+@param lastLogin 上一次登录
+@param failCountSinceLastLogin 从上次登录到现在中间登录失败的次数
+
+@struct Dtk::Accounts::ValidMsg
+@brief 表示验证项是否非法
+@param valid 是否非法
+@param code 不合法代码
+@param msg 提示信息
+
+*/
