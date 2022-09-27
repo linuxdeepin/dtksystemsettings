@@ -25,9 +25,15 @@ DLoginManager::DLoginManager(QObject *parent)
     : QObject(parent)
     , d_ptr(new DLoginManagerPrivate(this))
 {
+#if defined(USE_FAKE_INTERFACE)  // for unit test
+    const QString &Service = QStringLiteral("org.freedesktop.fakelogin1");
+    const QString &Path = QStringLiteral("/org/freedesktop/login1/manager");
+    QDBusConnection connection = QDBusConnection::sessionBus();
+#else
     const QString &Service = QStringLiteral("org.freedesktop.login1");
     const QString &Path = QStringLiteral("/org/freedesktop/login1");
-
+    QDBusConnection connection = QDBusConnection::systemBus();
+#endif
     Q_D(DLoginManager);
     DBusScheduledShutdownValue::registerMetaType();
     DBusSessionProperty::registerMetaType();
@@ -35,7 +41,7 @@ DLoginManager::DLoginManager(QObject *parent)
     DBusSeat::registerMetaType();
     DBusSession::registerMetaType();
     DBusUser::registerMetaType();
-    d->m_inter = new Login1ManagerInterface(Service, Path, QDBusConnection::systemBus(), d);
+    d->m_inter = new Login1ManagerInterface(Service, Path, connection, d);
     connect(d->m_inter, &Login1ManagerInterface::prepareForShutdown, this, &DLoginManager::prepareForShutdown);
     connect(d->m_inter, &Login1ManagerInterface::prepareForSleep, this, &DLoginManager::prepareForSleep);
     connect(d->m_inter, &Login1ManagerInterface::seatNew, this, [=](const QString &seatId, const QString &seatPath) {
@@ -134,43 +140,43 @@ QString DLoginManager::delayInhibited() const
     return d->m_inter->delayInhibited();
 }
 
-PowerOffAction DLoginManager::handleHibernateKey() const
+PowerAction DLoginManager::handleHibernateKey() const
 {
     Q_D(const DLoginManager);
     return Utils::stringToAction(d->m_inter->handleHibernateKey());
 }
 
-PowerOffAction DLoginManager::handleLidSwitch() const
+PowerAction DLoginManager::handleLidSwitch() const
 {
     Q_D(const DLoginManager);
     return Utils::stringToAction(d->m_inter->handleLidSwitch());
 }
 
-PowerOffAction DLoginManager::handleLidSwitchDocked() const
+PowerAction DLoginManager::handleLidSwitchDocked() const
 {
     Q_D(const DLoginManager);
     return Utils::stringToAction(d->m_inter->handleLidSwitchDocked());
 }
 
-PowerOffAction DLoginManager::handleLidSwitchExternalPower() const
+PowerAction DLoginManager::handleLidSwitchExternalPower() const
 {
     Q_D(const DLoginManager);
     return Utils::stringToAction(d->m_inter->handleLidSwitchExternalPower());
 }
 
-PowerOffAction DLoginManager::handlePowerKey() const
+PowerAction DLoginManager::handlePowerKey() const
 {
     Q_D(const DLoginManager);
     return Utils::stringToAction(d->m_inter->handlePowerKey());
 }
 
-PowerOffAction DLoginManager::handleSuspendKey() const
+PowerAction DLoginManager::handleSuspendKey() const
 {
     Q_D(const DLoginManager);
     return Utils::stringToAction(d->m_inter->handleSuspendKey());
 }
 
-PowerOffAction DLoginManager::idleAction() const
+PowerAction DLoginManager::idleAction() const
 {
     Q_D(const DLoginManager);
     return Utils::stringToAction(d->m_inter->idleAction());
@@ -686,17 +692,17 @@ void DLoginManager::logout()
 
 QSharedPointer<DLoginSeat> DLoginManager::currentSeat()
 {
-    const QString &Path = QStringLiteral("/org/freedesktop/login1/seat/self");
-    return QSharedPointer<DLoginSeat>(new DLoginSeat(Path));
+    DLoginSeat current(QStringLiteral("/org/freedesktop/login1/seat/self"));
+    return QSharedPointer<DLoginSeat>(findSeatById(current.id()));
 }
 QSharedPointer<DLoginSession> DLoginManager::currentSession()
 {
-    const QString &Path = QStringLiteral("/org/freedesktop/login1/session/self");
-    return QSharedPointer<DLoginSession>(new DLoginSession(Path));
+    DLoginSession current(QStringLiteral("/org/freedesktop/login1/session/self"));
+    return QSharedPointer<DLoginSession>(findSessionById(current.id()));
 }
 QSharedPointer<DLoginUser> DLoginManager::currentUser()
 {
-    const QString &Path = QStringLiteral("/org/freedesktop/login1/user/self");
-    return QSharedPointer<DLoginUser>(new DLoginUser(Path));
+    DLoginUser current(QStringLiteral("/org/freedesktop/login1/user/self"));
+    return QSharedPointer<DLoginUser>(findUserById(current.UID()));
 }
 DLOGIN_END_NAMESPACE

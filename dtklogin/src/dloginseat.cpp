@@ -20,11 +20,17 @@ DLoginSeat::DLoginSeat(const QString &path, QObject *parent)
     : QObject(parent)
     , d_ptr(new DLoginSeatPrivate(this))
 {
+#if defined(USE_FAKE_INTERFACE)  // for unit test
+    const QString &Service = QStringLiteral("org.freedesktop.fakelogin1");
+    QDBusConnection connection = QDBusConnection::sessionBus();
+#else
     const QString &Service = QStringLiteral("org.freedesktop.login1");
+    QDBusConnection connection = QDBusConnection::systemBus();
+#endif
 
     DBusSessionPath::registerMetaType();
     Q_D(DLoginSeat);
-    d->m_inter = new Login1SeatInterface(Service, path, QDBusConnection::systemBus(), this);
+    d->m_inter = new Login1SeatInterface(Service, path, connection, this);
 }
 
 QList<QString> DLoginSeat::sessions() const
@@ -75,10 +81,10 @@ QDateTime DLoginSeat::idleSinceHint() const
     return QDateTime::fromMSecsSinceEpoch(d->m_inter->idleSinceHint());
 }
 
-QDateTime DLoginSeat::idleSinceHintMonotonic() const
+quint64 DLoginSeat::idleSinceHintMonotonic() const
 {
     Q_D(const DLoginSeat);
-    return QDateTime::fromMSecsSinceEpoch(d->m_inter->idleSinceHintMonotonic());
+    return d->m_inter->idleSinceHintMonotonic();
 }
 
 void DLoginSeat::activateSession(const QString &sessionId)

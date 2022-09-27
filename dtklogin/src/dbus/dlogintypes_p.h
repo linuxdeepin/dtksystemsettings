@@ -20,6 +20,8 @@ struct DBusScheduledShutdownValue
     QString type;
     quint64 usec;
     static void registerMetaType();
+    bool operator==(const DBusScheduledShutdownValue &v);
+    bool operator!=(const DBusScheduledShutdownValue &v);
 };
 
 struct DBusSessionProperty

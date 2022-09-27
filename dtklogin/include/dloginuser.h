@@ -31,9 +31,9 @@ public:
     Q_PROPERTY(quint32 GID READ GID);
     Q_PROPERTY(quint32 UID READ UID);
     Q_PROPERTY(QDateTime idleSinceHint READ idleSinceHint);
-    Q_PROPERTY(QDateTime idleSinceHintMonotonic READ idleSinceHintMonotonic);
+    Q_PROPERTY(quint64 idleSinceHintMonotonic READ idleSinceHintMonotonic);
     Q_PROPERTY(QDateTime loginTime READ loginTime);
-    Q_PROPERTY(QDateTime loginTimeMonotonic READ loginTimeMonotonic);
+    Q_PROPERTY(quint64 loginTimeMonotonic READ loginTimeMonotonic);
 
     QList<QString> sessions() const;
     bool idleHint() const;
@@ -47,9 +47,9 @@ public:
     quint32 GID() const;
     quint32 UID() const;
     QDateTime idleSinceHint() const;
-    QDateTime idleSinceHintMonotonic() const;//FIXME:类型错误
+    quint64 idleSinceHintMonotonic() const;
     QDateTime loginTime() const;
-    QDateTime loginTimeMonotonic() const;//FIXME：类型错误
+    quint64 loginTimeMonotonic() const;
 
 public slots:
     void kill(const int signalNumber);

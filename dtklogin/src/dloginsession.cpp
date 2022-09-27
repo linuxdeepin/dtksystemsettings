@@ -26,7 +26,13 @@ DLoginSession::DLoginSession(const QString &path, QObject *parent)
     : QObject(parent)
     , d_ptr(new DLoginSessionPrivate(this))
 {
+#if defined(USE_FAKE_INTERFACE)  // for unit test
+    const QString &Service = QStringLiteral("org.freedesktop.fakelogin1");
+    QDBusConnection connection = QDBusConnection::sessionBus();
+#else
     const QString &Service = QStringLiteral("org.freedesktop.login1");
+    QDBusConnection connection = QDBusConnection::systemBus();
+#endif
 
     const QString &StartManagerService = QStringLiteral("com.deepin.SessionManager");
     const QString &StartManagerPath = QStringLiteral("/com/deepin/StartManager");
@@ -37,7 +43,7 @@ DLoginSession::DLoginSession(const QString &path, QObject *parent)
     Q_D(DLoginSession);
     DBusSeatPath::registerMetaType();
     DBusUserPath::registerMetaType();
-    d->m_inter = new Login1SessionInterface(Service, path, QDBusConnection::systemBus(), this);
+    d->m_inter = new Login1SessionInterface(Service, path, connection, this);
     connect(d->m_sessionManagerInter, &SessionManagerInterface::LockedChanged, this, &DLoginSession::lockedChanged);
     d->m_startManagerInter =
         new StartManagerInterface(StartManagerService, StartManagerPath, QDBusConnection::sessionBus(), this);

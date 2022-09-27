@@ -20,12 +20,18 @@ DLoginUser::DLoginUser(const QString &path, QObject *parent)
     : QObject(parent)
     , d_ptr(new DLoginUserPrivate(this))
 {
+#if defined(USE_FAKE_INTERFACE)  // for unit test
+    const QString &Service = QStringLiteral("org.freedesktop.fakelogin1");
+    QDBusConnection connection = QDBusConnection::sessionBus();
+#else
     const QString &Service = QStringLiteral("org.freedesktop.login1");
+    QDBusConnection connection = QDBusConnection::systemBus();
+#endif
 
     DBusSessionPath::registerMetaType();
 
     Q_D(DLoginUser);
-    d->m_inter = new Login1UserInterface(Service, path, QDBusConnection::systemBus(), this);
+    d->m_inter = new Login1UserInterface(Service, path, connection, this);
 }
 
 DLoginUser::~DLoginUser() {}
@@ -108,10 +114,10 @@ QDateTime DLoginUser::idleSinceHint() const
     return QDateTime::fromMSecsSinceEpoch(d->m_inter->idleSinceHint());
 }
 
-QDateTime DLoginUser::idleSinceHintMonotonic() const
+quint64 DLoginUser::idleSinceHintMonotonic() const
 {
     Q_D(const DLoginUser);
-    return QDateTime::fromMSecsSinceEpoch(d->m_inter->idleSinceHintMonotonic());
+    return d->m_inter->idleSinceHintMonotonic();
 }
 
 QDateTime DLoginUser::loginTime() const
@@ -120,10 +126,10 @@ QDateTime DLoginUser::loginTime() const
     return QDateTime::fromMSecsSinceEpoch(d->m_inter->timestamp());
 }
 
-QDateTime DLoginUser::loginTimeMonotonic() const
+quint64 DLoginUser::loginTimeMonotonic() const
 {
     Q_D(const DLoginUser);
-    return QDateTime::fromMSecsSinceEpoch(d->m_inter->timestampMonotonic());
+    return d->m_inter->timestampMonotonic();
 }
 
 // public slots

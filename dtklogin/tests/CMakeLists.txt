@@ -12,16 +12,17 @@ file(GLOB_RECURSE SRCS
 
 file(GLOB_RECURSE TEST_FILES "./*.h" "./*.cpp")
 
+add_compile_definitions(USE_FAKE_INTERFACE)
+
 add_executable(${BIN_NAME}
     ${INCLUDE_FILES}
     ${SRCS}
     ${TEST_FILES})
 
 target_include_directories(${BIN_NAME} PUBLIC
-    Qt5::Core
-    Qt5::DBus
     ../include
     ../src/dbus
+    ./fakedbus
 )
 
 target_link_libraries(${BIN_NAME} PRIVATE
@@ -30,6 +31,7 @@ target_link_libraries(${BIN_NAME} PRIVATE
     -lpthread
     -lgcov
     -lgtest
+    -lgmock
 )
 
 if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
@@ -38,6 +40,8 @@ endif()
 if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
     target_compile_options(${BIN_NAME} PRIVATE -fprofile-arcs -ftest-coverage)
 endif()
+
+target_compile_options(${BIN_NAME} PRIVATE -fno-access-control)
 
 enable_testing()
 add_test(NAME ${BIN_NAME} COMMAND ${BIN_NAME})

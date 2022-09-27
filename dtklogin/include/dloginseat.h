@@ -26,7 +26,7 @@ public:
     Q_PROPERTY(QString id READ id);
     Q_PROPERTY(QString activeSession READ activeSession);
     Q_PROPERTY(QDateTime idleSinceHint READ idleSinceHint);
-    Q_PROPERTY(QDateTime idleSinceHintMonotonic READ idleSinceHintMonotonic);
+    Q_PROPERTY(quint64 idleSinceHintMonotonic READ idleSinceHintMonotonic);
 
     bool canGraphical() const;
     bool canTTY() const;
@@ -35,11 +35,11 @@ public:
     QString id() const;
     QString activeSession() const;
     QDateTime idleSinceHint() const;
-    QDateTime idleSinceHintMonotonic() const; //FIXME:类型错误
+    quint64 idleSinceHintMonotonic() const;
 
 public slots:
     void activateSession(const QString &sessionId);
-    void switchTo(const uint VTNr); //FIXME:是否考虑传入参数换为quint32
+    void switchTo(const quint32 VTNr);
     void switchToNext();
     void switchToPrevious();
 
