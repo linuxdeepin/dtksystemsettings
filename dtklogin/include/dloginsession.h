@@ -33,17 +33,13 @@ public:
     Q_PROPERTY(QString scope READ scope);
     Q_PROPERTY(QString service READ service);
     Q_PROPERTY(SessionState state READ state);
-    // Why TTY?
     Q_PROPERTY(QString TTY READ TTY);
     Q_PROPERTY(SessionType type READ type);
-
     Q_PROPERTY(QString seat READ seat);
     Q_PROPERTY(quint32 user READ user);
-
     Q_PROPERTY(quint32 audit READ audit);
     Q_PROPERTY(quint32 leader READ leader);
     Q_PROPERTY(quint32 VTNr READ VTNr);
-
     Q_PROPERTY(QDateTime idleSinceHint READ idleSinceHint);
     Q_PROPERTY(QDateTime idleSinceHintMonotonic READ idleSinceHintMonotonic);
     Q_PROPERTY(QDateTime createdTime READ createdTime);

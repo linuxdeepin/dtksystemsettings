@@ -131,39 +131,39 @@ SessionRole stringToSessionRole(const QString &strSessionRole)
         return SessionRole::All;
     }
 }
-PowerOffAction stringToAction(const QString &strAction)
+PowerAction stringToAction(const QString &strAction)
 {
-    static const QMap<QString, PowerOffAction> actionMap = {{"poweroff", PowerOffAction::PowerOff},
-                                                            {"reboot", PowerOffAction::Reboot},
-                                                            {"halt", PowerOffAction::Halt},
-                                                            {"kexec", PowerOffAction::KExec},
-                                                            {"suspend", PowerOffAction::Suspend},
-                                                            {"hibernate", PowerOffAction::Hibernate},
-                                                            {"hybrid-sleep", PowerOffAction::HybridSleep},
-                                                            {"suspend-then-hibernate", PowerOffAction::SuspendThenHibernate},
-                                                            {"lock", PowerOffAction::Lock},
-                                                            {"ignore", PowerOffAction::Ignore}};
+    static const QMap<QString, PowerAction> actionMap = {{"poweroff", PowerAction::PowerOff},
+                                                         {"reboot", PowerAction::Reboot},
+                                                         {"halt", PowerAction::Halt},
+                                                         {"kexec", PowerAction::KExec},
+                                                         {"suspend", PowerAction::Suspend},
+                                                         {"hibernate", PowerAction::Hibernate},
+                                                         {"hybrid-sleep", PowerAction::HybridSleep},
+                                                         {"suspend-then-hibernate", PowerAction::SuspendThenHibernate},
+                                                         {"lock", PowerAction::Lock},
+                                                         {"ignore", PowerAction::Ignore}};
     if (actionMap.contains(strAction)) {
         return actionMap[strAction];
     } else {
         qWarning() << "Not supported action.";
-        return PowerOffAction::Ignore;
+        return PowerAction::Ignore;
     }
 }
-QString actionToString(const PowerOffAction &action)
+QString actionToString(const PowerAction &action)
 {
-    static const QMap<PowerOffAction, QString> actionMap = {{PowerOffAction::PowerOff, "poweroff"},
-                                                            {PowerOffAction::Reboot, "reboot"},
-                                                            {PowerOffAction::Halt, "halt"},
-                                                            {PowerOffAction::KExec, "kexec"},
-                                                            {PowerOffAction::Suspend, "suspend"},
-                                                            {PowerOffAction::Hibernate, "hibernate"},
-                                                            {PowerOffAction::HybridSleep, "hybrid-sleep"},
-                                                            {PowerOffAction::SuspendThenHibernate, "suspend-then-hibernate"},
-                                                            {PowerOffAction::FactoryReset, "factory-reset"},
-                                                            {PowerOffAction::Lock, "lock"},
-                                                            {PowerOffAction::Ignore, "ignore"},
-                                                            {PowerOffAction::Unknown, ""}};
+    static const QMap<PowerAction, QString> actionMap = {{PowerAction::PowerOff, "poweroff"},
+                                                         {PowerAction::Reboot, "reboot"},
+                                                         {PowerAction::Halt, "halt"},
+                                                         {PowerAction::KExec, "kexec"},
+                                                         {PowerAction::Suspend, "suspend"},
+                                                         {PowerAction::Hibernate, "hibernate"},
+                                                         {PowerAction::HybridSleep, "hybrid-sleep"},
+                                                         {PowerAction::SuspendThenHibernate, "suspend-then-hibernate"},
+                                                         {PowerAction::FactoryReset, "factory-reset"},
+                                                         {PowerAction::Lock, "lock"},
+                                                         {PowerAction::Ignore, "ignore"},
+                                                         {PowerAction::Unknown, ""}};
     return actionMap[action];
 }
 QString shutdownTypeToString(const ShutdownType &type)

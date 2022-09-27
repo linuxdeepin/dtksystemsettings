@@ -27,7 +27,7 @@ constexpr uint HandleHibernateKey = 1 << 5;
 constexpr uint HandleLidSwitch = 1 << 6;
 };  // namespace InhibitBehavior
 
-enum class PowerOffAction {
+enum class PowerAction {
     PowerOff,
     Reboot,
     Halt,

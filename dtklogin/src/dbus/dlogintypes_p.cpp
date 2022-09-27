@@ -7,6 +7,16 @@
 
 DLOGIN_BEGIN_NAMESPACE
 
+bool DBusScheduledShutdownValue::operator==(const DBusScheduledShutdownValue &v)
+{
+    return this->type == v.type && this->usec == v.usec;
+}
+
+bool DBusScheduledShutdownValue::operator!=(const DBusScheduledShutdownValue &v)
+{
+    return !(*this == v);
+}
+
 QDBusArgument &operator<<(QDBusArgument &arg, const DBusScheduledShutdownValue &value)
 {
     arg.beginStructure();
