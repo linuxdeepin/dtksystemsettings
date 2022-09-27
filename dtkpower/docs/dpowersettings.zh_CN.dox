@@ -50,11 +50,22 @@ DPowerSettings类
 
 @fn qint32 DPowerSettings::batteryLidClosedAction() const
 @brief 获取使用电池时笔记本盖子关闭时的行为
-@return 返回一个枚举类型 //TODO:确认枚举
+@return 返回一个枚举类型
+@retval powerActionshutdown
+        powerActionsuspend
+        powerActionHibernate
+        powerActionTurnoffscreen
+        powerActionDoNothing
 
 @fn void DPowerSettings::setBatteryLidClosedAction(const qint32 value)
 @brief 设置使用电池时笔记本盖子关闭行为
-@param[in] 传入一个int值 //TODO:确认枚举
+@param[in] 传入一个int值
+        powerActionshutdown
+        powerActionsuspend
+        powerActionHibernate
+        powerActionTurnoffscreen
+        powerActionDoNothing
+
 
 @fn qint32 DPowerSettings::batteryLockDelay() const
 @brief 使用电池的时锁屏延时
@@ -97,11 +108,23 @@ DPowerSettings类
 
 @fn qint32 DPowerSettings::linePowerLidClosedAction() const
 @brief 获取使用电源时笔记本盖子关闭时的行为
-@return 返回一个枚举类型 //TODO:确认枚举
+@return 返回一个枚举类型
+@retval powerActionshutdown
+        powerActionsuspend
+        powerActionHibernate
+        powerActionTurnoffscreen
+        powerActionDoNothing
+
 
 @fn void DPowerSettings::setLinePowerLidClosedAction(const qint32 value)
 @brief 设置使用电源时笔记本盖子关闭行为
-@param[in] 传入一个int值 //TODO:确认枚举
+@param[in] 传入一个int值
+@retval powerActionshutdown
+        powerActionsuspend
+        powerActionHibernate
+        powerActionTurnoffscreen
+        powerActionDoNothing
+
 
 @fn qint32 DPowerSettings::linePowerLockDelay() const
 @brief 使用电源的时锁屏延时
@@ -143,10 +166,19 @@ DPowerSettings类
 @pragma[in] 延时时间
 
 @fn qint32 DPowerSettings::lowPowerAutoSleepThreshold() const
-//TODO: 不知道含义
+@retval powerActionshutdown
+        powerActionsuspend
+        powerActionHibernate
+        powerActionTurnoffscreen
+        powerActionDoNothing
 
 @fn void DPowerSettings::setLowPowerAutoSleepThreshold(const qint32 value)
-//TODO: 不知道含义
+@retval powerActionshutdown
+        powerActionsuspend
+        powerActionHibernate
+        powerActionTurnoffscreen
+        powerActionDoNothing
+
 
 @fn bool DPowerSettings::lowPowerNotifyEnable() const
 @brief 是否打开低电量通知
@@ -157,21 +189,21 @@ DPowerSettings类
 @param[in] 布尔值
 
 @fn qint32 DPowerSettings::lowPowerNotifyThreshold() const
-//TODO: 不知道含义
+@brief 低电量通知的阈值：阈值：每百分之25%为一个单位
 
 @fn void DPowerSettings::setLowPowerNotifyThreshold(const qint32 value)
-//TODO: 不知道含义
+@brief 设置低电量通知的阈值：阈值：每百分之25%为一个单位
 
 @fn bool DPowerSettings::screenBlackLock() const
-@brief 关闭屏幕并锁屏
+@brief 屏幕关闭是否锁屏
 
 @fn void DPowerSettings::setScreenBlackLock(const bool value)
 @brief 设置关闭屏幕并锁屏
-//TODO: 不知道含义
+
 
 @fn bool DPowerSettings::sleepLock() const
-//TODO: 不知道含义
+@brief 睡眠是否锁屏
 
 @fn void DPowerSettings::setSleepLock(const bool value)
-//TODO: 不知道含义
+@brief 设置睡眠是否锁屏
 */
