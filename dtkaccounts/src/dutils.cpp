@@ -4,6 +4,7 @@
 
 #include "dutils.h"
 #include <QDir>
+#include <QTextStream>
 #include "dglobalconfig.h"
 
 DACCOUNTS_BEGIN_NAMESPACE
