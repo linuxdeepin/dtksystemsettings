@@ -20,35 +20,37 @@ struct LoginHistory
 
 // Common Custom Type
 
+/**
+ * @brief type of user account
+ */
 enum class AccountTypes : qint32 {
-    Default = 0,  // 普通账户
-    Admin,        // 管理员
-    Udcp,         // 域管账户
-    Unknown       // 未知
+    Default = 0,
+    Admin,
+    Udcp, /**< Domain Controller */
+    Unknown
 };
 
+/**
+ * @brief keys in the configuration file
+ */
 enum class keyType {
-    IconFile,    // 图标路径
-    Layout,      // 布局
-    LayoutList,  // 历史布局
-    Locale,      // 本地化
-    UUID,        // 用户的UUID
-    Unknown      // 未知
+    IconFile,   /**< icon file path     */
+    Layout,     /**< keyboard layout     */
+    LayoutList, /**< keyboard layout list*/
+    Locale,
+    UUID,
+    Unknown
 };
 
-enum class PasswdStatus {
-    P,       // 有密码
-    NP,      // 无密码
-    L,       // 账户被锁定
-    Unknown  // 未知
-};
+/**
+ * @brief password status
+ */
+enum class PasswdStatus { Password, NoPassword, Locked, Unknown };
 
-enum class PasswdExpirInfo {
-    Normal,   // 没有过期
-    Closed,   // 将要过期
-    Expired,  // 已过期
-    Unknown   // 未知
-};
+/**
+ * @brief Password Expiration Information
+ */
+enum class PasswdExpirInfo { Normal, Closed, Expired, Unknown };
 
 struct ShadowInfo
 {
