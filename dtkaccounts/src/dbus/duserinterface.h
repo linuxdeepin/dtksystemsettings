@@ -92,7 +92,6 @@ private slots:
     void receiveChanged();
 
 private:
-    QString encryptPassword(const QString &password) const;
     QScopedPointer<DDBusInterface> m_inter;
 };
 

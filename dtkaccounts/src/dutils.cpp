@@ -6,8 +6,14 @@
 #include <QDir>
 #include <QTextStream>
 #include "dglobalconfig.h"
+#include "passwd.h"
 
 DACCOUNTS_BEGIN_NAMESPACE
+
+QString Dutils::encryptPassword(const QString &password)
+{
+    return QString(mkpasswd(password.toStdString().c_str()));
+}
 
 QString Dutils::getUserConfigValue(const QByteArray &username, keyType key)
 {

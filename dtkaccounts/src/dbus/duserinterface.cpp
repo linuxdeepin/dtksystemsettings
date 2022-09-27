@@ -4,8 +4,6 @@
 
 #include "daccountstypes_p.h"
 #include "duserinterface.h"
-#include "../passwd.h"
-#include "../dutils.h"
 
 DACCOUNTS_BEGIN_NAMESPACE
 
@@ -191,7 +189,7 @@ QDBusPendingReply<void> DUserInterface::setLocked(bool locked)
 
 QDBusPendingReply<void> DUserInterface::setPassword(const QString &password, const QString &hint)
 {
-    QVariantList args{QVariant::fromValue(encryptPassword(password)), QVariant::fromValue(hint)};
+    QVariantList args{QVariant::fromValue(password), QVariant::fromValue(hint)};
     return m_inter->asyncCallWithArgumentList("SetPassword", args);
 }
 
@@ -229,11 +227,6 @@ QDBusPendingReply<void> DUserInterface::setXSession(const QString &x_session)
 {
     QVariantList args{QVariant::fromValue(x_session)};
     return m_inter->asyncCallWithArgumentList("SetXSession", args);
-}
-
-QString DUserInterface::encryptPassword(const QString &password) const
-{
-    return QString(mkpasswd(password.toStdString().c_str()));
 }
 
 DACCOUNTS_END_NAMESPACE
