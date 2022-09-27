@@ -178,6 +178,11 @@ void DDBusInterface::setProperty(const char *propName, const QVariant &value)
 {
     Q_D(const DDBusInterface);
     QDBusMessage msg = QDBusMessage::createMethodCall(service(), path(), PropertiesInterface, QStringLiteral("Set"));
-    msg << interface() << originalPropname(propName, d->m_suffix) << value;
-    connection().asyncCall(msg);
+    msg << interface() << originalPropname(propName, d->m_suffix) << QVariant::fromValue(QDBusVariant(value));
+
+    QDBusPendingReply<void> reply = connection().asyncCall(msg);
+    reply.waitForFinished();
+    if (!reply.isValid()) {
+        qWarning() << reply.error().message();
+    }
 }
