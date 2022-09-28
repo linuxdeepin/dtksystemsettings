@@ -33,13 +33,11 @@ DDBusInterfacePrivate::DDBusInterfacePrivate(DDBusInterface *interface, QObject 
     message << interface->service();
     interface->connection().callWithCallback(message, this, SLOT(onDBusNameHasOwner(bool)));
 
-    QStringList argumentMatch;
-    argumentMatch << interface->interface();
     interface->connection().connect(interface->service(),
                                     interface->path(),
                                     PropertiesInterface,
                                     PropertiesChanged,
-                                    argumentMatch,
+                                    {interface->interface()},
                                     QString(),
                                     this,
                                     SLOT(onPropertiesChanged(QString, QVariantMap, QStringList)));
@@ -49,8 +47,11 @@ void DDBusInterfacePrivate::updateProp(const char *propName, const QVariant &val
 {
     m_propertyMap.insert(propName, value);
     const QMetaObject *metaObj = m_parent->metaObject();
-    const char *signalName = propName + QStringLiteral("Changed").toLatin1();
-    int i = metaObj->indexOfSignal(signalName);
+    QByteArray baSignal = QStringLiteral("%1Changed(%2)").arg(propName).arg(value.typeName()).toLatin1();
+    QByteArray baSignalName = QStringLiteral("%1Changed").arg(propName).toLatin1();
+    const char *signal = baSignal.data();
+    const char *signalName = baSignalName.data();
+    int i = metaObj->indexOfSignal(signal);
     if (i != -1) {
         QMetaObject::invokeMethod(m_parent, signalName, Qt::DirectConnection, QGenericArgument(value.typeName(), value.data()));
     } else
