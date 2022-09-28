@@ -18,7 +18,6 @@ public:
     explicit DUserInterface(const QString &path, QObject *parent = nullptr);
     ~DUserInterface() = default;
 
-    Q_PROPERTY(QList<LoginHistory> LoginHistory READ loginHistorys)
     Q_PROPERTY(bool automaticLogin READ automaticLogin)
     Q_PROPERTY(bool localAccount READ localAccount)
     Q_PROPERTY(bool locked READ locked)
@@ -39,7 +38,6 @@ public:
     Q_PROPERTY(quint64 loginFrequency READ loginFrequency)
     Q_PROPERTY(quint64 UID READ UID)
 
-    QList<LoginHistory> loginHistorys() const;
     bool automaticLogin() const;
     bool localAccount() const;
     bool locked() const;
@@ -92,7 +90,7 @@ private slots:
     void receiveChanged();
 
 private:
-    QScopedPointer<DDBusInterface> m_inter;
+    DDBusInterface *m_inter;
 };
 
 DACCOUNTS_END_NAMESPACE

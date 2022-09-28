@@ -3,16 +3,14 @@
 # SPDX-License-Identifier: LGPL-3.0-or-later
 
 cmake_minimum_required(VERSION 3.13)
-
 # If do't define version number, specify the version number
 set(VERSION "1.0.0" CACHE STRING "define project version")
-
 set(BIN_NAME dtkaccounts)
 
 project(${BIN_NAME}
     LANGUAGES CXX
     HOMEPAGE_URL https://github.com/linuxdeepin/dtksystemsettings
-    DESCRIPTION "accounts DBus interface binding for Qt5"
+    DESCRIPTION "accounts DBus interface binding for Qt"
     VERSION ${VERSION})
 
 # specify install dir
@@ -39,7 +37,7 @@ if (CMAKE_BUILD_TYPE STREQUAL "Debug")
 endif ()
 
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core DBus)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Gui DBus)
 
 add_subdirectory(src)
 

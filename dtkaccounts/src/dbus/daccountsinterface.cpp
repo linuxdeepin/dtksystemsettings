@@ -10,12 +10,20 @@ DACCOUNTS_BEGIN_NAMESPACE
 DAccountsInterface::DAccountsInterface(QObject *parent)
     : QObject(parent)
 {
+#if defined(USE_FAKE_INTERFACE)
+    const QString &Service = QStringLiteral("com.deepin.daemon.FakeAccounts");
+    const QString &Path = QStringLiteral("/com/deepin/daemon/FakeAccounts");
+    const QString &Interface = QStringLiteral("com.deepin.daemon.FakeAccounts");
+    QDBusConnection Connection = QDBusConnection::sessionBus();
+#else
     const QString &Service = QStringLiteral("org.freedesktop.Accounts");
     const QString &Path = QStringLiteral("/org/freedesktop/Accounts");
     const QString &Interface = QStringLiteral("org.freedesktop.Accounts");
-    m_inter.reset(new DDBusInterface(Service, Path, Interface, QDBusConnection::systemBus(), this));
+    QDBusConnection Connection = QDBusConnection::systemBus();
     QDBusConnection::systemBus().connect(Service, Path, Interface, "UserAdded", this, "receiveUserAdded");
     QDBusConnection::systemBus().connect(Service, Path, Interface, "UserDeleted", this, "receiveUserDeleted");
+#endif
+    m_inter = new DDBusInterface(Service, Path, Interface, Connection, this);
 }
 
 QString DAccountsInterface::daemonVersion() const

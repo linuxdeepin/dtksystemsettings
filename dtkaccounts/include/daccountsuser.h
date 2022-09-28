@@ -20,26 +20,26 @@ public:
     virtual ~DAccountsUser();
 
     Q_PROPERTY(AccountTypes accountType READ accountType)
-    Q_PROPERTY(bool automaticLogin READ automaticLogin WRITE setAutomaticLogin)
+    Q_PROPERTY(bool automaticLogin READ automaticLogin WRITE setAutomaticLogin NOTIFY automaticLoginChanged)
     Q_PROPERTY(QString fullName READ fullName WRITE setFullName)
     Q_PROPERTY(quint64 GID READ GID)
     Q_PROPERTY(quint64 UID READ UID)
-    Q_PROPERTY(QStringList groups READ groups WRITE setGroups)
-    Q_PROPERTY(QList<QByteArray> layoutList READ layoutList WRITE setLayoutList)
+    Q_PROPERTY(QStringList groups READ groups WRITE setGroups NOTIFY groupsChanged)
+    Q_PROPERTY(QList<QByteArray> layoutList READ layoutList WRITE setLayoutList NOTIFY layoutListChanged)
     Q_PROPERTY(QString homeDir READ homeDir WRITE setHomeDir)
-    Q_PROPERTY(QList<QByteArray> iconFileList READ iconFileList)
-    Q_PROPERTY(QUrl iconFile READ iconFile WRITE setIconFile)
-    Q_PROPERTY(QByteArray layout READ layout WRITE setLayout)
-    Q_PROPERTY(QByteArray locale READ locale WRITE setLocale)
-    Q_PROPERTY(bool locked READ locked WRITE setLocked)
-    Q_PROPERTY(qint32 maxPasswordAge READ maxPasswordAge WRITE setMaxPasswordAge)
-    Q_PROPERTY(QString passwordHint READ passwordHint WRITE setPasswordHint)
+    Q_PROPERTY(QList<QByteArray> iconFileList READ iconFileList NOTIFY iconFileListChanged)
+    Q_PROPERTY(QUrl iconFile READ iconFile WRITE setIconFile NOTIFY iconFileChanged)
+    Q_PROPERTY(QByteArray layout READ layout WRITE setLayout NOTIFY layoutChanged)
+    Q_PROPERTY(QByteArray locale READ locale WRITE setLocale NOTIFY localeChanged)
+    Q_PROPERTY(bool locked READ locked WRITE setLocked NOTIFY lockedChanged)
+    Q_PROPERTY(qint32 maxPasswordAge READ maxPasswordAge WRITE setMaxPasswordAge NOTIFY maxPasswordAgeChanged)
+    Q_PROPERTY(QString passwordHint READ passwordHint WRITE setPasswordHint NOTIFY passwordHintChanged)
     Q_PROPERTY(QDateTime passwordLastChange READ passwordLastChange)
     Q_PROPERTY(PasswdStatus passwordStatus READ passwordStatus)
     Q_PROPERTY(QString shell READ shell WRITE setShell)
     Q_PROPERTY(QByteArray UUID READ UUID)
     Q_PROPERTY(QByteArray userName READ userName)
-    Q_PROPERTY(bool noPasswdLogin READ noPasswdLogin WRITE setNopasswdLogin)
+    Q_PROPERTY(bool noPasswdLogin READ noPasswdLogin WRITE setNopasswdLogin NOTIFY noPasswdLoginChanged)
     Q_PROPERTY(QDateTime loginTime READ loginTime)
     Q_PROPERTY(QDateTime createdTime READ createdTime)
 
@@ -91,8 +91,21 @@ public slots:
     ReminderInfo getReminderInfo() const;
     QList<qint32> secretQuestions() const;
     void setSecretQuestions(const QMap<qint32, QByteArray> &newquestions);
-    QList<qint32> vertifySecretQuestions(const QMap<qint32, QString> &anwsers);
+    QList<qint32> verifySecretQuestions(const QMap<qint32, QString> &anwsers);
     PasswdExpirInfo passwordExpirationInfo(qint64 &dayLeft) const;
+
+signals:
+    void automaticLoginChanged(const bool enabled);
+    void groupsChanged(const QStringList &list);
+    void layoutListChanged(const QList<QByteArray> &list);
+    void iconFileListChanged(const QList<QByteArray> &list);
+    void iconFileChanged(const QUrl &url);
+    void layoutChanged(const QByteArray &layout);
+    void localeChanged(const QByteArray &locale);
+    void lockedChanged(const bool locked);
+    void maxPasswordAgeChanged(const qint32 age);
+    void passwordHintChanged(const QString &hint);
+    void noPasswdLoginChanged(const bool enabled);
 
 private:
     explicit DAccountsUser(const quint64 uid, QObject *parent = nullptr);

@@ -36,7 +36,7 @@ private slots:
     void receiveUserDeleted(QString user);
 
 private:
-    QScopedPointer<DDBusInterface> m_inter;
+    DDBusInterface *m_inter;
 };
 
 DACCOUNTS_END_NAMESPACE

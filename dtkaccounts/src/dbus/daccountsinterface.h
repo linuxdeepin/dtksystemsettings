@@ -39,7 +39,7 @@ private slots:
     void receiveUserDeleted(const QDBusObjectPath &user);
 
 private:
-    QScopedPointer<DDBusInterface> m_inter;
+    DDBusInterface *m_inter;
 };
 
 DACCOUNTS_END_NAMESPACE
