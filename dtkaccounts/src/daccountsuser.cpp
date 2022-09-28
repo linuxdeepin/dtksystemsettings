@@ -19,8 +19,13 @@ DACCOUNTS_BEGIN_NAMESPACE
 DAccountsUserPrivate::DAccountsUserPrivate(const quint64 uid, DAccountsUser *parent)
     : q_ptr(parent)
 {
+#if defined(USE_FAKE_INTERFACE)
+    const auto &freeDesktopPath = "/com/deepin/daemon/FakeAccounts/User" + QString::number(uid);
+    const auto &daemonPath = "/com/deepin/daemon/FakeAccounts/User" + QString::number(uid);
+#else
     const auto &freeDesktopPath = "/org/freedesktop/Accounts/User" + QString::number(uid);
     const auto &daemonPath = "/com/deepin/daemon/Accounts/User" + QString::number(uid);
+#endif
     m_dSystemUserInter = new DSystemUserInterface(daemonPath, this);
     m_dUserInter = new DUserInterface(freeDesktopPath, this);
 }
@@ -29,6 +34,47 @@ DAccountsUser::DAccountsUser(const quint64 uid, QObject *parent)
     : QObject(parent)
     , d_ptr(new DAccountsUserPrivate(uid, this))
 {
+    Q_D(const DAccountsUser);
+    connect(d->m_dSystemUserInter, &DSystemUserInterface::AutomaticLoginChanged, this, [this](const bool enabled) {
+        emit this->automaticLoginChanged(enabled);
+    });
+    connect(d->m_dSystemUserInter, &DSystemUserInterface::GroupsChanged, this, [this](const QStringList &list) {
+        emit this->groupsChanged(list);
+    });
+    connect(d->m_dSystemUserInter, &DSystemUserInterface::LayoutChanged, this, [this](const QString &layout) {
+        emit this->layoutChanged(layout.toUtf8());
+    });
+    connect(d->m_dSystemUserInter, &DSystemUserInterface::HistoryLayoutChanged, this, [this](const QStringList &list) {
+        QList<QByteArray> tmp;
+        for (const auto &v : list)
+            tmp.append(v.toUtf8());
+        emit this->layoutListChanged(tmp);
+    });
+    connect(d->m_dSystemUserInter, &DSystemUserInterface::IconListChanged, this, [this](const QStringList &list) {
+        QList<QByteArray> tmp;
+        for (const auto &v : list)
+            tmp.append(v.toUtf8());
+        emit this->iconFileListChanged(tmp);
+    });
+    connect(d->m_dSystemUserInter, &DSystemUserInterface::IconFileChanged, this, [this](const QString &url) {
+        QUrl tmp(url);
+        emit this->iconFileChanged(url);
+    });
+    connect(d->m_dSystemUserInter, &DSystemUserInterface::LocaleChanged, this, [this](const QString &locale) {
+        emit this->localeChanged(locale.toUtf8());
+    });
+    connect(d->m_dSystemUserInter, &DSystemUserInterface::LockedChanged, this, [this](const bool locked) {
+        emit this->lockedChanged(locked);
+    });
+    connect(d->m_dSystemUserInter, &DSystemUserInterface::MaxPasswordAgeChanged, this, [this](const qint32 nDays) {
+        emit this->maxPasswordAgeChanged(nDays);
+    });
+    connect(d->m_dSystemUserInter, &DSystemUserInterface::NoPasswdLoginChanged, this, [this](const bool enabled) {
+        emit this->noPasswdLoginChanged(enabled);
+    });
+    connect(d->m_dSystemUserInter, &DSystemUserInterface::PasswordHintChanged, this, [this](const QString &hint) {
+        emit this->passwordHintChanged(hint);
+    });
 }
 
 DAccountsUser::~DAccountsUser() {}
@@ -163,8 +209,8 @@ qint32 DAccountsUser::maxPasswordAge() const
         return -1;
     }
     auto value = reply.argumentAt(3);
-    if (!value.isNull()) {
-        qWarning() << "can't get maxPasswordAge: max_days_between_changes null";
+    if (!value.isValid()) {
+        qWarning() << "can't get maxPasswordAge: max_days_between_changes is invalid";
         return -1;
     }
     return value.toInt();
@@ -187,8 +233,8 @@ QDateTime DAccountsUser::passwordLastChange() const
         return lstch;
     }
     auto value = reply.argumentAt(1);
-    if (!value.isNull()) {
-        qWarning() << "can't get passwordLastChange: last_change_time null";
+    if (!value.isValid()) {
+        qWarning() << "can't get passwordLastChange: last_change_time is invalid";
         return lstch;
     }
     return lstch.addDays(value.toInt());
@@ -315,7 +361,7 @@ void DAccountsUser::setHomeDir(const QString &newhomedir)
 void DAccountsUser::setIconFile(const QUrl &newiconURL)
 {
     Q_D(const DAccountsUser);
-    auto reply = d->m_dSystemUserInter->setIconFile(newiconURL.toLocalFile());
+    auto reply = d->m_dSystemUserInter->setIconFile(newiconURL.toString());
     reply.waitForFinished();
     if (!reply.isValid())
         qWarning() << reply.error().message();
@@ -478,7 +524,7 @@ void DAccountsUser::setSecretQuestions(const QMap<qint32, QByteArray> &newquesti
         qWarning() << reply.error().message();
 }
 
-QList<qint32> DAccountsUser::vertifySecretQuestions(const QMap<qint32, QString> &anwsers)
+QList<qint32> DAccountsUser::verifySecretQuestions(const QMap<qint32, QString> &anwsers)
 {
     Q_D(const DAccountsUser);
     auto reply = d->m_dSystemUserInter->verifySecretQuestions(anwsers);
@@ -501,24 +547,24 @@ PasswdExpirInfo DAccountsUser::passwordExpirationInfo(qint64 &dayLeft) const
     }
 
     const auto &lstch = reply.argumentAt(1);
-    if (!lstch.isNull()) {
-        qWarning() << "can't get passwordExpirationInfo: last_change_time is null.";
+    if (!lstch.isValid()) {
+        qWarning() << "can't get passwordExpirationInfo: last_change_time is invalid";
         return PasswdExpirInfo::Unknown;
     }
     if (lstch.toLongLong() == 0)
         return PasswdExpirInfo::Expired;
 
     const auto &max = reply.argumentAt(3);
-    if (!max.isNull()) {
-        qWarning() << "can't get passwordExpirationInfo: max_days_between_changes is null.";
+    if (!max.isValid()) {
+        qWarning() << "can't get passwordExpirationInfo: max_days_between_changes is invalid";
         return PasswdExpirInfo::Unknown;
     }
     if (max.toLongLong() == -1)
         return PasswdExpirInfo::Normal;
 
     const auto &warn = reply.argumentAt(4);
-    if (!warn.isNull()) {
-        qWarning() << "can't get passwordExpirationInfo: days_to_warn is null.";
+    if (!warn.isValid()) {
+        qWarning() << "can't get passwordExpirationInfo: days_to_warn is invalid";
         return PasswdExpirInfo::Unknown;
     }
     const auto &curDate = QDateTime::currentDateTime().toSecsSinceEpoch() / (60 * 60 * 24);

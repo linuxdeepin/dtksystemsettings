@@ -13,6 +13,8 @@ add_library(${BIN_NAME} SHARED
     ${SRCS}
 )
 
+include_directories(../include)
+
 set_target_properties(${BIN_NAME} PROPERTIES
     VERSION ${CMAKE_PROJECT_VERSION}
     SOVERSION ${CMAKE_PROJECT_VERSION_MAJOR})
@@ -21,12 +23,13 @@ target_compile_definitions(${BIN_NAME} PRIVATE VERSION="${CMAKE_PROJECT_VERSION}
 
 target_include_directories(${BIN_NAME} PUBLIC
     Qt${QT_VERSION_MAJOR}::Core
+    Qt${QT_VERSION_MAJOR}::Gui
     Qt${QT_VERSION_MAJOR}::DBus
-    ../include
 )
 
 target_link_libraries(${BIN_NAME} PRIVATE
     Qt${QT_VERSION_MAJOR}::Core
+    Qt${QT_VERSION_MAJOR}::Gui
     Qt${QT_VERSION_MAJOR}::DBus
     -lcrypt
 )

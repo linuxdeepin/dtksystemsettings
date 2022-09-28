@@ -9,12 +9,18 @@ DACCOUNTS_BEGIN_NAMESPACE
 DSystemUserInterface::DSystemUserInterface(const QString &path, QObject *parent)
     : QObject(parent)
 {
+#if defined(USE_FAKE_INTERFACE)
+    const QString &Service = QStringLiteral("com.deepin.daemon.FakeAccounts");
+    const QString &Interface = QStringLiteral("com.deepin.daemon.FakeAccounts.User");
+    QDBusConnection Connection = QDBusConnection::sessionBus();
+#else
     const QString &Service = QStringLiteral("com.deepin.daemon.Accounts");
     const QString &Interface = QStringLiteral("com.deepin.daemon.Accounts.User");
-
+    QDBusConnection Connection = QDBusConnection::systemBus();
+#endif
     ReminderInfo_p::registerMetaType();
 
-    m_inter.reset(new DDBusInterface(Service, path, Interface, QDBusConnection::systemBus(), this));
+    m_inter = new DDBusInterface(Service, path, Interface, Connection, this);
 };
 
 bool DSystemUserInterface::automaticLogin() const
@@ -84,7 +90,7 @@ QString DSystemUserInterface::UUID() const
 
 QDBusPendingReply<ReminderInfo_p> DSystemUserInterface::getReminderInfo() const
 {
-    return m_inter->asyncCall("GetReminderinfo");
+    return m_inter->asyncCall("GetReminderInfo");
 }
 
 QDBusPendingReply<QList<qint32>> DSystemUserInterface::getSecretQuestions() const
@@ -149,7 +155,7 @@ QDBusPendingReply<void> DSystemUserInterface::setLocale(const QString &locale)
 
 QDBusPendingReply<void> DSystemUserInterface::setMaxPasswordAge(qint32 nDays)
 {
-    return m_inter->asyncCallWithArgumentList("SetPasswordAge", {QVariant::fromValue(nDays)});
+    return m_inter->asyncCallWithArgumentList("SetMaxPasswordAge", {QVariant::fromValue(nDays)});
 }
 
 QDBusPendingReply<void> DSystemUserInterface::setPassword(const QString &password)

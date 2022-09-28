@@ -70,20 +70,20 @@ public slots:
 signals:
     void AutomaticLoginChanged(const bool enabled);
     void AccountTypeChanged(const qint32 type);
-    void GroupsChanged(const QStringList groups);
-    void HistoryLayoutChanged(const QStringList list);
-    void IconListChanged(const QStringList list);
-    void IconFileChanged(const QString iconURI);
-    void LayoutChanged(const QString layout);
-    void LocaleChanged(const QString locale);
+    void GroupsChanged(const QStringList &groups);
+    void HistoryLayoutChanged(const QStringList &list);
+    void IconListChanged(const QStringList &list);
+    void IconFileChanged(const QString &iconURI);
+    void LayoutChanged(const QString &layout);
+    void LocaleChanged(const QString &locale);
     void LockedChanged(const bool locked);
     void MaxPasswordAgeChanged(const qint32 nDays);
     void NoPasswdLoginChanged(const bool enabled);
-    void PasswordHintChanged(const QString passwordHint);
-    void UUIDChanged(const QString UUID);
+    void PasswordHintChanged(const QString &passwordHint);
+    void UUIDChanged(const QString &UUID);
 
 private:
-    QScopedPointer<DDBusInterface> m_inter;
+    DDBusInterface *m_inter;
 };
 
 DACCOUNTS_END_NAMESPACE

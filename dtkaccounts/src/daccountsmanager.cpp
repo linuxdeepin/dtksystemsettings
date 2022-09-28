@@ -136,22 +136,22 @@ ValidMsg DAccountsManager::isPasswordValid(const QString &password)
         return msg;
     }
     const auto &valid = reply.argumentAt(0);
-    if (valid.isNull()) {
-        qWarning() << "can't get ValidMsg: valid is null";
+    if (!valid.isValid()) {
+        qWarning() << "can't get ValidMsg: valid is invalid";
         return msg;
     }
     msg.valid = valid.toBool();
 
     const auto &errmsg = reply.argumentAt(1);
-    if (errmsg.isNull()) {
-        qWarning() << "can't get ValidMsg: errmsg is null";
+    if (!msg.valid and !errmsg.isValid()) {
+        qWarning() << "can't get ValidMsg: errmsg is invalid";
         return msg;
     }
     msg.msg = errmsg.toString();
 
     const auto &errcode = reply.argumentAt(2);
-    if (errcode.isNull()) {
-        qWarning() << "can't get ValidMsg: errcode is null";
+    if (!msg.valid and !errcode.isValid()) {
+        qWarning() << "can't get ValidMsg: errcode is invalid";
         return msg;
     }
     msg.code = errcode.toInt();
@@ -170,22 +170,22 @@ ValidMsg DAccountsManager::isUsernameValid(const QString &username)
         return msg;
     }
     const auto &valid = reply.argumentAt(0);
-    if (valid.isNull()) {
-        qWarning() << "can't get ValidMsg: valid is null";
+    if (!valid.isValid()) {
+        qWarning() << "can't get ValidMsg: valid is invalid";
         return msg;
     }
     msg.valid = valid.toBool();
 
     const auto &errmsg = reply.argumentAt(1);
-    if (errmsg.isNull()) {
-        qWarning() << "can't get ValidMsg: errmsg is null";
+    if (!msg.valid and !errmsg.isValid()) {
+        qWarning() << "can't get ValidMsg: errmsg is invalid";
         return msg;
     }
     msg.msg = errmsg.toString();
 
     const auto &errcode = reply.argumentAt(2);
-    if (errcode.isNull()) {
-        qWarning() << "can't get ValidMsg: errcode is null";
+    if (!msg.valid and !errcode.isValid()) {
+        qWarning() << "can't get ValidMsg: errcode is invalid";
         return msg;
     }
     msg.code = errcode.toInt();
@@ -195,7 +195,7 @@ ValidMsg DAccountsManager::isUsernameValid(const QString &username)
 
 quint64 DAccountsManagerPrivate::getUIDFromObjectPath(const QString &path) const
 {
-    const auto &name = *(path.split("/").rbegin());
+    auto name = *(path.split("/").rbegin());
     int index = name.indexOf("r");
     return name.mid(index + 1).toUInt();
 }

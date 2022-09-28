@@ -10,14 +10,6 @@
 
 DACCOUNTS_BEGIN_NAMESPACE
 
-// DBus Custom Type
-struct LoginHistory
-{
-    qint64 loginTime;
-    qint64 logoutTime;
-    QMap<QString, QVariant> sessionInfo;
-};
-
 // Common Custom Type
 
 /**

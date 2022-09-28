@@ -4,34 +4,26 @@
 
 #include "daccountstypes_p.h"
 #include "duserinterface.h"
+#include <qdebug.h>
 
 DACCOUNTS_BEGIN_NAMESPACE
 
 DUserInterface::DUserInterface(const QString &path, QObject *parent)
     : QObject(parent)
 {
+#if defined(USE_FAKE_INTERFACE)
+    const QString &Service = QStringLiteral("com.deepin.daemon.FakeAccounts");
+    const QString &Interface = QStringLiteral("com.deepin.daemon.FakeAccounts.User");
+    QDBusConnection Connection = QDBusConnection::sessionBus();
+#else
     const QString &Service = QStringLiteral("org.freedesktop.Accounts");
     const QString &Interface = QStringLiteral("org.freedesktop.Accounts.User");
-
+    QDBusConnection Connection = QDBusConnection::systemBus();
+#endif
     LoginHistory_p::registerMetaType();
 
-    m_inter.reset(new DDBusInterface(Service, path, Interface, QDBusConnection::systemBus(), this));
-    QDBusConnection::systemBus().connect(Service, path, Interface, "Changed", this, "receiveChanged");
+    m_inter = new DDBusInterface(Service, path, Interface, Connection, this);
 };
-
-QList<LoginHistory> DUserInterface::loginHistorys() const
-{
-    const auto &result = qdbus_cast<QList<LoginHistory_p>>(m_inter->property("LoginHistory"));
-    QList<LoginHistory> loginHistory;
-    for (auto &&history_p : result) {
-        LoginHistory history;
-        history.loginTime = history_p.loginTime;
-        history.logoutTime = history_p.logoutTime;
-        history.sessionInfo = history_p.sessionInfo;
-        loginHistory.push_back(std::move(history));
-    }
-    return loginHistory;
-}
 
 bool DUserInterface::automaticLogin() const
 {
