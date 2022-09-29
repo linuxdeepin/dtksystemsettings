@@ -1,22 +1,22 @@
 // SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
-#include "./upowerkbdbacklightinterface.h"
+#include "./upowerkbdbacklightservice.h"
 #include <qdbusconnection.h>
 
-UPowerKbdBacklightInterface::UPowerKbdBacklightInterface(QObject *parent)
+UPowerKbdBacklightService::UPowerKbdBacklightService(QObject *parent)
     : QObject(parent)
     ,m_reset(false)
 {
     registerService();
 }
 
-UPowerKbdBacklightInterface::~UPowerKbdBacklightInterface()
+UPowerKbdBacklightService::~UPowerKbdBacklightService()
 {
     unRegisterService();
 }
 
-void UPowerKbdBacklightInterface:: registerService()
+void UPowerKbdBacklightService:: registerService()
 {
     const QString &service = QLatin1String("com.deepin.daemon.FakePower");
     const QString &path = QLatin1String("/com/deepin/daemon/FakePower");
@@ -33,7 +33,7 @@ void UPowerKbdBacklightInterface:: registerService()
     }
 }
 
-void UPowerKbdBacklightInterface::unRegisterService()
+void UPowerKbdBacklightService::unRegisterService()
 {
     QDBusConnection bus = QDBusConnection::sessionBus();
     bus.unregisterObject(QLatin1String("/com/deepin/daemon/FakePower"));
@@ -42,17 +42,17 @@ void UPowerKbdBacklightInterface::unRegisterService()
 
 // pubilc slots
 
-uint UPowerKbdBacklightInterface::GetBrightness() const
+uint UPowerKbdBacklightService::GetBrightness() const
 {
     return 0;
 }
 
-uint UPowerKbdBacklightInterface::GetMaxBrightness() const
+uint UPowerKbdBacklightService::GetMaxBrightness() const
 {
     return 255;
 }
 
-void UPowerKbdBacklightInterface::SetBrightness(const uint value)
+void UPowerKbdBacklightService::SetBrightness(const uint value)
 {
     Q_UNUSED(value)
     m_reset = true;

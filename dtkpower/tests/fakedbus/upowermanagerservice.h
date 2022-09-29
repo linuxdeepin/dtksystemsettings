@@ -7,13 +7,13 @@
 #include <qdebug.h>
 #include <qdbuspendingreply.h>
 
-class UPowerManagerInterface : public QObject
+class UPowerManagerService : public QObject
 {
     Q_OBJECT
     Q_CLASSINFO("D-Bus Interface", "com.deepin.daemon.FakePower")
 public:
-    explicit UPowerManagerInterface(QObject *parent = nullptr);
-    virtual ~UPowerManagerInterface();
+    explicit UPowerManagerService(QObject *parent = nullptr);
+    virtual ~UPowerManagerService();
     // properties
     Q_PROPERTY(bool LidIsClosed READ lidIsClosed);
     Q_PROPERTY(bool LidIsPresent READ lidIsPresent);

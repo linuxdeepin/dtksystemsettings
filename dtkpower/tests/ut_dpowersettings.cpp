@@ -5,7 +5,7 @@
 #include <gtest/gtest.h>
 
 #include "dpowersettings.h"
-#include "fakedbus/daemonpowerinterface.h"
+#include "fakedbus/daemonpowerservice.h"
 #include <QDBusMessage>
 #include <QDBusConnection>
 #include <QDBusReply>
@@ -18,7 +18,7 @@ public:
     // 在测试套件的第一个测试用例开始前，SetUpTestCase 函数会被调用
     static void SetUpTestCase()
     {
-        m_fakeInterface = new DaemonPowerInterface();
+        m_fakeInterface = new DaemonPowerService();
         m_dpowerSettings = new DPowerSettings();
     }
     // 在测试套件中的最后一个测试用例运行结束后，TearDownTestCase 函数会被调用
@@ -35,11 +35,11 @@ public:
     // 每个测试用例运行结束后，TearDown 函数都会被被调用
     void TearDown() override {}
 
-    static DaemonPowerInterface *m_fakeInterface;
+    static DaemonPowerService *m_fakeInterface;
     static DPowerSettings *m_dpowerSettings;
 };
 
-DaemonPowerInterface *TestDPowerSettings::m_fakeInterface = nullptr;
+DaemonPowerService *TestDPowerSettings::m_fakeInterface = nullptr;
 DPowerSettings *TestDPowerSettings::m_dpowerSettings = nullptr;
 
 TEST_F(TestDPowerSettings, reset)

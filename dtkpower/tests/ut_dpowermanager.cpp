@@ -6,7 +6,7 @@
 
 #include "dpowermanager.h"
 #include "dpowerdevice.h"
-#include "fakedbus/upowermanagerinterface.h"
+#include "fakedbus/upowermanagerservice.h"
 #include <QDBusMessage>
 #include <QDBusConnection>
 #include <QDBusReply>
@@ -20,7 +20,7 @@ public:
     // 在测试套件的第一个测试用例开始前，SetUpTestCase 函数会被调用
     static void SetUpTestCase()
     {
-        m_fakeInterface = new UPowerManagerInterface();
+        m_fakeInterface = new UPowerManagerService();
         m_dpowermanager = new DPowerManager();
     }
     // 在测试套件中的最后一个测试用例运行结束后，TearDownTestCase 函数会被调用
@@ -37,11 +37,11 @@ public:
     // 每个测试用例运行结束后，TearDown 函数都会被被调用
     void TearDown() override {}
 
-    static UPowerManagerInterface *m_fakeInterface;
+    static UPowerManagerService *m_fakeInterface;
     static DPowerManager *m_dpowermanager;
 };
 
-UPowerManagerInterface *TestDPowerManager::m_fakeInterface = nullptr;
+UPowerManagerService *TestDPowerManager::m_fakeInterface = nullptr;
 DPowerManager *TestDPowerManager::m_dpowermanager = nullptr;
 
 QT_BEGIN_NAMESPACE //for QString support
