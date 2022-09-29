@@ -4,7 +4,7 @@
 
 #include <gtest/gtest.h>
 #include "daccountsmanager.h"
-#include "fakedbus/accountsmanagerinterface.h"
+#include "fakedbus/accountsmanagerservice.h"
 
 DACCOUNTS_USE_NAMESPACE
 
@@ -13,7 +13,7 @@ class TestDAccountsManager : public testing::Test
 public:
     static void SetUpTestCase()
     {
-        m_fakeinter = new FakeAccountsManagerInterface();
+        m_fakeinter = new FakeAccountsManagerService();
         m_damanager = new DAccountsManager();
     }
     static void TearDownTestCase()
@@ -25,7 +25,7 @@ public:
     void TearDown() override {}
 
     static inline DAccountsManager *m_damanager{nullptr};
-    static inline FakeAccountsManagerInterface *m_fakeinter{nullptr};
+    static inline FakeAccountsManagerService *m_fakeinter{nullptr};
 };
 
 TEST_F(TestDAccountsManager, userList)
@@ -63,13 +63,6 @@ TEST_F(TestDAccountsManager, findUserByName)
     EXPECT_EQ(true, m_fakeinter->m_findUserByNameTrigger);
 }
 
-TEST_F(TestDAccountsManager, groups)
-{
-    EXPECT_EQ(false, m_fakeinter->m_groupsTrigger);
-    m_damanager->groups();
-    EXPECT_EQ(true, m_fakeinter->m_groupsTrigger);
-}
-
 TEST_F(TestDAccountsManager, presetGroups)
 {
     EXPECT_EQ(false, m_fakeinter->m_presetGroupsTrigger);
@@ -86,7 +79,7 @@ TEST_F(TestDAccountsManager, isPasswordValid)
 
 TEST_F(TestDAccountsManager, isUsernameValid)
 {
-    EXPECT_EQ(false, m_fakeinter->m_isUsernameTrigger);
+    EXPECT_EQ(false, m_fakeinter->m_isUsernameValidTrigger);
     m_damanager->isUsernameValid("aaa");
-    EXPECT_EQ(true, m_fakeinter->m_isUsernameTrigger);
+    EXPECT_EQ(true, m_fakeinter->m_isUsernameValidTrigger);
 }

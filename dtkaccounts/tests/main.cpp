@@ -5,13 +5,18 @@
 #include <qcoreapplication.h>
 #include <gtest/gtest.h>
 #include <sanitizer/asan_interface.h>
+//#include "fakedbus/accountsmanagerservice.h"
+//#include "fakedbus/accountsuserservice.h"
 int main(int argc, char **argv)
 {
     QCoreApplication app(argc, argv);
     ::testing::InitGoogleTest(&argc, argv);
     int ret = RUN_ALL_TESTS();
+    // FakeAccountsManagerService uinterface;
+    // FakeAccountsUserService uservice;
 #ifdef QT_DEBUG
     __sanitizer_set_report_path("asan_demo.log");
 #endif
     return ret;
+    // return app.exec();
 }
