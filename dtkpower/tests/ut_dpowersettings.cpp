@@ -9,6 +9,7 @@
 #include <QDBusMessage>
 #include <QDBusConnection>
 #include <QDBusReply>
+#include "dpowertypes.h"
 
 DPOWER_USE_NAMESPACE
 
@@ -53,12 +54,12 @@ TEST_F(TestDPowerSettings, reset)
 
 TEST_F(TestDPowerSettings, batteryLidClosedAction)
 {
-    m_dpowerSettings->setBatteryLidClosedAction(3);
+    m_dpowerSettings->setBatteryLidClosedAction(LidClosedAction::TurnoffScreen);
     ASSERT_EQ(3, m_fakeInterface->m_batteryLidClosedAction);
-    EXPECT_EQ(3, m_dpowerSettings->batteryLidClosedAction());
-    m_fakeInterface->setBatteryLidClosedAction(5);
-    ASSERT_EQ(5, m_fakeInterface->m_batteryLidClosedAction);
-    EXPECT_EQ(5, m_dpowerSettings->batteryLidClosedAction());
+    EXPECT_EQ(LidClosedAction::TurnoffScreen, m_dpowerSettings->batteryLidClosedAction());
+    m_fakeInterface->setBatteryLidClosedAction(2);
+    ASSERT_EQ(2, m_fakeInterface->m_batteryLidClosedAction);
+    EXPECT_EQ(LidClosedAction::Hibernate, m_dpowerSettings->batteryLidClosedAction());
 }
 TEST_F(TestDPowerSettings, batteryLockDelay)
 {
@@ -71,12 +72,12 @@ TEST_F(TestDPowerSettings, batteryLockDelay)
 }
 TEST_F(TestDPowerSettings, batteryPressPowerBtnAction)
 {
-    m_dpowerSettings->setBatteryPressPowerBtnAction(1);
+    m_dpowerSettings->setBatteryPressPowerBtnAction(PowerBtnAction::Suspend);
     ASSERT_EQ(1, m_fakeInterface->m_batteryPressPowerBtnAction);
-    EXPECT_EQ(1, m_dpowerSettings->batteryPressPowerBtnAction());
+    EXPECT_EQ(PowerBtnAction::Suspend, m_dpowerSettings->batteryPressPowerBtnAction());
     m_fakeInterface->setBatteryPressPowerBtnAction(2);
     EXPECT_EQ(2, m_fakeInterface->m_batteryPressPowerBtnAction);
-    EXPECT_EQ(2, m_dpowerSettings->batteryPressPowerBtnAction());
+    EXPECT_EQ(PowerBtnAction::Hibernate, m_dpowerSettings->batteryPressPowerBtnAction());
 }
 TEST_F(TestDPowerSettings, batteryScreenBlackDelay)
 {
@@ -107,12 +108,12 @@ TEST_F(TestDPowerSettings, batterySleepDelay)
 }
 TEST_F(TestDPowerSettings, linePowerLidClosedAction)
 {
-    m_dpowerSettings->setLinePowerLidClosedAction(1);
+    m_dpowerSettings->setLinePowerLidClosedAction(LidClosedAction::Suspend);
     ASSERT_EQ(1, m_fakeInterface->m_linePowerLidClosedAction);
-    EXPECT_EQ(1, m_dpowerSettings->linePowerLidClosedAction());
+    EXPECT_EQ(LidClosedAction::Suspend, m_dpowerSettings->linePowerLidClosedAction());
     m_fakeInterface->setLinePowerLidClosedAction(2);
     EXPECT_EQ(2, m_fakeInterface->m_linePowerLidClosedAction);
-    EXPECT_EQ(2, m_dpowerSettings->linePowerLidClosedAction());
+    EXPECT_EQ(LidClosedAction::Hibernate, m_dpowerSettings->linePowerLidClosedAction());
 }
 TEST_F(TestDPowerSettings, linePowerLockDelay)
 {
@@ -125,12 +126,12 @@ TEST_F(TestDPowerSettings, linePowerLockDelay)
 }
 TEST_F(TestDPowerSettings, linePowerPressPowerBtnAction)
 {
-    m_dpowerSettings->setLinePowerPressPowerBtnAction(100);
-    ASSERT_EQ(100, m_fakeInterface->m_linePowerPressPowerBtnAction);
-    EXPECT_EQ(100, m_dpowerSettings->linePowerPressPowerBtnAction());
-    m_fakeInterface->setLinePowerPressPowerBtnAction(200);
-    ASSERT_EQ(200, m_fakeInterface->m_linePowerPressPowerBtnAction);
-    EXPECT_EQ(200, m_dpowerSettings->linePowerPressPowerBtnAction());
+    m_dpowerSettings->setLinePowerPressPowerBtnAction(PowerBtnAction::Suspend);
+    ASSERT_EQ(1, m_fakeInterface->m_linePowerPressPowerBtnAction);
+    EXPECT_EQ(PowerBtnAction::Suspend, m_dpowerSettings->linePowerPressPowerBtnAction());
+    m_fakeInterface->setLinePowerPressPowerBtnAction(2);
+    ASSERT_EQ(2, m_fakeInterface->m_linePowerPressPowerBtnAction);
+    EXPECT_EQ(PowerBtnAction::Hibernate, m_dpowerSettings->linePowerPressPowerBtnAction());
 }
 TEST_F(TestDPowerSettings, linePowerScreenBlackDelay)
 {

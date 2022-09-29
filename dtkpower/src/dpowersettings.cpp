@@ -33,7 +33,11 @@ void DPowerSettingsPrivate::connectDBusSignal()
     connect(m_daemonPowerInter,
             &DaemonPowerInterface::BatteryLidClosedActionChanged,
             q,
-            &DPowerSettings::batteryLidClosedActionChanged);
+            [q] (const qint32 value) {
+                if (value < 1 || value > 4)
+                    return;
+                emit q->batteryLidClosedActionChanged(static_cast<LidClosedAction>(value));
+            });
     connect(m_daemonPowerInter,
             &DaemonPowerInterface::BatteryLockDelayChanged,
             q,
@@ -41,7 +45,11 @@ void DPowerSettingsPrivate::connectDBusSignal()
     connect(m_daemonPowerInter,
             &DaemonPowerInterface::BatteryPressPowerBtnActionChanged,
             q,
-            &DPowerSettings::batteryPressPowerBtnActionChanged);
+            [q] (const qint32 value) {
+                if (value < 0 || value > 4)
+                    return;
+                emit q->batteryPressPowerBtnActionChanged(static_cast<PowerBtnAction>(value));
+            });
     connect(m_daemonPowerInter,
             &DaemonPowerInterface::BatteryScreenBlackDelayChanged,
             q,
@@ -57,7 +65,11 @@ void DPowerSettingsPrivate::connectDBusSignal()
     connect(m_daemonPowerInter,
             &DaemonPowerInterface::LinePowerLidClosedActionChanged,
             q,
-            &DPowerSettings::linePowerLidClosedActionChanged);
+            [q] (const qint32 value) {
+                if (value < 1 || value > 4)
+                    return;
+                emit q->linePowerLidClosedActionChanged(static_cast<LidClosedAction>(value));
+            });
     connect(m_daemonPowerInter,
             &DaemonPowerInterface::LinePowerLockDelayChanged,
             q,
@@ -65,7 +77,11 @@ void DPowerSettingsPrivate::connectDBusSignal()
     connect(m_daemonPowerInter,
             &DaemonPowerInterface::LinePowerPressPowerBtnActionChanged,
             q,
-            &DPowerSettings::linePowerPressPowerBtnActionChanged);
+            [q] (const qint32 value) {
+                if (value < 0 || value > 4)
+                    return;
+                emit q->linePowerPressPowerBtnActionChanged(static_cast<PowerBtnAction>(value));
+            });
     connect(m_daemonPowerInter,
             &DaemonPowerInterface::LinePowerScreenBlackDelayChanged,
             q,
