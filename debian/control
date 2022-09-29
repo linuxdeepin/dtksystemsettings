@@ -5,6 +5,8 @@ Maintainer: Packages Builder <packages@deepin.com>
 Build-Depends:
  debhelper-compat (= 12),
  cmake,
+ doxygen,
+ qhelpgenerator-qt5 | qttools5-dev-tools,
  qtbase5-dev
 Standards-Version: 4.5.0
 
@@ -18,7 +20,7 @@ Description: Deepin Tool Kit template library
 
 Package: libdtksystemsettings-dev
 Architecture: any
-Depends:${misc:Depends}, libdtktemplate( =${binary:Version})
+Depends:${misc:Depends}, libdtksystemsettings( =${binary:Version})
 Description: Deepin Tool Kit template devel library
  libdtksystemsettings-dev is base devel library of Deepin Qt/C++ applications.
  .

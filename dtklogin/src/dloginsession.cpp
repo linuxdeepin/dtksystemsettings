@@ -287,7 +287,7 @@ static QStringList getSystemAutostartDirs()
     QStringList autostartDirs;
     QString defaultSystemConfigDir("/etc/xdg");
     QString configuredSystemConfigDirsVar = QProcessEnvironment::systemEnvironment().value("XDG_CONFIG_DIRS");
-    QStringList configuredSystemConfigDirs = configuredSystemConfigDirsVar.split(":", Qt::SkipEmptyParts);
+    QStringList configuredSystemConfigDirs = configuredSystemConfigDirsVar.split(":");
     foreach (const QString &configuredSystemConfigDir, configuredSystemConfigDirs) {
         if (!QDir::isAbsolutePath(configuredSystemConfigDir)) {
             configuredSystemConfigDirs.removeAll(configuredSystemConfigDir);
@@ -328,7 +328,7 @@ static bool judgeAutostart(const QString &fullPath)
         return false;
     }
     QString desktopEnv = QProcessEnvironment::systemEnvironment().value("XDG_CURRENT_DESKTOP");
-    QStringList currentDesktops = desktopEnv.split(":", Qt::SkipEmptyParts);
+    QStringList currentDesktops = desktopEnv.split(":");
     QStringList onlyShowIn = desktopFile.value(KeyOnlyShowIn).toStringList();
     QStringList notShowIn = desktopFile.value(KeyNotShowIn).toStringList();
     if (!onlyShowIn.isEmpty()) {
