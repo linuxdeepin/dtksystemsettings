@@ -10,8 +10,27 @@
 
 #include "dbus/upowerkbdbacklightinterface.h"
 #include "namespace.h"
+#include "dpowertypes.h"
 
 DPOWER_BEGIN_NAMESPACE
+
+void DKbdBacklightPrivate::connectDBusSignal()
+{
+    Q_Q(DKbdBacklight);
+    connect(m_kb_inter, &UPowerKbdBacklightInterface::BrightnessChanged, q, &DKbdBacklight::brightnessChanged);
+    connect(m_kb_inter, &UPowerKbdBacklightInterface::BrightnessChangedWithSource, q, [q] (const uint value, const QString &source) {
+        QMap<QString, KbdSource> sourceMap;
+        sourceMap["internal"] = KbdSource::Internal;
+        sourceMap["external"] = KbdSource::External;
+        KbdSource realSource;
+        if (sourceMap.contains(source))
+            realSource = sourceMap[source];
+        else
+            realSource = KbdSource::Unknown;
+        emit q->brightnessChangedWithSource(value, realSource);
+    });
+}
+
 DKbdBacklight::DKbdBacklight(QObject *parent)
     : QObject(parent)
     , d_ptr(new DKbdBacklightPrivate(this))
@@ -47,7 +66,7 @@ uint DKbdBacklight::maxBrightness() const
     return reply.value();
 }
 
-void DKbdBacklight::setBrightness(uint value)
+void DKbdBacklight::setBrightness(const uint value)
 {
     Q_D(DKbdBacklight);
     QDBusPendingReply<> reply = d->m_kb_inter->setBrightness(value);
