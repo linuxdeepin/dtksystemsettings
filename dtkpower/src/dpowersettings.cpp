@@ -10,6 +10,7 @@
 
 #include "dbus/systempowerinterface.h"
 #include "dbus/daemonpowerinterface.h"
+#include "dpowertypes.h"
 
 DPOWER_BEGIN_NAMESPACE
 
@@ -117,16 +118,33 @@ QString DPowerSettings::cpuGovernor() const
     return d->m_systemPowerInter->cpuGovernor();
 }
 
-QString DPowerSettings::mode() const
+PowerMode DPowerSettings::powerMode() const
 {
     Q_D(const DPowerSettings);
-    return d->m_systemPowerInter->mode();
+    QMap<QString, PowerMode> modeMap;
+    modeMap["performance"] = PowerMode::Performance;
+    modeMap["balance"] = PowerMode::Balance;
+    modeMap["powersave"] = PowerMode::Powersave;
+    auto mode = d->m_systemPowerInter->mode();
+    PowerMode realMode;
+    if (modeMap.contains(mode))
+        realMode = modeMap[mode];
+    else
+        realMode = PowerMode::Unknown;
+
+    return realMode;
 }
 
-void DPowerSettings::setMode(const QString &mode)
+void DPowerSettings::setPowerMode(const PowerMode &mode)
 {
     Q_D(DPowerSettings);
-    d->m_systemPowerInter->setMode(mode);
+    if (mode == PowerMode::Unknown)
+        return;
+    QMap<PowerMode, QString> modeMap;
+    modeMap[PowerMode::Performance] = "performance";
+    modeMap[PowerMode::Balance] = "balance";
+    modeMap[PowerMode::Powersave] = "powersave";
+    d->m_systemPowerInter->setMode(modeMap[mode]);
 }
 
 bool DPowerSettings::autoPowerSavingOnBattery() const
@@ -165,16 +183,22 @@ void DPowerSettings::setPowerSavingBrightnessDropPercent(const quint32 value)
     d->m_systemPowerInter->setPowerSavingModeBrightnessDropPercent(value);
 }
 
-qint32 DPowerSettings::batteryLidClosedAction() const
+LidClosedAction DPowerSettings::batteryLidClosedAction() const
 {
     Q_D(const DPowerSettings);
-    return d->m_daemonPowerInter->batteryLidClosedAction();
+    auto action = d->m_daemonPowerInter->batteryLidClosedAction();
+    if (action < 1 || action > 4)
+        return LidClosedAction::Unknown;
+    return static_cast<LidClosedAction>(action);
 }
 
-void DPowerSettings::setBatteryLidClosedAction(const qint32 value)
+void DPowerSettings::setBatteryLidClosedAction(const LidClosedAction &value)
 {
     Q_D(DPowerSettings);
-    d->m_daemonPowerInter->setBatteryLidClosedAction(value);
+    if (value == LidClosedAction::Unknown)
+        return;
+
+    d->m_daemonPowerInter->setBatteryLidClosedAction(static_cast<qint32>(value));
 }
 
 qint32 DPowerSettings::batteryLockDelay() const
@@ -189,16 +213,21 @@ void DPowerSettings::setBatteryLockDelay(const qint32 value)
     d->m_daemonPowerInter->setBatteryLockDelay(value);
 }
 
-qint32 DPowerSettings::batteryPressPowerBtnAction() const
+PowerBtnAction DPowerSettings::batteryPressPowerBtnAction() const
 {
     Q_D(const DPowerSettings);
-    return d->m_daemonPowerInter->batteryPressPowerBtnAction();
+    auto action = d->m_daemonPowerInter->batteryPressPowerBtnAction();
+    if (action < 0 || action > 4)
+        return PowerBtnAction::Unknown;
+    return static_cast<PowerBtnAction>(action);
 }
 
-void DPowerSettings::setBatteryPressPowerBtnAction(const qint32 value)
+void DPowerSettings::setBatteryPressPowerBtnAction(const PowerBtnAction &value)
 {
     Q_D(DPowerSettings);
-    d->m_daemonPowerInter->setBatteryPressPowerBtnAction(value);
+    if (value == PowerBtnAction::Unknown)
+        return;
+    d->m_daemonPowerInter->setBatteryPressPowerBtnAction(static_cast<qint32>(value));
 }
 
 qint32 DPowerSettings::batteryScreenBlackDelay() const
@@ -237,16 +266,21 @@ void DPowerSettings::setBatterySleepDelay(const qint32 value)
     d->m_daemonPowerInter->setBatterySleepDelay(value);
 }
 
-qint32 DPowerSettings::linePowerLidClosedAction() const
+LidClosedAction DPowerSettings::linePowerLidClosedAction() const
 {
     Q_D(const DPowerSettings);
-    return d->m_daemonPowerInter->linePowerLidClosedAction();
+    auto action = d->m_daemonPowerInter->linePowerLidClosedAction();
+    if (action < 1 || action > 4)
+        return LidClosedAction::Unknown;
+    return static_cast<LidClosedAction>(action);
 }
 
-void DPowerSettings::setLinePowerLidClosedAction(const qint32 value)
+void DPowerSettings::setLinePowerLidClosedAction(const LidClosedAction &value)
 {
     Q_D(DPowerSettings);
-    d->m_daemonPowerInter->setLinePowerLidClosedAction(value);
+    if (value == LidClosedAction::Unknown)
+        return;
+    d->m_daemonPowerInter->setLinePowerLidClosedAction(static_cast<qint32>(value));
 }
 
 qint32 DPowerSettings::linePowerLockDelay() const
@@ -261,16 +295,21 @@ void DPowerSettings::setLinePowerLockDelay(const qint32 value)
     d->m_daemonPowerInter->setLinePowerLockDelay(value);
 }
 
-qint32 DPowerSettings::linePowerPressPowerBtnAction() const
+PowerBtnAction DPowerSettings::linePowerPressPowerBtnAction() const
 {
     Q_D(const DPowerSettings);
-    return d->m_daemonPowerInter->linePowerPressPowerBtnAction();
+    auto action = d->m_daemonPowerInter->linePowerPressPowerBtnAction();
+    if (action < 0 || action > 4)
+        return PowerBtnAction::Unknown;
+    return static_cast<PowerBtnAction>(action);
 }
 
-void DPowerSettings::setLinePowerPressPowerBtnAction(const qint32 value)
+void DPowerSettings::setLinePowerPressPowerBtnAction(const PowerBtnAction &value)
 {
     Q_D(DPowerSettings);
-    d->m_daemonPowerInter->setLinePowerPressPowerBtnAction(value);
+    if (value == PowerBtnAction::Unknown)
+        return;
+    d->m_daemonPowerInter->setLinePowerPressPowerBtnAction(static_cast<qint32>(value));
 }
 
 qint32 DPowerSettings::linePowerScreenBlackDelay() const

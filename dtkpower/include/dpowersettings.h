@@ -9,6 +9,9 @@
 
 DPOWER_BEGIN_NAMESPACE
 class DPowerSettingsPrivate;
+enum class PowerMode;
+enum class LidClosedAction;
+enum class PowerBtnAction;
 
 class DPowerSettings : public QObject
 {
@@ -18,27 +21,27 @@ public:
     virtual ~DPowerSettings();
 
     Q_PROPERTY(QString cpuGovernor READ cpuGovernor NOTIFY cpuGovernorChanged);
-    Q_PROPERTY(QString mode READ mode WRITE setMode NOTIFY modeChanged);
+    Q_PROPERTY(PowerMode powerMode READ powerMode WRITE setPowerMode NOTIFY powerModeChanged); // TODO:mode 改为powerMode, 并且值改为枚举
     Q_PROPERTY(bool autoPowerSavingOnBattery READ autoPowerSavingOnBattery WRITE setAutoPowerSavingOnBattery NOTIFY
                    autoPowerSavingOnBatteryChanged);
     Q_PROPERTY(bool autoPowerSavingWhenBatteryLow READ autoPowerSavingWhenBatteryLow WRITE setAutoPowerSavingWhenBatteryLow NOTIFY
                    autoPowerSavingWhenBatteryLowChanged);
     Q_PROPERTY(quint32 powerSavingBrightnessDropPercent READ powerSavingBrightnessDropPercent WRITE
                    setPowerSavingBrightnessDropPercent NOTIFY powerSavingBrightnessDropPercentChanged);
-    Q_PROPERTY(qint32 batteryLidClosedAction READ batteryLidClosedAction WRITE setBatteryLidClosedAction NOTIFY
-                   batteryLidClosedActionChanged);
+    Q_PROPERTY(LidClosedAction batteryLidClosedAction READ batteryLidClosedAction WRITE setBatteryLidClosedAction NOTIFY
+                   batteryLidClosedActionChanged); // TODO:文档中应添加说明，可用dtklogin的接口进行判断是否支持休眠再进行设置
     Q_PROPERTY(qint32 batteryLockDelay READ batteryLockDelay WRITE setBatteryLockDelay NOTIFY batteryLockDelayChanged);
-    Q_PROPERTY(qint32 batteryPressPowerBtnAction READ batteryPressPowerBtnAction WRITE setBatteryPressPowerBtnAction NOTIFY
+    Q_PROPERTY(PowerBtnAction batteryPressPowerBtnAction READ batteryPressPowerBtnAction WRITE setBatteryPressPowerBtnAction NOTIFY
                    batteryPressPowerBtnActionChanged);
     Q_PROPERTY(qint32 batteryScreenBlackDelay READ batteryScreenBlackDelay WRITE setBatteryScreenBlackDelay NOTIFY
                    batteryScreenBlackDelayChanged);
     Q_PROPERTY(qint32 batteryScreensaverDelay READ batteryScreensaverDelay WRITE setBatteryScreensaverDelay NOTIFY
                    batteryScreensaverDelayChanged);
     Q_PROPERTY(qint32 batterySleepDelay READ batterySleepDelay WRITE setBatterySleepDelay NOTIFY batterySleepDelayChanged);
-    Q_PROPERTY(qint32 linePowerLidClosedAction READ linePowerLidClosedAction WRITE setLinePowerLidClosedAction NOTIFY
+    Q_PROPERTY(LidClosedAction linePowerLidClosedAction READ linePowerLidClosedAction WRITE setLinePowerLidClosedAction NOTIFY
                    linePowerLidClosedActionChanged);
     Q_PROPERTY(qint32 linePowerLockDelay READ linePowerLockDelay WRITE setLinePowerLockDelay NOTIFY linePowerLockDelayChanged);
-    Q_PROPERTY(qint32 linePowerPressPowerBtnAction READ linePowerPressPowerBtnAction WRITE setLinePowerPressPowerBtnAction NOTIFY
+    Q_PROPERTY(PowerBtnAction linePowerPressPowerBtnAction READ linePowerPressPowerBtnAction WRITE setLinePowerPressPowerBtnAction NOTIFY
                    linePowerPressPowerBtnActionChanged);
     Q_PROPERTY(qint32 linePowerScreenBlackDelay READ linePowerScreenBlackDelay WRITE setLinePowerScreenBlackDelay NOTIFY
                    linePowerScreenBlackDelayChanged);
@@ -55,32 +58,32 @@ public:
     Q_PROPERTY(bool screenBlackLock READ screenBlackLock WRITE setScreenBlackLock NOTIFY screenBlackLockChanged);
     Q_PROPERTY(bool sleepLock READ sleepLock WRITE setSleepLock NOTIFY sleepLockChanged);
     QString cpuGovernor() const;
-    QString mode() const;
-    void setMode(const QString &mode);
+    PowerMode powerMode() const;
+    void setPowerMode(const PowerMode &mode);
     bool autoPowerSavingOnBattery() const;
     void setAutoPowerSavingOnBattery(const bool enabled);
     bool autoPowerSavingWhenBatteryLow() const;
     void setAutoPowerSavingWhenBatteryLow(const bool enabled);
     quint32 powerSavingBrightnessDropPercent() const;
     void setPowerSavingBrightnessDropPercent(const quint32 value);
-    qint32 batteryLidClosedAction() const;
-    void setBatteryLidClosedAction(const qint32 value);
+    LidClosedAction batteryLidClosedAction() const;
+    void setBatteryLidClosedAction(const LidClosedAction &value);
     qint32 batteryLockDelay() const;
     void setBatteryLockDelay(const qint32 value);
-    qint32 batteryPressPowerBtnAction() const;
-    void setBatteryPressPowerBtnAction(const qint32 value);
+    PowerBtnAction batteryPressPowerBtnAction() const;
+    void setBatteryPressPowerBtnAction(const PowerBtnAction &value);
     qint32 batteryScreenBlackDelay() const;
     void setBatteryScreenBlackDelay(const qint32 value);
     qint32 batteryScreensaverDelay() const;
     void setBatteryScreensaverDelay(const qint32 value);
     qint32 batterySleepDelay() const;
     void setBatterySleepDelay(const qint32 value);
-    qint32 linePowerLidClosedAction() const;
-    void setLinePowerLidClosedAction(const qint32 value);
+    LidClosedAction linePowerLidClosedAction() const;
+    void setLinePowerLidClosedAction(const LidClosedAction &value);
     qint32 linePowerLockDelay() const;
     void setLinePowerLockDelay(const qint32 value);
-    qint32 linePowerPressPowerBtnAction() const;
-    void setLinePowerPressPowerBtnAction(const qint32 value);
+    PowerBtnAction linePowerPressPowerBtnAction() const;
+    void setLinePowerPressPowerBtnAction(const PowerBtnAction &value);
     qint32 linePowerScreenBlackDelay() const;
     void setLinePowerScreenBlackDelay(const qint32 value);
     qint32 linePowerScreensaverDelay() const;
@@ -100,19 +103,19 @@ public:
 
 signals:
     void cpuGovernorChanged(const QString &value);
-    void modeChanged(const QString &mode);
+    void powerModeChanged(const PowerMode &mode);
     void autoPowerSavingOnBatteryChanged(const bool enabled);
     void autoPowerSavingWhenBatteryLowChanged(const bool enabled);
     void powerSavingBrightnessDropPercentChanged(const quint32 value);
-    void batteryLidClosedActionChanged(const qint32 value);
+    void batteryLidClosedActionChanged(const LidClosedAction &value);
     void batteryLockDelayChanged(const qint32 value);
-    void batteryPressPowerBtnActionChanged(const qint32 value);
+    void batteryPressPowerBtnActionChanged(const PowerBtnAction &value);
     void batteryScreenBlackDelayChanged(const qint32 value);
     void batteryScreensaverDelayChanged(const qint32 value);
     void batterySleepDelayChanged(const qint32 value);
-    void linePowerLidClosedActionChanged(const qint32 value);
+    void linePowerLidClosedActionChanged(const LidClosedAction &value);
     void linePowerLockDelayChanged(const qint32 value);
-    void linePowerPressPowerBtnActionChanged(const qint32 value);
+    void linePowerPressPowerBtnActionChanged(const PowerBtnAction &value);
     void linePowerScreenBlackDelayChanged(const qint32 value);
     void linePowerScreensaverDelayChanged(const qint32 value);
     void linePowerSleepDelayChanged(const qint32 value);

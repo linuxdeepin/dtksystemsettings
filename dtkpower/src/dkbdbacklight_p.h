@@ -18,6 +18,7 @@ public:
     explicit DKbdBacklightPrivate(DKbdBacklight *parent = nullptr)
         : QObject(parent)
         , q_ptr(parent) {}
+    void connectDBusSignal();
 
 public:
     UPowerKbdBacklightInterface *m_kb_inter;

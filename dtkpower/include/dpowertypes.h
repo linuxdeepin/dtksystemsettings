@@ -21,4 +21,38 @@ struct Statistic
     double accuracy;
 };
 
+enum class KbdSource
+{
+    Internal,
+    External,
+    Unknown
+};
+
+enum class PowerMode
+{
+    Performance,
+    Balance,
+    Powersave,
+    Unknown
+};
+
+enum class LidClosedAction : qint32
+{
+    Suspend = 1,
+    Hibernate,
+    TurnoffScreen,
+    DoNothing,
+    Unknown
+};
+
+enum class PowerBtnAction : qint32
+{
+    Shutdown = 0,
+    Suspend,
+    Hibernate,
+    TurnoffScreen,
+    DoNothing,
+    Unknown
+};
+
 DPOWER_END_NAMESPACE
