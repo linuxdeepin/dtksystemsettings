@@ -1,43 +1,23 @@
 // SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
-
-#include "fakedaemonpowerinterface.h"
-
-#include <qdebug.h>
+#include "./upowermanagerinterface.h"
 #include <qdbusconnection.h>
-#include <qdbuserror.h>
+#include <qdebug.h>
 
-FakeDaemonPowerInterface::FakeDaemonPowerInterface(QObject *parent)
+UPowerManagerInterface::UPowerManagerInterface(QObject *parent)
     : QObject(parent)
-    , m_reset(false)
-    , m_batteryLidClosedAction(0)
-    , m_batteryLockDelay(0)
-    , m_batteryPressPowerBtnAction(0)
-    , m_batteryScreenBlackDelay(0)
-    , m_batteryScreensaverDelay(0)
-    , m_batterySleepDelay(0)
-    , m_linePowerLidClosedAction(0)
-    , m_linePowerLockDelay(0)
-    , m_linePowerPressPowerBtnAction(0)
-    , m_linePowerScreenBlackDelay(0)
-    , m_linePowerScreensaverDelay(0)
-    , m_linePowerSleepDelay(0)
-    , m_lowPowerAutoSleepThreshold(0)
-    , m_lowPowerNotifyEnable(false)
-    , m_lowPowerNotifyThreshold(0)
-    , m_screenBlackLock(false)
-    , m_sleepLock(false)
+    ,m_reset(false)
 {
     registerService();
 }
 
-FakeDaemonPowerInterface::~FakeDaemonPowerInterface()
+UPowerManagerInterface::~UPowerManagerInterface()
 {
     unRegisterService();
 }
 
-void FakeDaemonPowerInterface::registerService()
+void UPowerManagerInterface:: registerService()
 {
     const QString &service = QLatin1String("com.deepin.daemon.FakePower");
     const QString &path = QLatin1String("/com/deepin/daemon/FakePower");
@@ -54,9 +34,30 @@ void FakeDaemonPowerInterface::registerService()
     }
 }
 
-void FakeDaemonPowerInterface::unRegisterService()
+void UPowerManagerInterface::unRegisterService()
 {
     QDBusConnection bus = QDBusConnection::sessionBus();
     bus.unregisterObject(QLatin1String("/com/deepin/daemon/FakePower"));
     bus.unregisterService(QLatin1String("com.deepin.daemon.FakePower"));
+}
+
+QList<QDBusObjectPath> UPowerManagerInterface::EnumerateDevices() const
+{
+    QList<QDBusObjectPath> a ;
+    QDBusObjectPath b ;
+    b.setPath("/org/freedesktop/UPower/devices/battery_BAT1");
+    a.append(b);
+    return a;
+}
+
+QString UPowerManagerInterface::GetCriticalAction() const
+{
+    return QString("true");
+}
+
+QDBusObjectPath UPowerManagerInterface::GetDisplayDevice() const
+{
+    QDBusObjectPath path;
+    path.setPath("/org/freedesktop/UPower/devices/DisplayDevice");
+    return path;
 }

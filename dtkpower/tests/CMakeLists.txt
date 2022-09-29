@@ -47,6 +47,7 @@ endif()
 if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
     target_compile_options(${BIN_NAME} PRIVATE -fprofile-arcs -ftest-coverage)
 endif()
+target_compile_options(${BIN_NAME} PRIVATE -fno-access-control)
 
 enable_testing()
 add_test(NAME ${BIN_NAME} COMMAND ${BIN_NAME})

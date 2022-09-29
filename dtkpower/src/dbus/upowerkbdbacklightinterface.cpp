@@ -12,11 +12,18 @@ DPOWER_BEGIN_NAMESPACE
 UPowerKbdBacklightInterface::UPowerKbdBacklightInterface(QObject *parent)
     : QObject(parent)
 {
-    const QString &Service = QStringLiteral("org.freedesktop.UPower");
-    const QString &Path = QStringLiteral("/org/freedesktop/UPower/KbdBacklight");
-    const QString &Interface = QStringLiteral("org.freedesktop.UPower.KbdBacklight");
-
-    m_inter.reset(new DDBusInterface(Service, Path, Interface, QDBusConnection::systemBus(), this));
+#ifdef USE_FAKE_INTERFACE
+    static const QString &Service = QStringLiteral("com.deepin.daemon.FakePower");
+    static const QString &Path = QStringLiteral("/com/deepin/daemon/FakePower");
+    static const QString &Interface = QStringLiteral("com.deepin.daemon.FakePower");
+    QDBusConnection connection = QDBusConnection::sessionBus();
+#else
+    static const QString &Service = QStringLiteral("org.freedesktop.UPower");
+    static const QString &Path = QStringLiteral("/org/freedesktop/UPower/KbdBacklight");
+    static const QString &Interface = QStringLiteral("org.freedesktop.UPower.KbdBacklight");
+    QDBusConnection connection = QDBusConnection::systemBus();
+#endif
+    m_inter = new DDBusInterface(Service, Path, Interface, connection, this);
 }
 
 UPowerKbdBacklightInterface::~UPowerKbdBacklightInterface() {}
