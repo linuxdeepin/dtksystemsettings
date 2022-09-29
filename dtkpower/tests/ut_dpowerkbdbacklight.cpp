@@ -6,7 +6,7 @@
 #include <gtest/gtest.h>
 
 #include "dkbdbacklight.h"
-#include "fakedbus/upowerkbdbacklightinterface.h"
+#include "fakedbus/upowerkbdbacklightservice.h"
 #include <QDBusMessage>
 #include <QDBusConnection>
 #include <QDBusReply>
@@ -19,7 +19,7 @@ public:
     // 在测试套件的第一个测试用例开始前，SetUpTestCase 函数会被调用
     static void SetUpTestCase()
     {
-        m_fakeInterface = new UPowerKbdBacklightInterface();
+        m_fakeInterface = new UPowerKbdBacklightService();
         m_dkbdBackLight = new DKbdBacklight();
     }
     // 在测试套件中的最后一个测试用例运行结束后，TearDownTestCase 函数会被调用
@@ -36,11 +36,11 @@ public:
     // 每个测试用例运行结束后，TearDown 函数都会被被调用
     void TearDown() override {}
 
-    static UPowerKbdBacklightInterface *m_fakeInterface;
+    static UPowerKbdBacklightService *m_fakeInterface;
     static DKbdBacklight *m_dkbdBackLight;
 };
 
-UPowerKbdBacklightInterface *TestDPowerKbdBacklight::m_fakeInterface = nullptr;
+UPowerKbdBacklightService *TestDPowerKbdBacklight::m_fakeInterface = nullptr;
 DKbdBacklight *TestDPowerKbdBacklight::m_dkbdBackLight = nullptr;
 
 TEST_F(TestDPowerKbdBacklight, brightness)

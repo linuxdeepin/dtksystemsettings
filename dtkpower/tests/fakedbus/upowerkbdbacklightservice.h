@@ -11,13 +11,13 @@
 
 // class DKbdBacklightPrivate;
 
-class UPowerKbdBacklightInterface : public QObject
+class UPowerKbdBacklightService : public QObject
 {
     Q_OBJECT
     Q_CLASSINFO("D-Bus Interface", "com.deepin.daemon.FakePower")
 public:
-    explicit UPowerKbdBacklightInterface(QObject *parent = nullptr);
-    virtual ~UPowerKbdBacklightInterface();
+    explicit UPowerKbdBacklightService(QObject *parent = nullptr);
+    virtual ~UPowerKbdBacklightService();
 
 // signals:
 //     Q_SCRIPTABLE void PropertiesChanged(const QVariantMap &properties);

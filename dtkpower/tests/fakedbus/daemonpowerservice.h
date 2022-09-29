@@ -8,13 +8,13 @@
 #include <qscopedpointer.h>
 #include <qdebug.h>
 
-class DaemonPowerInterface : public QObject
+class DaemonPowerService : public QObject
 {
     Q_OBJECT
     Q_CLASSINFO("D-Bus Interface", "com.deepin.daemon.FakePower")
 public:
-    explicit DaemonPowerInterface(QObject *parent = nullptr);
-    virtual ~DaemonPowerInterface();
+    explicit DaemonPowerService(QObject *parent = nullptr);
+    virtual ~DaemonPowerService();
 
     Q_PROPERTY(qint32 BatteryLidClosedAction READ batteryLidClosedAction WRITE setBatteryLidClosedAction);
     Q_PROPERTY(qint32 BatteryLockDelay READ batteryLockDelay WRITE setBatteryLockDelay);
