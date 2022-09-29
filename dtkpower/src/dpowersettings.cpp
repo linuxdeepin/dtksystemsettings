@@ -246,7 +246,7 @@ qint32 DPowerSettings::linePowerLidClosedAction() const
 void DPowerSettings::setLinePowerLidClosedAction(const qint32 value)
 {
     Q_D(DPowerSettings);
-    d->m_daemonPowerInter->setBatteryLidClosedAction(value);
+    d->m_daemonPowerInter->setLinePowerLidClosedAction(value);
 }
 
 qint32 DPowerSettings::linePowerLockDelay() const

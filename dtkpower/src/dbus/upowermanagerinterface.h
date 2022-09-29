@@ -18,12 +18,12 @@ public:
     explicit UPowerManagerInterface(QObject *parent = nullptr);
     virtual ~UPowerManagerInterface();
     // properties
-    Q_PROPERTY(bool LidlsClosed READ lidlsClosed)
-    Q_PROPERTY(bool LidlsPresent READ lidlsPresent)
+    Q_PROPERTY(bool LidIsClosed READ lidIsClosed)
+    Q_PROPERTY(bool LidIsPresent READ lidIsPresent)
     Q_PROPERTY(bool OnBattery READ onBattery)
     Q_PROPERTY(QString DaemonVersion READ daemonVersion)
-    bool lidlsClosed() const;
-    bool lidlsPresent() const;
+    bool lidIsClosed() const;
+    bool lidIsPresent() const;
     bool onBattery() const;
     QString daemonVersion() const;
 
@@ -37,7 +37,7 @@ public slots:
     QDBusPendingReply<QDBusObjectPath> getDisplayDevice() const;
 
 private:
-    QScopedPointer<DDBusInterface> m_inter;
+    DDBusInterface* m_inter;
 };
 
 DPOWER_END_NAMESPACE

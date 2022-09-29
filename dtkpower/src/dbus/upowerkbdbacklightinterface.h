@@ -29,7 +29,7 @@ public slots:
     QDBusPendingReply<> setBrightness(uint value);
 
 private:
-    QScopedPointer<DDBusInterface> m_inter;
+    DDBusInterface *m_inter;
 };
 
 DPOWER_END_NAMESPACE
