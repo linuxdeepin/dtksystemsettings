@@ -18,24 +18,31 @@ DPOWER_BEGIN_NAMESPACE
 UPowerManagerInterface::UPowerManagerInterface(QObject *parent)
     : QObject(parent)
 {
+#ifdef USE_FAKE_INTERFACE
+    static const QString &Service = QStringLiteral("com.deepin.daemon.FakePower");
+    static const QString &Path = QStringLiteral("/com/deepin/daemon/FakePower");
+    static const QString &Interface = QStringLiteral("com.deepin.daemon.FakePower");
+    QDBusConnection connection = QDBusConnection::sessionBus();
+#else
     const QString &Service = QStringLiteral("org.freedesktop.UPower");
     const QString &Path = QStringLiteral("/org/freedesktop/UPower");
     const QString &Interface = QStringLiteral("org.freedesktop.UPower");
-
-    m_inter.reset(new DDBusInterface(Service, Path, Interface, QDBusConnection::systemBus(), this));
+    QDBusConnection connection = QDBusConnection::systemBus();
+#endif
+    m_inter = new DDBusInterface(Service, Path, Interface, connection, this);
 }
 
 UPowerManagerInterface::~UPowerManagerInterface() {}
 
 // properties
-bool UPowerManagerInterface::lidlsClosed() const
+bool UPowerManagerInterface::lidIsClosed() const
 {
-    return qdbus_cast<bool>(m_inter->property("LidlsClosed"));
+    return qdbus_cast<bool>(m_inter->property("LidIsClosed"));
 }
 
-bool UPowerManagerInterface::lidlsPresent() const
+bool UPowerManagerInterface::lidIsPresent() const
 {
-    return qdbus_cast<bool>(m_inter->property("LidlsPresent"));
+    return qdbus_cast<bool>(m_inter->property("LidIsPresent"));
 }
 
 bool UPowerManagerInterface::onBattery() const
