@@ -43,10 +43,10 @@ target_link_libraries(${BIN_NAME} PRIVATE
 )
 
 if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-    target_compile_options(${BIN_NAME} PRIVATE -fprofile-instr-generate -ftest-coverage)
+    target_compile_options(${BIN_NAME} PRIVATE -fprofile-instr-generate -ftest-coverage -fno-access-control)
 endif()
 if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-    target_compile_options(${BIN_NAME} PRIVATE -fprofile-arcs -ftest-coverage)
+    target_compile_options(${BIN_NAME} PRIVATE -fprofile-arcs -ftest-coverage -fno-access-control)
 endif()
 
 enable_testing()
