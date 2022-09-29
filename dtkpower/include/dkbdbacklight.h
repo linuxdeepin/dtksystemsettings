@@ -24,7 +24,7 @@ signals:
 public slots:
     uint brightness() const;
     uint maxBrightness() const;
-    void setBrightness(uint value);
+    void setBrightness(const uint value);
 
 private:
     QScopedPointer<DKbdBacklightPrivate> d_ptr;
