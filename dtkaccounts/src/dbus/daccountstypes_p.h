@@ -32,17 +32,17 @@ struct ShadowInfo_p
 
 struct LoginUtmpx_p
 {
-    QByteArray inittabID;
-    QByteArray line;
-    QByteArray host;
-    QByteArray address;
-    QByteArray time;
+    QString inittabID;
+    QString line;
+    QString host;
+    QString address;
+    QString time;
     static void registerMetaType();
 };
 
 struct ReminderInfo_p
 {
-    QByteArray userName;
+    QString userName;
     ShadowInfo_p spent;
     LoginUtmpx_p currentLogin;
     LoginUtmpx_p lastLogin;

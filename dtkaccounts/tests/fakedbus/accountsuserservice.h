@@ -23,14 +23,6 @@ class FakeAccountsUserService : public QObject
     Q_CLASSINFO("D-Bus Introspection",
                 ""
                 "  <interface name=\"com.deepin.daemon.FakeAccounts.User\">\n"
-                "    <method name=\"GetPasswordExpirationPolicy\">\n"
-                "      <arg direction=\"out\" type=\"x\" name=\"a\"/>\n"
-                "      <arg direction=\"out\" type=\"x\" name=\"b\"/>\n"
-                "      <arg direction=\"out\" type=\"x\" name=\"c\"/>\n"
-                "      <arg direction=\"out\" type=\"x\" name=\"d\"/>\n"
-                "      <arg direction=\"out\" type=\"x\" name=\"e\"/>\n"
-                "      <arg direction=\"out\" type=\"x\" name=\"f\"/>\n"
-                "    </method>\n"
                 "    <method name=\"AddGroup\">\n"
                 "      <arg direction=\"in\" type=\"s\" name=\"group\"/>\n"
                 "    </method>\n"
@@ -116,6 +108,9 @@ class FakeAccountsUserService : public QObject
                 "    <property access=\"read\" type=\"s\" name=\"HomeDirectory\"/>\n"
                 "    <property access=\"read\" type=\"s\" name=\"IconFile\"/>\n"
                 "    <property access=\"read\" type=\"i\" name=\"PasswordMode\"/>\n"
+                "    <property access=\"read\" type=\"i\" name=\"PasswordLastChange\"/>\n"
+                "    <property access=\"read\" type=\"i\" name=\"MaxPasswordAge\"/>\n"
+                "    <property access=\"read\" type=\"t\" name=\"CreatedTime\"/>\n"
                 "  </interface>\n"
                 "")
 public:
@@ -138,6 +133,9 @@ public:
     Q_PROPERTY(bool NoPasswdLogin READ NoPasswdLogin WRITE EnableNoPasswdLogin)
     Q_PROPERTY(qint64 LoginTime READ LoginTime)
     Q_PROPERTY(qint32 PasswordMode READ PasswordMode)
+    Q_PROPERTY(qint32 MaxPasswordAge READ MaxPasswordAge)
+    Q_PROPERTY(quint64 CreatedTime READ CreatedTime)
+    Q_PROPERTY(qint32 PasswordLastChange READ PasswordLastChange)
 
     qint32 m_accountType{0};
     bool m_automaticLogin{false};
@@ -155,6 +153,15 @@ public:
     bool m_noPasswdLogin{false};
     qint64 m_loginTime{1234567};
     qint32 m_passwordMode{0};
+    qint32 m_maxpasswordage{99999};
+    quint64 m_createdtime{1656048743};
+    qint32 m_passwordlastchange{19167};
+
+    inline qint32 MaxPasswordAge() const { return m_maxpasswordage; }
+
+    inline quint64 CreatedTime() const { return m_createdtime; }
+
+    inline qint32 PasswordLastChange() const { return m_passwordlastchange; }
 
     inline qint32 AccountType() const { return m_accountType; }
 
@@ -209,7 +216,7 @@ public:
     bool m_setGroupsTrigger{false};
     bool m_setMaxPasswordAgeTrigger{false};
     bool m_setPasswordTrigger{false};
-    bool m_getPasswordExpirationPolicyTrigger{false};
+    bool m_passwordExpiredInfoTirgger{false};
 
 public slots:
 
@@ -274,14 +281,10 @@ public slots:
         m_setPasswordTrigger = true;
     }
 
-    Q_SCRIPTABLE qint64 GetPasswordExpirationPolicy(qint64 &b, qint64 &c, qint64 &d, qint64 &e, qint64 &f)
+    Q_SCRIPTABLE qint32 PasswordExpiredInfo(qint64 &dayLeft)
     {
-        Q_UNUSED(b)
-        Q_UNUSED(c)
-        Q_UNUSED(d)
-        Q_UNUSED(e)
-        Q_UNUSED(f)
-        m_getPasswordExpirationPolicyTrigger = true;
+        Q_UNUSED(dayLeft)
+        m_passwordExpiredInfoTirgger = true;
         return 0;
     }
 

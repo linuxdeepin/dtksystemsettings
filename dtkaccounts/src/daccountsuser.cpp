@@ -108,33 +108,38 @@ QString DAccountsUser::fullName() const
 
 quint64 DAccountsUser::GID() const
 {
-    return getgid();
+    auto userinfo = getpwnam(userName());
+    endpwent();
+    if (userinfo == nullptr) {
+        qWarning() << strerror(errno);
+        return 0;
+    }
+    return userinfo->pw_gid;
 }
 
 quint64 DAccountsUser::UID() const
 {
-    return getuid();
+    Q_D(const DAccountsUser);
+    return d->m_dUserInter->UID();
 }
 
 QStringList DAccountsUser::groups() const
 {
     QStringList groupList;
-    gid_t *groupid = nullptr;
-    auto num = getgroups(0, groupid);
-    if (num == -1)
+    gid_t *groups{nullptr};
+    int ngroups{0};
+    auto username = userName();
+    auto gid = GID();
+    getgrouplist(username, gid, groups, &ngroups);
+    groups = reinterpret_cast<gid_t *>(malloc(sizeof(gid_t) * ngroups));
+    if (getgrouplist(username, gid, groups, &ngroups) == -1) {
         qWarning() << strerror(errno);
-    groupid = static_cast<gid_t *>(malloc(sizeof(gid_t) * num));
-    num = getgroups(num, groupid);
-    if (num == -1) {
-        qWarning() << strerror(errno);
-        free(groupid);
+        free(groups);
         return groupList;
     }
-    for (int i = 0; i < num; ++i) {
-        auto g = getgrgid(groupid[i]);
-        groupList.push_back(g->gr_name);
-    }
-    free(groupid);
+    for (int i = 0; i < ngroups; ++i)
+        groupList.append(getgrgid(groups[i])->gr_name);
+    free(groups);
     return groupList;
 }
 
@@ -168,8 +173,8 @@ QList<QByteArray> DAccountsUser::iconFileList() const
     icons.append(d->getImageFromDir(icondir));
     if (cusdirinfo.exists() and cusdirinfo.isDir()) {
         auto cusdir = QDir(cusdirinfo.absoluteFilePath());
-        icondir.setFilter(QDir::Files | QDir::NoDotAndDotDot);
-        icondir.setSorting(QDir::NoSort);
+        cusdir.setFilter(QDir::Files | QDir::NoDotAndDotDot);
+        cusdir.setSorting(QDir::NoSort);
         icons.append(d->getImageFromDir(cusdir));
     }
     return icons;
@@ -202,18 +207,8 @@ bool DAccountsUser::locked() const
 qint32 DAccountsUser::maxPasswordAge() const
 {
     Q_D(const DAccountsUser);
-    auto reply = d->m_dUserInter->getPasswordExpirationPolicy();
-    reply.waitForFinished();
-    if (!reply.isValid()) {
-        qWarning() << reply.error().message();
-        return -1;
-    }
-    auto value = reply.argumentAt(3);
-    if (!value.isValid()) {
-        qWarning() << "can't get maxPasswordAge: max_days_between_changes is invalid";
-        return -1;
-    }
-    return value.toInt();
+    auto age = d->m_dSystemUserInter->maxPasswordAge();
+    return age;
 }
 
 QString DAccountsUser::passwordHint() const
@@ -225,19 +220,8 @@ QString DAccountsUser::passwordHint() const
 QDateTime DAccountsUser::passwordLastChange() const
 {
     Q_D(const DAccountsUser);
-    QDateTime lstch = QDateTime::fromSecsSinceEpoch(0);
-    auto reply = d->m_dUserInter->getPasswordExpirationPolicy();
-    reply.waitForFinished();
-    if (!reply.isValid()) {
-        qWarning() << reply.error().message();
-        return lstch;
-    }
-    auto value = reply.argumentAt(1);
-    if (!value.isValid()) {
-        qWarning() << "can't get passwordLastChange: last_change_time is invalid";
-        return lstch;
-    }
-    return lstch.addDays(value.toInt());
+    auto days = d->m_dSystemUserInter->passwordLastChange();
+    return QDateTime::fromSecsSinceEpoch(0).addDays(days);
 }
 
 PasswdStatus DAccountsUser::passwordStatus() const
@@ -288,16 +272,7 @@ QDateTime DAccountsUser::loginTime() const
 QDateTime DAccountsUser::createdTime() const
 {
     Q_D(const DAccountsUser);
-    qint64 time = 0;
-    QFileInfo bash(homeDir() + "/.bash_logout");
-    if (bash.exists() and bash.isFile())
-        time = d->getCreatedTimeFromFile(bash.absoluteFilePath());
-    if (time == 0) {
-        QFileInfo custom(UserConfigDir + userName());
-        if (custom.exists() and custom.isFile())
-            time = d->getCreatedTimeFromFile(custom.absoluteFilePath());
-    }
-    return QDateTime::fromSecsSinceEpoch(time);
+    return QDateTime::fromSecsSinceEpoch(d->m_dSystemUserInter->createdTime());
 }
 
 void DAccountsUser::setNopasswdLogin(const bool enabled)
@@ -477,7 +452,7 @@ ReminderInfo DAccountsUser::getReminderInfo() const
     }
     const auto &info_p = reply.value();
 
-    info.userName = info_p.userName;
+    info.userName = info_p.userName.toUtf8();
 
     info.failCountSinceLastLogin = info_p.failCountSinceLastLogin;
 
@@ -488,17 +463,17 @@ ReminderInfo DAccountsUser::getReminderInfo() const
     info.spent.min = info_p.spent.min;
     info.spent.warn = info_p.spent.warn;
 
-    info.currentLogin.address = info_p.currentLogin.address;
-    info.currentLogin.host = info_p.currentLogin.host;
-    info.currentLogin.inittabID = info_p.currentLogin.inittabID;
-    info.currentLogin.line = info_p.currentLogin.line;
-    info.currentLogin.time = info_p.currentLogin.time;
+    info.currentLogin.address = info_p.currentLogin.address.toUtf8();
+    info.currentLogin.host = info_p.currentLogin.host.toUtf8();
+    info.currentLogin.inittabID = info_p.currentLogin.inittabID.toUtf8();
+    info.currentLogin.line = info_p.currentLogin.line.toUtf8();
+    info.currentLogin.time = info_p.currentLogin.time.toUtf8();
 
-    info.lastLogin.address = info_p.lastLogin.address;
-    info.lastLogin.host = info_p.lastLogin.host;
-    info.lastLogin.inittabID = info_p.lastLogin.inittabID;
-    info.lastLogin.line = info_p.lastLogin.line;
-    info.lastLogin.time = info_p.lastLogin.time;
+    info.lastLogin.address = info_p.lastLogin.address.toUtf8();
+    info.lastLogin.host = info_p.lastLogin.host.toUtf8();
+    info.lastLogin.inittabID = info_p.lastLogin.inittabID.toUtf8();
+    info.lastLogin.line = info_p.lastLogin.line.toUtf8();
+    info.lastLogin.time = info_p.lastLogin.time.toUtf8();
 
     return info;
 }
@@ -539,41 +514,42 @@ QList<qint32> DAccountsUser::verifySecretQuestions(const QMap<qint32, QString> &
 PasswdExpirInfo DAccountsUser::passwordExpirationInfo(qint64 &dayLeft) const
 {
     Q_D(const DAccountsUser);
-    auto reply = d->m_dUserInter->getPasswordExpirationPolicy();
+    PasswdExpirInfo info;
+    auto reply = d->m_dSystemUserInter->passwordExpiredInfo();
     reply.waitForFinished();
     if (!reply.isValid()) {
         qWarning() << reply.error().message();
         return PasswdExpirInfo::Unknown;
     }
 
-    const auto &lstch = reply.argumentAt(1);
-    if (!lstch.isValid()) {
-        qWarning() << "can't get passwordExpirationInfo: last_change_time is invalid";
-        return PasswdExpirInfo::Unknown;
+    const auto &expireStatus = reply.argumentAt(0);
+    if (!expireStatus.isValid()) {
+        qWarning() << "can't get passwordExpirationInfo: expiredStatus is invalid";
+        info = PasswdExpirInfo::Unknown;
+    } else {
+        switch (expireStatus.toInt()) {
+            case 0:
+                info = PasswdExpirInfo::Normal;
+                break;
+            case 1:
+                info = PasswdExpirInfo::Closed;
+                break;
+            case 2:
+                info = PasswdExpirInfo::Expired;
+                break;
+            default:
+                info = PasswdExpirInfo::Unknown;
+                break;
+        }
     }
-    if (lstch.toLongLong() == 0)
-        return PasswdExpirInfo::Expired;
-
-    const auto &max = reply.argumentAt(3);
-    if (!max.isValid()) {
-        qWarning() << "can't get passwordExpirationInfo: max_days_between_changes is invalid";
-        return PasswdExpirInfo::Unknown;
+    const auto &day = reply.argumentAt(1);
+    if (!day.isValid()) {
+        qWarning() << "can't get passwordExpirationInfo: dayLeft is invalid";
+        return info;
+    } else {
+        dayLeft = day.toLongLong();
     }
-    if (max.toLongLong() == -1)
-        return PasswdExpirInfo::Normal;
-
-    const auto &warn = reply.argumentAt(4);
-    if (!warn.isValid()) {
-        qWarning() << "can't get passwordExpirationInfo: days_to_warn is invalid";
-        return PasswdExpirInfo::Unknown;
-    }
-    const auto &curDate = QDateTime::currentDateTime().toSecsSinceEpoch() / (60 * 60 * 24);
-    dayLeft = lstch.toLongLong() + max.toLongLong() - curDate;
-    if (dayLeft < 0)
-        return PasswdExpirInfo::Expired;
-    if (dayLeft < warn.toLongLong())
-        return PasswdExpirInfo::Closed;
-    return PasswdExpirInfo::Normal;
+    return info;
 }
 
 QList<QByteArray> DAccountsUserPrivate::getImageFromDir(const QDir &dir) const
@@ -584,26 +560,17 @@ QList<QByteArray> DAccountsUserPrivate::getImageFromDir(const QDir &dir) const
         return icons;
     }
     QMimeDatabase db;
+    auto fileter = QRegularExpression("[\u4e00-\u9fa5]");
     for (const auto &v : list) {
         QMimeType type = db.mimeTypeForFile(v);
-        if (!type.isValid() or !type.name().startsWith("image/"))
+        if (!type.name().startsWith("image"))
             continue;
-        auto filepath = v.absoluteFilePath();
-        if (filepath.contains(QRegularExpression("[\\x4e00-\\x9fa5]+")))
+        auto filename = v.fileName();
+        if (filename.contains(fileter))
             continue;
         icons.push_back(("file://" + v.absoluteFilePath()).toUtf8());
     }
     return icons;
-}
-
-qint64 DAccountsUserPrivate::getCreatedTimeFromFile(const QString &file) const
-{
-    auto *info = static_cast<struct stat *>(malloc(sizeof(struct stat)));
-    if (stat(file.toUtf8(), info) == -1) {
-        qWarning() << strerror(errno);
-        return 0;
-    }
-    return info->st_ctim.tv_sec;
 }
 
 DACCOUNTS_END_NAMESPACE
