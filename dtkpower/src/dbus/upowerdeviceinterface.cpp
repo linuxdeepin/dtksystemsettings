@@ -9,14 +9,22 @@ DPOWER_BEGIN_NAMESPACE
 UPowerDeviceInterface::UPowerDeviceInterface(const QString &name, QObject *parent)
     : QObject(parent)
 {
-    const QString &Service = QStringLiteral("org.freedesktop.UPower");
-    const QString &Interface = QStringLiteral("org.freedesktop.UPower.Device");
-    const QString &path = "/org/freedesktop/UPower/devices/" + name;
+    #ifdef USE_FAKE_INTERFACE
+    static const QString &Service = QStringLiteral("com.deepin.daemon.FakePower");
+    static const QString &Path = QStringLiteral("/com/deepin/daemon/FakePower");
+    static const QString &Interface = QStringLiteral("com.deepin.daemon.FakePower");
+    QDBusConnection connection = QDBusConnection::sessionBus();
+#else
+    static const QString &Service = QStringLiteral("org.freedesktop.UPower");
+    static const QString &Interface = QStringLiteral("org.freedesktop.UPower.Device");
+    static const QString &Path = "/org/freedesktop/UPower/devices/" + name;
+    QDBusConnection connection = QDBusConnection::systemBus();
+#endif
 
     History_p::registerMetaType();
     Statistic_p::registerMetaType();
     devicename = name;
-    m_inter.reset(new DDBusInterface(Service, path, Interface, QDBusConnection::systemBus(), this));
+    m_inter=new DDBusInterface(Service, Path, Interface,connection,this);
 }
 
 UPowerDeviceInterface::~UPowerDeviceInterface() {}
@@ -134,7 +142,7 @@ QString UPowerDeviceInterface::nativePath() const
 
 QString UPowerDeviceInterface::serial() const
 {
-    return qdbus_cast<QString>(m_inter->property("NativePath"));
+    return qdbus_cast<QString>(m_inter->property("Serial"));
 }
 
 QString UPowerDeviceInterface::vendor() const
@@ -188,7 +196,7 @@ UPowerDeviceInterface::getHistory(const QString &type, const quint32 timespan, c
 
 QDBusPendingReply<QList<Statistic_p>> UPowerDeviceInterface::getStatistics(const QString &type) const
 {
-    return m_inter->asyncCallWithArgumentList("GetHistory", {QVariant::fromValue(type)});
+    return m_inter->asyncCallWithArgumentList("GetStatistics", {QVariant::fromValue(type)});
 }
 
 QDBusPendingReply<> UPowerDeviceInterface::refresh()

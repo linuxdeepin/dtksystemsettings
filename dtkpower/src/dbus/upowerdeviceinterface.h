@@ -15,7 +15,6 @@
 #include "upowertypes_p.h"
 DPOWER_BEGIN_NAMESPACE
 
-
 class UPowerDeviceInterface : public QObject
 {
     Q_OBJECT
@@ -54,8 +53,7 @@ public:
     Q_PROPERTY(quint32 Type READ type)
     Q_PROPERTY(quint32 WarningLevel READ warningLevel)
     Q_PROPERTY(quint64 UpdateTime READ updateTime NOTIFY UpdateTimeChanged)
-    Q_PROPERTY(QString DeviceName READ deviceName )
-
+    Q_PROPERTY(QString DeviceName READ deviceName)
 
     bool hasHistory() const;
     bool hasStatistics() const;
@@ -98,14 +96,13 @@ signals:
     void EnergyChanged(const double value);
     void IconNameChanged(const QString &value);
 
-
 public slots:
     QDBusPendingReply<QList<History_p>> getHistory(const QString &type, const uint timespan, const uint resolution) const;
     QDBusPendingReply<QList<Statistic_p>> getStatistics(const QString &type) const;
     QDBusPendingReply<> refresh();
 
 private:
-    QScopedPointer<DDBusInterface> m_inter;
-    QString devicename ;
+    DDBusInterface *m_inter;
+    QString devicename;
 };
 DPOWER_END_NAMESPACE
