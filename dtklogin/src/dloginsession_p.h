@@ -25,6 +25,11 @@ public:
     }
 
     bool enableAutostartWatch();
+    QString getUserAutostartDir();
+    QStringList getSystemAutostartDirs();
+    QStringList getAutostartDirs();
+    bool judgeAutostart(const QString &fullPath);
+    QStringList getAutostartApps(const QString &dir);
 
 private:
     Login1SessionInterface *m_inter;
