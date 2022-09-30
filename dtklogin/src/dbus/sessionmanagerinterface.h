@@ -4,7 +4,6 @@
 
 #pragma once
 
-
 #include "namespace.h"
 #include <qobject.h>
 #include <qdbuspendingreply.h>
@@ -19,7 +18,6 @@ class SessionManagerInterface : public QObject
     Q_OBJECT
 
 public:
-
     Q_PROPERTY(bool Locked READ Locked NOTIFY LockedChanged);
 
     static inline const char *staticInterfaceName() { return "com.deepin.SessionManager"; }

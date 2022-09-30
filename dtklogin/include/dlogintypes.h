@@ -51,7 +51,7 @@ enum class UserState { Offline, Lingering, Online, Active, Closing, Unknown };
 
 struct Inhibitor
 {
-    uint what;
+    quint32 what;
     QString who;
     QString why;
     InhibitMode mode;

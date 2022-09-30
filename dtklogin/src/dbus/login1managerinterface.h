@@ -6,6 +6,7 @@
 #include "namespace.h"
 #include <qobject.h>
 #include <qdbuspendingreply.h>
+#include <qdbusunixfiledescriptor.h>
 #include "dlogintypes_p.h"
 #include "dlogintypes.h"
 
@@ -132,10 +133,11 @@ public slots:
     QDBusPendingReply<> hibernateWithFlags(quint64 flags);
     QDBusPendingReply<> hybridSleep(bool interactive);
     QDBusPendingReply<> hybridSleepWithFlags(quint64 flags);
-    QDBusPendingReply<int> inhibit(const QString &what, const QString &who, const QString &why, const QString &mode);
+    QDBusPendingReply<QDBusUnixFileDescriptor>
+    inhibit(const QString &what, const QString &who, const QString &why, const QString &mode);
     QDBusPendingReply<> killSession(const QString &sessionId, const QString &who, qint32 signalNumber);
     QDBusPendingReply<> killUser(quint32 UID, qint32 signalName);
-    QDBusPendingReply<QList<DLOGIN_NAMESPACE::DBusInhibitor>> listInhibitors();
+    QDBusPendingReply<QList<DBusInhibitor>> listInhibitors();
     QDBusPendingReply<QList<DLOGIN_NAMESPACE::DBusSeat>> listSeats();
     QDBusPendingReply<QList<DLOGIN_NAMESPACE::DBusSession>> listSessions();
     QDBusPendingReply<QList<DLOGIN_NAMESPACE::DBusUser>> listUsers();
@@ -158,7 +160,7 @@ public slots:
     QDBusPendingReply<> suspendThenHibernateWithFlags(quint64 flags);
     QDBusPendingReply<> terminateSeat(const QString &seatId);
     QDBusPendingReply<> terminateSession(const QString &sessionId);
-    QDBusPendingReply<> terminateUser(const QString &UID);
+    QDBusPendingReply<> terminateUser(const quint32 UID);
     QDBusPendingReply<> unlockSession(const QString &sessionId);
     QDBusPendingReply<> unlockSessions();
 

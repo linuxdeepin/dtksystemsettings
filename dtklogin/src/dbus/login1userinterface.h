@@ -55,6 +55,7 @@ public slots:
     QDBusPendingReply<> terminate();
 
 private:
-    ::DDBusInterface *m_interface;
+    DDBusInterface *m_interface;
+    QString m_path;
 };
 DLOGIN_END_NAMESPACE

@@ -41,9 +41,9 @@ public:
     Q_PROPERTY(quint32 leader READ leader);
     Q_PROPERTY(quint32 VTNr READ VTNr);
     Q_PROPERTY(QDateTime idleSinceHint READ idleSinceHint);
-    Q_PROPERTY(QDateTime idleSinceHintMonotonic READ idleSinceHintMonotonic);
+    Q_PROPERTY(quint64 idleSinceHintMonotonic READ idleSinceHintMonotonic);
     Q_PROPERTY(QDateTime createdTime READ createdTime);
-    Q_PROPERTY(QDateTime createdTimeMonotonic READ createdTimeMonotonic);
+    Q_PROPERTY(quint64 createdTimeMonotonic READ createdTimeMonotonic);
 
     bool active() const;
     bool idleHint() const;
@@ -68,9 +68,9 @@ public:
     quint32 VTNr() const;
 
     QDateTime idleSinceHint() const;
-    QDateTime idleSinceHintMonotonic() const;
+    quint64 idleSinceHintMonotonic() const;
     QDateTime createdTime() const;
-    QDateTime createdTimeMonotonic() const;
+    quint64 createdTimeMonotonic() const;
 
 signals:
     void lockedChanged(const bool locked);
@@ -83,9 +83,8 @@ public slots:
     void lock();
     void setIdleHint(const bool idle);
     void setLocked(const bool locked);
-    void setType(const QString &type);
+    void setType(const SessionType &type);
     void terminate();
-    // Previous StartManager interfaces
     QStringList autostartList();
     bool isAutostart(const QString &fileName);
     bool removeAutostart(const QString &fileName);

@@ -19,44 +19,97 @@ DLOGIN_BEGIN_NAMESPACE
  * Implementation of adaptor class Login1SeatAdaptor
  */
 
-Login1SeatService::Login1SeatService(QObject *parent)
+Login1SeatService::Login1SeatService(const QString &service, const QString &path, QObject *parent)
     : QObject(parent)
+    , m_service(service)
+    , m_path(path)
 {
+    DBusSessionPath::registerMetaType();
+    registerService(m_service, m_path);
+}
+
+Login1SeatService::~Login1SeatService()
+{
+    unRegisterService();
+}
+
+bool Login1SeatService::registerService(const QString &service, const QString &path)
+{
+    QDBusConnection connection = QDBusConnection::sessionBus();
+    if (!connection.registerService(service)) {
+        QString errorMsg = connection.lastError().message();
+        if (errorMsg.isEmpty())
+            errorMsg = "maybe it's running";
+
+        qWarning() << QString("Can't register the %1 service, %2.").arg(service).arg(errorMsg);
+        return false;
+    }
+    if (!connection.registerObject(path, this, QDBusConnection::ExportAllContents)) {
+        qWarning() << QString("Can't register %1 the D-Bus object.").arg(path);
+        return false;
+    }
+    return true;
+}
+
+void Login1SeatService::unRegisterService()
+{
+    QDBusConnection connection = QDBusConnection::sessionBus();
+    connection.unregisterObject(m_path);
+    connection.unregisterService(m_service);
 }
 
 DBusSessionPath Login1SeatService::activeSession() const
 {
-    // get the value of property ActiveSession
-    return qvariant_cast<DBusSessionPath>(parent()->property("ActiveSession"));
+    return m_activeSession;
 }
 
 bool Login1SeatService::canGraphical() const
 {
-    // get the value of property CanGraphical
-    return qvariant_cast<bool>(parent()->property("CanGraphical"));
+    return m_canGraphical;
 }
 
 bool Login1SeatService::canTTY() const
 {
-    // get the value of property CanTTY
-    return qvariant_cast<bool>(parent()->property("CanTTY"));
+    return m_canTTY;
+}
+
+bool Login1SeatService::idleHint() const
+{
+    return m_idleHint;
 }
 
 QString Login1SeatService::id() const
 {
-    // get the value of property Id
-    return qvariant_cast<QString>(parent()->property("Id"));
+    return m_id;
+}
+quint64 Login1SeatService::idleSinceHint() const
+{
+    return m_idleSinceHint;
+}
+quint64 Login1SeatService::idleSinceHintMonotonic() const
+{
+    return m_idleSinceHintMonotonic;
+}
+QList<DBusSessionPath> Login1SeatService::sessions() const
+{
+    return m_sessions;
 }
 
 void Login1SeatService::ActivateSession(const QString &sessionId)
 {
-    Q_UNUSED(sessionId)
+    m_sessionId = sessionId;
 }
-void Login1SeatService::SwitchTo(const uint VTNr)
+void Login1SeatService::SwitchTo(const quint32 VTNr)
 {
-    Q_UNUSED(VTNr)
+    m_VTNr = VTNr;
 }
-void Login1SeatService::SwitchToNext() {}
-void Login1SeatService::SwitchToPrevious() {}
+void Login1SeatService::SwitchToNext()
+{
+    m_VTNr++;
+}
+void Login1SeatService::SwitchToPrevious()
+{
+    m_VTNr--;
+}
 
 DLOGIN_END_NAMESPACE

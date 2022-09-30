@@ -52,7 +52,7 @@ public:
     quint64 loginTimeMonotonic() const;
 
 public slots:
-    void kill(const int signalNumber);
+    void kill(const qint32 signalNumber);
     void terminate();
 
 private:

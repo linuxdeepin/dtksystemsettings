@@ -15,6 +15,7 @@
 #include <qvariant.h>
 #include <qdbusconnection.h>
 #include <qdebug.h>
+#include <qdbuserror.h>
 
 #include "dlogintypes_p.h"
 DLOGIN_BEGIN_NAMESPACE
@@ -23,29 +24,47 @@ DLOGIN_BEGIN_NAMESPACE
  * Implementation of adaptor class  Login1ManagerService
  */
 
-Login1ManagerService::Login1ManagerService(QObject *parent)
+Login1ManagerService::Login1ManagerService(const QString &service, const QString &path, QObject *parent)
     : QObject(parent)
+    , m_service(service)
+    , m_path(path)
 {
-    registerService();
+    DBusScheduledShutdownValue::registerMetaType();
+    DBusInhibitor::registerMetaType();
+    DBusSeat::registerMetaType();
+    DBusSession::registerMetaType();
+    DBusUser::registerMetaType();
+    registerService(m_service, m_path);
 }
 
-void Login1ManagerService::registerService()
+Login1ManagerService::~Login1ManagerService()
 {
-    bool success = false;
-    const QString &FakeService = QStringLiteral("org.freedesktop.fakelogin1");
-    const QString &ManagerPath = QStringLiteral("/org/freedesktop/login1/manager");
-    success = QDBusConnection::sessionBus().registerService(FakeService);
-    if (success) {
-        qDebug() << "Successfully registered fake service org.freedesktop.freelogin1";
-    } else {
-        qCritical() << "Can't register fake service org.freedesktop.freelogin1";
+    unRegisterService();
+}
+
+bool Login1ManagerService::registerService(const QString &service, const QString &path)
+{
+    QDBusConnection connection = QDBusConnection::sessionBus();
+    if (!connection.registerService(service)) {
+        QString errorMsg = connection.lastError().message();
+        if (errorMsg.isEmpty())
+            errorMsg = "maybe it's running";
+
+        qWarning() << QString("Can't register the %1 service, %2.").arg(service).arg(errorMsg);
+        return false;
     }
-    success = QDBusConnection::sessionBus().registerObject(ManagerPath, this, QDBusConnection::ExportAllContents);
-    if (success) {
-        qDebug() << "Successfully registered object /org/freedesktop/login1/manager";
-    } else {
-        qCritical() << "Can't register object /org/freedesktop/login1/manager";
+    if (!connection.registerObject(path, this, QDBusConnection::ExportAllContents)) {
+        qWarning() << QString("Can't register %1 the D-Bus object.").arg(path);
+        return false;
     }
+    return true;
+}
+
+void Login1ManagerService::unRegisterService()
+{
+    QDBusConnection connection = QDBusConnection::sessionBus();
+    connection.unregisterObject(m_path);
+    connection.unregisterService(m_service);
 }
 
 QString Login1ManagerService::blockInhibited() const
@@ -208,275 +227,200 @@ quint64 Login1ManagerService::userStopDelayUSec() const
     return m_userStopDelayUSec;
 }
 
-void Login1ManagerService::ActivateSession(const QString &session_id)
+void Login1ManagerService::ActivateSession(const QString &sessionId)
 {
-    // handle method call org.freedesktop.login1.Manager.ActivateSession
-    QMetaObject::invokeMethod(parent(), "ActivateSession", Q_ARG(QString, session_id));
+    m_sessionId = sessionId;
 }
 
-void Login1ManagerService::ActivateSessionOnSeat(const QString &session_id, const QString &seat_id)
+void Login1ManagerService::ActivateSessionOnSeat(const QString &sessionId, const QString &seatId)
 {
-    // handle method call org.freedesktop.login1.Manager.ActivateSessionOnSeat
-    QMetaObject::invokeMethod(parent(), "ActivateSessionOnSeat", Q_ARG(QString, session_id), Q_ARG(QString, seat_id));
+    m_sessionId = sessionId;
+    m_seatId = seatId;
 }
 
 QString Login1ManagerService::CanHalt()
 {
-    // handle method call org.freedesktop.login1.Manager.CanHalt
-    QString result;
-    QMetaObject::invokeMethod(parent(), "CanHalt", Q_RETURN_ARG(QString, result));
-    return result;
+    return m_canHalt;
 }
 
 QString Login1ManagerService::CanHibernate()
 {
-    // handle method call org.freedesktop.login1.Manager.CanHibernate
-    QString result;
-    QMetaObject::invokeMethod(parent(), "CanHibernate", Q_RETURN_ARG(QString, result));
-    return result;
+    return m_canHibernate;
 }
 
 QString Login1ManagerService::CanHybridSleep()
 {
-    // handle method call org.freedesktop.login1.Manager.CanHybridSleep
-    QString result;
-    QMetaObject::invokeMethod(parent(), "CanHybridSleep", Q_RETURN_ARG(QString, result));
-    return result;
+    return m_canHybridSleep;
 }
 
 QString Login1ManagerService::CanPowerOff()
 {
-    // handle method call org.freedesktop.login1.Manager.CanPowerOff
-    QString result;
-    QMetaObject::invokeMethod(parent(), "CanPowerOff", Q_RETURN_ARG(QString, result));
-    return result;
+    return m_canPowerOff;
 }
 
 QString Login1ManagerService::CanReboot()
 {
-    // handle method call org.freedesktop.login1.Manager.CanReboot
-    QString result;
-    QMetaObject::invokeMethod(parent(), "CanReboot", Q_RETURN_ARG(QString, result));
-    return result;
+    return m_canReboot;
 }
 
 QString Login1ManagerService::CanSuspend()
 {
-    // handle method call org.freedesktop.login1.Manager.CanSuspend
-    QString result;
-    QMetaObject::invokeMethod(parent(), "CanSuspend", Q_RETURN_ARG(QString, result));
-    return result;
+    return m_canSuspend;
 }
 
 QString Login1ManagerService::CanSuspendThenHibernate()
 {
-    // handle method call org.freedesktop.login1.Manager.CanSuspendThenHibernate
-    QString result;
-    QMetaObject::invokeMethod(parent(), "CanSuspendThenHibernate", Q_RETURN_ARG(QString, result));
-    return result;
+    return m_canSuspendThenHibernate;
 }
 
 bool Login1ManagerService::CancelScheduledShutdown()
 {
-    // handle method call org.freedesktop.login1.Manager.CancelScheduledShutdown
-    bool cancelled;
-    QMetaObject::invokeMethod(parent(), "CancelScheduledShutdown", Q_RETURN_ARG(bool, cancelled));
-    return cancelled;
+    return m_cancelScheduledShutdown;
 }
 
-QDBusObjectPath Login1ManagerService::GetSeat(const QString &seat_id)
+QDBusObjectPath Login1ManagerService::GetSeat(const QString &seatId)
 {
-    // handle method call org.freedesktop.login1.Manager.GetSeat
-    QDBusObjectPath object_path;
-    QMetaObject::invokeMethod(parent(), "GetSeat", Q_RETURN_ARG(QDBusObjectPath, object_path), Q_ARG(QString, seat_id));
-    return object_path;
+    m_seatId = seatId;
+    return m_seatPath;
 }
 
-QDBusObjectPath Login1ManagerService::GetSession(const QString &session_id)
+QDBusObjectPath Login1ManagerService::GetSession(const QString &sessionId)
 {
-    // handle method call org.freedesktop.login1.Manager.GetSession
-    QDBusObjectPath object_path;
-    QMetaObject::invokeMethod(parent(), "GetSession", Q_RETURN_ARG(QDBusObjectPath, object_path), Q_ARG(QString, session_id));
-    return object_path;
+    m_sessionId = sessionId;
+    return m_sessionPath;
 }
 
-QDBusObjectPath Login1ManagerService::GetSessionByPID(quint32 pid)
+QDBusObjectPath Login1ManagerService::GetSessionByPID(quint32 PID)
 {
-    // handle method call org.freedesktop.login1.Manager.GetSessionByPID
-    QDBusObjectPath object_path;
-    QMetaObject::invokeMethod(parent(), "GetSessionByPID", Q_RETURN_ARG(QDBusObjectPath, object_path), Q_ARG(quint32, pid));
-    return object_path;
+    m_PID = PID;
+    return m_sessionPath;
 }
 
-QDBusObjectPath Login1ManagerService::GetUser(quint32 uid)
+QDBusObjectPath Login1ManagerService::GetUser(quint32 UID)
 {
-    // handle method call org.freedesktop.login1.Manager.GetUser
-    QDBusObjectPath object_path;
-    QMetaObject::invokeMethod(parent(), "GetUser", Q_RETURN_ARG(QDBusObjectPath, object_path), Q_ARG(quint32, uid));
-    return object_path;
+    m_UID = UID;
+    return m_userPath;
 }
 
-QDBusObjectPath Login1ManagerService::GetUserByPID(quint32 pid)
+QDBusObjectPath Login1ManagerService::GetUserByPID(quint32 PID)
 {
-    // handle method call org.freedesktop.login1.Manager.GetUserByPID
-    QDBusObjectPath object_path;
-    QMetaObject::invokeMethod(parent(), "GetUserByPID", Q_RETURN_ARG(QDBusObjectPath, object_path), Q_ARG(quint32, pid));
-    return object_path;
+    m_PID = PID;
+    return m_userPath;
 }
 
 void Login1ManagerService::Halt(bool interactive)
 {
-    // handle method call org.freedesktop.login1.Manager.Halt
-    QMetaObject::invokeMethod(parent(), "Halt", Q_ARG(bool, interactive));
+    m_haltInteractive = interactive;
 }
 
 void Login1ManagerService::Hibernate(bool interactive)
 {
-    // handle method call org.freedesktop.login1.Manager.Hibernate
-    QMetaObject::invokeMethod(parent(), "Hibernate", Q_ARG(bool, interactive));
+    m_hibernateInteractive = interactive;
 }
 
 void Login1ManagerService::HybridSleep(bool interactive)
 {
-    // handle method call org.freedesktop.login1.Manager.HybridSleep
-    QMetaObject::invokeMethod(parent(), "HybridSleep", Q_ARG(bool, interactive));
+    m_hybridSleepInteractive = interactive;
 }
 
 QDBusUnixFileDescriptor
 Login1ManagerService::Inhibit(const QString &what, const QString &who, const QString &why, const QString &mode)
 {
-    // handle method call org.freedesktop.login1.Manager.Inhibit
-    QDBusUnixFileDescriptor pipe_fd;
-    QMetaObject::invokeMethod(parent(),
-                              "Inhibit",
-                              Q_RETURN_ARG(QDBusUnixFileDescriptor, pipe_fd),
-                              Q_ARG(QString, what),
-                              Q_ARG(QString, who),
-                              Q_ARG(QString, why),
-                              Q_ARG(QString, mode));
-    return pipe_fd;
+    m_inhibitor.what = what;
+    m_inhibitor.who = who;
+    m_inhibitor.why = why;
+    m_inhibitor.mode = mode;
+    return m_inhibitFileDescriptor;
 }
 
-void Login1ManagerService::KillSession(const QString &session_id, const QString &who, qint32 signal_number)
+void Login1ManagerService::KillSession(const QString &sessionId, const QString &who, qint32 signalNumber)
 {
-    // handle method call org.freedesktop.login1.Manager.KillSession
-    QMetaObject::invokeMethod(
-        parent(), "KillSession", Q_ARG(QString, session_id), Q_ARG(QString, who), Q_ARG(qint32, signal_number));
+    m_sessionId = sessionId;
+    m_sessionRole = who;
+    m_signalNumber = signalNumber;
 }
 
-void Login1ManagerService::KillUser(quint32 uid, qint32 signal_number)
+void Login1ManagerService::KillUser(quint32 UID, qint32 signalNumber)
 {
-    // handle method call org.freedesktop.login1.Manager.KillUser
-    QMetaObject::invokeMethod(parent(), "KillUser", Q_ARG(quint32, uid), Q_ARG(qint32, signal_number));
+    m_UID = UID;
+    m_signalNumber = signalNumber;
 }
 
-DBusInhibitor Login1ManagerService::ListInhibitors()
+QList<DBusInhibitor> Login1ManagerService::ListInhibitors()
 {
-    // handle method call org.freedesktop.login1.Manager.ListInhibitors
-    DBusInhibitor inhibitors;
-    QMetaObject::invokeMethod(parent(), "ListInhibitors", Q_RETURN_ARG(DBusInhibitor, inhibitors));
-    return inhibitors;
+    return m_inhibitors;
 }
 
-DBusSeat Login1ManagerService::ListSeats()
+QList<DBusSeat> Login1ManagerService::ListSeats()
 {
-    // handle method call org.freedesktop.login1.Manager.ListSeats
-    DBusSeat seats;
-    QMetaObject::invokeMethod(parent(), "ListSeats", Q_RETURN_ARG(DBusSeat, seats));
-    return seats;
+    return m_seats;
 }
 
-DBusSession Login1ManagerService::ListSessions()
+QList<DBusSession> Login1ManagerService::ListSessions()
 {
-    // handle method call org.freedesktop.login1.Manager.ListSessions
-    DBusSession sessions;
-    QMetaObject::invokeMethod(parent(), "ListSessions", Q_RETURN_ARG(DBusSession, sessions));
-    return sessions;
+    return m_sessions;
 }
 
-DBusUser Login1ManagerService::ListUsers()
+QList<DBusUser> Login1ManagerService::ListUsers()
 {
-    // handle method call org.freedesktop.login1.Manager.ListUsers
-    DBusUser users;
-    QMetaObject::invokeMethod(parent(), "ListUsers", Q_RETURN_ARG(DBusUser, users));
-    return users;
+    return m_users;
 }
 
 void Login1ManagerService::LockSession(const QString &session_id)
 {
-    // handle method call org.freedesktop.login1.Manager.LockSession
-    QMetaObject::invokeMethod(parent(), "LockSession", Q_ARG(QString, session_id));
+    m_sessionId = session_id;
 }
 
 void Login1ManagerService::LockSessions()
 {
-    // handle method call org.freedesktop.login1.Manager.LockSessions
-    QMetaObject::invokeMethod(parent(), "LockSessions");
+    m_lockSessions = true;
 }
 
 void Login1ManagerService::PowerOff(bool interactive)
 {
-    // handle method call org.freedesktop.login1.Manager.PowerOff
-    QMetaObject::invokeMethod(parent(), "PowerOff", Q_ARG(bool, interactive));
+    m_powerOffInteractive = interactive;
 }
 
 void Login1ManagerService::Reboot(bool interactive)
 {
-    // handle method call org.freedesktop.login1.Manager.Reboot
-    QMetaObject::invokeMethod(parent(), "Reboot", Q_ARG(bool, interactive));
+    m_rebootInteractive = interactive;
 }
 
 void Login1ManagerService::ScheduleShutdown(const QString &type, quint64 usec)
 {
-    // handle method call org.freedesktop.login1.Manager.ScheduleShutdown
-    QMetaObject::invokeMethod(parent(), "ScheduleShutdown", Q_ARG(QString, type), Q_ARG(quint64, usec));
+    m_scheduledShutdown.type = type;
+    m_scheduledShutdown.usec = usec;
 }
 
 void Login1ManagerService::SetUserLinger(quint32 uid, bool enable, bool interactive)
 {
-    // handle method call org.freedesktop.login1.Manager.SetUserLinger
-    QMetaObject::invokeMethod(parent(), "SetUserLinger", Q_ARG(quint32, uid), Q_ARG(bool, enable), Q_ARG(bool, interactive));
+    m_UID = uid;
+    m_userLinger = enable;
+    m_userLingerInteractive = interactive;
 }
 
 void Login1ManagerService::Suspend(bool interactive)
 {
-    // handle method call org.freedesktop.login1.Manager.Suspend
-    QMetaObject::invokeMethod(parent(), "Suspend", Q_ARG(bool, interactive));
+    m_suspendInteractive = interactive;
 }
 
 void Login1ManagerService::SuspendThenHibernate(bool interactive)
 {
-    // handle method call org.freedesktop.login1.Manager.SuspendThenHibernate
-    QMetaObject::invokeMethod(parent(), "SuspendThenHibernate", Q_ARG(bool, interactive));
+    m_suspendThenHibernateInteractive = interactive;
 }
 
-void Login1ManagerService::TerminateSeat(const QString &seat_id)
+void Login1ManagerService::TerminateSeat(const QString &seatId)
 {
-    // handle method call org.freedesktop.login1.Manager.TerminateSeat
-    QMetaObject::invokeMethod(parent(), "TerminateSeat", Q_ARG(QString, seat_id));
+    m_seatId = seatId;
 }
 
-void Login1ManagerService::TerminateSession(const QString &session_id)
+void Login1ManagerService::TerminateSession(const QString &sessionId)
 {
-    // handle method call org.freedesktop.login1.Manager.TerminateSession
-    QMetaObject::invokeMethod(parent(), "TerminateSession", Q_ARG(QString, session_id));
+    m_sessionId = sessionId;
 }
 
-void Login1ManagerService::TerminateUser(quint32 uid)
+void Login1ManagerService::TerminateUser(quint32 UID)
 {
-    // handle method call org.freedesktop.login1.Manager.TerminateUser
-    QMetaObject::invokeMethod(parent(), "TerminateUser", Q_ARG(quint32, uid));
-}
-
-void Login1ManagerService::UnlockSession(const QString &session_id)
-{
-    // handle method call org.freedesktop.login1.Manager.UnlockSession
-    QMetaObject::invokeMethod(parent(), "UnlockSession", Q_ARG(QString, session_id));
-}
-
-void Login1ManagerService::UnlockSessions()
-{
-    // handle method call org.freedesktop.login1.Manager.UnlockSessions
-    QMetaObject::invokeMethod(parent(), "UnlockSessions");
+    m_UID = UID;
 }
 DLOGIN_END_NAMESPACE

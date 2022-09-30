@@ -19,188 +19,199 @@ DLOGIN_BEGIN_NAMESPACE
  * Implementation of adaptor class Login1SessionAdaptor
  */
 
-Login1SessionService::Login1SessionService(QObject *parent)
+Login1SessionService::Login1SessionService(const QString &service, const QString &path, QObject *parent)
     : QObject(parent)
+    , m_service(service)
+    , m_path(path)
 {
+    DBusUserPath::registerMetaType();
+    DBusSeatPath::registerMetaType();
+    registerService(m_service, m_path);
+}
+
+Login1SessionService::~Login1SessionService()
+{
+    unRegisterService();
+}
+
+bool Login1SessionService::registerService(const QString &service, const QString &path)
+{
+    QDBusConnection connection = QDBusConnection::sessionBus();
+    if (!connection.registerService(service)) {
+        QString errorMsg = connection.lastError().message();
+        if (errorMsg.isEmpty())
+            errorMsg = "maybe it's running";
+
+        qWarning() << QString("Can't register the %1 service, %2.").arg(service).arg(errorMsg);
+        return false;
+    }
+    if (!connection.registerObject(path, this, QDBusConnection::ExportAllContents)) {
+        qWarning() << QString("Can't register %1 the D-Bus object.").arg(path);
+        return false;
+    }
+    return true;
+}
+
+void Login1SessionService::unRegisterService()
+{
+    QDBusConnection connection = QDBusConnection::sessionBus();
+    connection.unregisterObject(m_path);
+    connection.unregisterService(m_service);
 }
 
 bool Login1SessionService::active() const
 {
-    // get the value of property Active
-    return qvariant_cast<bool>(parent()->property("Active"));
+    return m_active;
 }
 
 uint Login1SessionService::audit() const
 {
-    // get the value of property Audit
-    return qvariant_cast<uint>(parent()->property("Audit"));
+    return m_audit;
 }
 
 QString Login1SessionService::sessionClass() const
 {
-    // get the value of property Class
-    return qvariant_cast<QString>(parent()->property("Class"));
+    return m_sessionClass;
 }
 
 QString Login1SessionService::desktop() const
 {
-    // get the value of property Desktop
-    return qvariant_cast<QString>(parent()->property("Desktop"));
+    return m_desktop;
 }
 
 QString Login1SessionService::display() const
 {
-    // get the value of property Display
-    return qvariant_cast<QString>(parent()->property("Display"));
+    return m_display;
 }
 
 QString Login1SessionService::id() const
 {
-    // get the value of property Id
-    return qvariant_cast<QString>(parent()->property("Id"));
+    return m_id;
 }
 
 bool Login1SessionService::idleHint() const
 {
-    // get the value of property IdleHint
-    return qvariant_cast<bool>(parent()->property("IdleHint"));
+    return m_idleHint;
 }
 
-qulonglong Login1SessionService::idleSinceHint() const
+quint64 Login1SessionService::idleSinceHint() const
 {
-    // get the value of property IdleSinceHint
-    return qvariant_cast<qulonglong>(parent()->property("IdleSinceHint"));
+    return m_idleSinceHint;
 }
 
-qulonglong Login1SessionService::idleSinceHintMonotonic() const
+quint64 Login1SessionService::idleSinceHintMonotonic() const
 {
-    // get the value of property IdleSinceHintMonotonic
-    return qvariant_cast<qulonglong>(parent()->property("IdleSinceHintMonotonic"));
+    return m_idleSinceHintMonotonic;
 }
 
 uint Login1SessionService::leader() const
 {
-    // get the value of property Leader
-    return qvariant_cast<uint>(parent()->property("Leader"));
+    return m_leader;
 }
 
 bool Login1SessionService::lockedHint() const
 {
-    // get the value of property LockedHint
-    return qvariant_cast<bool>(parent()->property("LockedHint"));
+    return m_lockedHint;
 }
 
 QString Login1SessionService::name() const
 {
-    // get the value of property Name
-    return qvariant_cast<QString>(parent()->property("Name"));
+    return m_name;
 }
 
 bool Login1SessionService::remote() const
 {
-    // get the value of property Remote
-    return qvariant_cast<bool>(parent()->property("Remote"));
+    return m_remote;
 }
 
 QString Login1SessionService::remoteHost() const
 {
-    // get the value of property RemoteHost
-    return qvariant_cast<QString>(parent()->property("RemoteHost"));
+    return m_remoteHost;
 }
 
 QString Login1SessionService::remoteUser() const
 {
-    // get the value of property RemoteUser
-    return qvariant_cast<QString>(parent()->property("RemoteUser"));
+    return m_remoteUser;
 }
 
 QString Login1SessionService::scope() const
 {
-    // get the value of property Scope
-    return qvariant_cast<QString>(parent()->property("Scope"));
+    return m_scope;
 }
 
 DBusSeatPath Login1SessionService::seat() const
 {
-    // get the value of property Seat
-    return qvariant_cast<DBusSeatPath>(parent()->property("Seat"));
+    return m_seat;
 }
 
 QString Login1SessionService::service() const
 {
-    // get the value of property Service
-    return qvariant_cast<QString>(parent()->property("Service"));
+    return m_applicationService;
 }
 
 QString Login1SessionService::state() const
 {
-    // get the value of property State
-    return qvariant_cast<QString>(parent()->property("State"));
+    return m_state;
 }
 
-QString Login1SessionService::tTY() const
+QString Login1SessionService::TTY() const
 {
-    // get the value of property TTY
-    return qvariant_cast<QString>(parent()->property("TTY"));
+    return m_TTY;
 }
 
-qulonglong Login1SessionService::timestamp() const
+quint64 Login1SessionService::timestamp() const
 {
-    // get the value of property Timestamp
-    return qvariant_cast<qulonglong>(parent()->property("Timestamp"));
+    return m_timestamp;
 }
 
-qulonglong Login1SessionService::timestampMonotonic() const
+quint64 Login1SessionService::timestampMonotonic() const
 {
-    // get the value of property TimestampMonotonic
-    return qvariant_cast<qulonglong>(parent()->property("TimestampMonotonic"));
+    return m_timestampMonotonic;
 }
 
 QString Login1SessionService::type() const
 {
-    // get the value of property Type
-    return qvariant_cast<QString>(parent()->property("Type"));
+    return m_type;
 }
 
 DBusUserPath Login1SessionService::user() const
 {
-    // get the value of property User
-    return qvariant_cast<DBusUserPath>(parent()->property("User"));
+    return m_user;
 }
 
 uint Login1SessionService::VTNr() const
 {
-    // get the value of property VTNr
-    return qvariant_cast<uint>(parent()->property("VTNr"));
+    return m_VTNr;
 }
 
 void Login1SessionService::Activate()
 {
-    // handle method call org.freedesktop.login1.Session.Activate
-    QMetaObject::invokeMethod(parent(), "Activate");
+    m_active = true;
 }
 
-void Login1SessionService::Kill(const QString &who, int signal_number)
+void Login1SessionService::Kill(const QString &who, qint32 signalNumber)
 {
-    // handle method call org.freedesktop.login1.Session.Kill
-    QMetaObject::invokeMethod(parent(), "Kill", Q_ARG(QString, who), Q_ARG(int, signal_number));
+    m_who = who;
+    m_signalNumber = signalNumber;
 }
 
 void Login1SessionService::Lock()
 {
-    // handle method call org.freedesktop.login1.Session.Lock
-    QMetaObject::invokeMethod(parent(), "Lock");
+    m_lockedHint = true;
 }
 
 void Login1SessionService::SetIdleHint(bool idle)
 {
-    // handle method call org.freedesktop.login1.Session.SetIdleHint
-    QMetaObject::invokeMethod(parent(), "SetIdleHint", Q_ARG(bool, idle));
+    m_idleHint = idle;
+}
+
+void Login1SessionService::SetType(const QString &type)
+{
+    m_type = type;
 }
 
 void Login1SessionService::Terminate()
 {
-    // handle method call org.freedesktop.login1.Session.Terminate
-    QMetaObject::invokeMethod(parent(), "Terminate");
+    m_terminated = true;
 }
 DLOGIN_END_NAMESPACE
