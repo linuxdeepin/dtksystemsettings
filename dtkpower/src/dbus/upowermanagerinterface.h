@@ -37,7 +37,7 @@ public slots:
     QDBusPendingReply<QDBusObjectPath> getDisplayDevice() const;
 
 private:
-    DDBusInterface* m_inter;
+    DDBusInterface *m_inter;
 };
 
 DPOWER_END_NAMESPACE

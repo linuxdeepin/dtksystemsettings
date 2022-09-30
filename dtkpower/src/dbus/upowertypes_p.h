@@ -10,7 +10,7 @@
 #include <qdbusmetatype.h>
 #include <qlist.h>
 
-DPOWER_BEGIN_NAMESPACE 
+DPOWER_BEGIN_NAMESPACE
 
 struct History_p
 {
@@ -27,14 +27,13 @@ struct Statistic_p
     static void registerMetaType();
 };
 
-
 QDBusArgument &operator<<(QDBusArgument &arg, const History_p &value);
 const QDBusArgument &operator>>(const QDBusArgument &arg, History_p &value);
 
 QDBusArgument &operator<<(QDBusArgument &arg, const Statistic_p &value);
 const QDBusArgument &operator>>(const QDBusArgument &arg, Statistic_p &value);
 
-DPOWER_END_NAMESPACE 
+DPOWER_END_NAMESPACE
 
 Q_DECLARE_METATYPE(DPOWER_NAMESPACE::History_p)
 Q_DECLARE_METATYPE(DPOWER_NAMESPACE::Statistic_p)

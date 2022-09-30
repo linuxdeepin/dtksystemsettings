@@ -8,7 +8,7 @@
 #include <qlist.h>
 
 DPOWER_BEGIN_NAMESPACE
-QDBusArgument &operator<< (QDBusArgument &arg, const History_p &value)
+QDBusArgument &operator<<(QDBusArgument &arg, const History_p &value)
 {
     arg.beginStructure();
     arg << value.time;
@@ -18,7 +18,7 @@ QDBusArgument &operator<< (QDBusArgument &arg, const History_p &value)
     return arg;
 }
 
-const QDBusArgument &operator>> (const QDBusArgument &arg, History_p &value)
+const QDBusArgument &operator>>(const QDBusArgument &arg, History_p &value)
 {
     arg.beginStructure();
     arg >> value.time;
@@ -28,16 +28,17 @@ const QDBusArgument &operator>> (const QDBusArgument &arg, History_p &value)
     return arg;
 }
 
-QDBusArgument &operator<< (QDBusArgument &arg, const Statistic_p &value)
+QDBusArgument &operator<<(QDBusArgument &arg, const Statistic_p &value)
 {
-    arg.beginStructure();;
+    arg.beginStructure();
+    ;
     arg << value.value;
     arg << value.accuracy;
     arg.endStructure();
     return arg;
 }
 
-const QDBusArgument &operator>> (const QDBusArgument &arg, Statistic_p &value)
+const QDBusArgument &operator>>(const QDBusArgument &arg, Statistic_p &value)
 {
     arg.beginStructure();
     arg >> value.value;
@@ -51,14 +52,12 @@ void History_p::registerMetaType()
     qRegisterMetaType<History_p>("History_p");
     qDBusRegisterMetaType<History_p>();
     qDBusRegisterMetaType<QList<History_p>>();
-
 }
 void Statistic_p::registerMetaType()
 {
     qRegisterMetaType<Statistic_p>("Statistic_p");
     qDBusRegisterMetaType<Statistic_p>();
     qDBusRegisterMetaType<QList<Statistic_p>>();
-
 }
 
 DPOWER_END_NAMESPACE

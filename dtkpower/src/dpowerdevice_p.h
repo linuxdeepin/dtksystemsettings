@@ -16,13 +16,15 @@ class DPowerDevicePrivate : public QObject
     Q_OBJECT
 public:
     explicit DPowerDevicePrivate(DPowerDevice *parent)
-        : q_ptr(parent) {}
+        : q_ptr(parent)
+    {
+    }
     virtual ~DPowerDevicePrivate() {}
 
 public:
-    QString                 devicename;
+    QString devicename;
     UPowerDeviceInterface *m_device_inter;
-    DPowerDevice           *q_ptr;
+    DPowerDevice *q_ptr;
     Q_DECLARE_PUBLIC(DPowerDevice)
 };
 

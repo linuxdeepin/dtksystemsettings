@@ -18,7 +18,7 @@ DPowerDevice::DPowerDevice(const QString &name, QObject *parent)
     , d_ptr(new DPowerDevicePrivate(this))
 {
     Q_D(DPowerDevice);
-    d->devicename     = name;
+    d->devicename = name;
     d->m_device_inter = new UPowerDeviceInterface(name, this);
 }
 
@@ -228,7 +228,7 @@ QList<History> DPowerDevice::history(const QString &type, const uint timespan, c
         History history;
         history.value = history_p.value;
         history.state = history_p.state;
-        history.time  = history_p.time;
+        history.time = history_p.time;
         historys.append(history);
     }  // TODO:修改此处，需要简化
     return historys;
@@ -247,7 +247,7 @@ QList<Statistic> DPowerDevice::statistics(const QString &type) const
 
     for (auto &&statistic_p : reply.value()) {
         Statistic statistic;
-        statistic.value    = statistic_p.value;
+        statistic.value = statistic_p.value;
         statistic.accuracy = statistic_p.accuracy;
 
         statistics.append(statistic);

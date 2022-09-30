@@ -21,7 +21,7 @@ public:
 
 public:
     UPowerManagerInterface *m_manager_inter;
-    DPowerManager           *q_ptr;
+    DPowerManager *q_ptr;
     Q_DECLARE_PUBLIC(DPowerManager)
 };
 

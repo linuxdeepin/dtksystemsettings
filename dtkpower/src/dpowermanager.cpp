@@ -121,7 +121,7 @@ QSharedPointer<DPowerDevice> DPowerManager::displayDevice() const
         qWarning() << reply.error().message();
         return nullptr;
     }
-    QString                      name = reply.value().path().mid(32);
+    QString name = reply.value().path().mid(32);
     QSharedPointer<DPowerDevice> device(new DPowerDevice(name, nullptr));
     return device;
 }

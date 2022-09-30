@@ -19,13 +19,11 @@ public:
     explicit UPowerKbdBacklightService(QObject *parent = nullptr);
     virtual ~UPowerKbdBacklightService();
 
-// signals:
-//     Q_SCRIPTABLE void PropertiesChanged(const QVariantMap &properties);
+    // signals:
+    //     Q_SCRIPTABLE void PropertiesChanged(const QVariantMap &properties);
 
 public slots:
-    Q_SCRIPTABLE void Reset() {
-        m_reset = true;
-    }
+    Q_SCRIPTABLE void Reset() { m_reset = true; }
     Q_SCRIPTABLE uint GetBrightness() const;
     Q_SCRIPTABLE uint GetMaxBrightness() const;
     Q_SCRIPTABLE void SetBrightness(const uint value);
