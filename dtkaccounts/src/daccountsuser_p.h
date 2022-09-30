@@ -20,7 +20,6 @@ public:
     ~DAccountsUserPrivate() = default;
 
     QList<QByteArray> getImageFromDir(const QDir &dir) const;
-    qint64 getCreatedTimeFromFile(const QString &file) const;
 
     DAccountsUser *q_ptr;
     DUserInterface *m_dUserInter;

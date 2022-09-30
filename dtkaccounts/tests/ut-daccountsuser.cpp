@@ -197,14 +197,17 @@ TEST_F(TestDAccountsUser, setPassword)
 
 TEST_F(TestDAccountsUser, maxPasswordAge)
 {
-    m_dauser->maxPasswordAge();
-    EXPECT_TRUE(m_fakeservice->m_getPasswordExpirationPolicyTrigger);
+    EXPECT_EQ(99999, m_dauser->maxPasswordAge());
+    m_fakeservice->m_maxpasswordage = 0;
+    EXPECT_EQ(0, m_dauser->maxPasswordAge());
 }
 
 TEST_F(TestDAccountsUser, passwordLastChange)
 {
-    m_dauser->passwordLastChange();
-    EXPECT_TRUE(m_fakeservice->m_getPasswordExpirationPolicyTrigger);
+    QDateTime tmp = QDateTime::fromSecsSinceEpoch(0);
+    EXPECT_EQ(tmp.addDays(19167), m_dauser->passwordLastChange());
+    m_fakeservice->m_passwordlastchange = 0;
+    EXPECT_EQ(tmp, m_dauser->passwordLastChange());
 }
 
 TEST_F(TestDAccountsUser, passwordStatus)
@@ -219,15 +222,9 @@ TEST_F(TestDAccountsUser, passwordStatus)
     EXPECT_EQ(PasswdStatus::Unknown, m_dauser->passwordStatus());
 }
 
-TEST_F(TestDAccountsUser, isPasswordExpired)
-{
-    m_dauser->isPasswordExpired();
-    EXPECT_TRUE(m_fakeservice->m_getPasswordExpirationPolicyTrigger);
-}
-
 TEST_F(TestDAccountsUser, passwordExpirationInfo)
 {
     qint64 tmp;
     m_dauser->passwordExpirationInfo(tmp);
-    EXPECT_TRUE(m_fakeservice->m_getPasswordExpirationPolicyTrigger);
+    EXPECT_TRUE(m_fakeservice->m_passwordExpiredInfoTirgger);
 }

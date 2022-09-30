@@ -43,6 +43,11 @@ qint32 DSystemUserInterface::maxPasswordAge() const
     return qdbus_cast<qint32>(m_inter->property("MaxPasswordAge"));
 }
 
+qint32 DSystemUserInterface::passwordLastChange() const
+{
+    return qdbus_cast<qint32>(m_inter->property("PasswordLastChange"));
+}
+
 QStringList DSystemUserInterface::iconList() const
 {
     return qdbus_cast<QStringList>(m_inter->property("IconList"));
@@ -88,6 +93,11 @@ QString DSystemUserInterface::UUID() const
     return qdbus_cast<QString>(m_inter->property("UUID"));
 }
 
+quint64 DSystemUserInterface::createdTime()
+{
+    return qdbus_cast<quint64>(m_inter->property("CreatedTime"));
+}
+
 QDBusPendingReply<ReminderInfo_p> DSystemUserInterface::getReminderInfo() const
 {
     return m_inter->asyncCall("GetReminderInfo");
@@ -111,6 +121,11 @@ QDBusPendingReply<void> DSystemUserInterface::deleteGroup(const QString &group)
 QDBusPendingReply<void> DSystemUserInterface::deleteIconFile(const QString &icon)
 {
     return m_inter->asyncCallWithArgumentList("DeleteIconFile", {QVariant::fromValue(icon)});
+}
+
+QDBusPendingReply<qint32, qint64> DSystemUserInterface::passwordExpiredInfo()
+{
+    return m_inter->asyncCall("PasswordExpiredInfo");
 }
 
 QDBusPendingReply<void> DSystemUserInterface::enableNoPasswdLogin(const bool enabled)

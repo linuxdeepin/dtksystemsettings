@@ -28,10 +28,12 @@ public:
     Q_PROPERTY(QString Layout READ layout WRITE setLayout NOTIFY LayoutChanged)
     Q_PROPERTY(QString Locale READ locale WRITE setLocale NOTIFY LocaleChanged)
     Q_PROPERTY(qint32 MaxPasswordAge READ maxPasswordAge WRITE setMaxPasswordAge NOTIFY MaxPasswordAgeChanged)
+    Q_PROPERTY(qint32 PasswordLastChange READ passwordLastChange NOTIFY PasswordLastChangeChanged)
     Q_PROPERTY(bool NoPasswdLogin READ noPasswdLogin WRITE enableNoPasswdLogin NOTIFY NoPasswdLoginChanged)
     Q_PROPERTY(QString PasswordHint READ passwordHint WRITE setPasswordHint NOTIFY PasswordHintChanged)
     Q_PROPERTY(bool Locked READ locked WRITE setLocked NOTIFY LockedChanged)
     Q_PROPERTY(QString UUID READ UUID NOTIFY UUIDChanged)
+    Q_PROPERTY(quint64 createdTime READ createdTime NOTIFY CreatedTimeChanged)
 
     bool automaticLogin() const;
     qint32 accountType() const;
@@ -43,15 +45,18 @@ public:
     QString locale() const;
     bool locked() const;
     qint32 maxPasswordAge() const;
+    qint32 passwordLastChange() const;
     bool noPasswdLogin() const;
     QString passwordHint() const;
     QString UUID() const;
+    quint64 createdTime();
 
 public slots:
     QDBusPendingReply<void> addGroup(const QString &group);
     QDBusPendingReply<void> deleteGroup(const QString &group);
     QDBusPendingReply<void> deleteIconFile(const QString &icon);
     QDBusPendingReply<void> enableNoPasswdLogin(const bool enabled);
+    QDBusPendingReply<qint32, qint64> passwordExpiredInfo();
     QDBusPendingReply<ReminderInfo_p> getReminderInfo() const;
     QDBusPendingReply<QList<qint32>> getSecretQuestions() const;
     QDBusPendingReply<void> setAutomaticLogin(const bool enabled);
@@ -81,6 +86,8 @@ signals:
     void NoPasswdLoginChanged(const bool enabled);
     void PasswordHintChanged(const QString &passwordHint);
     void UUIDChanged(const QString &UUID);
+    void PasswordLastChangeChanged(const qint32 lstch);
+    void CreatedTimeChanged(quint64 time);
 
 private:
     DDBusInterface *m_inter;

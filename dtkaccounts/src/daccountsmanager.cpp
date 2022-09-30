@@ -135,26 +135,30 @@ ValidMsg DAccountsManager::isPasswordValid(const QString &password)
         qWarning() << reply.error().message();
         return msg;
     }
+
     const auto &valid = reply.argumentAt(0);
     if (!valid.isValid()) {
         qWarning() << "can't get ValidMsg: valid is invalid";
         return msg;
+    } else {
+        msg.valid = valid.toBool();
     }
-    msg.valid = valid.toBool();
 
     const auto &errmsg = reply.argumentAt(1);
     if (!msg.valid and !errmsg.isValid()) {
         qWarning() << "can't get ValidMsg: errmsg is invalid";
         return msg;
+    } else {
+        msg.msg = errmsg.toString();
     }
-    msg.msg = errmsg.toString();
 
     const auto &errcode = reply.argumentAt(2);
     if (!msg.valid and !errcode.isValid()) {
         qWarning() << "can't get ValidMsg: errcode is invalid";
         return msg;
+    } else {
+        msg.code = errcode.toInt();
     }
-    msg.code = errcode.toInt();
 
     return msg;
 }
