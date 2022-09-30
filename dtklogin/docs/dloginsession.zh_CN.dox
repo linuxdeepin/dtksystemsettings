@@ -110,18 +110,18 @@ DLoginSession 中定义了会话管理的接口
 @return session的空闲状态
 
 
-@fn QDateTime DLoginSession::idleSinceHintMonotonic() const
+@fn quint64 DLoginSession::idleSinceHintMonotonic() const
 @brief session空闲状态
 @return session的空闲状态
 
 
-@fn QDateTime DLoginSession::timestamp() const
-@brief 返回对系统时间
-@return 对系统时间的
+@fn QDateTime DLoginSession::createdTime() const
+@brief 获取session创建时间
+@return session创建时间
 
-@fn QDateTime DLoginSession::timestampMonotonic() const
-@brief 来自过去某个任意固定点以来经过的绝对时间
-@return 返回来自过去某个任意固定点以来经过的绝对时间
+@fn quint64 DLoginSession::createdTimeMonotonic() const
+@brief 以CLOCK_MONOTONIC的形式获取session创建的时间戳
+@return 创建session的时间戳
 
 @fn void DLoginSession::activate()
 @brief 对 Manger对象的相应调用
@@ -147,7 +147,7 @@ DLoginSession 中定义了会话管理的接口
 @brief 设置session的锁定状态
 对应Login上的SetLockedHint()方法，可以用于将锁定提示设置为锁定，也就是说session是否被锁定的信息。这个可以由桌面环境告诉systemd-logind 什么时候锁定会话
 
-@fn void DLoginSession::setType(const QString &type)
+@fn void DLoginSession::setType(const SessionType &type)
 @brief 更改session的类型
 对应Login上的SetType() 方法。该方法允许动态改变会话类型，只能由session当前的控制器调用。如果尚未调用TakeControl()方法，这个方法会失效。此外，一旦控制被释放，session类型会重置，或者使用ReleaseControl方法或者关闭D-Bus连接可以实现重置的效果。这个应该有助于防止session进入不一致的状态，比如控制器崩溃时候。唯一的参数 argument type是指的新的session 类型。
 
