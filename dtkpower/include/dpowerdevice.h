@@ -22,7 +22,7 @@ public:
 
     Q_PROPERTY(bool hasHistory READ hasHistory);
     Q_PROPERTY(bool hasStatistics READ hasStatistics);
-    Q_PROPERTY(bool IsPresent READ isPresent);
+    Q_PROPERTY(bool IsPresent READ isPresent);//TODO:小驼峰
     Q_PROPERTY(bool isRechargeable READ isRechargeable);
     Q_PROPERTY(bool online READ online);
     Q_PROPERTY(bool powerSupply READ powerSupply);
