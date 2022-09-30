@@ -9,7 +9,7 @@ DPOWER_BEGIN_NAMESPACE
 UPowerDeviceInterface::UPowerDeviceInterface(const QString &name, QObject *parent)
     : QObject(parent)
 {
-    #ifdef USE_FAKE_INTERFACE
+#ifdef USE_FAKE_INTERFACE
     static const QString &Service = QStringLiteral("com.deepin.daemon.FakePower");
     static const QString &Path = QStringLiteral("/com/deepin/daemon/FakePower");
     static const QString &Interface = QStringLiteral("com.deepin.daemon.FakePower");
@@ -24,7 +24,7 @@ UPowerDeviceInterface::UPowerDeviceInterface(const QString &name, QObject *paren
     History_p::registerMetaType();
     Statistic_p::registerMetaType();
     devicename = name;
-    m_inter=new DDBusInterface(Service, Path, Interface,connection,this);
+    m_inter = new DDBusInterface(Service, Path, Interface, connection, this);
 }
 
 UPowerDeviceInterface::~UPowerDeviceInterface() {}
