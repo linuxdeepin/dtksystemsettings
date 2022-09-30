@@ -11,6 +11,7 @@ Login1UserInterface::Login1UserInterface(const QString &service,
                                          QObject *parent)
     : QObject(parent)
     , m_interface(new DDBusInterface(service, path, staticInterfaceName(), connection, this))
+    , m_path(path)
 {
     DBusSessionPath::registerMetaType();
 }

@@ -7,6 +7,7 @@
 #include <qstring.h>
 #include "dlogintypes_p.h"
 #include "dlogintypes.h"
+#include <ostream>
 
 DLOGIN_BEGIN_NAMESPACE
 
@@ -35,4 +36,6 @@ QString userStateToString(const UserState &userState);
 UserState stringToUserState(const QString &strState);
 
 }  // namespace Utils
+
+std::ostream &operator<<(std::ostream &os, const QString &str);
 DLOGIN_END_NAMESPACE

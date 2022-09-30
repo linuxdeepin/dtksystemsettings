@@ -48,7 +48,7 @@ public:
     Q_PROPERTY(quint64 holdoffTimeoutUSec READ holdoffTimeoutUSec);
     Q_PROPERTY(quint64 idleActionUSec READ idleActionUSec);
     Q_PROPERTY(QDateTime idleSinceHint READ idleSinceHint);
-    Q_PROPERTY(QDateTime idleSinceHintMonotonic READ idleSinceHintMonotonic);
+    Q_PROPERTY(quint64 idleSinceHintMonotonic READ idleSinceHintMonotonic);
     Q_PROPERTY(quint64 inhibitDelayMaxUSec READ inhibitDelayMaxUSec);
     Q_PROPERTY(quint64 inhibitorsMax READ inhibitorsMax);
     Q_PROPERTY(quint64 nCurrentInhibitors READ nCurrentInhibitors);
@@ -81,7 +81,7 @@ public:
     quint64 holdoffTimeoutUSec() const;
     quint64 idleActionUSec() const;
     QDateTime idleSinceHint() const;
-    QDateTime idleSinceHintMonotonic() const;
+    quint64 idleSinceHintMonotonic() const;
     quint64 inhibitDelayMaxUSec() const;
     quint64 inhibitorsMax() const;
     quint64 nCurrentInhibitors() const;
@@ -98,8 +98,8 @@ signals:
     void seatRemoved(const QString &seatId);
     void sessionNew(const QString &sessionId);
     void sessionRemoved(const QString &sessionId);
-    void userNew(const uint UID);
-    void userRemoved(const uint UID);
+    void userNew(const quint32 UID);
+    void userRemoved(const quint32 UID);
 
 public slots:
     void activateSession(const QString &sessionId);
@@ -120,7 +120,7 @@ public slots:
     void halt(const bool interactive = false);
     void hibernate(const bool interactive = false);
     void hybridSleep(const bool interactive = false);
-    int inhibit(const uint what, const QString &who, const QString &why, const InhibitMode &mode);
+    int inhibit(const quint32 what, const QString &who, const QString &why, const InhibitMode &mode);
     void killSession(const QString &sessionId, const SessionRole &who, const qint32 signalNumber);
     void killUser(const quint32 uid, const qint32 signalNumber);
     QList<Inhibitor> listInhibitors();
@@ -131,11 +131,10 @@ public slots:
     void lockSessions();
     void powerOff(const bool interactive = false);
     void reboot(const bool interactive = false);
-    void scheduleShutdown(const QString &type, const quint64 usec);
+    void scheduleShutdown(const ShutdownType &type, const QDateTime &usec);
     void setUserLinger(const quint32 UID, const bool enable, const bool interactive);
     void suspend(const bool interactive = false);
     void suspendThenHibernate(const bool interactive = false);
-    void terminateSeat(const QString &seatId);
     void terminateSession(const QString &sessionId);
     void terminateUser(const quint32 uid);
     void logout();

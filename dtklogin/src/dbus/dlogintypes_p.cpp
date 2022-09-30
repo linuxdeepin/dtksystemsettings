@@ -17,6 +17,42 @@ bool DBusScheduledShutdownValue::operator!=(const DBusScheduledShutdownValue &v)
     return !(*this == v);
 }
 
+bool DBusSessionPath::operator==(const DBusSessionPath &v)
+{
+    return this->path == v.path && this->sessionId == v.sessionId;
+}
+bool DBusSessionPath::operator!=(const DBusSessionPath &v)
+{
+    return !(*this == v);
+}
+
+bool DBusSeat::operator==(const DBusSeat &v)
+{
+    return this->seatId == v.seatId && this->path == v.path;
+}
+bool DBusSeat::operator!=(const DBusSeat &v)
+{
+    return !(*this == v);
+}
+
+bool DBusSeatPath::operator==(const DBusSeatPath &v)
+{
+    return this->seatId == v.seatId && this->path == v.path;
+}
+bool DBusSeatPath::operator!=(const DBusSeatPath &v)
+{
+    return !(*this == v);
+}
+
+bool DBusUserPath::operator==(const DBusUserPath &v)
+{
+    return this->path == v.path && this->userId == v.userId;
+}
+bool DBusUserPath::operator!=(const DBusUserPath &v)
+{
+    return !(*this == v);
+}
+
 QDBusArgument &operator<<(QDBusArgument &arg, const DBusScheduledShutdownValue &value)
 {
     arg.beginStructure();
@@ -31,24 +67,6 @@ const QDBusArgument &operator>>(const QDBusArgument &arg, DBusScheduledShutdownV
     arg.beginStructure();
     arg >> value.type;
     arg >> value.usec;
-    arg.endStructure();
-    return arg;
-}
-
-QDBusArgument &operator<<(QDBusArgument &arg, const DBusSessionProperty &property)
-{
-    arg.beginStructure();
-    arg << property.name;
-    arg << property.var;
-    arg.endStructure();
-    return arg;
-}
-
-const QDBusArgument &operator>>(const QDBusArgument &arg, DBusSessionProperty &property)
-{
-    arg.beginStructure();
-    arg >> property.name;
-    arg >> property.var;
     arg.endStructure();
     return arg;
 }
@@ -89,6 +107,24 @@ QDBusArgument &operator<<(QDBusArgument &arg, const DBusSeat &seat)
 }
 
 const QDBusArgument &operator>>(const QDBusArgument &arg, DBusSeat &seat)
+{
+    arg.beginStructure();
+    arg >> seat.seatId;
+    arg >> seat.path;
+    arg.endStructure();
+    return arg;
+}
+
+QDBusArgument &operator<<(QDBusArgument &arg, const DBusSeatPath &seat)
+{
+    arg.beginStructure();
+    arg << seat.seatId;
+    arg << seat.path;
+    arg.endStructure();
+    return arg;
+}
+
+const QDBusArgument &operator>>(const QDBusArgument &arg, DBusSeatPath &seat)
 {
     arg.beginStructure();
     arg >> seat.seatId;
@@ -179,56 +215,59 @@ const QDBusArgument &operator>>(const QDBusArgument &arg, DBusUserPath &path)
 
 void DBusScheduledShutdownValue::registerMetaType()
 {
-    qRegisterMetaType<DBusScheduledShutdownValue>("ScheduledShutdownValue_p");
+    qRegisterMetaType<DBusScheduledShutdownValue>("DBusScheduledShutdownValue");
     qDBusRegisterMetaType<DBusScheduledShutdownValue>();
     qDBusRegisterMetaType<QList<DBusScheduledShutdownValue>>();
 }
 
-void DBusSessionProperty::registerMetaType()
-{
-    qRegisterMetaType<DBusSessionProperty>("SessionProperty_p");
-    qDBusRegisterMetaType<DBusSessionProperty>();
-    qDBusRegisterMetaType<QList<DBusSessionProperty>>();
-}
-
 void DBusInhibitor::registerMetaType()
 {
-    qRegisterMetaType<DBusInhibitor>("Inhibitor_p");
+    qRegisterMetaType<DBusInhibitor>("DBusInhibitor");
     qDBusRegisterMetaType<DBusInhibitor>();
     qDBusRegisterMetaType<QList<DBusInhibitor>>();
 }
 
 void DBusSeat::registerMetaType()
 {
-    qRegisterMetaType<DBusSeat>("Seat_p");
+    qRegisterMetaType<DBusSeat>("DBusSeat");
     qDBusRegisterMetaType<DBusSeat>();
     qDBusRegisterMetaType<QList<DBusSeat>>();
+    qRegisterMetaType<DBusSeatPath>("DBusSeatPath");
+    qDBusRegisterMetaType<DBusSeatPath>();
+    qDBusRegisterMetaType<QList<DBusSeatPath>>();
+}
+
+void DBusSeatPath::registerMetaType()
+{
+    qRegisterMetaType<DBusSeatPath>("DBusSeatPath");
+    qDBusRegisterMetaType<DBusSeatPath>();
+    qDBusRegisterMetaType<QList<DBusSeatPath>>();
 }
 
 void DBusSession::registerMetaType()
 {
-    qRegisterMetaType<DBusSession>("Session_p");
+    qRegisterMetaType<DBusSession>("DBusSession");
     qDBusRegisterMetaType<DBusSession>();
     qDBusRegisterMetaType<QList<DBusSession>>();
 }
 
 void DBusUser::registerMetaType()
 {
-    qRegisterMetaType<DBusUser>("User_p");
+    qRegisterMetaType<DBusUser>("DBusUser");
     qDBusRegisterMetaType<DBusUser>();
     qDBusRegisterMetaType<QList<DBusUser>>();
 }
 
 void DBusSessionPath::registerMetaType()
 {
-    qRegisterMetaType<DBusSessionPath>("SessionPath_p");
+    qRegisterMetaType<DBusSessionPath>("DBusSessionPath");
     qDBusRegisterMetaType<DBusSessionPath>();
     qDBusRegisterMetaType<QList<DBusSessionPath>>();
 }
 
 void DBusUserPath::registerMetaType()
 {
-    qRegisterMetaType<DBusUserPath>("UserPath_p");
+    qRegisterMetaType<DBusUserPath>("DBusUserPath");
     qDBusRegisterMetaType<DBusUserPath>();
     qDBusRegisterMetaType<QList<DBusUserPath>>();
 }

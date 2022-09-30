@@ -101,27 +101,21 @@ QString statusToString(const ExecuteStatus &status)
 }
 ExecuteStatus stringToStatus(const QString &strStatus)
 {
-    if (strStatus == "yes") {
-        return ExecuteStatus::Yes;
-    } else if (strStatus == "no") {
-        return ExecuteStatus::No;
-    } else if (strStatus == "challenge") {
-        return ExecuteStatus::Challenge;
+    static const QMap<QString, ExecuteStatus> statusMap = {{"yes", ExecuteStatus::Yes},
+                                                           {"no", ExecuteStatus::No},
+                                                           {"challenge", ExecuteStatus::Challenge},
+                                                           {"na", ExecuteStatus::Na}};
+    if (statusMap.contains(strStatus)) {
+        return statusMap[strStatus];
     } else {
-        return ExecuteStatus::Na;
+        return ExecuteStatus::Unknown;
     }
 }
 QString sessionRoleToString(const SessionRole &sessionRole)
 {
-    switch (sessionRole) {
-        case SessionRole::Leader:
-            return "leader";
-        case SessionRole::All:
-            return "all";
-        default:
-            qWarning() << "Not supported session role.";
-            return "";
-    }
+    static const QMap<SessionRole, QString> roleMap = {
+        {SessionRole::All, "all"}, {SessionRole::Leader, "leader"}, {SessionRole::Unknown, ""}};
+    return roleMap[sessionRole];
 }
 SessionRole stringToSessionRole(const QString &strSessionRole)
 {
@@ -147,7 +141,7 @@ PowerAction stringToAction(const QString &strAction)
         return actionMap[strAction];
     } else {
         qWarning() << "Not supported action.";
-        return PowerAction::Ignore;
+        return PowerAction::Unknown;
     }
 }
 QString actionToString(const PowerAction &action)
@@ -285,5 +279,11 @@ UserState stringToUserState(const QString &strState)
     }
 }
 }  // namespace Utils
+
+std::ostream &operator<<(std::ostream &os, const QString &str)
+{
+    os << str.toStdString();
+    return os;
+}
 
 DLOGIN_END_NAMESPACE

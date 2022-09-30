@@ -19,76 +19,122 @@ DLOGIN_BEGIN_NAMESPACE
  * Implementation of adaptor class Login1UserAdaptor
  */
 
-Login1UserService::Login1UserService(QObject *parent)
+Login1UserService::Login1UserService(const QString &service, const QString &path, QObject *parent)
     : QObject(parent)
+    , m_service(service)
+    , m_path(path)
 {
+    registerService(m_service, m_path);
+}
+
+Login1UserService::~Login1UserService()
+{
+    unRegisterService();
+}
+
+bool Login1UserService::registerService(const QString &service, const QString &path)
+{
+    QDBusConnection connection = QDBusConnection::sessionBus();
+    if (!connection.registerService(service)) {
+        QString errorMsg = connection.lastError().message();
+        if (errorMsg.isEmpty())
+            errorMsg = "maybe it's running";
+
+        qWarning() << QString("Can't register the %1 service, %2.").arg(service).arg(errorMsg);
+        return false;
+    }
+    if (!connection.registerObject(path, this, QDBusConnection::ExportAllContents)) {
+        qWarning() << QString("Can't register %1 the D-Bus object.").arg(path);
+        return false;
+    }
+    return true;
+}
+
+void Login1UserService::unRegisterService()
+{
+    QDBusConnection connection = QDBusConnection::sessionBus();
+    connection.unregisterObject(m_path);
+    connection.unregisterService(m_service);
 }
 
 DBusSessionPath Login1UserService::display() const
 {
-    // get the value of property Display
-    return qvariant_cast<DBusSessionPath>(parent()->property("Display"));
+    return m_display;
 }
 
 quint32 Login1UserService::GID() const
 {
-    // get the value of property GID
-    return qvariant_cast<uint>(parent()->property("GID"));
+    return m_GID;
 }
 
 QString Login1UserService::name() const
 {
-    // get the value of property Name
-    return qvariant_cast<QString>(parent()->property("Name"));
+    return m_name;
 }
 
 QString Login1UserService::runtimePath() const
 {
-    // get the value of property RuntimePath
-    return qvariant_cast<QString>(parent()->property("RuntimePath"));
+    return m_runtimePath;
 }
 
 QString Login1UserService::service() const
 {
-    // get the value of property Service
-    return qvariant_cast<QString>(parent()->property("Service"));
+    return m_applicationService;
 }
 
 QString Login1UserService::slice() const
 {
-    // get the value of property Slice
-    return qvariant_cast<QString>(parent()->property("Slice"));
+    return m_slice;
 }
 
 QString Login1UserService::state() const
 {
-    // get the value of property State
-    return qvariant_cast<QString>(parent()->property("State"));
+    return m_state;
 }
 
-qulonglong Login1UserService::timestamp() const
+quint64 Login1UserService::timestamp() const
 {
-    // get the value of property Timestamp
-    return qvariant_cast<qulonglong>(parent()->property("Timestamp"));
+    return m_timestamp;
 }
 
-qulonglong Login1UserService::timestampMonotonic() const
+quint64 Login1UserService::timestampMonotonic() const
 {
-    // get the value of property TimestampMonotonic
-    return qvariant_cast<qulonglong>(parent()->property("TimestampMonotonic"));
+    return m_timestampMonotonic;
 }
 
 quint32 Login1UserService::UID() const
 {
-    // get the value of property UID
-    return qvariant_cast<uint>(parent()->property("UID"));
+    return m_UID;
 }
 
 void Login1UserService::Kill(const qint32 signalNumber)
 {
-    Q_UNUSED(signalNumber)
+    m_signalNumber = signalNumber;
 }
 
-void Login1UserService::Terminate() {}
+void Login1UserService::Terminate()
+{
+    m_terminated = true;
+}
+QList<DLOGIN_NAMESPACE::DBusSessionPath> Login1UserService::sessions() const
+{
+    return m_sessions;
+}
+bool Login1UserService::idleHint() const
+{
+    return m_idleHint;
+}
+bool Login1UserService::linger() const
+{
+    return m_linger;
+}
+quint64 Login1UserService::idleSinceHint() const
+{
+    return m_idleSinceHint;
+}
+quint64 Login1UserService::idleSinceHintMonotonic() const
+{
+    return m_idleSinceHintMonotonic;
+}
 
 DLOGIN_END_NAMESPACE

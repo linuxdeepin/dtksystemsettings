@@ -29,22 +29,26 @@ DLoginSession::DLoginSession(const QString &path, QObject *parent)
 #if defined(USE_FAKE_INTERFACE)  // for unit test
     const QString &Service = QStringLiteral("org.freedesktop.fakelogin1");
     QDBusConnection connection = QDBusConnection::sessionBus();
+    const QString &StartManagerService = QStringLiteral("com.deepin.FakeSessionManager");
+    const QString &StartManagerPath = QStringLiteral("/com/deepin/FakeStartManager");
+    const QString &SessionManagerService = StartManagerService;
+    const QString &SessionManagerPath = QStringLiteral("/com/deepin/FakeSessionManager");
+
 #else
     const QString &Service = QStringLiteral("org.freedesktop.login1");
     QDBusConnection connection = QDBusConnection::systemBus();
-#endif
-
     const QString &StartManagerService = QStringLiteral("com.deepin.SessionManager");
     const QString &StartManagerPath = QStringLiteral("/com/deepin/StartManager");
-
     const QString &SessionManagerService = StartManagerService;
     const QString &SessionManagerPath = QStringLiteral("/com/deepin/SessionManager");
+#endif
+
+
 
     Q_D(DLoginSession);
     DBusSeatPath::registerMetaType();
     DBusUserPath::registerMetaType();
     d->m_inter = new Login1SessionInterface(Service, path, connection, this);
-    connect(d->m_sessionManagerInter, &SessionManagerInterface::LockedChanged, this, &DLoginSession::lockedChanged);
     d->m_startManagerInter =
         new StartManagerInterface(StartManagerService, StartManagerPath, QDBusConnection::sessionBus(), this);
     d->m_sessionManagerInter =
@@ -53,6 +57,7 @@ DLoginSession::DLoginSession(const QString &path, QObject *parent)
     if (!d->enableAutostartWatch()) {
         qWarning() << "Enable autostart watch failed.";
     }
+    connect(d->m_sessionManagerInter, &SessionManagerInterface::LockedChanged, this, &DLoginSession::lockedChanged);
 }
 
 DLoginSession::~DLoginSession(){};
@@ -183,10 +188,10 @@ QDateTime DLoginSession::idleSinceHint() const
     return QDateTime::fromMSecsSinceEpoch(d->m_inter->idleSinceHint());
 }
 
-QDateTime DLoginSession::idleSinceHintMonotonic() const
+quint64 DLoginSession::idleSinceHintMonotonic() const
 {
     Q_D(const DLoginSession);
-    return QDateTime::fromMSecsSinceEpoch(d->m_inter->idleSinceHintMonotonic());
+    return d->m_inter->idleSinceHintMonotonic();
 }
 
 QDateTime DLoginSession::createdTime() const
@@ -194,10 +199,10 @@ QDateTime DLoginSession::createdTime() const
     Q_D(const DLoginSession);
     return QDateTime::fromMSecsSinceEpoch(d->m_inter->timestamp());
 }
-QDateTime DLoginSession::createdTimeMonotonic() const
+quint64 DLoginSession::createdTimeMonotonic() const
 {
     Q_D(const DLoginSession);
-    return QDateTime::fromMSecsSinceEpoch(d->m_inter->timestampMonotonic());
+    return d->m_inter->timestampMonotonic();
 }
 
 void DLoginSession::activate()
@@ -247,10 +252,10 @@ void DLoginSession::setLocked(const bool locked)
     }
 }
 
-void DLoginSession::setType(const QString &type)
+void DLoginSession::setType(const SessionType &type)
 {
     Q_D(DLoginSession);
-    QDBusPendingReply<> reply = d->m_inter->setType(type);
+    QDBusPendingReply<> reply = d->m_inter->setType(Utils::sessionTypeToString(type));
     reply.waitForFinished();
     if (!reply.isValid()) {
         qWarning() << reply.error().message();

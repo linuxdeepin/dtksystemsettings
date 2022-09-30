@@ -12,6 +12,7 @@ Login1SessionInterface::Login1SessionInterface(const QString &service,
                                                QObject *parent)
     : QObject(parent)
     , m_interface(new DDBusInterface(service, path, staticInterfaceName(), connection, this))
+    , m_path(path)
 {
     DBusSeatPath::registerMetaType();
     DBusUserPath::registerMetaType();
@@ -102,11 +103,11 @@ QString Login1SessionInterface::type() const
 
 DBusSeatPath Login1SessionInterface::seat() const
 {
-    return qvariant_cast<DBusSeatPath>(m_interface->property("Seat"));
+    return qdbus_cast<DBusSeatPath>(m_interface->property("Seat"));
 }
 DBusUserPath Login1SessionInterface::user() const
 {
-    return qvariant_cast<DBusUserPath>(m_interface->property("User"));
+    return qdbus_cast<DBusUserPath>(m_interface->property("User"));
 }
 
 quint32 Login1SessionInterface::audit() const

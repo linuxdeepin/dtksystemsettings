@@ -22,6 +22,7 @@ add_executable(${BIN_NAME}
 target_include_directories(${BIN_NAME} PUBLIC
     ../include
     ../src/dbus
+    ../src
     ./fakedbus
 )
 

@@ -134,7 +134,7 @@ quint64 DLoginUser::loginTimeMonotonic() const
 
 // public slots
 
-void DLoginUser::kill(const int signalNumber)
+void DLoginUser::kill(const qint32 signalNumber)
 {
     Q_D(DLoginUser);
     QDBusPendingReply<> reply = d->m_inter->kill(signalNumber);

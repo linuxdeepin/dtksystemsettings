@@ -13,6 +13,7 @@
 #include <qdebug.h>
 #include <qdbusconnection.h>
 #include <qdatetime.h>
+#include <qdbusunixfiledescriptor.h>
 
 #include "login1managerinterface.h"
 #include "dloginseat.h"
@@ -36,7 +37,6 @@ DLoginManager::DLoginManager(QObject *parent)
 #endif
     Q_D(DLoginManager);
     DBusScheduledShutdownValue::registerMetaType();
-    DBusSessionProperty::registerMetaType();
     DBusInhibitor::registerMetaType();
     DBusSeat::registerMetaType();
     DBusSession::registerMetaType();
@@ -216,10 +216,10 @@ QDateTime DLoginManager::idleSinceHint() const
     return QDateTime::fromMSecsSinceEpoch(d->m_inter->idleSinceHint());
 }
 
-QDateTime DLoginManager::idleSinceHintMonotonic() const
+quint64 DLoginManager::idleSinceHintMonotonic() const
 {
     Q_D(const DLoginManager);
-    return QDateTime::fromMSecsSinceEpoch(d->m_inter->idleSinceHintMonotonic());
+    return d->m_inter->idleSinceHintMonotonic();
 }
 
 quint64 DLoginManager::inhibitDelayMaxUSec() const
@@ -478,16 +478,17 @@ void DLoginManager::hybridSleep(const bool interactive)
     }
 }
 
-int DLoginManager::inhibit(const uint what, const QString &who, const QString &why, const InhibitMode &mode)
+int DLoginManager::inhibit(const quint32 what, const QString &who, const QString &why, const InhibitMode &mode)
 {
     Q_D(DLoginManager);
-    QDBusPendingReply<int> reply = d->m_inter->inhibit(Utils::decodeBehavior(what), who, why, Utils::modeToString(mode));
+    QDBusPendingReply<QDBusUnixFileDescriptor> reply =
+        d->m_inter->inhibit(Utils::decodeBehavior(what), who, why, Utils::modeToString(mode));
     reply.waitForFinished();
     if (!reply.isValid()) {
         qWarning() << reply.error().message();
         return -1;
     }
-    return reply.value();
+    return reply.value().fileDescriptor();
 }
 
 void DLoginManager::killSession(const QString &sessionId, const SessionRole &who, const qint32 signalNumber)
@@ -614,10 +615,10 @@ void DLoginManager::reboot(const bool interactive)
     }
 }
 
-void DLoginManager::scheduleShutdown(const QString &type, const quint64 usec)
+void DLoginManager::scheduleShutdown(const ShutdownType &type, const QDateTime &usec)
 {
     Q_D(DLoginManager);
-    QDBusPendingReply<> reply = d->m_inter->scheduleShutdown(type, usec);
+    QDBusPendingReply<> reply = d->m_inter->scheduleShutdown(Utils::shutdownTypeToString(type), usec.toMSecsSinceEpoch());
     reply.waitForFinished();
     if (!reply.isValid()) {
         qWarning() << reply.error().message();
@@ -654,16 +655,6 @@ void DLoginManager::suspendThenHibernate(const bool interactive)
     }
 }
 
-void DLoginManager::terminateSeat(const QString &seatId)
-{
-    Q_D(DLoginManager);
-    QDBusPendingReply<> reply = d->m_inter->terminateSeat(seatId);
-    reply.waitForFinished();
-    if (!reply.isValid()) {
-        qWarning() << reply.error().message();
-    }
-}
-
 void DLoginManager::terminateSession(const QString &sessionId)
 {
     Q_D(DLoginManager);
@@ -677,7 +668,7 @@ void DLoginManager::terminateSession(const QString &sessionId)
 void DLoginManager::terminateUser(const quint32 uid)
 {
     Q_D(DLoginManager);
-    QDBusPendingReply<> reply = d->m_inter->terminateUser(QString::number(uid));
+    QDBusPendingReply<> reply = d->m_inter->terminateUser(uid);
     reply.waitForFinished();
     if (!reply.isValid()) {
         qWarning() << reply.error().message();

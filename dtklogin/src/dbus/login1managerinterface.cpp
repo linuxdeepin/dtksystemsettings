@@ -5,6 +5,7 @@
 #include "login1managerinterface.h"
 #include "ddbusinterface.h"
 #include <qdbusconnection.h>
+#include <qdbusunixfiledescriptor.h>
 #include <qmetatype.h>
 DLOGIN_BEGIN_NAMESPACE
 
@@ -16,7 +17,6 @@ Login1ManagerInterface::Login1ManagerInterface(const QString &service,
     , m_interface(new DDBusInterface(service, path, staticInterfaceName(), connection, this))
 {
     DBusScheduledShutdownValue::registerMetaType();
-    DBusSessionProperty::registerMetaType();
     DBusInhibitor::registerMetaType();
     DBusSeat::registerMetaType();
     DBusSession::registerMetaType();
@@ -367,7 +367,7 @@ QDBusPendingReply<QDBusObjectPath> Login1ManagerInterface::getUserByPID(const qu
 }
 QDBusPendingReply<> Login1ManagerInterface::halt(const bool interactive)
 {
-    QDBusPendingReply<> reply = m_interface->asyncCallWithArgumentList(QLatin1String("Halt"), {interactive});
+    QDBusPendingReply<> reply = m_interface->asyncCallWithArgumentList(QLatin1String("Halt"), {QVariant::fromValue(interactive)});
     return reply;
 }
 QDBusPendingReply<> Login1ManagerInterface::haltWithFlags(const quint64 flags)
@@ -395,10 +395,10 @@ QDBusPendingReply<> Login1ManagerInterface::hybridSleepWithFlags(const quint64 f
     QDBusPendingReply<> reply = m_interface->asyncCallWithArgumentList(QLatin1String("HybridSleepWithFlags"), {flags});
     return reply;
 }
-QDBusPendingReply<int>
+QDBusPendingReply<QDBusUnixFileDescriptor>
 Login1ManagerInterface::inhibit(const QString &what, const QString &who, const QString &why, const QString &mode)
 {
-    QDBusPendingReply<int> reply = m_interface->asyncCallWithArgumentList(
+    QDBusPendingReply<QDBusUnixFileDescriptor> reply = m_interface->asyncCallWithArgumentList(
         QLatin1String("Inhibit"),
         {QVariant::fromValue(what), QVariant::fromValue(who), QVariant::fromValue(why), QVariant::fromValue(mode)});
     return reply;
@@ -538,7 +538,7 @@ QDBusPendingReply<> Login1ManagerInterface::terminateSession(const QString &sess
         m_interface->asyncCallWithArgumentList(QLatin1String("TerminateSession"), {QVariant::fromValue(sessionId)});
     return reply;
 }
-QDBusPendingReply<> Login1ManagerInterface::terminateUser(const QString &UID)
+QDBusPendingReply<> Login1ManagerInterface::terminateUser(const quint32 UID)
 {
     QDBusPendingReply<> reply =
         m_interface->asyncCallWithArgumentList(QLatin1String("TerminateUser"), {QVariant::fromValue(UID)});

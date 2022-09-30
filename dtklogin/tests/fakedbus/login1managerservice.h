@@ -3,7 +3,6 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
 #pragma once
-
 #include <qobject.h>
 #include <qdbusabstractadaptor.h>
 #include <qdbusunixfiledescriptor.h>
@@ -33,8 +32,10 @@ class Login1ManagerService : public QObject
     Q_OBJECT
     Q_CLASSINFO("D-Bus Interface", "org.freedesktop.login1.Manager")
 public:
-    Login1ManagerService(QObject *parent = nullptr);
-    void registerService();
+    Login1ManagerService(const QString &service = QStringLiteral("org.freedesktop.fakelogin1"),
+                         const QString &path = QStringLiteral("/org/freedesktop/login1/manager"),
+                         QObject *parent = nullptr);
+    ~Login1ManagerService() override;
 
 public:  // PROPERTIES
     Q_PROPERTY(QString BlockInhibited MEMBER m_blockInhibited READ blockInhibited);
@@ -125,10 +126,10 @@ public Q_SLOTS:  // METHODS
     QDBusUnixFileDescriptor Inhibit(const QString &what, const QString &who, const QString &why, const QString &mode);
     void KillSession(const QString &session_id, const QString &who, qint32 signal_number);
     void KillUser(quint32 uid, qint32 signal_number);
-    DBusInhibitor ListInhibitors();
-    DBusSeat ListSeats();
-    DBusSession ListSessions();
-    DBusUser ListUsers();
+    QList<DLOGIN_NAMESPACE::DBusInhibitor> ListInhibitors();
+    QList<DLOGIN_NAMESPACE::DBusSeat> ListSeats();
+    QList<DLOGIN_NAMESPACE::DBusSession> ListSessions();
+    QList<DLOGIN_NAMESPACE::DBusUser> ListUsers();
     void LockSession(const QString &session_id);
     void LockSessions();
     void PowerOff(bool interactive);
@@ -140,8 +141,7 @@ public Q_SLOTS:  // METHODS
     void TerminateSeat(const QString &seat_id);
     void TerminateSession(const QString &session_id);
     void TerminateUser(quint32 uid);
-    void UnlockSession(const QString &session_id);
-    void UnlockSessions();
+
 Q_SIGNALS:  // SIGNALS
     void PrepareForShutdown(bool start);
     void PrepareForSleep(bool start);
@@ -152,7 +152,8 @@ Q_SIGNALS:  // SIGNALS
     void UserNew(quint32 uid, const QDBusObjectPath &object_path);
     void UserRemoved(quint32 uid, const QDBusObjectPath &object_path);
 
-private:
+public:
+    // properties
     QString m_blockInhibited;
     QString m_delayInhibited;
     bool m_docked;
@@ -185,5 +186,54 @@ private:
     DBusScheduledShutdownValue m_scheduledShutdown;
     quint64 m_sessionsMax;
     quint64 m_userStopDelayUSec;
+
+    // for function tests
+    QString m_sessionId;
+    QString m_sessionRole;
+    QString m_seatId;
+    quint32 m_UID;
+    quint32 m_PID;
+
+    QString m_canHalt;
+    QString m_canHibernate;
+    QString m_canHybridSleep;
+    QString m_canPowerOff;
+    QString m_canReboot;
+    QString m_canSuspend;
+    QString m_canSuspendThenHibernate;
+
+    bool m_cancelScheduledShutdown;
+
+    QDBusObjectPath m_seatPath;
+    QDBusObjectPath m_sessionPath;
+    QDBusObjectPath m_userPath;
+
+    bool m_haltInteractive;
+    bool m_hibernateInteractive;
+    bool m_hybridSleepInteractive;
+    bool m_powerOffInteractive;
+    bool m_rebootInteractive;
+    bool m_suspendInteractive;
+    bool m_suspendThenHibernateInteractive;
+
+    QDBusUnixFileDescriptor m_inhibitFileDescriptor;
+    QString m_who;
+    qint32 m_signalNumber;
+
+    DBusInhibitor m_inhibitor;
+    QList<DBusInhibitor> m_inhibitors;
+    QList<DBusSeat> m_seats;
+    QList<DBusSession> m_sessions;
+    QList<DBusUser> m_users;
+
+    bool m_lockSessions;
+    bool m_userLinger;
+    bool m_userLingerInteractive;
+
+private:
+    bool registerService(const QString &service, const QString &path);
+    void unRegisterService();
+    QString m_service;
+    QString m_path;
 };
 DLOGIN_END_NAMESPACE
