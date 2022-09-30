@@ -17,14 +17,15 @@ class DKbdBacklightPrivate : public QObject
 public:
     explicit DKbdBacklightPrivate(DKbdBacklight *parent = nullptr)
         : QObject(parent)
-        , q_ptr(parent) {}
+        , q_ptr(parent)
+    {
+    }
     void connectDBusSignal();
 
 public:
     UPowerKbdBacklightInterface *m_kb_inter;
     DKbdBacklight *q_ptr;
     Q_DECLARE_PUBLIC(DKbdBacklight)
-
 };
 
 DPOWER_END_NAMESPACE

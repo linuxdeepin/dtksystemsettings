@@ -8,12 +8,12 @@
 static const QString &Service = QStringLiteral("com.deepin.daemon.FakePower");
 static const QString &Path = QStringLiteral("/com/deepin/daemon/FakePower");
 static const QString &Interface = QStringLiteral("com.deepin.daemon.FakePower");
-#define DBUS_CON QDBusConnection::sessionBus()
+#    define DBUS_CON QDBusConnection::sessionBus()
 #else
 static const QString &Service = QStringLiteral("com.deepin.daemon.Power");
 static const QString &Path = QStringLiteral("/com/deepin/daemon/Power");
 static const QString &Interface = QStringLiteral("com.deepin.daemon.Power");
-#define DBUS_CON QDBusConnection::sessionBus()
+#    define DBUS_CON QDBusConnection::sessionBus()
 #endif
 
 DPOWER_BEGIN_NAMESPACE

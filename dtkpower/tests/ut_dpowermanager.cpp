@@ -44,24 +44,23 @@ public:
 UPowerManagerService *TestDPowerManager::m_fakeInterface = nullptr;
 DPowerManager *TestDPowerManager::m_dpowermanager = nullptr;
 
-QT_BEGIN_NAMESPACE //for QString support
-inline void PrintTo(const QString &qString, ::std::ostream *os)
+QT_BEGIN_NAMESPACE  // for QString support
+    inline void
+    PrintTo(const QString &qString, ::std::ostream *os)
 {
     *os << qUtf8Printable(qString);
 }
 QT_END_NAMESPACE
 
-
 TEST_F(TestDPowerManager, displayDevice)
 {
     auto ddevice = m_dpowermanager->displayDevice();
-    ASSERT_EQ("DisplayDevice",ddevice->deviceName());
-
+    ASSERT_EQ("DisplayDevice", ddevice->deviceName());
 }
 
 TEST_F(TestDPowerManager, criticalAction)
 {
-    ASSERT_EQ("true",m_dpowermanager->criticalAction());
+    ASSERT_EQ("true", m_dpowermanager->criticalAction());
 }
 
 TEST_F(TestDPowerManager, devices)
@@ -70,7 +69,7 @@ TEST_F(TestDPowerManager, devices)
     ASSERT_EQ("battery_BAT1", list[0]);
 }
 
-TEST_F(TestDPowerManager,properties)
+TEST_F(TestDPowerManager, properties)
 {
     EXPECT_FALSE(m_dpowermanager->lidIsClosed());
     EXPECT_FALSE(m_dpowermanager->lidIsPresent());

@@ -7,7 +7,7 @@
 
 UPowerManagerService::UPowerManagerService(QObject *parent)
     : QObject(parent)
-    ,m_reset(false)
+    , m_reset(false)
 {
     registerService();
 }
@@ -43,8 +43,8 @@ void UPowerManagerService::unRegisterService()
 
 QList<QDBusObjectPath> UPowerManagerService::EnumerateDevices() const
 {
-    QList<QDBusObjectPath> a ;
-    QDBusObjectPath b ;
+    QList<QDBusObjectPath> a;
+    QDBusObjectPath b;
     b.setPath("/org/freedesktop/UPower/devices/battery_BAT1");
     a.append(b);
     return a;

@@ -6,7 +6,7 @@
 
 UPowerKbdBacklightService::UPowerKbdBacklightService(QObject *parent)
     : QObject(parent)
-    ,m_reset(false)
+    , m_reset(false)
 {
     registerService();
 }
@@ -16,7 +16,7 @@ UPowerKbdBacklightService::~UPowerKbdBacklightService()
     unRegisterService();
 }
 
-void UPowerKbdBacklightService:: registerService()
+void UPowerKbdBacklightService::registerService()
 {
     const QString &service = QLatin1String("com.deepin.daemon.FakePower");
     const QString &path = QLatin1String("/com/deepin/daemon/FakePower");

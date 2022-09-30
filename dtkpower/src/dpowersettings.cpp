@@ -30,26 +30,17 @@ void DPowerSettingsPrivate::connectDBusSignal()
             &SystemPowerInterface::PowerSavingModeBrightnessDropPercentChanged,
             q,
             &DPowerSettings::powerSavingBrightnessDropPercentChanged);
-    connect(m_daemonPowerInter,
-            &DaemonPowerInterface::BatteryLidClosedActionChanged,
-            q,
-            [q] (const qint32 value) {
-                if (value < 1 || value > 4)
-                    return;
-                emit q->batteryLidClosedActionChanged(static_cast<LidClosedAction>(value));
-            });
-    connect(m_daemonPowerInter,
-            &DaemonPowerInterface::BatteryLockDelayChanged,
-            q,
-            &DPowerSettings::batteryLockDelayChanged);
-    connect(m_daemonPowerInter,
-            &DaemonPowerInterface::BatteryPressPowerBtnActionChanged,
-            q,
-            [q] (const qint32 value) {
-                if (value < 0 || value > 4)
-                    return;
-                emit q->batteryPressPowerBtnActionChanged(static_cast<PowerBtnAction>(value));
-            });
+    connect(m_daemonPowerInter, &DaemonPowerInterface::BatteryLidClosedActionChanged, q, [q](const qint32 value) {
+        if (value < 1 || value > 4)
+            return;
+        emit q->batteryLidClosedActionChanged(static_cast<LidClosedAction>(value));
+    });
+    connect(m_daemonPowerInter, &DaemonPowerInterface::BatteryLockDelayChanged, q, &DPowerSettings::batteryLockDelayChanged);
+    connect(m_daemonPowerInter, &DaemonPowerInterface::BatteryPressPowerBtnActionChanged, q, [q](const qint32 value) {
+        if (value < 0 || value > 4)
+            return;
+        emit q->batteryPressPowerBtnActionChanged(static_cast<PowerBtnAction>(value));
+    });
     connect(m_daemonPowerInter,
             &DaemonPowerInterface::BatteryScreenBlackDelayChanged,
             q,
@@ -58,30 +49,18 @@ void DPowerSettingsPrivate::connectDBusSignal()
             &DaemonPowerInterface::BatteryScreensaverDelayChanged,
             q,
             &DPowerSettings::batteryScreensaverDelayChanged);
-    connect(m_daemonPowerInter,
-            &DaemonPowerInterface::BatterySleepDelayChanged,
-            q,
-            &DPowerSettings::batterySleepDelayChanged);
-    connect(m_daemonPowerInter,
-            &DaemonPowerInterface::LinePowerLidClosedActionChanged,
-            q,
-            [q] (const qint32 value) {
-                if (value < 1 || value > 4)
-                    return;
-                emit q->linePowerLidClosedActionChanged(static_cast<LidClosedAction>(value));
-            });
-    connect(m_daemonPowerInter,
-            &DaemonPowerInterface::LinePowerLockDelayChanged,
-            q,
-            &DPowerSettings::linePowerLockDelayChanged);
-    connect(m_daemonPowerInter,
-            &DaemonPowerInterface::LinePowerPressPowerBtnActionChanged,
-            q,
-            [q] (const qint32 value) {
-                if (value < 0 || value > 4)
-                    return;
-                emit q->linePowerPressPowerBtnActionChanged(static_cast<PowerBtnAction>(value));
-            });
+    connect(m_daemonPowerInter, &DaemonPowerInterface::BatterySleepDelayChanged, q, &DPowerSettings::batterySleepDelayChanged);
+    connect(m_daemonPowerInter, &DaemonPowerInterface::LinePowerLidClosedActionChanged, q, [q](const qint32 value) {
+        if (value < 1 || value > 4)
+            return;
+        emit q->linePowerLidClosedActionChanged(static_cast<LidClosedAction>(value));
+    });
+    connect(m_daemonPowerInter, &DaemonPowerInterface::LinePowerLockDelayChanged, q, &DPowerSettings::linePowerLockDelayChanged);
+    connect(m_daemonPowerInter, &DaemonPowerInterface::LinePowerPressPowerBtnActionChanged, q, [q](const qint32 value) {
+        if (value < 0 || value > 4)
+            return;
+        emit q->linePowerPressPowerBtnActionChanged(static_cast<PowerBtnAction>(value));
+    });
     connect(m_daemonPowerInter,
             &DaemonPowerInterface::LinePowerScreenBlackDelayChanged,
             q,
@@ -90,30 +69,20 @@ void DPowerSettingsPrivate::connectDBusSignal()
             &DaemonPowerInterface::LinePowerScreensaverDelayChanged,
             q,
             &DPowerSettings::linePowerScreensaverDelayChanged);
-    connect(m_daemonPowerInter,
-            &DaemonPowerInterface::LinePowerSleepDelayChanged,
-            q,
-            &DPowerSettings::linePowerSleepDelayChanged);
+    connect(
+        m_daemonPowerInter, &DaemonPowerInterface::LinePowerSleepDelayChanged, q, &DPowerSettings::linePowerSleepDelayChanged);
     connect(m_daemonPowerInter,
             &DaemonPowerInterface::LowPowerAutoSleepThresholdChanged,
             q,
             &DPowerSettings::lowPowerAutoSleepThresholdChanged);
-    connect(m_daemonPowerInter,
-            &DaemonPowerInterface::LowPowerNotifyEnableChanged,
-            q,
-            &DPowerSettings::lowPowerNotifyEnableChanged);
+    connect(
+        m_daemonPowerInter, &DaemonPowerInterface::LowPowerNotifyEnableChanged, q, &DPowerSettings::lowPowerNotifyEnableChanged);
     connect(m_daemonPowerInter,
             &DaemonPowerInterface::LowPowerNotifyThresholdChanged,
             q,
             &DPowerSettings::lowPowerNotifyThresholdChanged);
-    connect(m_daemonPowerInter,
-            &DaemonPowerInterface::ScreenBlackLockChanged,
-            q,
-            &DPowerSettings::screenBlackLockChanged);
-    connect(m_daemonPowerInter,
-            &DaemonPowerInterface::SleepLockChanged,
-            q,
-            &DPowerSettings::sleepLockChanged);
+    connect(m_daemonPowerInter, &DaemonPowerInterface::ScreenBlackLockChanged, q, &DPowerSettings::screenBlackLockChanged);
+    connect(m_daemonPowerInter, &DaemonPowerInterface::SleepLockChanged, q, &DPowerSettings::sleepLockChanged);
 }
 
 DPowerSettings::DPowerSettings(QObject *parent)

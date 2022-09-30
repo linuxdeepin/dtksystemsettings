@@ -248,11 +248,11 @@ TEST_F(TestDPowerDevice, statistic)
     auto reval = m_fakeInterface->GetStatistics("type");
     ASSERT_EQ(100, reval[0].value);
     ASSERT_EQ(100, reval[0].accuracy);
-    ASSERT_EQ(200,reval[1].value );
-    ASSERT_EQ(200,reval[1].accuracy );
+    ASSERT_EQ(200, reval[1].value);
+    ASSERT_EQ(200, reval[1].accuracy);
     auto reval1 = m_dpowerDevice->statistics("type");
-    ASSERT_EQ(100,reval1[0].value );
-    ASSERT_EQ(100,reval1[0].accuracy );
-    ASSERT_EQ(200,reval1[1].value );
-    ASSERT_EQ(200,reval1[1].accuracy );
+    ASSERT_EQ(100, reval1[0].value);
+    ASSERT_EQ(100, reval1[0].accuracy);
+    ASSERT_EQ(200, reval1[1].value);
+    ASSERT_EQ(200, reval1[1].accuracy);
 }
