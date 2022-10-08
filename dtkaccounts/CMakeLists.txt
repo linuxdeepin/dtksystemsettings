@@ -52,6 +52,11 @@ if (BUILD_TESTING)
    add_subdirectory(tests)
 endif ()
 
+# example
+if (BUILD_EXAMPLE)
+    add_subdirectory(example)
+endif ()
+
 # for pc file config
 set(PC_LIBS_PRIVATE Qt${QT_VERSION_MAJOR}Core)
 set(PC_REQ_PRIVATE)
