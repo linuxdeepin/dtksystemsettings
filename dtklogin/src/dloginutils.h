@@ -38,4 +38,5 @@ UserState stringToUserState(const QString &strState);
 }  // namespace Utils
 
 std::ostream &operator<<(std::ostream &os, const QString &str);
+std::ostream &operator<<(std::ostream &os, const QStringList &strList);
 DLOGIN_END_NAMESPACE

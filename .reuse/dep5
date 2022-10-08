@@ -23,3 +23,8 @@ Files: .github/* .gitignore
 Copyright: None
 License: CC0-1.0
 
+# desktop files for test
+Files: dtklogin/tests/resource/*
+Copyright: None
+License: CC0-1.0
+

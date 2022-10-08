@@ -285,5 +285,10 @@ std::ostream &operator<<(std::ostream &os, const QString &str)
     os << str.toStdString();
     return os;
 }
-
+std::ostream &operator<<(std::ostream &os, const QStringList &strList)
+{
+    const QString str = strList.join(",");
+    os << "{ " << str << " }";
+    return os;
+}
 DLOGIN_END_NAMESPACE
