@@ -33,6 +33,7 @@ set(CMAKE_CXX_FLAGS Release CACHE STRING "define CXXFLAGS")
 
 if (CMAKE_BUILD_TYPE STREQUAL "Debug")
     set(BUILD_TESTING ON)
+    set(BUILD_EXAMPLE ON)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address -fno-omit-frame-pointer")
 endif ()
 
@@ -50,6 +51,11 @@ endif ()
 # test
 if (BUILD_TESTING)
     add_subdirectory(tests)
+endif ()
+
+# example
+if (BUILD_EXAMPLE)
+    add_subdirectory(example)
 endif ()
 
 # for pc file config
