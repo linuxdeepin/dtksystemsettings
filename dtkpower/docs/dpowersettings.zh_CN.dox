@@ -12,12 +12,13 @@ DPowerSettings类
 @brief 获取当前cpu电源策略
 @return 返回字符串，为当前cpu电源策略
 
-@fn QString DPowerSettings::mode() const
+@fn PowerMode DPowerSettings::powerMode() const
 @brief 获取当前系统电源策略
 @note 系统电源策略不等同与cpu电源策略，系统电源策略是指的是整个平台的设置，包括网卡cpu、gpu和屏幕亮度
-@return 返回字符串，为当前系统电源策略
+@return 返回枚举，为当前系统电源策略
+\sa
 
-@fn QString DPowerSettings::setMode(const QString &mode)
+@fn QString DPowerSettings::setPowerMode(const QString &mode)
 @brief 设置当前系统电源策略
 @note 系统电源策略不等同与cpu电源策略，系统电源策略是指的是整个平台的设置，包括网卡cpu、gpu和屏幕亮度
 @param[in] mode: 电源策略：performance(性能优先) balance(平衡) powersave(节能)
@@ -34,7 +35,7 @@ DPowerSettings类
 @brief 是否开启在使用电池且电量低的时候开启自动节能模式，电池电量低将自动调整电源模式到节能
 @return 布尔值
 
-@fn void DPowerSettings::setAutoPowerSavingOnBattery(const bool enabled)
+@fn void DPowerSettings::setAutoPowerSavingWhenBatteryLow(const bool enabled)
 @brief 设置开启在使用电池且电量低的时候开启自动节能模式，电池电量低将自动调整电源模式到节能
 @param[in] 布尔值，默认为enabled
 

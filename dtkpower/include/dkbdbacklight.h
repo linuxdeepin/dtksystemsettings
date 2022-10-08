@@ -20,8 +20,7 @@ public:
 
 signals:
     void brightnessChanged(const uint value);
-    void brightnessChangedWithSource(const uint value,
-                                     const KbdSource &source);  // TODO:source为internal是内部，exernal是外部，改为枚举
+    void brightnessChangedWithSource(const uint value, const KbdSource &source);
 
 public slots:
     uint brightness() const;

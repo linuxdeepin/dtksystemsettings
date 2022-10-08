@@ -4,7 +4,6 @@
 
 dpowerdevice.h 是对于dbus接口中关于电源设备（包括且不限于：dc电源，笔记本电池，ups不间断电源，使用干电池的鼠标键盘
 （其实即使不使用干电池也能被管理）等内部外部设备的数据和属性功能读取的详细管理接口。）
-
 @class Dtk::Power::DPowerDevice dpowerdevice.h
 @brief DPowerDevice class.
 DPowerDevice类
@@ -12,70 +11,70 @@ DPowerDevice类
 @fn DPowerDevice::DPowerDevice(const QString &path, QObject *parent = nullptr)
 @brief DPowerDevice类的构造函数，需要传入设备的地址进行构造，获取设备地址需要使用`DPowerManager`类中的`enumerateDevices`方法
 @pragma[in] path:设备地址
-\sa Dtk::Power::DPowerManager::enumerateDevices()
+\sa Dtk::Power::DPowerManager::enumerateDevices() const
 
-@fn bool DPowerDevice::hasHistory()
+@fn bool DPowerDevice::hasHistory() const
 @brief 电源设备是否有历史记录
 @return 布尔值
 
-@fn bool DPowerDevice::hasStatistics()
+@fn bool DPowerDevice::hasStatistics() const
 @brief 电源设备是否有电源设备具有统计信息
 @return 布尔值
 
-@fn bool DPowerDevice::isPresent()
+@fn bool DPowerDevice::isPresent() const
 @brief 电源设备是否有电源设备具有统计信息
 @return 布尔值
 
-@fn bool DPowerDevice::isRechargeable()
+@fn bool DPowerDevice::isRechargeable() const
 @brief 电源设备是否可充电
 @return 布尔值
 
-@fn bool DPowerDevice::online()
+@fn bool DPowerDevice::online() const
 @brief 电源设备当前是否通过线路电源提供电源。仅当属性类型具有值 `line-power` 时，此属性才有效。
 @return 布尔值
 
-@fn bool DPowerDevice::powerSupply()
+@fn bool DPowerDevice::powerSupply() const
 @brief 如果电源设备用于为系统供电。对于笔记本电脑电池和UPS设备，这将设置为`TRUE`，但对于无线鼠标或掌上电脑设置为`FALSE`。
 @return 布尔值
 
-@fn double DPowerDevice::capacity()
+@fn double DPowerDevice::capacity() const
 @brief 电源的容量表示为0和100之间的百分比。电池的容量会随着使用的增长而减少。
     小于75%的容量值通常表示您应该更新电池。通常，此值与 (full-design / full) * 100相同。
     但是，某些原始电源无法报告容量，在这种情况下，容量属性将被取消。
 @note 仅当type属性类型具有值`battery`时，此属性才有效
 @return 双精度浮点数
 
-@fn double DPowerDevice::energy()
+@fn double DPowerDevice::energy() const
 @brief 电源中当前可用的能量 (以Wh为单位)
 @note 仅当type属性类型具有值`battery`时，此属性才有效
 @return 双精度浮点数
 
-@fn double DPowerDevice::energyEmpty()
+@fn double DPowerDevice::energyEmpty() const
 @brief 当电源被认为是空的时，电源中的能量 (以Wh为单位)
 @note 仅当type属性类型具有值`battery`时，此属性才有效
 @return 双精度浮点数
 
-@fn double DPowerDevice::energyFull()
+@fn double DPowerDevice::energyFull() const
 @brief 当电源被认为充满时，电源中的能量 (以Wh为单位)
 @note 仅当type属性类型具有值`battery`时，此属性才有效
 @return 双精度浮点数
 
-@fn double DPowerDevice::energyFullDesign()
+@fn double DPowerDevice::energyFullDesign() const
 @brief电池设计的最大容量，以Wh作为单位
 @note 仅当type属性类型具有值`battery`时，此属性才有效
 @return 双精度浮点数
 
-@fn double DPowerDevice::energyRate()
+@fn double DPowerDevice::energyRate() const
 @brief 电源消耗的能量，以W为单位。如果是正数，电源正在放电，如果是负数，电源正在充电
 @note 仅当type属性类型具有值`battery`时，此属性才有效
 @return 双精度浮点数
 
-@fn double DPowerDevice::luminosity()
+@fn double DPowerDevice::luminosity() const
 @brief 仪表记录的光度（我也不能理解光度是什么意思，大概也许可能是屏幕亮度或者环境亮度？
     使用d-feet软件也无法获取其值）
 @return 双精度浮点数
 
-@fn double DPowerDevice::percentage()
+@fn double DPowerDevice::percentage() const
 @brief 功率源中剩余的能量表示为0和100之间的百分比。
     通常这与 (energy - energy-empty) / (energy-full - energy-empty)相同。
     但是，某些原始电源只能报告百分比，在这种情况下，在设置此属性时，将取消设置energy* 属性。
@@ -84,50 +83,50 @@ DPowerDevice类
     百分比的保留是出于兼容性的考虑
 @return 双精度浮点数
 
-@fn double DPowerDevice::temperature()
+@fn double DPowerDevice::temperature() const
 @brief 设备的温度，以摄氏度为单位。
 @note 仅当type属性类型具有值`battery`时，此属性才有效
 @return 双精度浮点数
 
-@fn double DPowerDevice::voltage()
+@fn double DPowerDevice::voltage() const
 @brief 电池中的电压或被仪表记录的值。
 @return 双精度浮点数
 
-@fn int DPowerDevice::chargeCycles()
+@fn int DPowerDevice::chargeCycles() const
 @brief TCO认证定义的充电周期数，如果该值未知或不适用，则为-1。(systemd>=251)
 @return 整数
 
-@fn quint64 DPowerDevice::timeToEmpty()
+@fn quint64 DPowerDevice::timeToEmpty() const
 @brief 直到电源被认为是空的秒数。如果未知，则设置为0
 @return 长整数
 
-@fn quint64 DPowerDevice::timeToFull()
+@fn quint64 DPowerDevice::timeToFull() const
 @brief 电池充电达到被认为充满所需的秒数。如果未知，则设置为0
 @return 长整数
 
-@fn QString DPowerDevice::iconName()
+@fn QString DPowerDevice::iconName() const
 @brief 图标名称，遵循图标命名规范
 @note 相对于剩余或感知到的剩余电量，图标在呈现方面可能与最终用户的期望不匹配。
     建议前端首先使用BatteryLevel属性 (如果可用)，然后使用百分比，以向用户呈现更真实的电池电量
 @return 字符串
 
-@fn QString DPowerDevice::model()
+@fn QString DPowerDevice::model() const
 @brief 这种电池型号的名称
 @return 字符串
 
-@fn QString DPowerDevice::nativePath()
+@fn QString DPowerDevice::nativePath() const
 @brief 操作系统特定的电源本机路径。在Linux上，这是sysfs路径，例如`/sys/devices/LNXSYSTM:00/device:00/PNP0C0A:00/power_supply/BAT0`. 如果设备由用户空间驱动程序驱动，则为空白
 @return 字符串
 
-@fn QString DPowerDevice::serial()
+@fn QString DPowerDevice::serial() const
 @brief 电池的唯一序列号
 @return 字符串
 
-@fn QString DPowerDevice::vendor()
+@fn QString DPowerDevice::vendor() const
 @brief 电池供应商的名称
 @return 字符串
 
-@fn uint DPowerDevice::batteryLevel()
+@fn uint DPowerDevice::batteryLevel() const
 @brief 不报告百分比而是报告粗略电池电量的设备的电池电量。如果该值为None，
     则该设备不支持粗略的电池报告，应改用百分比
 @return
@@ -139,7 +138,7 @@ DPowerDevice类
     - **7:** 高
     - **8:** 满
 
-@fn uint DPowerDevice::state()
+@fn uint DPowerDevice::state() const
 @brief 电池电量状态
 @note 仅当type属性类型具有值`battery`时，此属性才有效
 @return
@@ -151,7 +150,7 @@ DPowerDevice类
     - **5:** 待充电
     - **6:** 待放电
 
-@fn uint DPowerDevice::technology()
+@fn uint DPowerDevice::technology() const
 @brief 电池使用技术
 @note 仅当type属性类型具有值`battery`时，此属性才有效
 @return
@@ -163,7 +162,7 @@ DPowerDevice类
     - **5:** 镍铬电池
     - **6:** 镍氢电池
 
-@fn uint DPowerDevice::type()
+@fn uint DPowerDevice::type() const
 @brief 电源类型
 @note power-supply 如果该值设置为“电池”，则在将其视为笔记本电脑电池之前 ，您需要验证该属性的值是否为“真”。否则，它很可能是未知类型设备的电池。
 @return
@@ -177,7 +176,7 @@ DPowerDevice类
     - **7:** 掌上电脑
     - **8:** 手机
 
-@fn uint DPowerDevice::warningLevel()
+@fn uint DPowerDevice::warningLevel() const
 @brief 电池警告级别
 @return
     - **0:** 未知
@@ -187,14 +186,14 @@ DPowerDevice类
     - **4:** 临界
     - **5:** Action
 
-@fn QDateTime DPowerDevice::updateTime()
+@fn QDateTime DPowerDevice::updateTime() const
 @brief 从电源读取数据的时间点 (从世界协调时1970年1月1日开始的0:00秒)。（本质还是unix时间戳）
 @return 返回为一个qdatetime对象
 \sa [QDateTime使用方法](https://doc.qt.io/qt-5/qdatetime.html)
 @note 返回的时间并不直接可用，返回是是世界标准时间GMT，需要根据实际情况调整时区增减
 
 
-@fn QString DPowerDevice::lastError()
+@fn QString DPowerDevice::lastError() const
 @brief 返回错误信息
 @return 返回一个字符串
 
@@ -215,7 +214,10 @@ DPowerDevice类
     -* value: 百分比的值，通常以秒为单位
     -* accuracy: 预测的准确性，以百分比表示
 
-@fn void DPowerDevice::refresh()
+@fn void DPowerDevice::refresh() const
 @brief 刷新信息
 @return 无
+
+@fn QString DPowerDevice::deviceName () const
+@brief 获取当前device名称（唯一id）
 */
