@@ -21,8 +21,7 @@ public:
     virtual ~DPowerSettings();
 
     Q_PROPERTY(QString cpuGovernor READ cpuGovernor NOTIFY cpuGovernorChanged);
-    Q_PROPERTY(PowerMode powerMode READ powerMode WRITE setPowerMode NOTIFY
-                   powerModeChanged);  // TODO:mode 改为powerMode, 并且值改为枚举
+    Q_PROPERTY(PowerMode powerMode READ powerMode WRITE setPowerMode NOTIFY powerModeChanged);
     Q_PROPERTY(bool autoPowerSavingOnBattery READ autoPowerSavingOnBattery WRITE setAutoPowerSavingOnBattery NOTIFY
                    autoPowerSavingOnBatteryChanged);
     Q_PROPERTY(bool autoPowerSavingWhenBatteryLow READ autoPowerSavingWhenBatteryLow WRITE setAutoPowerSavingWhenBatteryLow NOTIFY
@@ -30,7 +29,7 @@ public:
     Q_PROPERTY(quint32 powerSavingBrightnessDropPercent READ powerSavingBrightnessDropPercent WRITE
                    setPowerSavingBrightnessDropPercent NOTIFY powerSavingBrightnessDropPercentChanged);
     Q_PROPERTY(LidClosedAction batteryLidClosedAction READ batteryLidClosedAction WRITE setBatteryLidClosedAction NOTIFY
-                   batteryLidClosedActionChanged);  // TODO:文档中应添加说明，可用dtklogin的接口进行判断是否支持休眠再进行设置
+                   batteryLidClosedActionChanged);
     Q_PROPERTY(qint32 batteryLockDelay READ batteryLockDelay WRITE setBatteryLockDelay NOTIFY batteryLockDelayChanged);
     Q_PROPERTY(PowerBtnAction batteryPressPowerBtnAction READ batteryPressPowerBtnAction WRITE setBatteryPressPowerBtnAction
                    NOTIFY batteryPressPowerBtnActionChanged);
