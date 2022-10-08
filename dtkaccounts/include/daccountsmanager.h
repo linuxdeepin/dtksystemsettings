@@ -23,7 +23,7 @@ public:
 
     Q_PROPERTY(QList<quint64> userList READ userList)
 
-    QList<quint64> userList() const;
+    QList<quint64> userList() const;  // TODO:创建或删除userlist无法及时刷新，调用sleep(1)正常
 
 public slots:
 

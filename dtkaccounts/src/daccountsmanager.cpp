@@ -22,11 +22,11 @@ DAccountsManager::DAccountsManager(QObject *parent)
     , d_ptr(new DAccountsManagerPrivate(this))
 {
     Q_D(const DAccountsManager);
-    connect(d->m_dSystemAccountsInter, &DSystemAccountsInterface::ReceivedUserAdded, this, [this, d](QString user) {
+    connect(d->m_dSystemAccountsInter, &DSystemAccountsInterface::ReceivedUserAdded, this, [this, &d](const QString &user) {
         emit this->UserAdded(d->getUIDFromObjectPath(user));
     });
-    connect(d->m_dSystemAccountsInter, &DSystemAccountsInterface::ReceivedUserDeleted, this, [this, d](QString user) {
-        emit this->UserAdded(d->getUIDFromObjectPath(user));
+    connect(d->m_dSystemAccountsInter, &DSystemAccountsInterface::ReceivedUserDeleted, this, [this, &d](const QString &user) {
+        emit this->UserDeleted(d->getUIDFromObjectPath(user));
     });
 }
 
@@ -116,6 +116,10 @@ QStringList DAccountsManager::groups()
 QStringList DAccountsManager::presetGroups(const AccountTypes &type)
 {
     Q_D(const DAccountsManager);
+    if (type == AccountTypes::Unknown) {
+        qWarning() << "Unknown account type";
+        return {};
+    }
     auto reply = d->m_dSystemAccountsInter->getPresetGroups(static_cast<qint32>(type));
     reply.waitForFinished();
     if (!reply.isValid()) {

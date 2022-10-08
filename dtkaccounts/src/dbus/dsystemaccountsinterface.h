@@ -20,6 +20,9 @@ public:
     explicit DSystemAccountsInterface(QObject *parent = nullptr);
     ~DSystemAccountsInterface() = default;
 
+    Q_PROPERTY(QStringList UserList READ UserList NOTIFY UserListChanged)
+    QStringList UserList() const;
+
 public slots:
     QDBusPendingReply<QDBusObjectPath> createUser(const QString &name, const QString &fullName, qint32 accountType);
     QDBusPendingReply<void> deleteUser(const QString &name, bool rmFiles);
@@ -30,6 +33,7 @@ public slots:
 signals:
     void ReceivedUserAdded(QString path);
     void ReceivedUserDeleted(QString path);
+    void UserListChanged(const QStringList &list);
 
 private slots:
     void receiveUserAdded(QString user);

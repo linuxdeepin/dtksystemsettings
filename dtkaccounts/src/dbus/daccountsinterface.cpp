@@ -20,8 +20,8 @@ DAccountsInterface::DAccountsInterface(QObject *parent)
     const QString &Path = QStringLiteral("/org/freedesktop/Accounts");
     const QString &Interface = QStringLiteral("org.freedesktop.Accounts");
     QDBusConnection Connection = QDBusConnection::systemBus();
-    QDBusConnection::systemBus().connect(Service, Path, Interface, "UserAdded", this, "receiveUserAdded");
-    QDBusConnection::systemBus().connect(Service, Path, Interface, "UserDeleted", this, "receiveUserDeleted");
+    Connection.connect(Service, Path, Interface, "UserAdded", this, SLOT(receiveUserAdded(QDBusObjectPath)));
+    Connection.connect(Service, Path, Interface, "UserDeleted", this, SLOT(receiveUserDeleted(QDBusObjectPath)));
 #endif
     m_inter = new DDBusInterface(Service, Path, Interface, Connection, this);
 }
