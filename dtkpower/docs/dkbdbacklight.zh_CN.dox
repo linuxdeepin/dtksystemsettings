@@ -10,11 +10,11 @@ dkbdbacklight.h 是对于dbus接口中控制键盘背光部分功能的封装，
 
 DKbdBacklight类
 
-@fn uint DKbdBacklight::getBrightness()
+@fn uint DKbdBacklight::brightness()
 @brief 获取当前键盘背光亮度
 @return 1或者0（如果只有开关两种状态）或者其他数字
 
-@fn uint DKbdBacklight::getMaxBrightness()
+@fn uint DKbdBacklight::maxBrightness()
 @brief 获取最大键盘背光亮度
 @return 1（如果只有开关两种状态）或者其他数字
 
@@ -22,15 +22,16 @@ DKbdBacklight类
 @brief 设置键盘背光的亮度级别
 @param[in] value: 亮度级别
 
-@fn void DKbdBacklight::BrightnessChanged(const uint value)
+@fn void DKbdBacklight::brightnessChanged(const uint value)
 @brief 信号：键盘背光亮度发生改变
 @param[in] value: 亮度级别
 
 
-@fn void DKbdBacklight::BrightnessChangedWithSource(const uint value ,const QString &source)
+@fn void DKbdBacklight::brightnessChangedWithSource(const uint value,const KbdSource &source)
 @brief 信号： 键盘背光亮度级别已更改，包括有关更改来源的信息
 @param[in] value：键盘背光的新亮度值。
-@param[in] source：键盘背光亮度变化的来源，如果调用了 SetBrightness，则为“外部”，如果硬件更改了键盘亮度本身（自动或通过按下固件处理的热键），则为“内部”。
+@param[in] source：枚举类型，键盘背光亮度变化的来源，如果调用了`SetBrightness`，则为`exernal`。如果硬件更改了键盘亮度本身（自动或通过按下固件处理的热键），则为`internal`。
+@note 固件处理的热键：这个概念是指的是键盘上调整键盘背光亮度按键，或者是别的快捷键调整方式，总之这些个调整方式与硬件有关，与操作系统无关。
 
 @fn void DKbdBacklight::errorMessageChanged(const QString &message)
 @brief 信号： 发送错误信号
