@@ -294,14 +294,15 @@ bool DLoginSession::isAutostart(const QString &fileName)
 {
     Q_D(DLoginSession);
     if (QDir::isAbsolutePath(fileName)) {
-        return d->judgeAutostart(fileName);
+        QStringList autostartApps = autostartList();
+        return autostartApps.contains(fileName);
     } else {
         if (fileName.contains("/")) {
             return false;
         } else {
             QStringList autostartDirs = d->getAutostartDirs();
             QString file = fileName;
-            if (!file.endsWith("*.desktop")) {
+            if (!file.endsWith(".desktop")) {
                 file += ".desktop";
             }
             foreach (QString autostartDir, autostartDirs) {
@@ -317,34 +318,27 @@ bool DLoginSession::isAutostart(const QString &fileName)
 bool DLoginSession::removeAutostart(const QString &fileName)
 {
     Q_D(const DLoginSession);
-    if (isAutostart(fileName)) {
-        auto reply = d->m_startManagerInter->removeAutostart(fileName);
-        reply.waitForFinished();
-        if (!reply.isValid()) {
-            qWarning() << reply.error().message();
-            return false;
-        } else {
-            return reply.value();
-        }
-    } else {
+    auto reply = d->m_startManagerInter->removeAutostart(fileName);
+    reply.waitForFinished();
+    if (!reply.isValid()) {
+        qWarning() << reply.error().message();
         return false;
+    } else {
+        return reply.value();
     }
 }
 
 bool DLoginSession::addAutostart(const QString &fileName)
 {
     Q_D(const DLoginSession);
-    if (!isAutostart(fileName)) {
-        auto reply = d->m_startManagerInter->addAutostart(fileName);
-        reply.waitForFinished();
-        if (!reply.isValid()) {
-            qWarning() << reply.error().message();
-            return false;
-        } else {
-            return reply.value();
-        }
+    auto reply = d->m_startManagerInter->addAutostart(fileName);
+    reply.waitForFinished();
+    if (!reply.isValid()) {
+        qWarning() << reply.error().message();
+        return false;
+    } else {
+        return reply.value();
     }
-    return false;
 }
 
 bool DLoginSessionPrivate::enableAutostartWatch()
@@ -394,7 +388,7 @@ QString DLoginSessionPrivate::getUserAutostartDir()
         defaultUserConfigDir = homeDir + "/.config";
     }
     QString configuredUserConfigDir = QProcessEnvironment::systemEnvironment().value("XDG_CONFIG_HOME");
-    if (!configuredUserConfigDir.isEmpty() && !QDir::isAbsolutePath(configuredUserConfigDir)) {
+    if (!configuredUserConfigDir.isEmpty() && QDir::isAbsolutePath(configuredUserConfigDir)) {
         return QDir::cleanPath(configuredUserConfigDir + "/autostart");
     } else {
         return QDir::cleanPath(defaultUserConfigDir + "/autostart");

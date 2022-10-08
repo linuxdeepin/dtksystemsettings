@@ -8,6 +8,7 @@ file(GLOB_RECURSE INCLUDE_FILES "../include/*.h")
 file(GLOB_RECURSE SRCS
     "../src/*.h"
     "../src/*.cpp"
+    "./resource/res.qrc"
 )
 
 file(GLOB_RECURSE TEST_FILES "./*.h" "./*.cpp")

@@ -4,12 +4,14 @@
 
 #include <qcoreapplication.h>
 #include <gtest/gtest.h>
+#include <qresource.h>
 #include <qtimer.h>
 
 int main(int argc, char *argv[])
 {
     testing::InitGoogleTest(&argc, argv);
     QCoreApplication app(argc, argv);
+    // QResource::registerResource("./resource/res.qrc");
     QTimer::singleShot(0, [] {
         int ret = RUN_ALL_TESTS();
         qApp->exit(ret);

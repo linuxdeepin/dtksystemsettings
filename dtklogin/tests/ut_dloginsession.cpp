@@ -8,9 +8,14 @@
 #include "login1sessioninterface.h"
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
+#include <qprocess.h>
+#include <qfile.h>
+#include <ostream>
 #include "ddbusinterface.h"
 #include "namespace.h"
 #include "sessionmanagerservice.h"
+#include "startmanagerservice.h"
+#include "dloginutils.h"
 
 DLOGIN_USE_NAMESPACE
 
@@ -20,6 +25,7 @@ public:
     TestDLoginSession()
         : m_fakeService(new Login1SessionService)
         , m_sessionManagerService(new SessionManagerService)
+        , m_startManagerService(new StartManagerService)
         , m_dLoginSession(new DLoginSession("/org/freedesktop/login1/session"))
     {
         m_dLoginSession->d_ptr->m_inter->m_interface->setTimeout(INT_MAX);
@@ -30,11 +36,13 @@ public:
         delete m_dLoginSession;
         delete m_fakeService;
         delete m_sessionManagerService;
+        delete m_startManagerService;
     }
 
 protected:
     Login1SessionService *m_fakeService;
     SessionManagerService *m_sessionManagerService;
+    StartManagerService *m_startManagerService;
     DLoginSession *m_dLoginSession;
     static const QString Service;
 };
@@ -365,4 +373,441 @@ TEST_F(TestDLoginSession, terminate)
     m_fakeService->m_terminated = false;
     m_dLoginSession->terminate();
     EXPECT_TRUE(m_fakeService->m_terminated);
+}
+
+struct AutostartParam
+{
+    QString homeDir = "";
+    QString xdgConfigHome = "";
+    QString xdgConfigDirs = "";
+    QString xdgCurrentDesktop = "";
+    QStringList desktopFiles = {};
+    QString userAutostartDirResult = "";
+    QStringList systemAutostartDirResult = {};
+    QStringList autostartAppsResult = {};
+    QString judgeAutostartDesktopFile = "";
+    bool judgeAutostartResult = false;
+    QString isAutostartFileName = "";
+    bool isAutostartResult = false;
+    friend std::ostream &operator<<(std::ostream &os, const AutostartParam &param)
+    {
+        os << "homeDir: " << param.homeDir << " xdgConfigHome: " << param.xdgConfigHome
+           << " xdgConfigDirs: " << param.xdgConfigDirs << " xdgCurrentDesktop: " << param.xdgCurrentDesktop
+           << " desktopFiles: " << param.desktopFiles << " userAutostartDirResult: " << param.userAutostartDirResult
+           << " systemAutostartDirResult: " << param.systemAutostartDirResult
+           << " autostartAppsResult: " << param.autostartAppsResult;
+        return os;
+    }
+};
+
+class EnvGuard
+{
+public:
+    EnvGuard()
+        : m_oldHome(qgetenv("HOME"))
+        , m_oldXdgConfigHome(qgetenv("XDG_CONFIG_HOME"))
+        , m_oldXdgConfigDirs(qgetenv("XDG_CONFIG_DIRS"))
+        , m_oldXdgCurrentDesktop(qgetenv("XDG_CURRENT_DESKTOP"))
+    {
+    }
+
+    ~EnvGuard()
+    {
+        qputenv("HOME", m_oldHome.toUtf8());
+        qputenv("XDG_CONFIG_HOME", m_oldXdgConfigHome.toUtf8());
+        qputenv("XDG_CONFIG_DIRS", m_oldXdgConfigDirs.toUtf8());
+        qputenv("XDG_CURRENT_DESKTOP", m_oldXdgCurrentDesktop.toUtf8());
+    }
+
+private:
+    const QString m_oldHome;
+    const QString m_oldXdgConfigHome;
+    const QString m_oldXdgConfigDirs;
+    const QString m_oldXdgCurrentDesktop;
+};
+
+class TestAutostart : public TestDLoginSession, public testing::WithParamInterface<AutostartParam>
+{
+protected:
+    TestAutostart()
+        : TestDLoginSession()
+    {
+        Prefix = qApp->applicationDirPath() + "/autostart-test";
+        QDir dir;
+        dir.mkpath(Prefix);
+    }
+
+    ~TestAutostart() override
+    {
+        QDir dir(Prefix);
+        dir.removeRecursively();
+    }
+
+    void setHomeDir(const QString &homeDir)
+    {
+        if (homeDir.isEmpty()) {
+            qputenv("HOME", "");
+        } else {
+            if (!homeDir.startsWith("/")) {
+                FAIL();
+            }
+            qputenv("HOME", catPath(homeDir).toUtf8());
+        }
+    }
+
+    void setXdgConfigHome(const QString &xdgConfigHome)
+    {
+        if (xdgConfigHome.isEmpty()) {
+            qputenv("XDG_CONFIG_HOME", "");
+        } else {
+            if (!xdgConfigHome.startsWith("/")) {
+                qputenv("XDG_CONFIG_HOME", xdgConfigHome.toUtf8());
+            } else {
+                qputenv("XDG_CONFIG_HOME", catPath(xdgConfigHome).toUtf8());
+            }
+        }
+    }
+
+    void setXdgConfigDirs(const QString &xdgConfigDirs)
+    {
+        if (xdgConfigDirs.isEmpty()) {
+            qputenv("XDG_CONFIG_DIRS", "");
+        } else {
+            QStringList configDirs = xdgConfigDirs.split(":");
+            for (int i = 0; i < configDirs.size(); i++) {
+                if (!configDirs[i].isEmpty() && configDirs[i].startsWith("/")) {
+                    configDirs[i] = catPath(configDirs[i]);
+                }
+            }
+            QString configDirVar = configDirs.join(":");
+            qputenv("XDG_CONFIG_DIRS", configDirVar.toUtf8());
+        }
+    }
+
+    static QString catPath(const QString &path)
+    {
+        if (path.isEmpty()) {
+            return path;
+        } else {
+            return Prefix + path;
+        }
+    }
+
+    static QString trimPath(const QString &path)
+    {
+        QString result = path;
+        if (result.startsWith(Prefix)) {
+            result.replace(Prefix, "");
+        }
+        return result;
+    }
+
+    void presetEnv(const QString &name, const QString &value) { qputenv(name.toStdString().c_str(), value.toUtf8()); }
+
+    EnvGuard m_guard;
+    static QString Prefix;
+};
+
+QString TestAutostart::Prefix = "";
+
+TEST_P(TestAutostart, getUserAutostartDir)
+{
+    auto params = GetParam();
+    setHomeDir(params.homeDir);
+    setXdgConfigHome(params.xdgConfigHome);
+    QString userAutostartDir = m_dLoginSession->d_ptr->getUserAutostartDir();
+    EXPECT_EQ(params.userAutostartDirResult, trimPath(userAutostartDir));
+}
+
+TEST_P(TestAutostart, getSystemAutostartDir)
+{
+    auto params = GetParam();
+    setXdgConfigDirs(params.xdgConfigDirs);
+    QStringList systemAutostartDir = m_dLoginSession->d_ptr->getSystemAutostartDirs();
+    foreach (const auto &autostartDir, systemAutostartDir) {
+        if (params.systemAutostartDirResult.contains(trimPath(autostartDir))) {
+            params.systemAutostartDirResult.removeAll(trimPath(autostartDir));
+        } else {
+            FAIL();
+        }
+    }
+    EXPECT_THAT(params.systemAutostartDirResult, testing::IsEmpty());
+}
+
+TEST_P(TestAutostart, getAutostartApps)
+{
+    auto params = GetParam();
+    setHomeDir(params.homeDir);
+    setXdgConfigHome(params.xdgConfigHome);
+    setXdgConfigDirs(params.xdgConfigDirs);
+    QString userAutostartDir = m_dLoginSession->d_ptr->getUserAutostartDir();
+    QDir dir;
+    dir.mkpath(userAutostartDir);
+    foreach (const auto &desktopFile, params.desktopFiles) {
+        QFileInfo fileInfo(":/" + desktopFile);
+        QFile::copy(fileInfo.absoluteFilePath(), userAutostartDir + "/" + fileInfo.fileName());
+    }
+    QStringList autostartApps = m_dLoginSession->d_ptr->getAutostartApps(userAutostartDir);
+    foreach (const auto app, params.autostartAppsResult) {
+        if (autostartApps.contains(catPath(app))) {
+            autostartApps.removeOne(catPath(app));
+        } else {
+            FAIL();
+        }
+    }
+    if (params.systemAutostartDirResult.size() == 1 && params.systemAutostartDirResult[0].startsWith("/etc/xdg")) {
+        return;
+    }
+    EXPECT_THAT(autostartApps, testing::IsEmpty());
+    autostartApps = m_dLoginSession->autostartList();
+    foreach (const auto app, params.autostartAppsResult) {
+        if (autostartApps.contains(catPath(app))) {
+            autostartApps.removeOne(catPath(app));
+        } else {
+            FAIL();
+        }
+    }
+    EXPECT_THAT(autostartApps, testing::IsEmpty());
+    QStringList systemAutostartDirs = m_dLoginSession->d_ptr->getSystemAutostartDirs();
+    if (!systemAutostartDirs.isEmpty()) {
+        QString first = systemAutostartDirs.first();
+        dir.mkdir(first);
+        foreach (const auto &desktopFile, params.desktopFiles) {
+            QFileInfo fileInfo(":/" + desktopFile);
+            QFile::copy(fileInfo.absoluteFilePath(), first + "/" + fileInfo.fileName());
+        }
+    }
+    autostartApps = m_dLoginSession->autostartList();
+    foreach (const auto app, params.autostartAppsResult) {
+        if (autostartApps.contains(catPath(app))) {
+            autostartApps.removeOne(catPath(app));
+        } else {
+            FAIL();
+        }
+    }
+    EXPECT_THAT(autostartApps, testing::IsEmpty());
+}
+
+TEST_P(TestAutostart, judgeAutostart)
+{
+    auto params = GetParam();
+    setHomeDir(params.homeDir);
+    setXdgConfigHome(params.xdgConfigHome);
+    setXdgConfigDirs(params.xdgConfigDirs);
+    QFileInfo fileInfo(":/" + params.judgeAutostartDesktopFile);
+    bool result = m_dLoginSession->d_ptr->judgeAutostart(fileInfo.absoluteFilePath());
+    EXPECT_EQ(params.judgeAutostartResult, result);
+}
+
+TEST_P(TestAutostart, isAutostart)
+{
+    auto params = GetParam();
+    setHomeDir(params.homeDir);
+    setXdgConfigHome(params.xdgConfigHome);
+    setXdgConfigDirs(params.xdgConfigDirs);
+    QString userAutostartDir = m_dLoginSession->d_ptr->getUserAutostartDir();
+    QDir dir;
+    dir.mkpath(userAutostartDir);
+    foreach (const auto &desktopFile, params.desktopFiles) {
+        QFileInfo fileInfo(":/" + desktopFile);
+        QFile::copy(fileInfo.absoluteFilePath(), userAutostartDir + "/" + fileInfo.fileName());
+    }
+    QString fileName;
+    if (params.isAutostartFileName.startsWith("/")) {
+        fileName = catPath(params.isAutostartFileName);
+    } else {
+        fileName = params.isAutostartFileName;
+    }
+    bool result = m_dLoginSession->isAutostart(fileName);
+    EXPECT_EQ(params.isAutostartResult, result);
+}
+
+INSTANTIATE_TEST_CASE_P(
+    Default,
+    TestAutostart,
+    testing::Values(AutostartParam{.homeDir = "/test",
+                                   .xdgConfigHome = "",
+                                   .xdgConfigDirs = "/system/config1:/system/config2",
+                                   .desktopFiles = {"test-only-show-in-false.desktop",
+                                                    "test-only-show-in-true.desktop",
+                                                    "test-not-show-in-true.desktop",
+                                                    "test-not-show-in-false.desktop",
+                                                    "test.desktop",
+                                                    "test-hidden.desktop"},
+                                   .userAutostartDirResult = "/test/.config/autostart",
+                                   .systemAutostartDirResult = {"/system/config1/autostart", "/system/config2/autostart"},
+                                   .autostartAppsResult = {"/test/.config/autostart/test.desktop",
+                                                           "/test/.config/autostart/test-only-show-in-true.desktop",
+                                                           "/test/.config/autostart/test-not-show-in-true.desktop"},
+                                   .judgeAutostartDesktopFile = "test-not-show-in-false.desktop",
+                                   .judgeAutostartResult = false,
+                                   .isAutostartFileName = "test.desktop",
+                                   .isAutostartResult = true},
+                    AutostartParam{.homeDir = "/test",
+                                   .xdgConfigHome = "config",
+                                   .xdgConfigDirs = "",
+                                   .desktopFiles = {"test-only-show-in-false.desktop",
+                                                    "test-only-show-in-true.desktop",
+                                                    "test-not-show-in-true.desktop",
+                                                    "test-not-show-in-false.desktop",
+                                                    "test.desktop",
+                                                    "test-hidden.desktop"},
+                                   .userAutostartDirResult = "/test/.config/autostart",
+                                   .systemAutostartDirResult = {"/etc/xdg/autostart"},
+                                   .autostartAppsResult = {"/test/.config/autostart/test.desktop",
+                                                           "/test/.config/autostart/test-only-show-in-true.desktop",
+                                                           "/test/.config/autostart/test-not-show-in-true.desktop"},
+                                   .judgeAutostartDesktopFile = "test-not-show-in-true.desktop",
+                                   .judgeAutostartResult = true,
+                                   .isAutostartFileName = "test-hidden.desktop",
+                                   .isAutostartResult = false},
+                    AutostartParam{.homeDir = "/test",
+                                   .xdgConfigHome = "/config",
+                                   .xdgConfigDirs = "/system/config1::/system/config2",
+                                   .desktopFiles = {"test-only-show-in-false.desktop",
+                                                    "test-only-show-in-true.desktop",
+                                                    "test-not-show-in-true.desktop",
+                                                    "test-not-show-in-false.desktop",
+                                                    "test.desktop",
+                                                    "test-hidden.desktop"},
+                                   .userAutostartDirResult = "/config/autostart",
+                                   .systemAutostartDirResult = {"/system/config1/autostart", "/system/config2/autostart"},
+                                   .autostartAppsResult = {"/config/autostart/test.desktop",
+                                                           "/config/autostart/test-only-show-in-true.desktop",
+                                                           "/config/autostart/test-not-show-in-true.desktop"},
+                                   .judgeAutostartDesktopFile = "test-only-show-in-true.desktop",
+                                   .judgeAutostartResult = true,
+                                   .isAutostartFileName = "test-only-show-in-false.desktop",
+                                   .isAutostartResult = false},
+                    AutostartParam{.homeDir = "/test",
+                                   .xdgConfigHome = "/config",
+                                   .xdgConfigDirs = "/system/config1:config3:/system/config2",
+                                   .desktopFiles = {"test-only-show-in-false.desktop",
+                                                    "test-only-show-in-true.desktop",
+                                                    "test-not-show-in-true.desktop",
+                                                    "test-not-show-in-false.desktop",
+                                                    "test.desktop",
+                                                    "test-hidden.desktop"},
+                                   .userAutostartDirResult = "/config/autostart",
+                                   .systemAutostartDirResult = {"/system/config1/autostart", "/system/config2/autostart"},
+                                   .autostartAppsResult = {"/config/autostart/test.desktop",
+                                                           "/config/autostart/test-only-show-in-true.desktop",
+                                                           "/config/autostart/test-not-show-in-true.desktop"},
+                                   .judgeAutostartDesktopFile = "test-only-show-in-false.desktop",
+                                   .judgeAutostartResult = false,
+                                   .isAutostartFileName = "test-only-show-in-true.desktop",
+                                   .isAutostartResult = true},
+                    AutostartParam{.homeDir = "/test",
+                                   .xdgConfigHome = "/config",
+                                   .xdgConfigDirs = "/system/config1:config3:/system/config2",
+                                   .desktopFiles = {"test-only-show-in-false.desktop",
+                                                    "test-only-show-in-true.desktop",
+                                                    "test-not-show-in-true.desktop",
+                                                    "test-not-show-in-false.desktop",
+                                                    "test.desktop",
+                                                    "test-hidden.desktop"},
+                                   .userAutostartDirResult = "/config/autostart",
+                                   .systemAutostartDirResult = {"/system/config1/autostart", "/system/config2/autostart"},
+                                   .autostartAppsResult = {"/config/autostart/test.desktop",
+                                                           "/config/autostart/test-only-show-in-true.desktop",
+                                                           "/config/autostart/test-not-show-in-true.desktop"},
+                                   .judgeAutostartDesktopFile = "test-only-show-in-false.desktop",
+                                   .judgeAutostartResult = false,
+                                   .isAutostartFileName = "test-not-show-in-true.desktop",
+                                   .isAutostartResult = true},
+                    AutostartParam{.homeDir = "/test",
+                                   .xdgConfigHome = "/config",
+                                   .xdgConfigDirs = "/system/config1:config3:/system/config2",
+                                   .desktopFiles = {"test-only-show-in-false.desktop",
+                                                    "test-only-show-in-true.desktop",
+                                                    "test-not-show-in-true.desktop",
+                                                    "test-not-show-in-false.desktop",
+                                                    "test.desktop",
+                                                    "test-hidden.desktop"},
+                                   .userAutostartDirResult = "/config/autostart",
+                                   .systemAutostartDirResult = {"/system/config1/autostart", "/system/config2/autostart"},
+                                   .autostartAppsResult = {"/config/autostart/test.desktop",
+                                                           "/config/autostart/test-only-show-in-true.desktop",
+                                                           "/config/autostart/test-not-show-in-true.desktop"},
+                                   .judgeAutostartDesktopFile = "test-only-show-in-false.desktop",
+                                   .judgeAutostartResult = false,
+                                   .isAutostartFileName = "test-not-show-in-false.desktop",
+                                   .isAutostartResult = false},
+                    AutostartParam{.homeDir = "/test",
+                                   .xdgConfigHome = "/config",
+                                   .xdgConfigDirs = "/system/config1:config3:/system/config2",
+                                   .desktopFiles = {"test-only-show-in-false.desktop",
+                                                    "test-only-show-in-true.desktop",
+                                                    "test-not-show-in-true.desktop",
+                                                    "test-not-show-in-false.desktop",
+                                                    "test.desktop",
+                                                    "test-hidden.desktop"},
+                                   .userAutostartDirResult = "/config/autostart",
+                                   .systemAutostartDirResult = {"/system/config1/autostart", "/system/config2/autostart"},
+                                   .autostartAppsResult = {"/config/autostart/test.desktop",
+                                                           "/config/autostart/test-only-show-in-true.desktop",
+                                                           "/config/autostart/test-not-show-in-true.desktop"},
+                                   .judgeAutostartDesktopFile = "test-only-show-in-false.desktop",
+                                   .judgeAutostartResult = false,
+                                   .isAutostartFileName = "test/test.desktop",
+                                   .isAutostartResult = false},
+                    AutostartParam{.homeDir = "/test",
+                                   .xdgConfigHome = "/config",
+                                   .xdgConfigDirs = "/system/config1:config3:/system/config2",
+                                   .desktopFiles = {"test-only-show-in-false.desktop",
+                                                    "test-only-show-in-true.desktop",
+                                                    "test-not-show-in-true.desktop",
+                                                    "test-not-show-in-false.desktop",
+                                                    "test.desktop",
+                                                    "test-hidden.desktop"},
+                                   .userAutostartDirResult = "/config/autostart",
+                                   .systemAutostartDirResult = {"/system/config1/autostart", "/system/config2/autostart"},
+                                   .autostartAppsResult = {"/config/autostart/test.desktop",
+                                                           "/config/autostart/test-only-show-in-true.desktop",
+                                                           "/config/autostart/test-not-show-in-true.desktop"},
+                                   .judgeAutostartDesktopFile = "test-only-show-in-false.desktop",
+                                   .judgeAutostartResult = false,
+                                   .isAutostartFileName = "/test/test.desktop",
+                                   .isAutostartResult = false},
+                    AutostartParam{.homeDir = "/test",
+                                   .xdgConfigHome = "/config",
+                                   .xdgConfigDirs = "/system/config1:config3:/system/config2",
+                                   .desktopFiles = {"test-only-show-in-false.desktop",
+                                                    "test-only-show-in-true.desktop",
+                                                    "test-not-show-in-true.desktop",
+                                                    "test-not-show-in-false.desktop",
+                                                    "test.desktop",
+                                                    "test-hidden.desktop"},
+                                   .userAutostartDirResult = "/config/autostart",
+                                   .systemAutostartDirResult = {"/system/config1/autostart", "/system/config2/autostart"},
+                                   .autostartAppsResult = {"/config/autostart/test.desktop",
+                                                           "/config/autostart/test-only-show-in-true.desktop",
+                                                           "/config/autostart/test-not-show-in-true.desktop"},
+                                   .judgeAutostartDesktopFile = "test-only-show-in-false.desktop",
+                                   .judgeAutostartResult = false,
+                                   .isAutostartFileName = "/test/.config/autostart/test.desktop",
+                                   .isAutostartResult = false}));
+
+TEST_F(TestDLoginSession, addAutostart)
+{
+    m_startManagerService->m_fileName = "";
+    m_startManagerService->m_success = false;
+    bool result = m_dLoginSession->addAutostart("test");
+    EXPECT_FALSE(result);
+    EXPECT_EQ("test", m_startManagerService->m_fileName);
+    m_startManagerService->m_success = true;
+    result = m_dLoginSession->addAutostart("test");
+    EXPECT_TRUE(result);
+}
+
+TEST_F(TestDLoginSession, removeAutostart)
+{
+    m_startManagerService->m_fileName = "";
+    m_startManagerService->m_success = false;
+    bool result = m_dLoginSession->removeAutostart("test");
+    EXPECT_FALSE(result);
+    EXPECT_EQ("test", m_startManagerService->m_fileName);
+    m_startManagerService->m_success = true;
+    result = m_dLoginSession->removeAutostart("test");
+    EXPECT_TRUE(result);
 }
