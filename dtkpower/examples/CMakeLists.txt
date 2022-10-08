@@ -16,9 +16,7 @@ target_link_libraries(
     Qt${QT_VERSION_MAJOR}::Gui
     Qt${QT_VERSION_MAJOR}::DBus
     dtkpower
-
 )
-
 
 
 set(BIN2 dpowerdevicedemo)
@@ -32,5 +30,18 @@ target_link_libraries(
     Qt${QT_VERSION_MAJOR}::Gui
     Qt${QT_VERSION_MAJOR}::DBus
     dtkpower
+)
 
+
+set(BIN3 dpowersettingsdemo)
+add_executable(
+    ${BIN3}
+    dpowersettingsdemo.cpp
+)
+target_link_libraries(
+    ${BIN3} PRIVATE
+    Qt${QT_VERSION_MAJOR}::Core
+    Qt${QT_VERSION_MAJOR}::Gui
+    Qt${QT_VERSION_MAJOR}::DBus
+    dtkpower
 )
