@@ -87,7 +87,7 @@ signals:
     void PasswordHintChanged(const QString &passwordHint);
     void UUIDChanged(const QString &UUID);
     void PasswordLastChangeChanged(const qint32 lstch);
-    void CreatedTimeChanged(quint64 time);
+    void CreatedTimeChanged(const quint64 time);
 
 private:
     DDBusInterface *m_inter;

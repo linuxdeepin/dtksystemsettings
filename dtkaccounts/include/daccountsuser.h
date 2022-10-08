@@ -76,7 +76,7 @@ public slots:
     void setHomeDir(const QString &newhomedir);
     void setIconFile(const QUrl &newiconURL);
     void setLayout(const QByteArray &newlayout);
-    void setLocale(const QByteArray &newlocale);
+    void setLocale(const QByteArray &newlocale);  // TODO:这个方法只能由控制中心调用
     void setLocked(const bool locked);
     void setMaxPasswordAge(const int newndays);
     void setPassword(const QByteArray &newpassword);

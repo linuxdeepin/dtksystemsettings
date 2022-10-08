@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
 #include "dsystemaccountsinterface.h"
+#include <qdebug.h>
 
 DACCOUNTS_BEGIN_NAMESPACE
 
@@ -19,8 +20,8 @@ DSystemAccountsInterface::DSystemAccountsInterface(QObject *parent)
     const QString &Path = QStringLiteral("/com/deepin/daemon/Accounts");
     const QString &Interface = QStringLiteral("com.deepin.daemon.Accounts");
     QDBusConnection Connection = QDBusConnection::systemBus();
-    QDBusConnection::systemBus().connect(Service, Path, Interface, "UserAdded", this, "receiveUserAdded");
-    QDBusConnection::systemBus().connect(Service, Path, Interface, "UserDeleted", this, "receiveUserDeleted");
+    Connection.connect(Service, Path, Interface, "UserAdded", this, SLOT(receiveUserAdded(QString)));
+    Connection.connect(Service, Path, Interface, "UserDeleted", this, SLOT(receiveUserDeleted(QString)));
 #endif
     m_inter = new DDBusInterface(Service, Path, Interface, Connection, this);
 };
@@ -50,6 +51,11 @@ QDBusPendingReply<bool, QString, qint32> DSystemAccountsInterface::isPasswordVal
 QDBusPendingReply<bool, QString, qint32> DSystemAccountsInterface::isUsernameValid(const QString &username)
 {
     return m_inter->asyncCallWithArgumentList("IsUsernameValid", {QVariant::fromValue(username)});
+}
+
+QStringList DSystemAccountsInterface::UserList() const
+{
+    return qdbus_cast<QStringList>(m_inter->property("UserList"));
 }
 
 void DSystemAccountsInterface::receiveUserAdded(QString user)
