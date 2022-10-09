@@ -120,7 +120,7 @@ public slots:
     void halt(const bool interactive = false);
     void hibernate(const bool interactive = false);
     void hybridSleep(const bool interactive = false);
-    int inhibit(const quint32 what, const QString &who, const QString &why, const InhibitMode &mode);
+    int inhibit(int what, const QString &who, const QString &why, const InhibitMode &mode);
     void killSession(const QString &sessionId, const SessionRole &who, const qint32 signalNumber);
     void killUser(const quint32 uid, const qint32 signalNumber);
     QList<Inhibitor> listInhibitors();

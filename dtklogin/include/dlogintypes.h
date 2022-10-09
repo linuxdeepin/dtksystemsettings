@@ -17,15 +17,16 @@ struct ScheduledShutdownValue
     ShutdownType type;
     QDateTime time;
 };
-namespace InhibitBehavior {
-constexpr uint Shutdown = 1 << 0;
-constexpr uint Sleep = 1 << 1;
-constexpr uint Idle = 1 << 2;
-constexpr uint HandlePowerKey = 1 << 3;
-constexpr uint HandleSuspendKey = 1 << 4;
-constexpr uint HandleHibernateKey = 1 << 5;
-constexpr uint HandleLidSwitch = 1 << 6;
-};  // namespace InhibitBehavior
+
+enum InhibitBehavior {
+    Shutdown = 1 << 0,
+    Sleep = 1 << 1,
+    Idle = 1 << 2,
+    HandlePowerKey = 1 << 3,
+    HandleSuspendKey = 1 << 4,
+    HandleHibernateKey = 1 << 5,
+    HandleLidSwitch = 1 << 6
+};
 
 enum class PowerAction {
     PowerOff,
@@ -51,12 +52,13 @@ enum class UserState { Offline, Lingering, Online, Active, Closing, Unknown };
 
 struct Inhibitor
 {
-    quint32 what;
+    int what;
     QString who;
     QString why;
     InhibitMode mode;
     quint32 UID;
     quint32 PID;
+    friend QDebug operator<<(QDebug debug, const Inhibitor &inhibitor);
 };
 
 DLOGIN_END_NAMESPACE

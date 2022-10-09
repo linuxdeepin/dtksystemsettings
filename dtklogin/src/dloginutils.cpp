@@ -8,16 +8,15 @@
 DLOGIN_BEGIN_NAMESPACE
 
 namespace Utils {
-using namespace InhibitBehavior;
-QString decodeBehavior(uint behavior)
+QString decodeBehavior(int behavior)
 {
-    static const QMap<uint, QString> behaviorMap = {{Shutdown, "shutdown"},
-                                                    {Sleep, "sleep"},
-                                                    {Idle, "idle"},
-                                                    {HandlePowerKey, "handle-power-key"},
-                                                    {HandleSuspendKey, "handle-suspend-key"},
-                                                    {HandleHibernateKey, "handle-hibernate-key"},
-                                                    {HandleLidSwitch, "handle-lid-switch"}};
+    static const QMap<InhibitBehavior, QString> behaviorMap = {{InhibitBehavior::Shutdown, "shutdown"},
+                                                               {InhibitBehavior::Sleep, "sleep"},
+                                                               {InhibitBehavior::Idle, "idle"},
+                                                               {InhibitBehavior::HandlePowerKey, "handle-power-key"},
+                                                               {InhibitBehavior::HandleSuspendKey, "handle-suspend-key"},
+                                                               {InhibitBehavior::HandleHibernateKey, "handle-hibernate-key"},
+                                                               {InhibitBehavior::HandleLidSwitch, "handle-lid-switch"}};
     QString decoded;
     for (auto it = behaviorMap.begin(); it != behaviorMap.end(); it++) {
         if (behavior & it.key()) {
@@ -30,16 +29,16 @@ QString decodeBehavior(uint behavior)
     }
     return decoded;
 }
-uint encodeBehavior(const QString &behavior)
+int encodeBehavior(const QString &behavior)
 {
-    static const QMap<QString, uint> behaviorMap = {{"shutdown", Shutdown},
-                                                    {"sleep", Sleep},
-                                                    {"idle", Idle},
-                                                    {"handle-power-key", HandlePowerKey},
-                                                    {"handle-suspend-key", HandleSuspendKey},
-                                                    {"handle-hibernate-key", HandleHibernateKey},
-                                                    {"handle-lid-switch", HandleLidSwitch}};
-    uint result = 0;
+    static const QMap<QString, InhibitBehavior> behaviorMap = {{"shutdown", InhibitBehavior::Shutdown},
+                                                               {"sleep", InhibitBehavior::Sleep},
+                                                               {"idle", InhibitBehavior::Idle},
+                                                               {"handle-power-key", InhibitBehavior::HandlePowerKey},
+                                                               {"handle-suspend-key", InhibitBehavior::HandleSuspendKey},
+                                                               {"handle-hibernate-key", InhibitBehavior::HandleHibernateKey},
+                                                               {"handle-lid-switch", InhibitBehavior::HandleLidSwitch}};
+    int result = 0;
     QStringList behaviors = behavior.split(":");
     foreach (const QString &strBehavior, behaviors) {
         if (behaviorMap.contains(strBehavior)) {
