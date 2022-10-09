@@ -99,7 +99,7 @@ DLoginManager 中定义了登录管理对象的接口。
 @fn ScheduledShutdownValue DLoginManager::scheduledShutdown() const
 @brief 读取scheduledShutdown的值，返回两个参数，第一个电源管理状态名，第二个是unix时间戳（精确到微秒），可以使用scheduleShutdown方法进行写入。
     具体含义见同名方法
-@return '',<usec>
+@return 包含关机类型和时间的结构体
 
 @fn quint32 DLoginManager::nAutoVTs() const
 @brief 读取默认配置分配多少个虚拟终端（VT），默认为6
@@ -159,11 +159,9 @@ DLoginManager 中定义了登录管理对象的接口。
 
 @fn void DLoginManager::activateSession(const QString &sessionId)
 @brief 将具有指定 ID 的会话带到前台
-@return 无
 
 @fn void DLoginManager::activateSessionOnSeat(const QString &sessionId, const QString &seatId)
 @brief 将指定ID，指定seat的会话带到前台
-@return 无
 
 @fn ExecuteStatus DLoginManager::canHalt()
 @brief 获取当前用户下计算机是否支持停止
@@ -243,33 +241,30 @@ DLoginManager 中定义了登录管理对象的接口。
 
 @fn QSharedPointer<DLoginSession> DLoginManager::findSessionByPID(const quint32 PID)
 @brief 通过进程号pid获取session对象
-@param[in] pid 进程id
+@param[in] PID 进程id
 @return session对象
 
 @fn QSharedPointer<DLoginUser> DLoginManager::findUserById(const quint32 UID)
 @brief 通过uid获取User对象
-@param[in] uid  用户id
+@param[in] UID 用户id
 @return user对象
 
 @fn QSharedPointer<DLoginUser> DLoginManager::findUserByPID(const quint32 PID)
 @brief 通过进程id获取User信息
-@param[in] pid 进程id
+@param[in] PID 进程id
 @return user对象
 
 @fn void DLoginManager::halt(const bool interactive=false)
 @brief 计算机暂停操作，暂停（不关闭电源关闭）
 @param[in] interactive: 一个交互式布尔参数可用于控制 polkit 是否应在需要时以交互方式要求用户提供认证凭证
-@return 无
 
 @fn void DLoginManager::hibernate(const bool interactive=false)
 @brief 计算机执行休眠操作，休眠（将内存中数据保存到磁盘并将机器关闭）
 @param[in] interactive: 一个交互式布尔参数可用于控制 polkit 是否应在需要时以交互方式要求用户提供认证凭证
-@return 无
 
 @fn void DLoginManager::hybridSleep(const bool interactive=false)
 @brief 计算机执行混合睡眠，混合睡眠模式，即系统既休眠又挂起
 @param[in] interactive: 一个交互式布尔参数可用于控制 polkit 是否应在需要时以交互方式要求用户提供认证凭证
-@return 无
 
 @fn int DLoginManager::inhibit(const quint32 what, const QString &who, const QString &why, const QString &mode)
 @brief 创建一个抑制锁，抑制锁：一个程序可以阻止或延迟系统休眠或关机
@@ -283,21 +278,19 @@ DLoginManager 中定义了登录管理对象的接口。
 @note 注释：人类可读字符串的定义是：对用户友好的字符串，通常使用ASCII码中支持的字符，使用英文语法描述当前程序名和原因
 @return 该方法返回一个文件描述符。在此文件描述符及其所有副本关闭时释放锁
 
-@fn void DLoginManager::killSession(const QString &sessionId, const QString &who, const int signal_number)
+@fn void DLoginManager::killSession(const QString &sessionId, const QString &who, const qint32 signalNumber)
 @brief 可用于向会话的一个或所有进程发送 Unix 信号，作为参数，它接受会话 id、字符串“ leader”或“ all”和一个信号编号。
     如果“ leader”通过，则只有会话“ leader”被终止。如果“ all”通过，则会话的所有进程都将被终止。
-@param[in] sessionId: 会话id
-@param[in] who: “leader”或“all”
-@param[in] signal_number: 信号编号
+@param[in] sessionId 会话id
+@param[in] who “leader”或“all”
+@param[in] signalNumber 信号编号
 @note 在shell中输入`kill -l`获取信号编号
-@return 无
 
-@fn void DLoginManager::killUser(const quint32 uid, const int signal_number)
+@fn void DLoginManager::killUser(const quint32 uid, const qint32 signalNumber)
 @brief 可用于向用户的所有进程发送 Unix 信号。作为参数，它需要用户 ID 和信号编号
 @param[in] uid: 用户id
-@param[in] signal_numbe: 信号编号
+@param[in] signalNumber: 信号编号
 @note 在shell中输入`kill -l`获取信号编号
-@return 无
 
 @fn QList<Inhibitor> DLoginManager::listInhibitors()
 @brief 列出所有当前有效的抑制器。
@@ -323,32 +316,22 @@ DLoginManager 中定义了登录管理对象的接口。
 @fn void DLoginManager::lockSession(const QString &sessionId)
 @brief 要求具有指定 ID 的会话激活屏幕锁定
 @param[in] sessionId: 会话id
-@return 无
 
 @fn void DLoginManager::lockSessions()
 @brief 要求所有会话激活其屏幕锁定。这可用于在一个操作中锁定对整个机器的访问。
-@return 无
 
 @fn void DLoginManager::powerOff(const bool interactive)
 @brief 关机
 @param[in] interactive: 一个交互式布尔参数可用于控制 polkit 是否应在需要时以交互方式要求用户提供认证凭证
-@return 无
 
 @fn void DLoginManager::reboot(const bool interactive)
 @brief 重启
 @param[in] interactive: 一个交互式布尔参数可用于控制 polkit 是否应在需要时以交互方式要求用户提供认证凭证
-@return 无
-
-// @fn void DLoginManager::releaseSession(const QString &sessionId)
-// @brief 关闭登录会话
-// @param[in] sessionId: 会话id
-// @note 这些调用绝不能由客户端直接调用。创建/关闭会话完全是 PAM 及其 [pam_systemd](https://www.freedesktop.org/software/systemd/man/pam_systemd.html#) 模块的工作。
 
 @fn void DLoginManager::scheduleShutdown(const ShutdownType type, const QDateTime &usec)
 @brief 在一定时间后定时关机
 @param[in] type: 关机操作类型，可以是"poweroff"、"dry-poweroff"、"reboot"、"dry-reboot"、"halt "和 "dry-halt "之一
 @param[in] usec: Unix时间戳，从1970.1.1零点开始到现在的微秒时间
-@return 无
 
 @fn void DLoginManager::setUserLinger(const quint32 uid, const bool enable, const bool interactive)
 @brief 启用或禁用用户滞留。如果启用，将保留用户的运行时目录，并且他们可以在注销时继续运行进程。如果禁用，运行时目录会在他们注销后立即消失
@@ -356,32 +339,26 @@ DLoginManager 中定义了登录管理对象的接口。
 @param[in] enable: 一个是否启用/禁用的布尔值
 @param[in] interactive: 一个交互式布尔参数可用于控制 polkit 是否应在需要时以交互方式要求用户提供认证凭证
 @note 请注意，用户滞留状态会持久性地保存在磁盘上。
-@return 无
 
 @fn void DLoginManager::suspend(const bool interactive)
 @brief 计算机执行挂起操作（系统状态保存到 RAM 并关闭 CPU）
 @param[in] interactive: 一个交互式布尔参数可用于控制 polkit 是否应在需要时以交互方式要求用户提供认证凭证
-@return 无
 
 @fn  void DLoginManager::suspendThenHibernate(const bool interactive);
 @brief 计算机系统被暂停，随后使用RTC定时器唤醒并休眠
 @param[in] interactive: 一个交互式布尔参数可用于控制 polkit 是否应在需要时以交互方式要求用户提供认证凭证
-@return 无
 
 @fn  void DLoginManager::terminateSession(const QString sessionId)
 @brief 可用于强制终止一个特定会话
-@param[in] sessionId:会话编号
-@return 无
+@param[in] sessionId: 会话编号
 
 @fn  void DLoginManager::terminateUser(const quint32 uid)
 @brief 可用于强制终止用户的所有进程
 @param[in] uid: 用户编号
-@return 无
 
 @fn void DLoginManager::logout()
 @brief 登出
 @note 注意：此操作为危险操作，会丢弃当前活动，请确保运行前重要文件已经得到妥善处理
-@return 无
 
 @fn QSharedPointer<DLoginSeat> DLoginManager::currentSeat()
 @brief 当前的seat
