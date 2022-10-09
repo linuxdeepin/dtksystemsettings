@@ -59,7 +59,11 @@ bool DPowerManager::lidIsPresent() const
 
 bool DPowerManager::hasBattery() const
 {
-    return !devices().isEmpty();
+    for (auto const &str : devices()) {
+        if (str.contains("BAT", Qt::CaseSensitive))
+            return true;
+    }
+    return false;
 }
 
 bool DPowerManager::onBattery() const
