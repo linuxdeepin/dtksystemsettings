@@ -25,12 +25,29 @@ dlogintypes.h 中定义了login组件需要使用到的一些自定义数据结�
 @var ScheduledShutdownValue ScheduledShutdownValue::time
 执行时间
 
-// TODO:需要确认这些参数各自代表什么意思
+@enum Dtk::Login::InhibitBehavior
+@brief 定义抑制锁行为
+@var InhibitBehavior::Shutdown
+关机
+@var InhibitBehavior::Sleep
+睡眠
+@var InhibitBehavior::Idle
+闲时
+@var InhibitBehavior::HandlePowerKey
+按下电源键
+@var InhibitBehavior::HandleSuspendKey
+按下待机键
+@var InhibitBehavior::HandleHibernateKey
+按下休眠键
+@var InhibitBehavior::HandleLidSwitch
+合上盖子
+
 @enum Dtk::Login::PowerAction
 @brief 定义关机键的动作
 @var PowerAction::PowerOff
 关机
 @var PowerAction::KExec
+加载新内核
 @var PowerAction::Reboot
 重启
 @var PowerAction::Halt
@@ -40,9 +57,13 @@ dlogintypes.h 中定义了login组件需要使用到的一些自定义数据结�
 @var PowerAction::Hibernate
 休眠
 @var PowerAction::HybridSleep
+混合睡眠
 @var PowerAction::SuspendThenHibernate
+先待机后休眠
 @var PowerAction::Lock
+锁屏
 @var PowerAction::FactoryReset
+还原设置
 @var PowerAction::Ignore
 忽略
 @var PowerAction::Unknown
