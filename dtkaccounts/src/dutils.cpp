@@ -56,7 +56,7 @@ QString Dutils::getUserConfigKey(keyType key)
             return "Layout";
         case keyType::Locale:
             return "Locale";
-        case keyType::UUID:
+        case keyType::UserUUID:
             return "UUID";
         default:
             break;
