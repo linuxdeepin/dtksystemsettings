@@ -9,6 +9,8 @@ dkbdbacklight.h 是对于dbus接口中控制键盘背光部分功能的封装，
 @brief DKbdBacklight class.
 
 DKbdBacklight类
+@fn DKbdBacklight::DKbdBacklight
+@brief DKbdBacklight class的构造函数，注意，此函数为私有，需要通过调用`DPowerManager::supportKbdBacklight() const`确定当前设备是否支持软件调整笔记本键盘背光，然后使用`DPowerManager::kbdBacklight() const`创建一个对象进行设置和管理
 
 @fn uint DKbdBacklight::brightness()
 @brief 获取当前键盘背光亮度
