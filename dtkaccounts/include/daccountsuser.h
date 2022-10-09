@@ -90,9 +90,6 @@ public slots:
     void deleteIconFile(const QUrl &iconURL);
     bool isPasswordExpired() const;
     ReminderInfo getReminderInfo() const;
-    QList<qint32> secretQuestions() const;
-    void setSecretQuestions(const QMap<qint32, QByteArray> &newquestions);
-    QList<qint32> verifySecretQuestions(const QMap<qint32, QString> &anwsers);
     PasswdExpirInfo passwordExpirationInfo(qint64 &dayLeft) const;
 
 signals:

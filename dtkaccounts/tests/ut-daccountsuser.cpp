@@ -159,24 +159,6 @@ TEST_F(TestDAccountsUser, getReminderInfo)
     EXPECT_TRUE(m_fakeservice->m_getReminderInfoTrigger);
 }
 
-TEST_F(TestDAccountsUser, secretQuestions)
-{
-    m_dauser->secretQuestions();
-    EXPECT_TRUE(m_fakeservice->m_secretQuestionsTrigger);
-}
-
-TEST_F(TestDAccountsUser, setSecretQuestions)
-{
-    m_dauser->setSecretQuestions({});
-    EXPECT_TRUE(m_fakeservice->m_setSecretQuestionsTrigger);
-}
-
-TEST_F(TestDAccountsUser, verifySecretQuestions)
-{
-    m_dauser->verifySecretQuestions({});
-    EXPECT_TRUE(m_fakeservice->m_verifySecretQuestionsTrigger);
-}
-
 TEST_F(TestDAccountsUser, setGroups)
 {
     m_dauser->setGroups({});

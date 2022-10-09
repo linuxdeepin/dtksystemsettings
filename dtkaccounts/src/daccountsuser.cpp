@@ -478,39 +478,6 @@ ReminderInfo DAccountsUser::getReminderInfo() const
     return info;
 }
 
-QList<qint32> DAccountsUser::secretQuestions() const
-{
-    Q_D(const DAccountsUser);
-    auto reply = d->m_dSystemUserInter->getSecretQuestions();
-    reply.waitForFinished();
-    if (!reply.isValid()) {
-        qWarning() << reply.error().message();
-        return {};
-    }
-    return reply.value();
-}
-
-void DAccountsUser::setSecretQuestions(const QMap<qint32, QByteArray> &newquestions)
-{
-    Q_D(const DAccountsUser);
-    auto reply = d->m_dSystemUserInter->setSecretQuestions(newquestions);
-    reply.waitForFinished();
-    if (!reply.isValid())
-        qWarning() << reply.error().message();
-}
-
-QList<qint32> DAccountsUser::verifySecretQuestions(const QMap<qint32, QString> &anwsers)
-{
-    Q_D(const DAccountsUser);
-    auto reply = d->m_dSystemUserInter->verifySecretQuestions(anwsers);
-    reply.waitForFinished();
-    if (!reply.isValid()) {
-        qWarning() << reply.error().message();
-        return {};
-    }
-    return reply.value();
-}
-
 PasswdExpirInfo DAccountsUser::passwordExpirationInfo(qint64 &dayLeft) const
 {
     Q_D(const DAccountsUser);
