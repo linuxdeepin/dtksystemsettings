@@ -39,4 +39,6 @@ void Demo::run()
     user->addGroup("libvirt");
     user->deleteGroup("libvirt");
     user->deleteIconFile(QUrl("file:///var/lib/AccountsService/icons/local/qwer-dfgdsd31dfs"));
+    user->setLayout("cn;");
+    user->setLayoutList({"cn;", "jp;", "en;"});
 }

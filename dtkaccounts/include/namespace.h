@@ -6,9 +6,6 @@
 
 #define DACCOUNTS_USE_NAMESPACE using namespace DACCOUNTS_NAMESPACE;
 
-#define DACCOUNTS_BEGIN_NAMESPACE                                                                                                \
-    namespace Dtk {                                                                                                              \
-    namespace Accounts {
-#define DACCOUNTS_END_NAMESPACE                                                                                                  \
-    }                                                                                                                            \
-    }
+#define DACCOUNTS_BEGIN_NAMESPACE namespace Dtk { namespace Accounts {
+
+#define DACCOUNTS_END_NAMESPACE }}

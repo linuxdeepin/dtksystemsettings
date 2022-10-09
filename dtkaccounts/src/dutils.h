@@ -9,6 +9,8 @@
 
 DACCOUNTS_BEGIN_NAMESPACE
 
+enum class keyType { IconFile, Layout, LayoutList, Locale, UserUUID, Unknown };
+
 struct Dutils
 {
     static QString encryptPassword(const QString &password);

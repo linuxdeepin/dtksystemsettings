@@ -5,43 +5,16 @@
 #pragma once
 
 #include "namespace.h"
-#include <QMap>
-#include <QVariant>
+#include <QString>
 
 DACCOUNTS_BEGIN_NAMESPACE
 
 // Common Custom Type
 
-/**
- * @brief type of user account
- */
-enum class AccountTypes : qint32 {
-    Default = 0,
-    Admin,
-    Udcp, /**< Domain Controller */
-    Unknown
-};
+enum class AccountTypes : qint32 { Default = 0, Admin, Udcp, Unknown };
 
-/**
- * @brief keys in the configuration file
- */
-enum class keyType {
-    IconFile,   /**< icon file path     */
-    Layout,     /**< keyboard layout     */
-    LayoutList, /**< keyboard layout list*/
-    Locale,
-    UUID,
-    Unknown
-};
-
-/**
- * @brief password status
- */
 enum class PasswdStatus { Password, NoPassword, Locked, Unknown };
 
-/**
- * @brief Password Expiration Information
- */
 enum class PasswdExpirInfo { Normal, Closed, Expired, Unknown };
 
 struct ShadowInfo

@@ -7,6 +7,7 @@
 #include "daccountstypes.h"
 #include <QDateTime>
 #include <QUrl>
+#include <QObject>
 
 DACCOUNTS_BEGIN_NAMESPACE
 

@@ -7,10 +7,14 @@ daccountsmanager.h是对于一组用于查询和管理用户帐户信息的D-BUS
 @class Dtk::Accounts::DAccountsManager daccountsmanager.h
 @brief DAccountsManager类
 
-@fn QSharedPointer<DAccountsUser> DAccountsManager::createUser(const QString &name, const QString &fullname, const AccountType &type)
+@fn DAccountsManager::DAccountsManager(QObject *parent = nullptr)
+@brief 构造manager对象,并且进行信号的连接
+@param[in] parent 父对象
+
+@fn QSharedPointer<DAccountsUser> DAccountsManager::createUser(const QString &name, const QString &fullName, const AccountType &type)
 @brief 创建一个新用户
 @param[in] name 新用户的用户名
-@param[in] fullname 新用户的全名
+@param[in] fullName 新用户的全名
 @param[in] type 用户类型
 @return 一个指向由该用户实例化的DAccountsUser的QSharedPointer
 
@@ -18,7 +22,6 @@ daccountsmanager.h是对于一组用于查询和管理用户帐户信息的D-BUS
 @brief 删除一个用户
 @param[in] name 要删除的用户的用户名
 @param[in] rmFiles 是否要删除用户的文件
-@return 空
 
 @fn QSharedPointer<DAccountsUser> DAccountsManager::findUserById(const qint64 id)
 @brief 使用uid来寻找用户
@@ -50,17 +53,18 @@ daccountsmanager.h是对于一组用于查询和管理用户帐户信息的D-BUS
 
 @fn ValidMsg DAccountsManager::isUsernameValid(const QString &name)
 @brief 判断用户名是否合法
-@paramp[in] name 用户名
+@param [in] name 用户名
 @return 一个表示判断信息的结构体
 
 @fn void DAccountsManager::UserAdded(const quint64 uid)
 @brief 当添加用户时发送信号
 @param[in] uid 新加入用户的uid
-@return 空
 
 @fn void DAccountsManager::UserDeleted(const quint64 uid)
 @brief 当用户被删除时发送信号
-@param[in] path uid 被删除用户的uid
-@return 空
+@param[in] uid 被删除用户的uid
+
+@property DAccountsManager::userList
+@brief 所有用户的uid组成的列表
 
 */
