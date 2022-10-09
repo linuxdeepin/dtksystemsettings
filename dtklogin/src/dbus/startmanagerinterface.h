@@ -20,7 +20,10 @@ public:
     static inline const char *staticInterfaceName() { return "com.deepin.StartManager"; }
     StartManagerInterface(const QString &service, const QString &path, QDBusConnection connection, QObject *parent = nullptr);
 
-public slots:
+Q_SIGNALS:
+    void autostartChanged(const QString &status, const QString &name);
+
+public Q_SLOTS:
     QDBusPendingReply<bool> addAutostart(const QString &fileName);
     QDBusPendingReply<bool> removeAutostart(const QString &fileName);
 

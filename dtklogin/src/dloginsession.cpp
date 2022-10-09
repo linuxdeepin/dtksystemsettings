@@ -33,7 +33,6 @@ DLoginSession::DLoginSession(const QString &path, QObject *parent)
     const QString &StartManagerPath = QStringLiteral("/com/deepin/FakeStartManager");
     const QString &SessionManagerService = StartManagerService;
     const QString &SessionManagerPath = QStringLiteral("/com/deepin/FakeSessionManager");
-
 #else
     const QString &Service = QStringLiteral("org.freedesktop.login1");
     QDBusConnection connection = QDBusConnection::systemBus();
@@ -42,7 +41,6 @@ DLoginSession::DLoginSession(const QString &path, QObject *parent)
     const QString &SessionManagerService = StartManagerService;
     const QString &SessionManagerPath = QStringLiteral("/com/deepin/SessionManager");
 #endif
-
     Q_D(DLoginSession);
     DBusSeatPath::registerMetaType();
     DBusUserPath::registerMetaType();
@@ -52,9 +50,19 @@ DLoginSession::DLoginSession(const QString &path, QObject *parent)
     d->m_sessionManagerInter =
         new SessionManagerInterface(SessionManagerService, SessionManagerPath, QDBusConnection::sessionBus(), this);
     d->m_fileWatcher = new QFileSystemWatcher(this);
-    if (!d->enableAutostartWatch()) {
-        qWarning() << "Enable autostart watch failed.";
-    }
+    // if (!d->enableAutostartWatch()) {
+    //     qWarning() << "Enable autostart watch failed.";
+    // }
+    connect(
+        d->m_startManagerInter, &StartManagerInterface::autostartChanged, this, [=](const QString &status, const QString &name) {
+            if (status == "added") {
+                Q_EMIT this->autostartAdded(name);
+            } else if (status == "deleted") {
+                Q_EMIT this->autostartRemoved(name);
+            } else {
+                qWarning() << "Unknown autostart changed signal.";
+            }
+        });
     connect(d->m_sessionManagerInter, &SessionManagerInterface::LockedChanged, this, &DLoginSession::lockedChanged);
 }
 
@@ -213,10 +221,10 @@ void DLoginSession::activate()
     }
 }
 
-void DLoginSession::kill(const QString &who, const qint32 signalNumber)
+void DLoginSession::kill(SessionRole who, const qint32 signalNumber)
 {
     Q_D(DLoginSession);
-    QDBusPendingReply<> reply = d->m_inter->kill(who, signalNumber);
+    QDBusPendingReply<> reply = d->m_inter->kill(Utils::sessionRoleToString(who), signalNumber);
     reply.waitForFinished();
     if (!reply.isValid()) {
         qWarning() << reply.error().message();
@@ -250,7 +258,7 @@ void DLoginSession::setLocked(const bool locked)
     }
 }
 
-void DLoginSession::setType(const SessionType &type)
+void DLoginSession::setType(SessionType type)
 {
     Q_D(DLoginSession);
     QDBusPendingReply<> reply = d->m_inter->setType(Utils::sessionTypeToString(type));
@@ -345,7 +353,7 @@ bool DLoginSessionPrivate::enableAutostartWatch()
 {
     Q_Q(DLoginSession);
     QStringList autostartDirs = getAutostartDirs();
-    auto result = m_fileWatcher->addPaths(autostartDirs);
+    auto notWatched = m_fileWatcher->addPaths(autostartDirs);
     // For desktop file handler
     connect(m_fileWatcher, &QFileSystemWatcher::directoryChanged, this, [=](const QString &path) {
         QStringList autostartApps = q->autostartList();
@@ -377,7 +385,7 @@ bool DLoginSessionPrivate::enableAutostartWatch()
             }
         }
     });
-    return result.size() == autostartDirs.size();
+    return notWatched.empty();
 }
 
 QString DLoginSessionPrivate::getUserAutostartDir()

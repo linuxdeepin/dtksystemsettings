@@ -5,6 +5,7 @@
 #include "sessionmanagerinterface.h"
 #include <qdbusconnection.h>
 #include "ddbusinterface.h"
+#include <qdebug.h>
 DLOGIN_BEGIN_NAMESPACE
 
 SessionManagerInterface::SessionManagerInterface(const QString &service,

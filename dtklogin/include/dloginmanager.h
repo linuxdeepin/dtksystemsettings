@@ -91,17 +91,17 @@ public:
     quint64 sessionsMax() const;
     quint64 userStopDelayUSec() const;
 
-signals:
-    void prepareForShutdown(const bool value);
-    void prepareForSleep(const bool value);
+Q_SIGNALS:
+    void prepareForShutdown(bool value);
+    void prepareForSleep(bool value);
     void seatNew(const QString &seatId);
     void seatRemoved(const QString &seatId);
     void sessionNew(const QString &sessionId);
     void sessionRemoved(const QString &sessionId);
-    void userNew(const quint32 UID);
-    void userRemoved(const quint32 UID);
+    void userNew(quint32 UID);
+    void userRemoved(quint32 UID);
 
-public slots:
+public Q_SLOTS:
     void activateSession(const QString &sessionId);
     void activateSessionOnSeat(const QString &sessionId, const QString &seatId);
     ExecuteStatus canHalt();
