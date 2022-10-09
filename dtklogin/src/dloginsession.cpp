@@ -50,9 +50,6 @@ DLoginSession::DLoginSession(const QString &path, QObject *parent)
     d->m_sessionManagerInter =
         new SessionManagerInterface(SessionManagerService, SessionManagerPath, QDBusConnection::sessionBus(), this);
     d->m_fileWatcher = new QFileSystemWatcher(this);
-    // if (!d->enableAutostartWatch()) {
-    //     qWarning() << "Enable autostart watch failed.";
-    // }
     connect(
         d->m_startManagerInter, &StartManagerInterface::autostartChanged, this, [=](const QString &status, const QString &name) {
             if (status == "added") {
