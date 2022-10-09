@@ -67,6 +67,12 @@ DPowerManager类
 @fn void DPowerManager::deviceRemoved(const QString &path)
 @brief 信号：设备被移除
 
+@fn void DPowerManager::lidIsClosedChanged(const bool &value)
+@brief 信号：笔记本盖子被关闭
+
+@fn void DPowerManager::lidIsPresentChanged(const bool &value)
+@brief 信号：笔记本盖子传感器启用状态发生改变
+
 
 */
 

@@ -282,6 +282,10 @@ DPowerSettings类
 @fn void DPowerSettings::sleepLockChanged(const bool value)
 \sa DPowerSettings::setSleepLock(const bool value)
 
+@fn void DPowerSettings::powerSavingModeEnabledChanged(const bool value)
+\sa DPowerSettings::setPowerSavingModeEnabled(const bool value)
 
+@fn void DPowerSettings::powerSavingModeBrightnessDataChanged(const QString &value)
+\sa DPowerSettings::setPowerSavingModeBrightnessData(const QString &value)
 
 */

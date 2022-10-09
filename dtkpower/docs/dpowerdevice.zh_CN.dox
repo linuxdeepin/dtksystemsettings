@@ -9,9 +9,9 @@ dpowerdevice.h 是对于dbus接口中关于电源设备（包括且不限于：d
 DPowerDevice类
 
 @fn DPowerDevice::DPowerDevice(const QString &path, QObject *parent = nullptr)
-@brief DPowerDevice类的构造函数，需要传入设备的地址进行构造，获取设备地址需要使用`DPowerManager`类中的`enumerateDevices`方法
+@brief DPowerDevice类的构造函数,此构造函数为私有，需要传入设备的地址进行构造，获取设备地址需要使用`DPowerManager::devices`方法然后使用`DPowerManager::findDeviceByName`进行构建,或者使用`DPowerManager::displayDevice`方法获取dispaly对象
 @pragma[in] path:设备地址
-\sa Dtk::Power::DPowerManager::enumerateDevices() const
+\sa Dtk::Power::DPowerManager::findDeviceByName() const
 
 @fn bool DPowerDevice::hasHistory() const
 @brief 电源设备是否有历史记录
