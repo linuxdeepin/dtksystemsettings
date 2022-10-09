@@ -18,8 +18,10 @@ void DKbdBacklightPrivate::connectDBusSignal()
 {
     Q_Q(DKbdBacklight);
     connect(m_kb_inter, &UPowerKbdBacklightInterface::BrightnessChanged, q, &DKbdBacklight::brightnessChanged);
+    // qDebug() << connect(m_kb_inter, &UPowerKbdBacklightInterface::BrightnessChanged, this, [=](const qint32 value) {
+    // });
     connect(
-        m_kb_inter, &UPowerKbdBacklightInterface::BrightnessChangedWithSource, q, [q](const uint value, const QString &source) {
+        m_kb_inter, &UPowerKbdBacklightInterface::BrightnessChangedWithSource, q, [q](const qint32 value, const QString &source) {
             QMap<QString, KbdSource> sourceMap;
             sourceMap["internal"] = KbdSource::Internal;
             sourceMap["external"] = KbdSource::External;
@@ -38,15 +40,16 @@ DKbdBacklight::DKbdBacklight(QObject *parent)
 {
     Q_D(DKbdBacklight);
     d->m_kb_inter = new UPowerKbdBacklightInterface(this);
+    d->connectDBusSignal();
 }
 
 DKbdBacklight::~DKbdBacklight() {}
 
 // pubilc slots
-uint DKbdBacklight::brightness() const
+qint32 DKbdBacklight::brightness() const
 {
     Q_D(const DKbdBacklight);
-    QDBusPendingReply<uint> reply = d->m_kb_inter->getBrightness();
+    QDBusPendingReply<qint32> reply = d->m_kb_inter->getBrightness();
     reply.waitForFinished();
     if (!reply.isValid()) {
         qWarning() << reply.error().message();
@@ -55,10 +58,10 @@ uint DKbdBacklight::brightness() const
     return reply.value();
 }
 
-uint DKbdBacklight::maxBrightness() const
+qint32 DKbdBacklight::maxBrightness() const
 {
     Q_D(const DKbdBacklight);
-    QDBusPendingReply<uint> reply = d->m_kb_inter->getMaxBrightness();
+    QDBusPendingReply<qint32> reply = d->m_kb_inter->getMaxBrightness();
     reply.waitForFinished();
     if (!reply.isValid()) {
         qWarning() << reply.error().message();
@@ -67,7 +70,7 @@ uint DKbdBacklight::maxBrightness() const
     return reply.value();
 }
 
-void DKbdBacklight::setBrightness(const uint value)
+void DKbdBacklight::setBrightness(const qint32 value)
 {
     Q_D(DKbdBacklight);
     QDBusPendingReply<> reply = d->m_kb_inter->setBrightness(value);

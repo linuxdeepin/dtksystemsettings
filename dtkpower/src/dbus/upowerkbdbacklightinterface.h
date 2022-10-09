@@ -20,13 +20,13 @@ public:
     virtual ~UPowerKbdBacklightInterface();
 
 signals:
-    void BrightnessChanged(const uint value);
-    void BrightnessChangedWithSource(const uint value, const QString &source);
+    void BrightnessChanged(const qint32 value);
+    void BrightnessChangedWithSource(const qint32 value, const QString &source);
 
 public slots:
-    QDBusPendingReply<uint> getBrightness() const;
-    QDBusPendingReply<uint> getMaxBrightness() const;
-    QDBusPendingReply<> setBrightness(uint value);
+    QDBusPendingReply<qint32> getBrightness() const;
+    QDBusPendingReply<qint32> getMaxBrightness() const;
+    QDBusPendingReply<> setBrightness(qint32 value);
 
 private:
     DDBusInterface *m_inter;

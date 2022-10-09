@@ -22,6 +22,8 @@ UPowerKbdBacklightInterface::UPowerKbdBacklightInterface(QObject *parent)
     static const QString &Path = QStringLiteral("/org/freedesktop/UPower/KbdBacklight");
     static const QString &Interface = QStringLiteral("org.freedesktop.UPower.KbdBacklight");
     QDBusConnection connection = QDBusConnection::systemBus();
+    connection.connect(Service, Path, Interface, "BrightnessChanged", this, SIGNAL(BrightnessChanged(const qint32)));
+
 #endif
     m_inter = new DDBusInterface(Service, Path, Interface, connection, this);
 }
@@ -30,17 +32,17 @@ UPowerKbdBacklightInterface::~UPowerKbdBacklightInterface() {}
 
 // pubilc slots
 
-QDBusPendingReply<uint> UPowerKbdBacklightInterface::getBrightness() const
+QDBusPendingReply<qint32> UPowerKbdBacklightInterface::getBrightness() const
 {
     return m_inter->asyncCall(QStringLiteral("GetBrightness"));
 }
 
-QDBusPendingReply<uint> UPowerKbdBacklightInterface::getMaxBrightness() const
+QDBusPendingReply<qint32> UPowerKbdBacklightInterface::getMaxBrightness() const
 {
     return m_inter->asyncCall(QStringLiteral("GetMaxBrightness"));
 }
 
-QDBusPendingReply<> UPowerKbdBacklightInterface::setBrightness(uint value)
+QDBusPendingReply<> UPowerKbdBacklightInterface::setBrightness(qint32 value)
 {
     return m_inter->asyncCallWithArgumentList("SetBrightness", {QVariant::fromValue(value)});
 }
