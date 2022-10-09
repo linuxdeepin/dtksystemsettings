@@ -20,6 +20,34 @@ DPowerDevice::DPowerDevice(const QString &name, QObject *parent)
     Q_D(DPowerDevice);
     d->devicename = name;
     d->m_device_inter = new UPowerDeviceInterface(name, this);
+
+    connect(d->m_device_inter, &UPowerDeviceInterface::UpdateTimeChanged, this, [this](const quint64 value) {
+        emit this->updateTimeChanged(QDateTime::fromSecsSinceEpoch(value));
+    });
+    connect(d->m_device_inter, &UPowerDeviceInterface::PercentageChanged, this, [this](const double value) {
+        emit this->percentageChanged(value);
+    });
+    connect(d->m_device_inter, &UPowerDeviceInterface::TimeToEmptyChanged, this, [this](const quint64 value) {
+        emit this->timeToEmptyChanged(value);
+    });
+    connect(d->m_device_inter, &UPowerDeviceInterface::TimeToEmptyChanged, this, [this](const quint64 value) {
+        emit this->timeToEmptyChanged(value);
+    });
+    connect(d->m_device_inter, &UPowerDeviceInterface::TimeToEmptyChanged, this, [this](const quint64 value) {
+        emit this->timeToEmptyChanged(value);
+    });
+    connect(d->m_device_inter, &UPowerDeviceInterface::TimeToFullChanged, this, [this](const quint64 value) {
+        emit this->timeToFullChanged(value);
+    });
+    connect(d->m_device_inter, &UPowerDeviceInterface::EnergyRateChanged, this, [this](const double value) {
+        emit this->energyRateChanged(value);
+    });
+    connect(d->m_device_inter, &UPowerDeviceInterface::EnergyChanged, this, [this](const double value) {
+        emit this->energyChanged(value);
+    });
+    connect(d->m_device_inter, &UPowerDeviceInterface::IconNameChanged, this, [this](const QString &value) {
+        emit this->iconNameChanged(value);
+    });
 }
 
 DPowerDevice::~DPowerDevice() {}

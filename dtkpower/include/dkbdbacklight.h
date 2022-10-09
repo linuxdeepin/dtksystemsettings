@@ -23,7 +23,7 @@ signals:
     void brightnessChangedWithSource(const uint value, const KbdSource &source);
 
 public slots:
-    uint brightness() const;
+    uint brightness() const;  // TODO: quint32
     uint maxBrightness() const;
     void setBrightness(const uint value);
 
