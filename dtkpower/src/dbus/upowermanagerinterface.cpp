@@ -28,6 +28,9 @@ UPowerManagerInterface::UPowerManagerInterface(QObject *parent)
     const QString &Path = QStringLiteral("/org/freedesktop/UPower");
     const QString &Interface = QStringLiteral("org.freedesktop.UPower");
     QDBusConnection connection = QDBusConnection::systemBus();
+    connection.connect(Service, Path, Interface, "DeviceAdded", this, SIGNAL(DeviceAdded(QDBusObjectPath)));
+    connection.connect(Service, Path, Interface, "DeviceRemove", this, SIGNAL(DeviceRemove(QDBusObjectPath)));
+
 #endif
     m_inter = new DDBusInterface(Service, Path, Interface, connection, this);
 }

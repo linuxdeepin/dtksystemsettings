@@ -18,8 +18,8 @@ public:
     explicit UPowerManagerInterface(QObject *parent = nullptr);
     virtual ~UPowerManagerInterface();
     // properties
-    Q_PROPERTY(bool LidIsClosed READ lidIsClosed)
-    Q_PROPERTY(bool LidIsPresent READ lidIsPresent)
+    Q_PROPERTY(bool LidIsClosed READ lidIsClosed NOTIFY LidIsClosedChanged);
+    Q_PROPERTY(bool LidIsPresent READ lidIsPresent NOTIFY LidIsPresentChanged);
     Q_PROPERTY(bool OnBattery READ onBattery)
     Q_PROPERTY(QString DaemonVersion READ daemonVersion)
     bool lidIsClosed() const;
@@ -30,6 +30,8 @@ public:
 signals:
     void DeviceAdded(const QDBusObjectPath &path);
     void DeviceRemoved(const QDBusObjectPath &path);
+    void LidIsClosedChanged(const bool &value);
+    void LidIsPresentChanged(const bool &value);
 
 public slots:
     QDBusPendingReply<QList<QDBusObjectPath>> enumerateDevices() const;

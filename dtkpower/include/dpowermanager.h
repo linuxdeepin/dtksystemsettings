@@ -19,12 +19,12 @@ public:
     explicit DPowerManager(QObject *parent = nullptr);
     virtual ~DPowerManager();
     // properties
-    Q_PROPERTY(bool lidIsClosed READ lidIsClosed)
-    Q_PROPERTY(bool lidIsPresent READ lidIsPresent)
-    Q_PROPERTY(bool hasBattery READ hasBattery)
-    Q_PROPERTY(bool onBattery READ onBattery)
-    Q_PROPERTY(bool supportKbdBacklight READ supportKbdBacklight)
-    Q_PROPERTY(QString daemonVersion READ daemonVersion)
+    Q_PROPERTY(bool lidIsClosed READ lidIsClosed NOTIFY lidIsClosedChanged);
+    Q_PROPERTY(bool lidIsPresent READ lidIsPresent NOTIFY lidIsPresentChanged);
+    Q_PROPERTY(bool hasBattery READ hasBattery);
+    Q_PROPERTY(bool onBattery READ onBattery);
+    Q_PROPERTY(bool supportKbdBacklight READ supportKbdBacklight);
+    Q_PROPERTY(QString daemonVersion READ daemonVersion);
     bool lidIsClosed() const;
     bool lidIsPresent() const;
     bool hasBattery() const;
@@ -38,6 +38,8 @@ public:
 signals:
     void deviceAdded(const QString &name);
     void deviceRemoved(const QString &name);
+    void lidIsClosedChanged(const bool &value);
+    void lidIsPresentChanged(const bool &value);
 
 public slots:
     QStringList devices() const;
