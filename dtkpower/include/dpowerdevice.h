@@ -85,7 +85,7 @@ public:
     QString deviceName() const;
 
 signals:
-    void updateTimeChanged(const quint64 value);
+    void updateTimeChanged(const QDateTime &value);  // TODO: 注意修改信号链接
     void percentageChanged(const double value);
     void timeToEmptyChanged(const quint64 value);
     void timeToFullChanged(const quint64 value);

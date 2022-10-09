@@ -39,7 +39,7 @@ DPowerManager类
 
 @fn QSharedPointer<DPowerDevice> DPowerManager::findDeviceByName(const QString &name) const
 @brief 通过设备名创建设备对象
-@param[in] 传入设备名，设备名获取见 DPowerManager::devices() const
+@param[in] name 传入设备名，设备名获取见 DPowerManager::devices() const
 @note 注意，请使用DPowerManager::devices() const 返回的电源设备名称，若不符将会返回一个nullptr.
 @return 返回一个device对象
 
@@ -60,18 +60,12 @@ DPowerManager类
 @fn QString DPowerManager::refresh()
 @brief 刷新设备列表
 
-@fn void DPowerManager::errorMessageChanged(const QString &message)
-@brief 信号：产生错误信号
-@return 无
-
-@fn void DPowerManager::DeviceAdded(const QString &path);
+@fn void DPowerManager::deviceAdded(const QString &path);
 @brief 信号：有新的设备被接入
-@return 无
 
 
-@fn void DPowerManager::DeviceRemoved(const QString &path)
+@fn void DPowerManager::deviceRemoved(const QString &path)
 @brief 信号：设备被移除
-@return 无
 
 
 */

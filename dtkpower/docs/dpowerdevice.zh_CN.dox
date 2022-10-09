@@ -192,16 +192,11 @@ DPowerDevice类
 \sa [QDateTime使用方法](https://doc.qt.io/qt-5/qdatetime.html)
 @note 返回的时间并不直接可用，返回是是世界标准时间GMT，需要根据实际情况调整时区增减
 
-
-@fn QString DPowerDevice::lastError() const
-@brief 返回错误信息
-@return 返回一个字符串
-
-@fn QList<History> DPowerDevice::getHistory(const QString &type, const uint timespan, const uint resolution)
+@fn QList<History> DPowerDevice::history(const QString &type, const uint timespan, const uint resolution)
 @brief 获取在重新引导期间持续存在的电源设备的历史记录
-@param[in] type:history的类型。有效类型是rateor或者 charge。
-@param[in] timespan:以秒为单位返回的数据量，或者全部为0
-@param[in] resolution:要返回的近似点数。更高的分辨率更准确，但以牺牲绘图速度为代价
+@param[in] type history的类型。有效类型是rateor或者 charge。
+@param[in] timespan 以秒为单位返回的数据量，或者全部为0
+@param[in] resolution 要返回的近似点数。更高的分辨率更准确，但以牺牲绘图速度为代价
 @return data:电源设备的历史数据（如果设备支持历史）。数据从最早的时间到最新的数据点进行排序。每个元素包含以下成员：
     -* time: 以秒为单位的时间值，从 gettimeofday() 方法获取
     -* value: 数据值, 比如以W为单位的增长速率或者以百分比为单位的充电百分比
@@ -209,15 +204,47 @@ DPowerDevice类
 
 @fn QList<Statistics> DPowerDevice::statistics(const QString &type)
 @brief 获取功率设备的统计信息，这些统计信息可能会在会话中的图形界面上显示
-@param[in] type:统计模式。有效类型是 charging 或者 discharging
+@param[in] type 统计模式。有效类型是 charging 或者 discharging
 @return 电源设备的统计数据。每个元素包含以下成员：
     -* value: 百分比的值，通常以秒为单位
     -* accuracy: 预测的准确性，以百分比表示
 
 @fn void DPowerDevice::refresh() const
 @brief 刷新信息
-@return 无
 
 @fn QString DPowerDevice::deviceName () const
 @brief 获取当前device名称（唯一id）
+
+// signal
+
+@fn void DPowerDevice::updateTimeChanged(const QDateTime& value)
+@brief 从电源读取数据的时间点发生改变
+@param[in] value QDateTime对象
+
+@fn void DPowerDevice::percentageChanged(const double value)
+@brief 电源百分比发生改变
+@param[in] value 电源百分比
+
+@fn void DPowerDevice::timeToEmptyChanged(const quint64 value)
+@brief 电源消耗到空的时间发生改变
+@param[in] value 时间段
+
+@fn void DPowerDevice::timeToFullChanged(const quint64 value)
+@brief 电源充满时间发生改变
+@param[in] value 时间段
+
+@fn void DPowerDevice::energyRateChanged(const double value)
+@brief 电源消耗的能量发生改变，以W为单位
+@param[in] value 消耗的能量正数是放电负数是充电
+
+@fn void DPowerDevice::energyChanged(const double value)
+@brief 电源中当前可用的能量发生改变
+@param[in] value 电源中可用能量
+
+@fn void DPowerDevice::iconNameChanged(const QString &value)
+@brief 电源图标发生改变
+@param[in] value 电源图标名
+
+
+
 */
