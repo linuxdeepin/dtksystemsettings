@@ -19,13 +19,13 @@ public:
     virtual ~DKbdBacklight();
 
 signals:
-    void brightnessChanged(const uint value);
-    void brightnessChangedWithSource(const uint value, const KbdSource &source);
+    void brightnessChanged(const qint32 value);
+    void brightnessChangedWithSource(const qint32 value, const KbdSource &source);
 
 public slots:
-    uint brightness() const;  // TODO: quint32
-    uint maxBrightness() const;
-    void setBrightness(const uint value);
+    qint32 brightness() const;
+    qint32 maxBrightness() const;
+    void setBrightness(const qint32 value);
 
 private:
     QScopedPointer<DKbdBacklightPrivate> d_ptr;
