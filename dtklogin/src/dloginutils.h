@@ -12,8 +12,8 @@
 DLOGIN_BEGIN_NAMESPACE
 
 namespace Utils {
-QString decodeBehavior(uint behavior);
-uint encodeBehavior(const QString &behavior);
+QString decodeBehavior(int behavior);
+int encodeBehavior(const QString &behavior);
 QString modeToString(const InhibitMode &mode);
 InhibitMode stringToMode(const QString &strMode);
 DBusInhibitor inhibitorToDBus(const Inhibitor &inhibitor);

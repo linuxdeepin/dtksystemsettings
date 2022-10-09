@@ -478,7 +478,7 @@ void DLoginManager::hybridSleep(const bool interactive)
     }
 }
 
-int DLoginManager::inhibit(const quint32 what, const QString &who, const QString &why, const InhibitMode &mode)
+int DLoginManager::inhibit(int what, const QString &who, const QString &why, const InhibitMode &mode)
 {
     Q_D(DLoginManager);
     QDBusPendingReply<QDBusUnixFileDescriptor> reply =
