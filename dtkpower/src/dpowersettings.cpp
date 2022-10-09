@@ -30,6 +30,25 @@ void DPowerSettingsPrivate::connectDBusSignal()
             &SystemPowerInterface::PowerSavingModeBrightnessDropPercentChanged,
             q,
             &DPowerSettings::powerSavingBrightnessDropPercentChanged);
+    connect(m_systemPowerInter,
+            &SystemPowerInterface::PowerSavingModeEnabledChanged,
+            q,
+            &DPowerSettings::powerSavingModeEnabledChanged);
+    connect(m_systemPowerInter,
+            &SystemPowerInterface::PowerSavingModeBrightnessDataChanged,
+            q,
+            &DPowerSettings::powerSavingModeBrightnessDataChanged);
+    connect(m_systemPowerInter, &SystemPowerInterface::CpuBoostChanged, q, &DPowerSettings::CpuBoostChanged);
+    connect(m_systemPowerInter, &SystemPowerInterface::ModeChanged, q, [q](const QString &value) {
+        if (value == "powsersave")
+            emit q->powerModeChanged(PowerMode::Powersave);
+        else if (value == "performance")
+            emit q->powerModeChanged(PowerMode::Performance);
+        else if (value == "balance")
+            emit q->powerModeChanged(PowerMode::Balance);
+        else
+            emit q->powerModeChanged(PowerMode::Unknown);
+    });
     connect(m_daemonPowerInter, &DaemonPowerInterface::BatteryLidClosedActionChanged, q, [q](const qint32 value) {
         if (value < 1 || value > 4)
             return;

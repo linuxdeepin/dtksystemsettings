@@ -124,6 +124,9 @@ signals:
     void lowPowerNotifyThresholdChanged(const qint32 value);
     void screenBlackLockChanged(const bool value);
     void sleepLockChanged(const bool value);
+    void powerSavingModeEnabledChanged(const bool value);
+    void powerSavingModeBrightnessDataChanged(const QString &value);
+    void CpuBoostChanged(const bool value);
 
 public slots:
     void reset();
