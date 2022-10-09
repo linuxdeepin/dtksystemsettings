@@ -14,7 +14,7 @@ dtkpower是对于deepin/UOS系统上的upowerdbus接口和dde-daemon接口的封
 
 ## dkbdbacklight使用示例
 
-```c++
+```cpp
 #include "dpowermanager.h"//为了创建manager对象需要调用此头文件
 #include "dkbdbacklight.h" //为了管理键盘背光需要调用此头文件
 #include <QCoreApplication>
