@@ -44,30 +44,12 @@ DLoginManager::DLoginManager(QObject *parent)
     d->m_inter = new Login1ManagerInterface(Service, Path, connection, d);
     connect(d->m_inter, &Login1ManagerInterface::prepareForShutdown, this, &DLoginManager::prepareForShutdown);
     connect(d->m_inter, &Login1ManagerInterface::prepareForSleep, this, &DLoginManager::prepareForSleep);
-    connect(d->m_inter, &Login1ManagerInterface::seatNew, this, [=](const QString &seatId, const QString &seatPath) {
-        Q_UNUSED(seatPath)
-        emit this->seatNew(seatId);
-    });
-    connect(d->m_inter, &Login1ManagerInterface::seatRemoved, this, [=](const QString &seatId, const QString &seatPath) {
-        Q_UNUSED(seatPath)
-        emit this->seatRemoved(seatId);
-    });
-    connect(d->m_inter, &Login1ManagerInterface::sessionNew, this, [=](const QString &sessionId, const QString &sessionPath) {
-        Q_UNUSED(sessionPath)
-        emit this->sessionNew(sessionId);
-    });
-    connect(d->m_inter, &Login1ManagerInterface::sessionRemoved, this, [=](const QString &sessionId, const QString &sessionPath) {
-        Q_UNUSED(sessionPath)
-        emit this->sessionRemoved(sessionId);
-    });
-    connect(d->m_inter, &Login1ManagerInterface::userNew, this, [=](const uint UID, const QString &userPath) {
-        Q_UNUSED(userPath)
-        emit this->userNew(UID);
-    });
-    connect(d->m_inter, &Login1ManagerInterface::userRemoved, this, [=](const uint UID, const QString &userPath) {
-        Q_UNUSED(userPath)
-        emit this->userRemoved(UID);
-    });
+    connect(d->m_inter, &Login1ManagerInterface::seatNew, this, &DLoginManager::seatNew);
+    connect(d->m_inter, &Login1ManagerInterface::seatRemoved, this, &DLoginManager::seatRemoved);
+    connect(d->m_inter, &Login1ManagerInterface::sessionNew, this, &DLoginManager::sessionNew);
+    connect(d->m_inter, &Login1ManagerInterface::sessionRemoved, this, &DLoginManager::sessionRemoved);
+    connect(d->m_inter, &Login1ManagerInterface::userNew, this, &DLoginManager::userNew);
+    connect(d->m_inter, &Login1ManagerInterface::userRemoved, this, &DLoginManager::userRemoved);
 }
 
 DLoginManager::~DLoginManager() = default;

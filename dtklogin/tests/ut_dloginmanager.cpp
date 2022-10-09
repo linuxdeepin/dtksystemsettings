@@ -619,7 +619,7 @@ TEST_F(TestDLoginManager, suspendThenHibernate)
 
 struct InhibitParam
 {
-    uint what;
+    int what;
     QString strWhat;
     QString who;
     QString why;

@@ -11,8 +11,8 @@
 #include "dlogintypes.h"
 
 class DDBusInterface;
-DLOGIN_BEGIN_NAMESPACE
-class Login1ManagerInterface : public QObject
+class QDBusObjectPath;
+DLOGIN_BEGIN_NAMESPACE class Login1ManagerInterface : public QObject
 {
     Q_OBJECT
 public:
@@ -164,15 +164,15 @@ public slots:
     QDBusPendingReply<> unlockSession(const QString &sessionId);
     QDBusPendingReply<> unlockSessions();
 
-signals:
-    void prepareForShutdown(const bool value);
-    void prepareForSleep(const bool value);
-    void seatNew(const QString &seatId, const QString &seatPath);
-    void seatRemoved(const QString &seatId, const QString &seatPath);
-    void sessionNew(const QString &sessionId, const QString &sessionPath);
-    void sessionRemoved(const QString &sessionId, const QString &sessionPath);
-    void userNew(const quint32 UID, const QString &path);
-    void userRemoved(const quint32 UID, const QString &path);
+Q_SIGNALS:
+    void prepareForShutdown(bool value);
+    void prepareForSleep(bool value);
+    void seatNew(const QString &seatId, const QDBusObjectPath &seatPath);
+    void seatRemoved(const QString &seatId, const QDBusObjectPath &seatPath);
+    void sessionNew(const QString &sessionId, const QDBusObjectPath &sessionPath);
+    void sessionRemoved(const QString &sessionId, const QDBusObjectPath &sessionPath);
+    void userNew(quint32 UID, const QDBusObjectPath &seatPath);
+    void userRemoved(quint32 UID, const QDBusObjectPath &seatPath);
 
 private:
     DDBusInterface *m_interface;

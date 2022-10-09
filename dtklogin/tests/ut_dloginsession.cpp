@@ -334,8 +334,8 @@ TEST_F(TestDLoginSession, kill)
 {
     m_fakeService->m_who = "";
     m_fakeService->m_signalNumber = -1;
-    m_dLoginSession->kill("uos", 8);
-    EXPECT_EQ("uos", m_fakeService->m_who);
+    m_dLoginSession->kill(SessionRole::All, 8);
+    EXPECT_EQ("all", m_fakeService->m_who);
     EXPECT_EQ(8, m_fakeService->m_signalNumber);
 }
 

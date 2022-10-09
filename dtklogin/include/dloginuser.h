@@ -51,7 +51,7 @@ public:
     QDateTime loginTime() const;
     quint64 loginTimeMonotonic() const;
 
-public slots:
+public Q_SLOTS:
     void kill(const qint32 signalNumber);
     void terminate();
 

@@ -73,17 +73,17 @@ public:
     quint64 createdTimeMonotonic() const;
 
 signals:
-    void lockedChanged(const bool locked);
+    void lockedChanged(bool locked);
     void autostartAdded(const QString &fileName);
     void autostartRemoved(const QString &fileName);
 
 public slots:
     void activate();
-    void kill(const QString &who, const qint32 signalNumber);
+    void kill(SessionRole who, const qint32 signalNumber);
     void lock();
     void setIdleHint(const bool idle);
-    void setLocked(const bool locked);
-    void setType(const SessionType &type);
+    void setLocked(const bool locked);  // FIXME We do not have the permission
+    void setType(SessionType type);
     void terminate();
     QStringList autostartList();
     bool isAutostart(const QString &fileName);

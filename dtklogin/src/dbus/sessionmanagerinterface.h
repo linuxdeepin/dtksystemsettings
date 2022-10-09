@@ -16,20 +16,18 @@ DLOGIN_BEGIN_NAMESPACE
 class SessionManagerInterface : public QObject
 {
     Q_OBJECT
-
 public:
     Q_PROPERTY(bool Locked READ Locked NOTIFY LockedChanged);
+    bool Locked();
 
     static inline const char *staticInterfaceName() { return "com.deepin.SessionManager"; }
     SessionManagerInterface(const QString &service, const QString &path, QDBusConnection connection, QObject *parent = nullptr);
 
-    bool Locked();
+Q_SIGNALS:
+    void LockedChanged(bool locked);
 
-signals:
-    void LockedChanged(const bool locked);
-
-public slots:
-    QDBusPendingReply<> SetLocked(const bool locked);
+public Q_SLOTS:
+    QDBusPendingReply<> SetLocked(bool locked);
 
 private:
     DDBusInterface *m_interface;

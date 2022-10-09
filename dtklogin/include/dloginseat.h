@@ -37,11 +37,11 @@ public:
     QDateTime idleSinceHint() const;
     quint64 idleSinceHintMonotonic() const;
 
-public slots:
+public Q_SLOTS:
     void activateSession(const QString &sessionId);
     void switchTo(const quint32 VTNr);
-    void switchToNext();
-    void switchToPrevious();
+    void switchToNext();      // FIXME Cannot use interface of freedesktop
+    void switchToPrevious();  // FIXME Cannot use interface of freedesktop
 
 private:
     friend class DLoginManager;

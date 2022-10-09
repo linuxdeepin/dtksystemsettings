@@ -16,6 +16,12 @@ StartManagerInterface::StartManagerInterface(const QString &service,
     : QObject(parent)
     , m_interface(new DDBusInterface(service, path, staticInterfaceName(), connection, this))
 {
+    connection.connect(service,
+                       path,
+                       staticInterfaceName(),
+                       "AutostartChanged",
+                       this,
+                       SIGNAL(autostartChanged(const QString &, const QString &)));
 }
 QDBusPendingReply<bool> StartManagerInterface::addAutostart(const QString &fileName)
 {
