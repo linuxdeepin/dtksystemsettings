@@ -186,19 +186,6 @@ daccountsuser.h是对于一组用于管理用户账户属性和相关信息的D-
 @brief 获取DAccountsUser指向的用户的一些信息
 @return 由信息组成的结构体
 
-@fn QList<qint32> DAccountsUser::secretQuestions() const
-@brief 获取DAccountsUser指向的用户的密保问题
-@return 由问题编号组成的列表
-
-@fn void DAccountsUser::setSecretQuestions(const QMap<qint32, QByteArray> &newquestions)
-@brief 设置DAccountsUser指向的用户的密保问题
-@param[in] newquestions 新的密保问题由问题id和加密后的答案组成
-
-@fn QList<qint32> DAccountsUser::verifySecretQuestions(const QMap<qint32, QString> &anwsers)
-@brief 验证DAccountsUser指向的用户的密保问题
-@param[in] anwsers 由问题id和加密后的答案组成
-@return 验证错误的问题id组成的列表
-
 @fn PasswdExpirInfo DAccountsUser::passwordExpirationInfo(qint64 &dayLeft) const
 @brief 获取DAccountsUser指向的用户的密码过期信息
 @param[out] dayLeft 还剩多少天密码过期

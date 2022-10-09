@@ -39,10 +39,6 @@ class FakeAccountsUserService : public QObject
                 "      <arg direction=\"out\" type=\"(s(iiiiii)(sssss)(sssss)i)\" name=\"info\"/>\n"
                 "      <annotation value=\"Dtk::Accounts::ReminderInfo_p\" name=\"org.qtproject.QtDBus.QtTypeName.info\"/>\n"
                 "    </method>\n"
-                "    <method name=\"GetSecretQuestions\">\n"
-                "      <arg direction=\"out\" type=\"ai\" name=\"list\"/>\n"
-                "      <annotation value=\"anwserIndex\" name=\"org.qtproject.QtDBus.QtTypeName.list\"/>\n"
-                "    </method>\n"
                 "    <method name=\"SetAutomaticLogin\">\n"
                 "      <arg direction=\"in\" type=\"b\" name=\"enabled\"/>\n"
                 "    </method>\n"
@@ -79,18 +75,8 @@ class FakeAccountsUserService : public QObject
                 "    <method name=\"SetPasswordHint\">\n"
                 "      <arg direction=\"in\" type=\"s\" name=\"hint\"/>\n"
                 "    </method>\n"
-                "    <method name=\"SetSecretQuestions\">\n"
-                "      <arg direction=\"in\" type=\"a{iay}\" name=\"list\"/>\n"
-                "      <annotation value=\"questionType\" name=\"org.qtproject.QtDBus.QtTypeName.list\"/>\n"
-                "    </method>\n"
                 "    <method name=\"SetShell\">\n"
                 "      <arg direction=\"in\" type=\"s\" name=\"shell\"/>\n"
-                "    </method>\n"
-                "    <method name=\"VerifySecretQuestions\">\n"
-                "      <arg direction=\"in\" type=\"a{is}\" name=\"answers\"/>\n"
-                "      <arg direction=\"out\" type=\"ai\" name=\"failed\"/>\n"
-                "      <annotation value=\"anwserType\" name=\"org.qtproject.QtDBus.QtTypeName.anwsers\"/>\n"
-                "      <annotation value=\"anwserIndex\" name=\"org.qtproject.QtDBus.QtTypeName.failed\"/>\n"
                 "    </method>\n"
                 "    <property access=\"read\" type=\"s\" name=\"Locale\"/>\n"
                 "    <property access=\"read\" type=\"b\" name=\"Locked\"/>\n"
@@ -210,9 +196,6 @@ public:
     bool m_deleteGroupTrigger{false};
     bool m_deleteIconFileTrigger{false};
     bool m_getReminderInfoTrigger{false};
-    bool m_secretQuestionsTrigger{false};
-    bool m_setSecretQuestionsTrigger{false};
-    bool m_verifySecretQuestionsTrigger{false};
     bool m_setGroupsTrigger{false};
     bool m_setMaxPasswordAgeTrigger{false};
     bool m_setPasswordTrigger{false};
@@ -242,25 +225,6 @@ public slots:
     {
         m_getReminderInfoTrigger = true;
         return {};
-    }
-
-    Q_SCRIPTABLE anwserIndex GetSecretQuestions()
-    {
-        m_secretQuestionsTrigger = true;
-        return {};
-    }
-
-    Q_SCRIPTABLE void SetSecretQuestions(questionsType newquestions)
-    {
-        Q_UNUSED(newquestions)
-        m_setSecretQuestionsTrigger = true;
-    }
-
-    Q_SCRIPTABLE anwserIndex VerifySecretQuestions(anwserType answers)
-    {
-        Q_UNUSED(answers)
-        m_verifySecretQuestionsTrigger = true;
-        return {1, 2, 3, 4, 5};
     }
 
     Q_SCRIPTABLE void SetGroups(QStringList newgroups)
