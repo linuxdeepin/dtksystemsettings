@@ -57,10 +57,4 @@ dloginseat.h 中定义了管理用户seat的接口。
 @brief 切换到虚拟终端上的会话
 @param VTNr 虚拟终端号
 
-@fn void DLoginSeat::switchToNext()
-@brief 切换到下一个会话，如果没有活动的会话，切换到seat上的第一个会话。
-
-@fn void DLoginSeat::switchToPrevious()
-@brief 切换到上一个会话，如果没有活动的会话，切换到seat上的最后一个会话。
-
 */

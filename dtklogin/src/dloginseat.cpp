@@ -107,25 +107,5 @@ void DLoginSeat::switchTo(const uint VTNr)
     }
 }
 
-void DLoginSeat::switchToNext()
-{
-    Q_D(DLoginSeat);
-    QDBusPendingReply<> reply = d->m_inter->switchToNext();
-    reply.waitForFinished();
-    if (!reply.isValid()) {
-        qWarning() << reply.error().message();
-    }
-}
-
-void DLoginSeat::switchToPrevious()
-{
-    Q_D(DLoginSeat);
-    QDBusPendingReply<> reply = d->m_inter->switchToPrevious();
-    reply.waitForFinished();
-    if (!reply.isValid()) {
-        qWarning() << reply.error().message();
-    }
-}
-
 DLoginSeat::~DLoginSeat() = default;
 DLOGIN_END_NAMESPACE

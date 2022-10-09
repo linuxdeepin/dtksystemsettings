@@ -125,17 +125,3 @@ TEST_F(TestDLoginSeat, switchTo)
     m_dLoginSeat->switchTo(32);
     EXPECT_EQ(32, m_fakeService->m_VTNr);
 }
-
-TEST_F(TestDLoginSeat, switchToNext)
-{
-    m_fakeService->m_VTNr = 32;
-    m_dLoginSeat->switchToNext();
-    EXPECT_EQ(33, m_fakeService->m_VTNr);
-}
-
-TEST_F(TestDLoginSeat, switchToPrevious)
-{
-    m_fakeService->m_VTNr = 32;
-    m_dLoginSeat->switchToPrevious();
-    EXPECT_EQ(31, m_fakeService->m_VTNr);
-}
