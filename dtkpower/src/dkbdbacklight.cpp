@@ -18,8 +18,6 @@ void DKbdBacklightPrivate::connectDBusSignal()
 {
     Q_Q(DKbdBacklight);
     connect(m_kb_inter, &UPowerKbdBacklightInterface::BrightnessChanged, q, &DKbdBacklight::brightnessChanged);
-    // qDebug() << connect(m_kb_inter, &UPowerKbdBacklightInterface::BrightnessChanged, this, [=](const qint32 value) {
-    // });
     connect(
         m_kb_inter, &UPowerKbdBacklightInterface::BrightnessChangedWithSource, q, [q](const qint32 value, const QString &source) {
             QMap<QString, KbdSource> sourceMap;
