@@ -87,8 +87,8 @@ public:
 signals:
     void updateTimeChanged(const QDateTime &value);
     void percentageChanged(const double value);
-    void timeToEmptyChanged(const quint64 value);
-    void timeToFullChanged(const quint64 value);
+    void timeToEmptyChanged(const qint64 value);
+    void timeToFullChanged(const qint64 value);
     void energyRateChanged(const double value);
     void energyChanged(const double value);
     void iconNameChanged(const QString &value);

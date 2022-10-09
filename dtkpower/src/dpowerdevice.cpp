@@ -27,16 +27,16 @@ DPowerDevice::DPowerDevice(const QString &name, QObject *parent)
     connect(d->m_device_inter, &UPowerDeviceInterface::PercentageChanged, this, [this](const double value) {
         emit this->percentageChanged(value);
     });
-    connect(d->m_device_inter, &UPowerDeviceInterface::TimeToEmptyChanged, this, [this](const quint64 value) {
+    connect(d->m_device_inter, &UPowerDeviceInterface::TimeToEmptyChanged, this, [this](const qint64 value) {
         emit this->timeToEmptyChanged(value);
     });
-    connect(d->m_device_inter, &UPowerDeviceInterface::TimeToEmptyChanged, this, [this](const quint64 value) {
+    connect(d->m_device_inter, &UPowerDeviceInterface::TimeToEmptyChanged, this, [this](const qint64 value) {
         emit this->timeToEmptyChanged(value);
     });
-    connect(d->m_device_inter, &UPowerDeviceInterface::TimeToEmptyChanged, this, [this](const quint64 value) {
+    connect(d->m_device_inter, &UPowerDeviceInterface::TimeToEmptyChanged, this, [this](const qint64 value) {
         emit this->timeToEmptyChanged(value);
     });
-    connect(d->m_device_inter, &UPowerDeviceInterface::TimeToFullChanged, this, [this](const quint64 value) {
+    connect(d->m_device_inter, &UPowerDeviceInterface::TimeToFullChanged, this, [this](const qint64 value) {
         emit this->timeToFullChanged(value);
     });
     connect(d->m_device_inter, &UPowerDeviceInterface::EnergyRateChanged, this, [this](const double value) {

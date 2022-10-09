@@ -20,10 +20,16 @@ void DPowerManagerPrivate::connectDBusSignal()
 {
     Q_Q(DPowerManager);
     connect(m_manager_inter, &UPowerManagerInterface::DeviceAdded, q, [q](const QDBusObjectPath &path) {
-        emit q->deviceAdded(path.path());
+        emit q->deviceAdded(path.path().mid(32));
     });
     connect(m_manager_inter, &UPowerManagerInterface::DeviceRemoved, q, [q](const QDBusObjectPath &path) {
-        emit q->deviceRemoved(path.path());
+        emit q->deviceRemoved(path.path().mid(32));
+    });
+    connect(m_manager_inter, &UPowerManagerInterface::LidIsClosedChanged, q, [q](const bool &value) {
+        emit q->lidIsClosedChanged(value);
+    });
+    connect(m_manager_inter, &UPowerManagerInterface::LidIsPresentChanged, q, [q](const bool &value) {
+        emit q->lidIsPresentChanged(value);
     });
 }
 
@@ -33,6 +39,7 @@ DPowerManager::DPowerManager(QObject *parent)
 {
     Q_D(DPowerManager);
     d->m_manager_inter = new UPowerManagerInterface(this);
+    d->connectDBusSignal();
 }
 
 DPowerManager::~DPowerManager() {}
