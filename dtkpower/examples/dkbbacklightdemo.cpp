@@ -6,7 +6,9 @@
 #include <QCoreApplication>
 #include <iostream>
 #include <qdebug.h>
-
+#include <qobject.h>
+#include <qeventloop.h>
+DPOWER_USE_NAMESPACE
 int main(int argc, char **argv)
 {
     QCoreApplication app(argc, argv);
@@ -15,5 +17,13 @@ int main(int argc, char **argv)
     qDebug() << kb->brightness();
     qDebug() << "*************************************************";
     kb->setBrightness(1);
-    return 0;
+    QObject::connect(kb.data(), &Dtk::Power::DKbdBacklight::brightnessChanged, &app, [=](const qint32 value) {
+        qDebug() << "brightness:" << value;
+    });
+    QObject::connect(
+        kb.data(),
+        &Dtk::Power::DKbdBacklight::brightnessChangedWithSource,
+        &app,
+        [=](const qint32 value, const KbdSource &source) { qDebug() << "brightness:" << value << static_cast<int>(source); });
+    return app.exec();
 }
