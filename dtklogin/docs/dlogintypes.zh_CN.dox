@@ -3,52 +3,142 @@
 @file dlogintypes.h
 dlogintypes.h 中定义了login组件需要使用到的一些自定义数据结构。
 
-@struct Dtk::Login::ScheduledShutdownValue
-@brief 定义定时关机所用数据结构
-@param type: 电源管理类型：关机操作类型，可以是"poweroff"、"dry-poweroff"、"reboot"、"dry-reboot"、"halt "和 "dry-halt "之一
-@param usec: Unix时间戳，从1970年1月1日零点到现在的微秒数
+@enum Dtk::Login::ShutdownType dlogintypes.h
+@brief 定义关机类型
+@var ShutdownType ShutdownType::PowerOff
+关机
+@var ShutdownType ShutdownType::DryPowerOff
+实际并不执行关机
+@var ShutdownType ShutdownType::Reboot
+重启
+@var ShutdownType ShutdownType::DryReboot
+实际并不执行重启
+@var ShutdownType ShutdownType::Halt
+关机不关闭电源
+@var ShutdownType ShutdownType::DryHalt
+实际并不执行关机
 
-@struct Dtk::Login::SessionProperty
-@brief 定义Session所用的数据结构
-@param name: Session名
-@param var
+@struct Dtk::Login::ScheduledShutdownValue dlogintypes.h
+@brief 定义定时关机所用数据结构
+@var ScheduledShutdownValue ScheduledShutdownValue::type
+关机类型
+@var ScheduledShutdownValue ScheduledShutdownValue::time
+执行时间
+
+// TODO:需要确认这些参数各自代表什么意思
+@enum Dtk::Login::PowerAction
+@brief 定义关机键的动作
+@var PowerAction::PowerOff
+关机
+@var PowerAction::KExec
+@var PowerAction::Reboot
+重启
+@var PowerAction::Halt
+关机不关闭电源
+@var PowerAction::Suspend
+待机
+@var PowerAction::Hibernate
+休眠
+@var PowerAction::HybridSleep
+@var PowerAction::SuspendThenHibernate
+@var PowerAction::Lock
+@var PowerAction::FactoryReset
+@var PowerAction::Ignore
+忽略
+@var PowerAction::Unknown
+未知
+
+@enum Dtk::Login::ExecuteStatus
+@brief 是否可以执行当前动作
+@var ExecuteStatus::Yes
+可以
+@var ExecuteStatus::No
+硬件支持但用户不可以
+@var ExecuteStatus::Challenge
+鉴权后可以
+@var ExecuteStatus::Na
+硬件不支持
+@var ExecuteStatus::Unknown
+未知
+
+@enum Dtk::Login::SessionRole
+@brief 指定进程对象
+@var SessionRole::Leader
+父进程
+@var SessionRole::All
+所有进程
+@var SessionRole::Unknown
+未知
+
+@enum Dtk::Login::InhibitMode
+@brief 抑制锁的类型
+@var InhibitMode::Block
+完全禁止操作，直到锁被释放。
+@var InhibitMode::Delay
+只是暂时禁止操作，直到锁被释放或达到一定的时间。DLoginManager::inhibitDelayMaxUSec获取超时时间。这旨在提供需要在系统挂起之前以同步方式执行操作但不允许无限期阻止挂起的应用程序使用。此模式仅适用于睡眠和关机的锁定。
+\sa DLoginManager::inhibitDelayMaxUSec
+@var InhibitMode::Unknown
+未知
+
+@enum Dtk::Login::SessionState
+@brief 会话状态
+@var SessionState::Online
+在线
+@var SessionState::Active
+已激活
+@var SessionState::Closing
+关闭中
+
+@enum Dtk::Login::SessionType
+@brief 会话类型
+@var SessionType::TTY
+TTY环境
+@var SessionType::X11
+X11环境
+@var SessionType::Mir
+Mir环境
+@var SessionType::Wayland
+Wayland环境
+@var SessionType::Unspecified
+未知的环境
+
+@enum Dtk::Login::SessionClass
+@brief 会话类别
+@var SessionClass::User
+由用户创建
+@var SessionClass::Greeter
+由登录界面创建
+@var SessionClass::LockScreen
+由锁屏程序创建
+@var SessionClass::Unknown
+未知
+
+@enum Dtk::Login::UserState
+@brief 用户状态
+@var UserState::Offline
+离线
+@var UserState::Lingering
+滞留中，
+@var UserState::Online
+在线
+@var UserState::Active
+已激活
+@var UserState::Unknown
+未知
 
 @struct Dtk::Login::Inhibitor
 @brief 一个结构数组
-@param what: 电源模式（关机，待机，休眠等）
-@param who: 发出抑制器的对象
-@param why: 为何发出抑制器
-@param mode: 抑制器模式
-@param UID: 用户id
-@param PID: 进程id
-
-@struct Dtk::Login::Seat
-@param seatId: seat编号,例如:“seat0”
-@param path: seat路径
-
-@struct Dtk::Login::Session
-@param sessionId: 会话编号
-@param userId: 用户编号
-@param username: 用户名
-@param seatId: seat编号,例如:“seat0”
-@param path: 路径
-
-@struct Dtk::Login::User
-@param userId: 用户编号
-@param username: 用户名
-@param path: 路径
-
-@struct Dtk::Login::SeatPath
-\sa Dtk::Login::Seat
-
-@struct Dtk::Login::SessionPath
-@param sessionId: 会话编号
-@param path: 路径
-
-@struct Dtk::Login::UserPath
-@param userId: 用户编号
-@param path: 路径
-
-
+@var Inhibitor::what
+电源模式（关机，待机，休眠等）
+@var Inhibitor::who
+发出抑制器的对象
+@var Inhibitor::why
+为何发出抑制器
+@var Inhibitor::mode
+抑制器模式
+@var Inhibitor::UID
+用户id
+@var Inhibitor::PID
+进程id
 
 */

@@ -29,11 +29,9 @@ dloginseat.h 中定义了管理用户seat的接口。
 @return 布尔值
 
 @fn QList<QString> DLoginSeat::sessions() const
-@brief 会话属性是这个Seat的所有当前会话的数组
-    每个会话都被编码为一个由ID和对象路径组成的数据结构。
+@brief 会话属性是这个Seat的所有当前会话的数组，由会话ID组成
 @note 注意，返回的是一个QList,需要使用[]来获取列表中某个元素
-@return [('<ID>','<对象路径>')]
-\sa Dtk::Login::SessionPath
+@return 由会话ID组成的数组
 
 @fn QString DLoginSeat::id() const
 @brief 对seat的id进行编码
@@ -54,19 +52,15 @@ dloginseat.h 中定义了管理用户seat的接口。
 
 @fn void DLoginSeat::activateSession(const QString &sessionId)
 @brief 将指定id的会话带到前台
-@return 无
 
 @fn void DLoginSeat::switchTo(const uint VTNr)
 @brief 切换到虚拟终端上的会话
-@param 会话号
-@return 无
+@param VTNr 虚拟终端号
 
 @fn void DLoginSeat::switchToNext()
 @brief 切换到下一个会话，如果没有活动的会话，切换到seat上的第一个会话。
-@return 无
 
 @fn void DLoginSeat::switchToPrevious()
 @brief 切换到上一个会话，如果没有活动的会话，切换到seat上的最后一个会话。
-@return 无
 
 */
