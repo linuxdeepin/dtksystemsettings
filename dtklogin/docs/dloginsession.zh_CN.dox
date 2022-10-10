@@ -9,6 +9,9 @@ loginsession.h 中定义了会话管理的接口
 
 DLoginSession 中定义了会话管理的接口
 
+@fn DLoginSession::DLoginSession()
+@brief 此函数为私有构造函数，应使用DLoginManager获取该对象，需要通过调用`DLoginManager::findSessionById()`、`DLoginManager::findSessionByPID()`或者`DLoginManager::currentSession()`函数获取
+
 @fn bool DLoginSession::active() const
 @brief 读取 active 属性
 
@@ -151,10 +154,6 @@ DLoginSession 中定义了会话管理的接口
 @brief 改变session的空闲状态
 由session对象调用时候以便更改会话的空闲状态
 
-@fn void DLoginSession::setLocked(const bool locked)
-@brief 设置session的锁定状态
-对应Login上的SetLockedHint()方法，可以用于将锁定提示设置为锁定，也就是说session是否被锁定的信息。这个可以由桌面环境告诉systemd-logind 什么时候锁定会话
-
 @fn void DLoginSession::setType(const SessionType &type)
 @brief 更改session的类型
 对应Login上的SetType() 方法。该方法允许动态改变会话类型，只能由session当前的控制器调用。如果尚未调用TakeControl()方法，这个方法会失效。此外，一旦控制被释放，session类型会重置，或者使用ReleaseControl方法或者关闭D-Bus连接可以实现重置的效果。这个应该有助于防止session进入不一致的状态，比如控制器崩溃时候。唯一的参数 argument type是指的新的session 类型。
@@ -282,12 +281,12 @@ session有3种状态，"online","active","closing"。当session已经登陆了�
 描述session的空闲状态,类似于管理器对象上各个属性如何为整个系统执行操作
 
 @property DLoginSession::createdTime 
-@brief 返回对系统时间的最佳猜测
+@brief 返回会话的创建时间
 
 timestamp 返回CLOCK_REALTIME。CLOCK_REALTIME 是对于机器绝对时间的猜测。
 
 @property DLoginSession::createdTimeMonotonic 
-@brief 来自过去某个任意固定点以来经过的绝对时间
+@brief 以CLOCK_MONOTONIC的形式获取session创建的时间戳
 
 timestampMonotonic() 返回CLOCK_MONOTONIC,该时间表示来自过去某个任意点经过的绝对时间，不受系统时钟变化影响
 */
