@@ -41,7 +41,7 @@ void DPowerSettingsPrivate::connectDBusSignal()
     connect(m_systemPowerInter, &SystemPowerInterface::CpuBoostChanged, q, &DPowerSettings::cpuBoostChanged);
     connect(m_systemPowerInter, &SystemPowerInterface::ModeChanged, q, [q](const QString &value) {
         if (value == "powsersave")
-            emit q->powerModeChanged(PowerMode::Powersave);
+            emit q->powerModeChanged(PowerMode::PowerSave);
         else if (value == "performance")
             emit q->powerModeChanged(PowerMode::Performance);
         else if (value == "balance")
@@ -128,7 +128,7 @@ PowerMode DPowerSettings::powerMode() const
     QMap<QString, PowerMode> modeMap;
     modeMap["performance"] = PowerMode::Performance;
     modeMap["balance"] = PowerMode::Balance;
-    modeMap["powersave"] = PowerMode::Powersave;
+    modeMap["powersave"] = PowerMode::PowerSave;
     auto mode = d->m_systemPowerInter->mode();
     PowerMode realMode;
     if (modeMap.contains(mode))
@@ -147,7 +147,7 @@ void DPowerSettings::setPowerMode(const PowerMode &mode)
     QMap<PowerMode, QString> modeMap;
     modeMap[PowerMode::Performance] = "performance";
     modeMap[PowerMode::Balance] = "balance";
-    modeMap[PowerMode::Powersave] = "powersave";
+    modeMap[PowerMode::PowerSave] = "powersave";
     d->m_systemPowerInter->setMode(modeMap[mode]);
 }
 
