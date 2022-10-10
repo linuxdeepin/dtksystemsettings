@@ -5,6 +5,9 @@
 #include "signaldemo.h"
 #include "dloginsession.h"
 #include <qdebug.h>
+#include <qfile.h>
+#include <qdir.h>
+#include <qtextstream.h>
 SignalDemo::SignalDemo(QObject *parent)
     : Demo(parent)
     , m_manager(new DLoginManager)
@@ -31,6 +34,17 @@ int SignalDemo::run()
     connect(m_currentSession.data(), &DLoginSession::autostartRemoved, this, [=](const QString &name) {
         qDebug() << "Autostart" << name << "is removed.";
     });
-    m_currentSession->lock();
+    connect(
+        m_manager, &DLoginManager::prepareForSleep, this, [=](bool value) { qDebug() << "Prepare for sleep, value:" << value; });
+    connect(m_manager, &DLoginManager::prepareForShutdown, this, [=](bool value) {
+        qDebug() << "Prepare for shutdown, value:" << value;
+        QFile file(QDir::currentPath() + "/shutdown.log");
+        while (!file.open(QIODevice::ReadWrite | QIODevice::Append))
+            ;
+        QTextStream stream(&file);
+        stream << QDateTime::currentDateTime().toString() << ": value = " << value;
+        file.close();
+    });
+
     return 0;
 }

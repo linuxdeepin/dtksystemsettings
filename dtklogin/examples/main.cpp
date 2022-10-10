@@ -6,13 +6,14 @@
 #include "demo.h"
 #include "signaldemo.h"
 #include "propertydemo.h"
+#include "powerdemo.h"
 
 DLOGIN_USE_NAMESPACE
 
 int main(int argc, char *argv[])
 {
     QCoreApplication app(argc, argv);
-    QList<Demo *> demos = {new SignalDemo(&app), new PropertyDemo(&app)};
+    QList<Demo *> demos = {new SignalDemo(&app), new PropertyDemo(&app), new PowerDemo(&app)};
     foreach (const auto demo, demos) {
         demo->run();
     }
