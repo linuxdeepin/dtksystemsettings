@@ -31,7 +31,8 @@ sudo cmake --build build --target install
 
 任何使用问题都可以通过以下方式寻求帮助:
 
-* [Gitter](https://gitter.im/orgs/linuxdeepin/rooms)
+* [Telegram group](https://t.me/deepin)
+* [Matrix](https://matrix.to/#/#deepin-community:matrix.org)
 * [IRC channel](https://webchat.freenode.net/?channels=deepin)
 * [Forum](https://bbs.deepin.org)
 * [WiKi](https://wiki.deepin.org/)
