@@ -128,7 +128,6 @@ public Q_SLOTS:
     QList<QString> listSessions();
     QList<quint32> listUsers();
     void lockSession(const QString &sessionId);
-    void lockSessions();
     void powerOff(const bool interactive = false);
     void reboot(const bool interactive = false);
     void scheduleShutdown(const ShutdownType &type, const QDateTime &usec);

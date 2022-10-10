@@ -33,11 +33,11 @@ DLoginSeat::DLoginSeat(const QString &path, QObject *parent)
     d->m_inter = new Login1SeatInterface(Service, path, connection, this);
 }
 
-QList<QString> DLoginSeat::sessions() const
+QStringList DLoginSeat::sessions() const
 {
     Q_D(const DLoginSeat);
     const auto &result = d->m_inter->sessions();
-    QList<QString> sessionIds;
+    QStringList sessionIds;
     for (const auto &sessionPath : result) {
         sessionIds.append(sessionPath.sessionId);
     }
@@ -78,7 +78,7 @@ QString DLoginSeat::activeSession() const
 QDateTime DLoginSeat::idleSinceHint() const
 {
     Q_D(const DLoginSeat);
-    return QDateTime::fromMSecsSinceEpoch(d->m_inter->idleSinceHint());
+    return QDateTime::fromMSecsSinceEpoch(d->m_inter->idleSinceHint() / 1000);
 }
 
 quint64 DLoginSeat::idleSinceHintMonotonic() const

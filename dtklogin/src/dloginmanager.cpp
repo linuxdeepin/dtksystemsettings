@@ -41,6 +41,14 @@ DLoginManager::DLoginManager(QObject *parent)
     DBusSeat::registerMetaType();
     DBusSession::registerMetaType();
     DBusUser::registerMetaType();
+    qRegisterMetaType<ShutdownType>("ShutdownType");
+    qRegisterMetaType<ScheduledShutdownValue>("ScheduledShutdownValue");
+    qRegisterMetaType<PowerAction>("PowerAction");
+    qRegisterMetaType<ExecuteStatus>("ExecuteStatus");
+    qRegisterMetaType<SessionRole>("SessionRole");
+    qRegisterMetaType<InhibitMode>("InhibitMode");
+    qRegisterMetaType<Inhibitor>("Inhibitor");
+    Utils::registerAllStringConverter();
     d->m_inter = new Login1ManagerInterface(Service, Path, connection, d);
     connect(d->m_inter, &Login1ManagerInterface::prepareForShutdown, this, &DLoginManager::prepareForShutdown);
     connect(d->m_inter, &Login1ManagerInterface::prepareForSleep, this, &DLoginManager::prepareForSleep);
@@ -170,7 +178,7 @@ ScheduledShutdownValue DLoginManager::scheduledShutdown() const
     const auto &result = d->m_inter->scheduledShutdown();
     ScheduledShutdownValue value;
     value.type = Utils::stringToShutdownType(result.type);
-    value.time = QDateTime::fromMSecsSinceEpoch(result.usec);
+    value.time = QDateTime::fromMSecsSinceEpoch(result.usec / 1000);
     return value;
 }
 
@@ -195,7 +203,7 @@ quint64 DLoginManager::idleActionUSec() const
 QDateTime DLoginManager::idleSinceHint() const
 {
     Q_D(const DLoginManager);
-    return QDateTime::fromMSecsSinceEpoch(d->m_inter->idleSinceHint());
+    return QDateTime::fromMSecsSinceEpoch(d->m_inter->idleSinceHint() / 1000);
 }
 
 quint64 DLoginManager::idleSinceHintMonotonic() const
@@ -470,7 +478,7 @@ int DLoginManager::inhibit(int what, const QString &who, const QString &why, con
         qWarning() << reply.error().message();
         return -1;
     }
-    return reply.value().fileDescriptor();
+    return reply.value().takeFileDescriptor();
 }
 
 void DLoginManager::killSession(const QString &sessionId, const SessionRole &who, const qint32 signalNumber)
@@ -567,16 +575,6 @@ void DLoginManager::lockSession(const QString &sessionId)
     }
 }
 
-void DLoginManager::lockSessions()
-{
-    Q_D(DLoginManager);
-    QDBusPendingReply<> reply = d->m_inter->lockSessions();
-    reply.waitForFinished();
-    if (!reply.isValid()) {
-        qWarning() << reply.error().message();
-    }
-}
-
 void DLoginManager::powerOff(const bool interactive)
 {
     Q_D(DLoginManager);
@@ -600,7 +598,7 @@ void DLoginManager::reboot(const bool interactive)
 void DLoginManager::scheduleShutdown(const ShutdownType &type, const QDateTime &usec)
 {
     Q_D(DLoginManager);
-    QDBusPendingReply<> reply = d->m_inter->scheduleShutdown(Utils::shutdownTypeToString(type), usec.toMSecsSinceEpoch());
+    QDBusPendingReply<> reply = d->m_inter->scheduleShutdown(Utils::shutdownTypeToString(type), usec.toMSecsSinceEpoch() * 1000);
     reply.waitForFinished();
     if (!reply.isValid()) {
         qWarning() << reply.error().message();

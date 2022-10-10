@@ -353,13 +353,6 @@ TEST_F(TestDLoginSession, setIdleHint)
     EXPECT_TRUE(m_fakeService->m_idleHint);
 }
 
-TEST_F(TestDLoginSession, setLocked)
-{
-    m_sessionManagerService->m_locked = false;
-    m_dLoginSession->setLocked(true);
-    EXPECT_TRUE(m_sessionManagerService->m_locked);
-}
-
 TEST_P(TestSessionType, setType)
 {
     auto params = GetParam();

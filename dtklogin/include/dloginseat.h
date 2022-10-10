@@ -19,7 +19,7 @@ class DLoginSeat : public QObject
 public:
     ~DLoginSeat() override;
 
-    Q_PROPERTY(QList<QString> sessions READ sessions);
+    Q_PROPERTY(QStringList sessions READ sessions);
     Q_PROPERTY(bool canGraphical READ canGraphical);
     Q_PROPERTY(bool canTTY READ canTTY);
     Q_PROPERTY(bool idleHint READ idleHint);
@@ -31,7 +31,7 @@ public:
     bool canGraphical() const;
     bool canTTY() const;
     bool idleHint() const;
-    QList<QString> sessions() const;
+    QStringList sessions() const;
     QString id() const;
     QString activeSession() const;
     QDateTime idleSinceHint() const;
