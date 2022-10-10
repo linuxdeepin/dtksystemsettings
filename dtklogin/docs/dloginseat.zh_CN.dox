@@ -13,6 +13,9 @@ dloginseat.h 中定义了管理用户seat的接口。
     后跟至少一个 [a-zA-Z0-9]、" _" 和 " -" 范围内的字符。它们适合用作文件名。seat名称可能稳定，
     也可能不稳定，如果座位再次可用，则可能会复用。经过测试，在同一台主机上使用vnc启动两个用户桌面，也只有一个seat0
 
+@fn DLoginSeat::DLoginSeat()
+@brief 此函数为私有构造函数，应使用DLoginManager获取该对象，需要通过调用`DLoginManager::findSeatById()`或者`DLoginManager::currentSeat()`来获取
+
 @fn bool DLoginSeat::canGraphical() const
 @brief 判断是否适合图形会话
     该属性无需传入值，若适合返回true不适合返回false
@@ -28,7 +31,7 @@ dloginseat.h 中定义了管理用户seat的接口。
     该属性无需传入值，若会话空闲返回true不空闲返回false
 @return 布尔值
 
-@fn QList<QString> DLoginSeat::sessions() const
+@fn QStringList DLoginSeat::sessions() const
 @brief 会话属性是这个Seat的所有当前会话的数组，由会话ID组成
 @note 注意，返回的是一个QList,需要使用[]来获取列表中某个元素
 @return 由会话ID组成的数组

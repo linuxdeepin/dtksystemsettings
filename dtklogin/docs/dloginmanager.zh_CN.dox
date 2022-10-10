@@ -9,6 +9,8 @@ dloginmanager.h 中定义了登录管理对象的接口。
 
 DLoginManager 中定义了登录管理对象的接口。
 
+@fn DLoginManager::DLoginManager()
+@brief 构造获取login manager
 
 @fn QStringList DLoginManager::killExcludeUsers() const
 @brief 读取 KillExcludeUsers 属性。
@@ -316,9 +318,6 @@ DLoginManager 中定义了登录管理对象的接口。
 @fn void DLoginManager::lockSession(const QString &sessionId)
 @brief 要求具有指定 ID 的会话激活屏幕锁定
 @param[in] sessionId: 会话id
-
-@fn void DLoginManager::lockSessions()
-@brief 要求所有会话激活其屏幕锁定。这可用于在一个操作中锁定对整个机器的访问。
 
 @fn void DLoginManager::powerOff(const bool interactive)
 @brief 关机
