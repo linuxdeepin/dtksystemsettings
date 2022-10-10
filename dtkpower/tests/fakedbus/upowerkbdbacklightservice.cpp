@@ -42,17 +42,17 @@ void UPowerKbdBacklightService::unRegisterService()
 
 // pubilc slots
 
-uint UPowerKbdBacklightService::GetBrightness() const
+qint32 UPowerKbdBacklightService::GetBrightness() const
 {
     return 0;
 }
 
-uint UPowerKbdBacklightService::GetMaxBrightness() const
+qint32 UPowerKbdBacklightService::GetMaxBrightness() const
 {
     return 255;
 }
 
-void UPowerKbdBacklightService::SetBrightness(const uint value)
+void UPowerKbdBacklightService::SetBrightness(const qint32 value)
 {
     Q_UNUSED(value)
     m_reset = true;
