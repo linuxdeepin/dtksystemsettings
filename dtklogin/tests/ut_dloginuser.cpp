@@ -161,7 +161,7 @@ TEST_F(TestDLoginUser, propertyIdleSinceHint)
 {
     m_fakeService->m_idleSinceHint = 1000;
     ASSERT_EQ(1000, m_fakeService->idleSinceHint());
-    EXPECT_EQ(1000, m_dLoginUser->idleSinceHint().toMSecsSinceEpoch());
+    EXPECT_EQ(1, m_dLoginUser->idleSinceHint().toMSecsSinceEpoch());
 }
 
 TEST_F(TestDLoginUser, propertyIdleSinceHintMonotonic)
@@ -178,7 +178,7 @@ TEST_F(TestDLoginUser, propertyLoginTime)
 {
     m_fakeService->m_timestamp = 1000;
     ASSERT_EQ(1000, m_fakeService->timestamp());
-    EXPECT_EQ(1000, m_dLoginUser->loginTime().toMSecsSinceEpoch());
+    EXPECT_EQ(1, m_dLoginUser->loginTime().toMSecsSinceEpoch());
 }
 
 TEST_F(TestDLoginUser, propertyLoginTimeMonotonic)

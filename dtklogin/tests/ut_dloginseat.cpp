@@ -94,12 +94,12 @@ TEST_F(TestDLoginSeat, propertyActiveSession)
 
 TEST_F(TestDLoginSeat, propertyIdleSinceHint)
 {
-    m_fakeService->m_idleSinceHint = 1500;
-    ASSERT_EQ(1500, m_fakeService->idleSinceHint());
-    EXPECT_EQ(1500, m_dLoginSeat->idleSinceHint().toMSecsSinceEpoch());
+    m_fakeService->m_idleSinceHint = 1000;
+    ASSERT_EQ(1000, m_fakeService->idleSinceHint());
+    EXPECT_EQ(1, m_dLoginSeat->idleSinceHint().toMSecsSinceEpoch());
     m_fakeService->m_idleSinceHint = 3000;
     ASSERT_EQ(3000, m_fakeService->idleSinceHint());
-    EXPECT_EQ(3000, m_dLoginSeat->idleSinceHint().toMSecsSinceEpoch());
+    EXPECT_EQ(3, m_dLoginSeat->idleSinceHint().toMSecsSinceEpoch());
 }
 
 TEST_F(TestDLoginSeat, propertyIdleSinceHintMonotonic)

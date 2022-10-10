@@ -259,12 +259,12 @@ TEST_F(TestDLoginManager, propertyScheduledShutdown)
     ASSERT_EQ("poweroff", m_fakeService->scheduledShutdown().type);
     ASSERT_EQ(1000, m_fakeService->scheduledShutdown().usec);
     EXPECT_EQ(ShutdownType::PowerOff, m_dLoginManager->scheduledShutdown().type);
-    EXPECT_EQ(1000, m_dLoginManager->scheduledShutdown().time.toMSecsSinceEpoch());
-    m_fakeService->m_scheduledShutdown = {.type = "", .usec = 1500};
+    EXPECT_EQ(1, m_dLoginManager->scheduledShutdown().time.toMSecsSinceEpoch());
+    m_fakeService->m_scheduledShutdown = {.type = "", .usec = 2000};
     ASSERT_EQ("", m_fakeService->scheduledShutdown().type);
-    ASSERT_EQ(1500, m_fakeService->scheduledShutdown().usec);
+    ASSERT_EQ(2000, m_fakeService->scheduledShutdown().usec);
     EXPECT_EQ(ShutdownType::Unknown, m_dLoginManager->scheduledShutdown().type);
-    EXPECT_EQ(1500, m_dLoginManager->scheduledShutdown().time.toMSecsSinceEpoch());
+    EXPECT_EQ(2, m_dLoginManager->scheduledShutdown().time.toMSecsSinceEpoch());
 }
 
 TEST_F(TestDLoginManager, propertyNAutoVTs)
@@ -301,7 +301,7 @@ TEST_F(TestDLoginManager, propertyIdleSinceHint)
 {
     m_fakeService->m_idleSinceHint = 1000;
     ASSERT_EQ(1000, m_fakeService->idleSinceHint());
-    EXPECT_EQ(1000, m_dLoginManager->idleSinceHint().toMSecsSinceEpoch());
+    EXPECT_EQ(1, m_dLoginManager->idleSinceHint().toMSecsSinceEpoch());
 }
 
 TEST_F(TestDLoginManager, propertyIdleSinceHintMonotonic)
@@ -800,7 +800,7 @@ TEST_P(TestScheduleShutdown, scheduleShutdown)
     m_fakeService->m_scheduledShutdown.usec = 0;
     m_dLoginManager->scheduleShutdown(params.type, QDateTime::fromMSecsSinceEpoch(params.usec));
     EXPECT_EQ(params.strType, m_fakeService->m_scheduledShutdown.type);
-    EXPECT_EQ(params.usec, m_fakeService->m_scheduledShutdown.usec);
+    EXPECT_EQ(params.usec * 1000, m_fakeService->m_scheduledShutdown.usec);
 }
 
 INSTANTIATE_TEST_CASE_P(Default,
