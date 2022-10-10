@@ -40,8 +40,8 @@ public:
     Q_PROPERTY(double Temperature READ temperature);
     Q_PROPERTY(double Voltage READ voltage);
     Q_PROPERTY(quint32 ChargeCycles READ chargeCycles);
-    Q_PROPERTY(quint64 TimeToEmpty READ timeToEmpty NOTIFY TimeToEmptyChanged);
-    Q_PROPERTY(quint64 TimeToFull READ timeToFull NOTIFY TimeToFullChanged);
+    Q_PROPERTY(qint64 TimeToEmpty READ timeToEmpty NOTIFY TimeToEmptyChanged);
+    Q_PROPERTY(qint64 TimeToFull READ timeToFull NOTIFY TimeToFullChanged);
     Q_PROPERTY(QString IconName READ iconName NOTIFY IconNameChanged);
     Q_PROPERTY(QString Model READ model);
     Q_PROPERTY(QString NativePath READ nativePath);
@@ -72,8 +72,8 @@ public:
     double temperature() const;
     double voltage() const;
     qint32 chargeCycles() const;
-    quint64 timeToEmpty() const;
-    quint64 timeToFull() const;
+    qint64 timeToEmpty() const;
+    qint64 timeToFull() const;
     QString iconName() const;
     QString model() const;
     QString nativePath() const;
