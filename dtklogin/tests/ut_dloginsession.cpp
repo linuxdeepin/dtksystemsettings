@@ -29,6 +29,7 @@ public:
         , m_dLoginSession(new DLoginSession("/org/freedesktop/login1/session"))
     {
         m_dLoginSession->d_ptr->m_inter->m_interface->setTimeout(INT_MAX);
+        qputenv("XDG_CURRENT_DESKTOP", "Deepin");
     }
 
     virtual ~TestDLoginSession()
