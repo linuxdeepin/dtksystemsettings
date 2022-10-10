@@ -126,7 +126,7 @@ signals:
     void sleepLockChanged(const bool value);
     void powerSavingModeEnabledChanged(const bool value);
     void powerSavingModeBrightnessDataChanged(const QString &value);
-    void CpuBoostChanged(const bool value);
+    void cpuBoostChanged(const bool value);
 
 public slots:
     void reset();
