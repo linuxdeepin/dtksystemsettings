@@ -38,7 +38,7 @@ void DPowerSettingsPrivate::connectDBusSignal()
             &SystemPowerInterface::PowerSavingModeBrightnessDataChanged,
             q,
             &DPowerSettings::powerSavingModeBrightnessDataChanged);
-    connect(m_systemPowerInter, &SystemPowerInterface::CpuBoostChanged, q, &DPowerSettings::CpuBoostChanged);
+    connect(m_systemPowerInter, &SystemPowerInterface::CpuBoostChanged, q, &DPowerSettings::cpuBoostChanged);
     connect(m_systemPowerInter, &SystemPowerInterface::ModeChanged, q, [q](const QString &value) {
         if (value == "powsersave")
             emit q->powerModeChanged(PowerMode::Powersave);
