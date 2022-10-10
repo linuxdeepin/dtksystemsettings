@@ -20,8 +20,8 @@ class DLoginSession : public QObject
 public:
     virtual ~DLoginSession();
     Q_PROPERTY(bool active READ active);
-    Q_PROPERTY(bool idleHint READ idleHint);
-    Q_PROPERTY(bool locked READ locked WRITE setLocked NOTIFY lockedChanged);
+    Q_PROPERTY(bool idleHint READ idleHint WRITE setIdleHint);
+    Q_PROPERTY(bool locked READ locked NOTIFY lockedChanged);
     Q_PROPERTY(bool remote READ remote);
     Q_PROPERTY(SessionClass sessionClass READ sessionClass);
     Q_PROPERTY(QString desktop READ desktop);
@@ -34,7 +34,7 @@ public:
     Q_PROPERTY(QString service READ service);
     Q_PROPERTY(SessionState state READ state);
     Q_PROPERTY(QString TTY READ TTY);
-    Q_PROPERTY(SessionType type READ type);
+    Q_PROPERTY(SessionType type READ type WRITE setType);
     Q_PROPERTY(QString seat READ seat);
     Q_PROPERTY(quint32 user READ user);
     Q_PROPERTY(quint32 audit READ audit);
@@ -82,7 +82,6 @@ public slots:
     void kill(SessionRole who, const qint32 signalNumber);
     void lock();
     void setIdleHint(const bool idle);
-    void setLocked(const bool locked);  // FIXME We do not have the permission
     void setType(SessionType type);
     void terminate();
     QStringList autostartList();

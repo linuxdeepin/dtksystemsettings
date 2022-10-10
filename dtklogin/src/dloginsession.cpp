@@ -44,6 +44,9 @@ DLoginSession::DLoginSession(const QString &path, QObject *parent)
     Q_D(DLoginSession);
     DBusSeatPath::registerMetaType();
     DBusUserPath::registerMetaType();
+    qRegisterMetaType<SessionState>("SessionState");
+    qRegisterMetaType<SessionType>("SessionType");
+    qRegisterMetaType<SessionClass>("SessionClass");
     d->m_inter = new Login1SessionInterface(Service, path, connection, this);
     d->m_startManagerInter =
         new StartManagerInterface(StartManagerService, StartManagerPath, QDBusConnection::sessionBus(), this);
@@ -188,7 +191,7 @@ quint32 DLoginSession::VTNr() const
 QDateTime DLoginSession::idleSinceHint() const
 {
     Q_D(const DLoginSession);
-    return QDateTime::fromMSecsSinceEpoch(d->m_inter->idleSinceHint());
+    return QDateTime::fromMSecsSinceEpoch(d->m_inter->idleSinceHint() / 1000);
 }
 
 quint64 DLoginSession::idleSinceHintMonotonic() const
@@ -200,7 +203,7 @@ quint64 DLoginSession::idleSinceHintMonotonic() const
 QDateTime DLoginSession::createdTime() const
 {
     Q_D(const DLoginSession);
-    return QDateTime::fromMSecsSinceEpoch(d->m_inter->timestamp());
+    return QDateTime::fromMSecsSinceEpoch(d->m_inter->timestamp() / 1000);
 }
 quint64 DLoginSession::createdTimeMonotonic() const
 {
@@ -240,15 +243,6 @@ void DLoginSession::setIdleHint(const bool idle)
 {
     Q_D(DLoginSession);
     QDBusPendingReply<> reply = d->m_inter->setIdleHint(idle);
-    reply.waitForFinished();
-    if (!reply.isValid()) {
-        qWarning() << reply.error().message();
-    }
-}
-void DLoginSession::setLocked(const bool locked)
-{
-    Q_D(DLoginSession);
-    QDBusPendingReply<> reply = d->m_sessionManagerInter->SetLocked(locked);
     reply.waitForFinished();
     if (!reply.isValid()) {
         qWarning() << reply.error().message();

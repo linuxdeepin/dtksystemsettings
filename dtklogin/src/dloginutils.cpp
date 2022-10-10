@@ -94,7 +94,6 @@ QString statusToString(const ExecuteStatus &status)
         case ExecuteStatus::Na:
             return "na";
         default:
-            qWarning() << "Not supported status";
             return "";
     }
 }
@@ -120,8 +119,10 @@ SessionRole stringToSessionRole(const QString &strSessionRole)
 {
     if (strSessionRole == "leader") {
         return SessionRole::Leader;
-    } else {
+    } else if (strSessionRole == "all") {
         return SessionRole::All;
+    } else {
+        return SessionRole::Unknown;
     }
 }
 PowerAction stringToAction(const QString &strAction)
@@ -139,7 +140,6 @@ PowerAction stringToAction(const QString &strAction)
     if (actionMap.contains(strAction)) {
         return actionMap[strAction];
     } else {
-        qWarning() << "Not supported action.";
         return PowerAction::Unknown;
     }
 }
@@ -181,7 +181,6 @@ ShutdownType stringToShutdownType(const QString &strType)
     if (typeMap.contains(strType)) {
         return typeMap[strType];
     } else {
-        qWarning() << "Not supported shutdown type.";
         return ShutdownType::Unknown;
     }
 }
@@ -204,7 +203,6 @@ SessionClass stringToSessionClass(const QString &strClass)
     } else if (strClass == "lock-screen") {
         return SessionClass::LockScreen;
     } else {
-        qWarning() << "Not supported session class.";
         return SessionClass::Unknown;
     }
 }
@@ -228,7 +226,6 @@ SessionType stringToSessionType(const QString &strType)
     if (sessionMap.contains(strType)) {
         return sessionMap[strType];
     } else {
-        qWarning() << "Not supported session type.";
         return SessionType::Unspecified;
     }
 }
@@ -249,7 +246,6 @@ SessionState stringToSessionState(const QString &strState)
     } else if (strState == "closing") {
         return SessionState::Closing;
     } else {
-        qWarning() << "Not supported session state.";
         return SessionState::Unknown;
     }
 }
@@ -273,10 +269,50 @@ UserState stringToUserState(const QString &strState)
     if (stateMap.contains(strState)) {
         return stateMap[strState];
     } else {
-        qWarning() << "Not supported user state.";
         return UserState::Unknown;
     }
 }
+
+QString scheduledShutdownValueToString(const ScheduledShutdownValue &value)
+{
+    return "{type: " + shutdownTypeToString(value.type) + ", time: " + value.time.toString() + "}";
+}
+
+QString inhibitorToString(const Inhibitor &inhibitor)
+{
+    QString str = "{";
+    str += "what: " + Utils::decodeBehavior(inhibitor.what) + ", ";
+    str += "who: " + inhibitor.who + ", ";
+    str += "why: " + inhibitor.why + ", ";
+    str += "mode: " + Utils::modeToString(inhibitor.mode) + ", ";
+    str += "UID: " + QString::number(inhibitor.UID) + ", ";
+    str += "PID: " + QString::number(inhibitor.PID) + "}";
+    return str;
+}
+
+bool registerAllStringConverter()
+{
+    static bool registered = false;
+    if (!registered) {
+        QMetaType::registerConverter<ShutdownType, QString, QString (*)(const ShutdownType &)>(shutdownTypeToString);
+        QMetaType::registerConverter<PowerAction, QString, QString (*)(const PowerAction &)>(actionToString);
+        QMetaType::registerConverter<ExecuteStatus, QString, QString (*)(const ExecuteStatus &)>(statusToString);
+        QMetaType::registerConverter<SessionRole, QString, QString (*)(const SessionRole &)>(sessionRoleToString);
+        QMetaType::registerConverter<InhibitMode, QString, QString (*)(const InhibitMode &)>(modeToString);
+        QMetaType::registerConverter<SessionState, QString, QString (*)(const SessionState &)>(sessionStateToString);
+        QMetaType::registerConverter<SessionType, QString, QString (*)(const SessionType &)>(sessionTypeToString);
+        QMetaType::registerConverter<SessionClass, QString, QString (*)(const SessionClass &)>(sessionClassToString);
+        QMetaType::registerConverter<UserState, QString, QString (*)(const UserState &)>(userStateToString);
+        QMetaType::registerConverter<ScheduledShutdownValue, QString, QString (*)(const ScheduledShutdownValue &)>(
+            scheduledShutdownValueToString);
+        QMetaType::registerConverter<Inhibitor, QString, QString (*)(const Inhibitor &)>(inhibitorToString);
+        registered = true;
+        return true;
+    } else {
+        return false;
+    }
+}
+
 }  // namespace Utils
 
 std::ostream &operator<<(std::ostream &os, const QString &str)

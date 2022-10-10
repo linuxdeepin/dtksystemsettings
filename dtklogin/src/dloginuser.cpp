@@ -29,18 +29,18 @@ DLoginUser::DLoginUser(const QString &path, QObject *parent)
 #endif
 
     DBusSessionPath::registerMetaType();
-
+    qRegisterMetaType<UserState>("UserState");
     Q_D(DLoginUser);
     d->m_inter = new Login1UserInterface(Service, path, connection, this);
 }
 
 DLoginUser::~DLoginUser() {}
 
-QList<QString> DLoginUser::sessions() const
+QStringList DLoginUser::sessions() const
 {
     Q_D(const DLoginUser);
     const auto &result = d->m_inter->sessions();
-    QList<QString> sessionIds;
+    QStringList sessionIds;
     for (auto &&sessionPath : result) {
         sessionIds.append(sessionPath.sessionId);
     }
@@ -111,7 +111,7 @@ quint32 DLoginUser::UID() const
 QDateTime DLoginUser::idleSinceHint() const
 {
     Q_D(const DLoginUser);
-    return QDateTime::fromMSecsSinceEpoch(d->m_inter->idleSinceHint());
+    return QDateTime::fromMSecsSinceEpoch(d->m_inter->idleSinceHint() / 1000);
 }
 
 quint64 DLoginUser::idleSinceHintMonotonic() const
@@ -123,7 +123,7 @@ quint64 DLoginUser::idleSinceHintMonotonic() const
 QDateTime DLoginUser::loginTime() const
 {
     Q_D(const DLoginUser);
-    return QDateTime::fromMSecsSinceEpoch(d->m_inter->timestamp());
+    return QDateTime::fromMSecsSinceEpoch(d->m_inter->timestamp() / 1000);
 }
 
 quint64 DLoginUser::loginTimeMonotonic() const

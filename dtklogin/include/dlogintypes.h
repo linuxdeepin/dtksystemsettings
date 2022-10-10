@@ -42,6 +42,7 @@ enum class PowerAction {
     Ignore,
     Unknown
 };
+
 enum class ExecuteStatus { Yes, No, Challenge, Na, Unknown };
 enum class SessionRole { Leader, All, Unknown };
 enum class InhibitMode { Block, Delay, Unknown };
@@ -61,4 +62,27 @@ struct Inhibitor
     friend QDebug operator<<(QDebug debug, const Inhibitor &inhibitor);
 };
 
+QDebug operator<<(QDebug debug, const ShutdownType &type);
+QDebug operator<<(QDebug debug, const ScheduledShutdownValue &scheduledShutdown);
+QDebug operator<<(QDebug debug, const PowerAction &action);
+QDebug operator<<(QDebug debug, const ExecuteStatus &status);
+QDebug operator<<(QDebug debug, const SessionRole &role);
+QDebug operator<<(QDebug debug, const InhibitMode &mode);
+QDebug operator<<(QDebug debug, const SessionState &state);
+QDebug operator<<(QDebug debug, const SessionType &type);
+QDebug operator<<(QDebug debug, const SessionClass &sessionClass);
+QDebug operator<<(QDebug debug, const UserState &userState);
+
 DLOGIN_END_NAMESPACE
+
+Q_DECLARE_METATYPE(DLOGIN_NAMESPACE::ShutdownType)
+Q_DECLARE_METATYPE(DLOGIN_NAMESPACE::ScheduledShutdownValue)
+Q_DECLARE_METATYPE(DLOGIN_NAMESPACE::PowerAction)
+Q_DECLARE_METATYPE(DLOGIN_NAMESPACE::ExecuteStatus)
+Q_DECLARE_METATYPE(DLOGIN_NAMESPACE::SessionRole)
+Q_DECLARE_METATYPE(DLOGIN_NAMESPACE::InhibitMode)
+Q_DECLARE_METATYPE(DLOGIN_NAMESPACE::SessionState)
+Q_DECLARE_METATYPE(DLOGIN_NAMESPACE::SessionType)
+Q_DECLARE_METATYPE(DLOGIN_NAMESPACE::SessionClass)
+Q_DECLARE_METATYPE(DLOGIN_NAMESPACE::UserState)
+Q_DECLARE_METATYPE(DLOGIN_NAMESPACE::Inhibitor)

@@ -12,6 +12,8 @@
 DLOGIN_BEGIN_NAMESPACE
 
 namespace Utils {
+QString scheduledShutdownValueToString(const ScheduledShutdownValue &value);
+QString inhibitorToString(const Inhibitor &inhibitor);
 QString decodeBehavior(int behavior);
 int encodeBehavior(const QString &behavior);
 QString modeToString(const InhibitMode &mode);
@@ -34,6 +36,7 @@ QString sessionStateToString(const SessionState &sessionState);
 SessionState stringToSessionState(const QString &strState);
 QString userStateToString(const UserState &userState);
 UserState stringToUserState(const QString &strState);
+bool registerAllStringConverter();
 
 }  // namespace Utils
 

@@ -777,13 +777,6 @@ TEST_F(TestDLoginManager, lockSession)
     EXPECT_EQ("session0", m_fakeService->m_sessionId);
 }
 
-TEST_F(TestDLoginManager, lockSessions)
-{
-    m_fakeService->m_lockSessions = false;
-    m_dLoginManager->lockSessions();
-    EXPECT_TRUE(m_fakeService->m_lockSessions);
-}
-
 struct ScheduleShutdownParam
 {
     ShutdownType type;

@@ -19,7 +19,7 @@ class DLoginUser : public QObject
 public:
     ~DLoginUser() override;
 
-    Q_PROPERTY(QList<QString> sessions READ sessions);
+    Q_PROPERTY(QStringList sessions READ sessions);
     Q_PROPERTY(bool idleHint READ idleHint);
     Q_PROPERTY(bool linger READ linger);
     Q_PROPERTY(QString name READ name);
@@ -35,7 +35,7 @@ public:
     Q_PROPERTY(QDateTime loginTime READ loginTime);
     Q_PROPERTY(quint64 loginTimeMonotonic READ loginTimeMonotonic);
 
-    QList<QString> sessions() const;
+    QStringList sessions() const;
     bool idleHint() const;
     bool linger() const;
     QString name() const;
