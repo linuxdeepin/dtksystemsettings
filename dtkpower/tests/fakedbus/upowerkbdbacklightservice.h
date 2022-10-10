@@ -24,9 +24,9 @@ public:
 
 public slots:
     Q_SCRIPTABLE void Reset() { m_reset = true; }
-    Q_SCRIPTABLE uint GetBrightness() const;
-    Q_SCRIPTABLE uint GetMaxBrightness() const;
-    Q_SCRIPTABLE void SetBrightness(const uint value);
+    Q_SCRIPTABLE qint32 GetBrightness() const;
+    Q_SCRIPTABLE qint32 GetMaxBrightness() const;
+    Q_SCRIPTABLE void SetBrightness(const qint32 value);
 
 public:
     bool m_reset;

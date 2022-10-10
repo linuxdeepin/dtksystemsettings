@@ -107,11 +107,11 @@ qint32 UPowerDeviceService::chargeCycles() const
 {
     return 4;
 }
-quint64 UPowerDeviceService::timeToEmpty() const
+qint64 UPowerDeviceService::timeToEmpty() const
 {
     return 12345678;
 }
-quint64 UPowerDeviceService::timeToFull() const
+qint64 UPowerDeviceService::timeToFull() const
 {
     return 12345678;
 }
