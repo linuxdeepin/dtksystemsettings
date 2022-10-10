@@ -156,13 +156,13 @@ qint32 DPowerDevice::chargeCycles() const
     return d->m_device_inter->chargeCycles();
 }
 
-quint64 DPowerDevice::timeToEmpty() const
+qint64 DPowerDevice::timeToEmpty() const
 {
     Q_D(const DPowerDevice);
     return d->m_device_inter->timeToEmpty();
 }
 
-quint64 DPowerDevice::timeToFull() const
+qint64 DPowerDevice::timeToFull() const
 {
     Q_D(const DPowerDevice);
     return d->m_device_inter->timeToFull();

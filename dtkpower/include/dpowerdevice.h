@@ -69,8 +69,8 @@ public:
     double temperature() const;
     double voltage() const;
     qint32 chargeCycles() const;
-    quint64 timeToEmpty() const;
-    quint64 timeToFull() const;
+    qint64 timeToEmpty() const;
+    qint64 timeToFull() const;
     QString iconName() const;
     QString model() const;
     QString nativePath() const;
