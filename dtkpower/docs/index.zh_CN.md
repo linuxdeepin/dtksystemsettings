@@ -28,7 +28,15 @@ int main(int argc, char **argv)
     qDebug() << kb->brightness();//调用对应方法，获取当前键盘灯亮度
     qDebug() << "*************************************************";
     kb->setBrightness(1);//调整键盘灯亮度
-    return 0;
+    QObject::connect(kb.data(), &Dtk::Power::DKbdBacklight::brightnessChanged, &app, [=](const qint32 value) {
+        qDebug() << "brightness:" << value;
+    });
+    QObject::connect(
+        kb.data(),
+        &Dtk::Power::DKbdBacklight::brightnessChangedWithSource,
+        &app,
+        [=](const qint32 value, const KbdSource &source) { qDebug() << "brightness:" << value << static_cast<int>(source); });//连接信号并且用lambda表达式捕获信号值强制转换为int类型输出
+    return app.exec();
 }
 ```
 
@@ -48,7 +56,22 @@ int main(int argc, char **argv)
     Dtk::Power::DPowerManager manager; //创建manager对象
     auto device = manager.displayDevice(); //由manager对象创建device对象
     qDebug() << device->energyFullDesign();
-    return 0;
+        QObject::connect(device.data(), &Dtk::Power::DPowerDevice::updateTimeChanged, &app, [=](const QDateTime &value) {
+        qDebug() << "updateTime:" << value;
+    });//连接信号 并且将信号传出的值用lambda表达式捕获并且输出
+    QObject::connect(device.data(), &Dtk::Power::DPowerDevice::timeToEmptyChanged, &app, [=](const qint64 value) {
+        qDebug() << "Time:" << value;
+    });
+    QObject::connect(device.data(), &Dtk::Power::DPowerDevice::percentageChanged, &app, [=](const double value) {
+        qDebug() << "percentage:" << value;
+    });
+    QObject::connect(
+        &manager, &Dtk::Power::DPowerManager::lidIsClosedChanged, &app, [=](const bool value) { qDebug() << "Lid:" << value; }); //这个是powermanager的信号
+    QObject::connect(
+        &manager, &Dtk::Power::DPowerManager::deviceAdded, &app, [=](const QString &name) { qDebug() << "name:" << name; });
+    QObject::connect(
+        &manager, &Dtk::Power::DPowerManager::deviceRemoved, &app, [=](const QString &name) { qDebug() << "nameRM:" << name; });
+    return app.exec();
 }
 ```
 
