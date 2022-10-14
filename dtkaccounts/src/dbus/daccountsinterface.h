@@ -5,7 +5,7 @@
 #pragma once
 
 #include <QDBusPendingReply>
-#include "namespace.h"
+#include "dtkaccounts_global.h"
 #include "ddbusinterface.h"
 
 DACCOUNTS_BEGIN_NAMESPACE

@@ -10,7 +10,7 @@
 #include <qdbusconnection.h>
 #include <qvariant.h>
 
-#include "namespace.h"
+#include "dtkpower_global.h"
 #include "ddbusinterface.h"
 #include "upowertypes_p.h"
 DPOWER_BEGIN_NAMESPACE

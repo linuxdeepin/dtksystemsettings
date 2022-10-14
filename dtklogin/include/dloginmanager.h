@@ -9,7 +9,6 @@
 #include <qsharedpointer.h>
 
 #include "dlogintypes.h"
-#include "namespace.h"
 
 DLOGIN_BEGIN_NAMESPACE
 

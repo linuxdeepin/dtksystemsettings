@@ -5,7 +5,7 @@
 #pragma once
 
 #include "ddbusinterface.h"
-#include "namespace.h"
+#include "dtkpower_global.h"
 #include <qdbuspendingreply.h>
 #include <qscopedpointer.h>
 

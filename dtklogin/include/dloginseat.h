@@ -6,7 +6,7 @@
 
 #include <qobject.h>
 
-#include "namespace.h"
+#include "dtklogin_global.h"
 
 DLOGIN_BEGIN_NAMESPACE
 

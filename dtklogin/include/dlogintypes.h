@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "namespace.h"
+#include "dtklogin_global.h"
 #include <qobject.h>
 #include <qvariant.h>
 #include <qdatetime.h>

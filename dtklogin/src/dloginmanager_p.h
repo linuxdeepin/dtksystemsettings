@@ -8,8 +8,6 @@
 
 #include <qobject.h>
 
-#include "namespace.h"
-
 class DDBusInterface;
 DLOGIN_BEGIN_NAMESPACE
 class Login1ManagerInterface;

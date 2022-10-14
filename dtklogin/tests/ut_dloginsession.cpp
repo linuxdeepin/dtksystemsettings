@@ -12,7 +12,6 @@
 #include <qfile.h>
 #include <ostream>
 #include "ddbusinterface.h"
-#include "namespace.h"
 #include "sessionmanagerservice.h"
 #include "startmanagerservice.h"
 #include "dloginutils.h"
