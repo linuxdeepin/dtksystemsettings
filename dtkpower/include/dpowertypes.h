@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "namespace.h"
+#include "dtkpower_global.h"
 #include <qobject.h>
 
 DPOWER_BEGIN_NAMESPACE

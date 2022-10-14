@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
 #pragma once
-#include "namespace.h"
+#include "dtklogin_global.h"
 #include <qobject.h>
 
 DLOGIN_BEGIN_NAMESPACE

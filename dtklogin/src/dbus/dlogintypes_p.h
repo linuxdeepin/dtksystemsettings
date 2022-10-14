@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "namespace.h"
+#include "dtklogin_global.h"
 #include <qdbusargument.h>
 #include <qdbusextratypes.h>
 #include <qdbusmetatype.h>

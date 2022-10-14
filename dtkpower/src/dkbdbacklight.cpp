@@ -9,7 +9,6 @@
 #include <qdbuspendingreply.h>
 
 #include "dbus/upowerkbdbacklightinterface.h"
-#include "namespace.h"
 #include "dpowertypes.h"
 
 DPOWER_BEGIN_NAMESPACE

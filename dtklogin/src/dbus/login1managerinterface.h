@@ -3,7 +3,6 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
 #pragma once
-#include "namespace.h"
 #include <qobject.h>
 #include <qdbuspendingreply.h>
 #include <qdbusunixfiledescriptor.h>

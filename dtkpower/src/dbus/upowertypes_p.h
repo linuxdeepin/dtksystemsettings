@@ -4,8 +4,7 @@
 
 #pragma once
 
-#include "dpowertypes.h"
-#include "namespace.h"
+#include "dtkpower_global.h"
 #include <qdbusargument.h>
 #include <qdbusmetatype.h>
 #include <qlist.h>

@@ -6,7 +6,7 @@
 
 #include <qobject.h>
 #include <qscopedpointer.h>
-#include "namespace.h"
+#include "dtkpower_global.h"
 
 DPOWER_BEGIN_NAMESPACE
 class DKbdBacklightPrivate;
