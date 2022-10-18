@@ -7,7 +7,6 @@
 #include <qobject.h>
 #include <QtDBus>
 
-#include "namespace.h"
 #include "dlogintypes_p.h"
 
 QT_BEGIN_NAMESPACE

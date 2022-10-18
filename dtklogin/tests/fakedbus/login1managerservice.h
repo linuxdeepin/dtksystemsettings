@@ -7,7 +7,6 @@
 #include <qdbusabstractadaptor.h>
 #include <qdbusunixfiledescriptor.h>
 
-#include "namespace.h"
 #include "dlogintypes_p.h"
 
 QT_BEGIN_NAMESPACE

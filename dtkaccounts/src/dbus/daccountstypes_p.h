@@ -7,7 +7,7 @@
 #include <QDBusArgument>
 #include <QMap>
 #include <QVariant>
-#include "namespace.h"
+#include "dtkaccounts_global.h"
 
 DACCOUNTS_BEGIN_NAMESPACE
 

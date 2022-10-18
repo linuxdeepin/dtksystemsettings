@@ -8,7 +8,6 @@
 #include <qdatetime.h>
 
 #include "dpowertypes.h"
-#include "namespace.h"
 
 DPOWER_BEGIN_NAMESPACE
 

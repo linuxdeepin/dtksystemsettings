@@ -6,7 +6,6 @@
 
 #include <qobject.h>
 
-#include "namespace.h"
 #include "dlogintypes.h"
 
 DLOGIN_BEGIN_NAMESPACE

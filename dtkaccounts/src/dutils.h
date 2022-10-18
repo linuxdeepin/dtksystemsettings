@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "namespace.h"
+#include "dtkaccounts_global.h"
 #include "daccountstypes.h"
 
 DACCOUNTS_BEGIN_NAMESPACE

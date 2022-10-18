@@ -4,7 +4,6 @@
 
 #include "upowerkbdbacklightinterface.h"
 #include "ddbusinterface.h"
-#include "namespace.h"
 #include <qdbusconnection.h>
 #include <qdbuspendingreply.h>
 
