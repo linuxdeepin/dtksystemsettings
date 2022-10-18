@@ -18,6 +18,7 @@ build*/
 *.core
 *.autosave
 *.user*
+cmake-build-debug/
 
 # qm file is auto generate from .ts file
 *.qm
