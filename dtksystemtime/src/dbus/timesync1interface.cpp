@@ -18,7 +18,7 @@ TimeSync1Interface::TimeSync1Interface(QObject *parent)
     QDBusConnection connection = QDBusConnection::sessionBus();
 #else
     static const QString &Service = QStringLiteral("org.freedesktop.timesync1");
-    static const QString &Interface = QStringLiteral("org.freedesktop.timesync1");
+    static const QString &Interface = QStringLiteral("org.freedesktop.timesync1.Manager");
     static const QString &Path = "/org/freedesktop/timesync1";
     QDBusConnection connection = QDBusConnection::systemBus();
 #endif
