@@ -28,3 +28,7 @@ Files: dtklogin/tests/resource/*
 Copyright: None
 License: CC0-1.0
 
+# HEADERS
+Files: */include/D*
+Copyright: None
+License: CC0-1.0
