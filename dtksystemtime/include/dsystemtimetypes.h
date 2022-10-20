@@ -48,39 +48,3 @@ struct Message
 DSYSTEMTIME_END_NAMESPACE
 
 #endif
-
-// TODO: 文档需要用的内容，完成文档后删除
-//  // r = sd_bus_message_append(reply, "uuuuitt",
-//  //                           NTP_FIELD_LEAP(m->ntpmsg.field),
-//  //                           NTP_FIELD_VERSION(m->ntpmsg.field),
-//  //                           NTP_FIELD_MODE(m->ntpmsg.field),
-//  //                           m->ntpmsg.stratum,
-//  //                           m->ntpmsg.precision,
-//  //                           ntp_ts_short_to_usec(&m->ntpmsg.root_delay),
-//  //                           ntp_ts_short_to_usec(&m->ntpmsg.root_dispersion));
-//  // if (r < 0)
-//  //         return r;
-
-// // r = sd_bus_message_append_array(reply, 'y', m->ntpmsg.refid, 4);
-// // if (r < 0)
-// //         return r;
-
-// // r = sd_bus_message_append(reply, "ttttbtt",
-// //                           timespec_load(&m->origin_time),
-// //                           ntp_ts_to_usec(&m->ntpmsg.recv_time),
-// //                           ntp_ts_to_usec(&m->ntpmsg.trans_time),
-// //                           timespec_load(&m->dest_time),
-// //                           m->spike,
-// //                           m->packet_count,
-// //                           (usec_t) (m->samples_jitter * USEC_PER_SEC));
-
-// /*
-
-// NTP 客户端发送带有本地时间的数据包 orig_time , NTP 服务器在服务器时间接收 recv_time .然后服务器在服务器时间回复
-// tx_time客户端在本地时间收到回复 dest_time .
-
-// 往返delay计算为 recv_time - orig_time + dest_time - tx_time ，并且时钟之间的偏移量是 offset = (recv_time - orig_time + tx_time
-// - dest_time) / 2 .
-
-// 假设两个NTP数据包采用一致的路径，正确的调整时间就是dest_time + offset ，相当于 tx_time + delay/2 .
-// */
