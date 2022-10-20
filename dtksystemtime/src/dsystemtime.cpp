@@ -9,6 +9,7 @@
 #include "dbus/dsystemtimetypes_p.h"
 #include <qdbusreply.h>
 #include <qdebug.h>
+#include <qdatetime.h>
 DSYSTEMTIME_BEGIN_NAMESPACE
 DSystemTime::DSystemTime(QObject *parent)
     : QObject(parent)
@@ -50,7 +51,7 @@ QString DSystemTime::serverName() const
     return d->m_timesync_inter->serverName();
 }
 
-Address DSystemTime::serverAddress() const  // TODO: check it
+Address DSystemTime::serverAddress() const
 {
     Q_D(const DSystemTime);
     Address_p address_p = d->m_timesync_inter->serverAddress();
@@ -145,11 +146,13 @@ quint64 DSystemTime::RTCTimeUSec() const
     return d->m_timedate_inter->RTCTimeUSec();
 }
 
-quint64 DSystemTime::timeUSec() const
+QDateTime DSystemTime::timeDate() const
 {
     Q_D(const DSystemTime);
-    return d->m_timedate_inter->timeUSec();
+    QDateTime date;
+    return date.fromMSecsSinceEpoch(d->m_timedate_inter->timeUSec() / 1000);
 }
+
 // slots
 QStringList DSystemTime::listTimeZones() const
 {
@@ -185,13 +188,19 @@ void DSystemTime::setNTP(const bool use_NTP, const bool interactive)
     }
 }
 
-void DSystemTime::setTime(const qint64 usec_utc, const bool relative, const bool interactive)
+void DSystemTime::setRelativeTime(const qint64 usec_utc, const bool interactive)
 {
     Q_D(DSystemTime);
-    QDBusPendingReply<> reply = d->m_timedate_inter->setTime(usec_utc, relative, interactive);
+    QDBusPendingReply<> reply = d->m_timedate_inter->setTime(usec_utc, 1, interactive);
     if (!reply.isValid()) {
         qWarning() << reply.error().message();
     }
+}
+
+void DSystemTime::setAbsoluteTime(const QDateTime &time, const bool interactive)
+{
+    Q_D(DSystemTime);
+    QDBusPendingReply<> reply = d->m_timedate_inter->setTime(time.toMSecsSinceEpoch() * 1000, 0, interactive);
 }
 
 void DSystemTime::setTimeZone(const QString &timezone, const bool interactive)

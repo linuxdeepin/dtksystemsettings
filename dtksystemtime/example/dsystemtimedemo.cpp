@@ -16,4 +16,5 @@ int main(int argc, char **argv)
     qDebug() << systemTime.fallbackNTPServers()[1];
     qDebug() << systemTime.systemNTPServers().isEmpty();
     qDebug() << systemTime.canNTP();
+    qDebug() << systemTime.timeDate();
 }

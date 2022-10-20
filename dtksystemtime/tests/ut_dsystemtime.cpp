@@ -7,6 +7,7 @@
 #include "fakedbus/timedate1service.h"
 #include "fakedbus/timesync1service.h"
 #include <QDBusConnection>
+#include <qdatetime.h>
 #include <qdebug.h>
 DSYSTEMTIME_USE_NAMESPACE
 
@@ -51,18 +52,6 @@ QT_BEGIN_NAMESPACE  // for QString support
     *os << qUtf8Printable(qString);
 }
 QT_END_NAMESPACE
-
-/*    QStringList fallbackNTPServers() const;
-    QStringList linkNTPServers() const;
-    QStringList systemNTPServers() const;
-    qint64 frequency() const;
-    QString serverName() const;
-    Address_p serverAddress() const;
-    Message_p NTPMessage() const;
-    quint64 pollIntervalMaxUSec() const;
-    quint64 pollIntervalMinUSec() const;
-    quint64 pollIntervalUSec() const;
-    quint64 rootDistanceMaxUSec() const;*/
 
 TEST_F(TestDSystemTime, fallbackNTPServers)
 {
@@ -166,10 +155,10 @@ TEST_F(TestDSystemTime, RTCTimeUSec)  // return 42
     EXPECT_EQ(42, m_dsystemtime->RTCTimeUSec());
 }
 
-TEST_F(TestDSystemTime, timeUSec)  // return 24
+TEST_F(TestDSystemTime, timeDate)  // return 1666171692//TODO:
 {
-    ASSERT_EQ(24, m_date_fakeInterface->timeUSec());
-    EXPECT_EQ(24, m_dsystemtime->timeUSec());
+    ASSERT_EQ(1666171692, m_date_fakeInterface->timeUSec());
+    EXPECT_EQ(qint64(1666171692 / 1000), m_dsystemtime->timeDate().toMSecsSinceEpoch());
 }
 
 TEST_F(TestDSystemTime, ListTimeZones)  // return {"Asia/Tokyo", "Asia/Shanghai", "Asia/Hongkong", "Asia/Korea"}
@@ -194,12 +183,12 @@ TEST_F(TestDSystemTime, SetLocalTime)  // focus use_NTP
     EXPECT_FALSE(m_date_fakeInterface->setLocalTime_sig);
 }
 
-TEST_F(TestDSystemTime, SetTime)  // focus usec_utc
+TEST_F(TestDSystemTime, SetAbsoluteTime)  // focus usec_utc
 {
     m_date_fakeInterface->SetTime(42, false, false);
     ASSERT_EQ(42, m_date_fakeInterface->setTime_sig);
-    m_dsystemtime->setTime(24, false, false);
-    EXPECT_EQ(24, m_date_fakeInterface->setTime_sig);
+    m_dsystemtime->setAbsoluteTime(QDateTime::fromMSecsSinceEpoch(1666171692), false);
+    EXPECT_EQ(1666171692, m_date_fakeInterface->setTime_sig / 1000);  // TODO:
 }
 
 TEST_F(TestDSystemTime, SetTimeZone)  // focus timezone
