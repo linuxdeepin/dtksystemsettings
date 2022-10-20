@@ -43,7 +43,7 @@ public slots:
 public:
     bool setLocalRTC_sig = false;
     bool setLocalTime_sig = false;
-    int setTime_sig = 0;
+    qint64 setTime_sig = 0;
     QString setTimeZone_sig;
 
 private:

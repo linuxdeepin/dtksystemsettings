@@ -70,7 +70,7 @@ quint64 TimeDate1Service::RTCTimeUSec() const
 
 quint64 TimeDate1Service::timeUSec() const
 {
-    return 24;
+    return 1666171692;
 }
 
 QStringList TimeDate1Service::ListTimeZones() const

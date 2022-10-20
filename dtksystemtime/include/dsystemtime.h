@@ -10,6 +10,7 @@
 
 #include <qobject.h>
 #include <qscopedpointer.h>
+#include <qdatetime.h>
 #include "dtksystemtime_global.h"
 #include "dsystemtimetypes.h"
 
@@ -28,14 +29,14 @@ public:
     Q_PROPERTY(bool NTPSynchronized READ NTPSynchronized);
     Q_PROPERTY(QString timeZone READ timeZone);
     Q_PROPERTY(quint64 RTCTimeUSec READ RTCTimeUSec);
-    Q_PROPERTY(quint64 timeUSec READ timeUSec);
+    Q_PROPERTY(QDateTime timeDate READ timeDate);
     bool canNTP() const;
     bool localRTC() const;
     bool NTP() const;
     bool NTPSynchronized() const;
     QString timeZone() const;
     quint64 RTCTimeUSec() const;
-    quint64 timeUSec() const;
+    QDateTime timeDate() const;
     // sync properties
     Q_PROPERTY(QStringList fallbackNTPServers READ fallbackNTPServers);
     Q_PROPERTY(QStringList linkNTPServers READ linkNTPServers);
@@ -62,9 +63,10 @@ public:
     // slot
 public slots:
     QStringList listTimeZones() const;
-    void setLocalRTC(const bool local_rtc, const bool fix_system, const bool interactive);
+    void setLocalRTC(const bool local_rtc, const bool fix_system, const bool interactive);  // TODO: fix system是否可以被丢掉
     void setNTP(const bool use_NTP, const bool interactive);  // FIXME: this functions should be fixing
-    void setTime(const qint64 usec_utc, const bool relative, const bool interactive);
+    void setRelativeTime(const qint64 usec_utc, const bool interactive);
+    void setAbsoluteTime(const QDateTime &time, const bool interactive);
     void setTimeZone(const QString &timezone, const bool interactive);
 
 private:
