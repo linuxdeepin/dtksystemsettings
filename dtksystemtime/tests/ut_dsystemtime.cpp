@@ -155,7 +155,7 @@ TEST_F(TestDSystemTime, RTCTimeUSec)  // return 42
     EXPECT_EQ(42, m_dsystemtime->RTCTimeUSec());
 }
 
-TEST_F(TestDSystemTime, timeDate)  // return 1666171692//TODO:
+TEST_F(TestDSystemTime, timeDate)  // return 1666171692
 {
     ASSERT_EQ(1666171692, m_date_fakeInterface->timeUSec());
     EXPECT_EQ(qint64(1666171692 / 1000), m_dsystemtime->timeDate().toMSecsSinceEpoch());
@@ -188,7 +188,7 @@ TEST_F(TestDSystemTime, SetAbsoluteTime)  // focus usec_utc
     m_date_fakeInterface->SetTime(42, false, false);
     ASSERT_EQ(42, m_date_fakeInterface->setTime_sig);
     m_dsystemtime->setAbsoluteTime(QDateTime::fromMSecsSinceEpoch(1666171692), false);
-    EXPECT_EQ(1666171692, m_date_fakeInterface->setTime_sig / 1000);  // TODO:
+    EXPECT_EQ(1666171692, m_date_fakeInterface->setTime_sig / 1000);
 }
 
 TEST_F(TestDSystemTime, SetTimeZone)  // focus timezone
