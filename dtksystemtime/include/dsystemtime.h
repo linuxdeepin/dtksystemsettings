@@ -64,7 +64,7 @@ public:
 public slots:
     QStringList listTimeZones() const;
     void setLocalRTC(const bool local_rtc, const bool fix_system, const bool interactive);  // TODO: fix system是否可以被丢掉
-    void setNTP(const bool use_NTP, const bool interactive);
+    void enableNTP(const bool use_NTP, const bool interactive);
     void setRelativeTime(const qint64 usec_utc, const bool interactive);
     void setAbsoluteTime(const QDateTime &time, const bool interactive);
     void setTimeZone(const QString &timezone, const bool interactive);

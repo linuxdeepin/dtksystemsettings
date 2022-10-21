@@ -71,7 +71,7 @@ dsystemtime.h是用于管理系统时间和系统时间同步的接口
 @bref 设置本地RTC时钟是否开启
 @param[in] interactive 如果为true则会调用polkit进行鉴权
 
-@fn void DSystemTime::setNTP(const bool use_NTP, const bool interactive)
+@fn void DSystemTime::enableNTP(const bool use_NTP, const bool interactive)
 @brief 设置是否使用NTP同步时间
 @param[in] use_NTP 布尔值,开启或者关闭NTP服务
 @param[in] interactive 如果为true则会调用polkit进行鉴权

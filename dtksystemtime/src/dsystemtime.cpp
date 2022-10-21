@@ -179,7 +179,7 @@ void DSystemTime::setLocalRTC(const bool local_rtc, const bool fix_system, const
     }
 }
 
-void DSystemTime::setNTP(const bool use_NTP, const bool interactive)
+void DSystemTime::enableNTP(const bool use_NTP, const bool interactive)
 {
     Q_D(DSystemTime);
     QDBusPendingReply<> reply = d->m_timedate_inter->setNTP(use_NTP, interactive);

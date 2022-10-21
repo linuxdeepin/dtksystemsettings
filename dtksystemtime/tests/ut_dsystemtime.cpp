@@ -179,7 +179,7 @@ TEST_F(TestDSystemTime, SetLocalTime)  // focus use_NTP
 {
     m_date_fakeInterface->SetNTP(true, false);
     ASSERT_TRUE(m_date_fakeInterface->setLocalTime_sig);
-    m_dsystemtime->setNTP(false, false);
+    m_dsystemtime->enableNTP(false, false);
     EXPECT_FALSE(m_date_fakeInterface->setLocalTime_sig);
 }
 
