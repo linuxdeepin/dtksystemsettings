@@ -12,8 +12,8 @@ set (DOXYGEN_EXTRACT_STATIC YES)
 set (DOXYGEN_OUTPUT_LANGUAGE "Chinese")
 set (DOXYGEN_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/docs/)
 set (DOXYGEN_QHG_LOCATION "qhelpgenerator")
-set (DOXYGEN_QHP_NAMESPACE "org.deepin.dde.${CMAKE_PROJECT_NAME}")
-set (DOXYGEN_QCH_FILE "${CMAKE_PROJECT_NAME}.qch")
+set (DOXYGEN_QHP_NAMESPACE "org.deepin.dtk.power")
+set (DOXYGEN_QCH_FILE "${BIN_NAME}.qch")
 set (DOXYGEN_QHP_VIRTUAL_FOLDER ${CMAKE_PROJECT_NAME})
 set (DOXYGEN_HTML_EXTRA_STYLESHEET "" CACHE STRING "Doxygen custom stylesheet for HTML output")
 set (DOXYGEN_TAGFILES "qtcore.tags=qthelp://doc.qt.io/qt-5/" CACHE STRING "Doxygen tag files")
@@ -33,4 +33,4 @@ doxygen_add_docs (doxygen_dtkpower
     COMMENT "Generate documentation via Doxygen"
 )
 
-install (FILES ${CMAKE_CURRENT_BINARY_DIR}/html/${CMAKE_PROJECT_NAME}.qch DESTINATION ${QCH_INSTALL_DESTINATION})
+install (FILES ${CMAKE_CURRENT_BINARY_DIR}/html/${BIN_NAME}.qch DESTINATION ${QCH_INSTALL_DESTINATION})
