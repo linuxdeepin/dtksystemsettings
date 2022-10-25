@@ -22,29 +22,29 @@ public:
     Q_PROPERTY(bool LocalRTC READ localRTC);
     Q_PROPERTY(bool NTP READ NTP);
     Q_PROPERTY(bool NTPSynchronized READ NTPSynchronized);
-    Q_PROPERTY(QString TimeZone READ timeZone);
+    Q_PROPERTY(QString Timezone READ timezone);
     Q_PROPERTY(quint64 RTCTimeUSec READ RTCTimeUSec);
     Q_PROPERTY(quint64 TimeUSec READ timeUSec);
     bool canNTP() const;
     bool localRTC() const;
     bool NTP() const;
     bool NTPSynchronized() const;
-    QString timeZone() const;
+    QString timezone() const;
     quint64 RTCTimeUSec() const;
     quint64 timeUSec() const;
     // slot
 public slots:
-    Q_SCRIPTABLE QStringList ListTimeZones() const;
+    Q_SCRIPTABLE QStringList ListTimezones() const;
     Q_SCRIPTABLE void SetLocalRTC(const bool local_rtc, const bool fix_system, const bool interactive);
     Q_SCRIPTABLE void SetNTP(const bool use_NTP, const bool interactive);
     Q_SCRIPTABLE void SetTime(const qint64 usec_utc, const bool relative, const bool interactive);
-    Q_SCRIPTABLE void SetTimeZone(const QString &timezone, const bool interactive);
+    Q_SCRIPTABLE void SetTimezone(const QString &timezone, const bool interactive);
 
 public:
     bool setLocalRTC_sig = false;
     bool setLocalTime_sig = false;
     qint64 setTime_sig = 0;
-    QString setTimeZone_sig;
+    QString setTimezone_sig;
 
 private:
     DDBusInterface *m_inter;

@@ -27,14 +27,14 @@ public:
     Q_PROPERTY(bool localRTC READ localRTC);
     Q_PROPERTY(bool NTP READ NTP);
     Q_PROPERTY(bool NTPSynchronized READ NTPSynchronized);
-    Q_PROPERTY(QString timeZone READ timeZone);
+    Q_PROPERTY(QString timezone READ timezone);
     Q_PROPERTY(quint64 RTCTimeUSec READ RTCTimeUSec);
     Q_PROPERTY(QDateTime timeDate READ timeDate);
     bool canNTP() const;
     bool localRTC() const;
     bool NTP() const;
     bool NTPSynchronized() const;
-    QString timeZone() const;
+    QString timezone() const;
     quint64 RTCTimeUSec() const;
     QDateTime timeDate() const;
     // sync properties
@@ -62,12 +62,12 @@ public:
     quint64 rootDistanceMaxUSec() const;
     // slot
 public slots:
-    QStringList listTimeZones() const;
+    QStringList listTimezones() const;
     void setLocalRTC(const bool local_rtc, const bool fix_system, const bool interactive);  // TODO: fix system是否可以被丢掉
     void enableNTP(const bool use_NTP, const bool interactive);
     void setRelativeTime(const qint64 usec_utc, const bool interactive);
     void setAbsoluteTime(const QDateTime &time, const bool interactive);
-    void setTimeZone(const QString &timezone, const bool interactive);
+    void setTimezone(const QString &timezone, const bool interactive);
 
 private:
     QScopedPointer<DSystemTimePrivate> d_ptr;

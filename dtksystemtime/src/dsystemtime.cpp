@@ -134,10 +134,10 @@ bool DSystemTime::NTPSynchronized() const
     return d->m_timedate_inter->NTPSynchronized();
 }
 
-QString DSystemTime::timeZone() const
+QString DSystemTime::timezone() const
 {
     Q_D(const DSystemTime);
-    return d->m_timedate_inter->timeZone();
+    return d->m_timedate_inter->timezone();
 }
 
 quint64 DSystemTime::RTCTimeUSec() const
@@ -154,10 +154,10 @@ QDateTime DSystemTime::timeDate() const
 }
 
 // slots
-QStringList DSystemTime::listTimeZones() const
+QStringList DSystemTime::listTimezones() const
 {
     Q_D(const DSystemTime);
-    QDBusPendingReply<QStringList> reply = d->m_timedate_inter->listTimeZones();
+    QDBusPendingReply<QStringList> reply = d->m_timedate_inter->listTimezones();
     reply.waitForFinished();
     QStringList timezones;
     if (!reply.isValid()) {
@@ -203,10 +203,10 @@ void DSystemTime::setAbsoluteTime(const QDateTime &time, const bool interactive)
     QDBusPendingReply<> reply = d->m_timedate_inter->setTime(time.toMSecsSinceEpoch() * 1000, 0, interactive);
 }
 
-void DSystemTime::setTimeZone(const QString &timezone, const bool interactive)
+void DSystemTime::setTimezone(const QString &timezone, const bool interactive)
 {
     Q_D(DSystemTime);
-    QDBusPendingReply<> reply = d->m_timedate_inter->setTimeZone(timezone, interactive);
+    QDBusPendingReply<> reply = d->m_timedate_inter->setTimezone(timezone, interactive);
     if (!reply.isValid()) {
         qWarning() << reply.error().message();
     }
