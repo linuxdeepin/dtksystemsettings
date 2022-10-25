@@ -64,7 +64,7 @@ dsystemtime.h是用于管理系统时间和系统时间同步的接口
 @fn quint64 DSystemTime::rootDistanceMaxUSec() const
 @brief 与根NTP服务器通讯最大延时
 
-@fn QStringList DSystemTime::listTimeZones() const
+@fn QStringList DSystemTime::listTimezones() const
 @brief 列举时区
 
 @fn void DSystemTime::setLocalRTC(const bool local_rtc, const bool fix_system, const bool interactive)
@@ -86,9 +86,9 @@ dsystemtime.h是用于管理系统时间和系统时间同步的接口
 @param[in] time 使用QDateTime表示的时间点
 @param[in] interactive 如果为true则会调用polkit进行鉴权
 
-@fn void DSystemTime::setTimeZone(const QString &timezone, const bool interactive)
+@fn void DSystemTime::setTimezone(const QString &timezone, const bool interactive)
 @brief 设置本地时区
 @param[in] timezone 时区
 @param[in] interactive 如果为true则会调用polkit进行鉴权
-\sa DSystemTime::listTimeZones() const
+\sa DSystemTime::listTimezones() const
 */

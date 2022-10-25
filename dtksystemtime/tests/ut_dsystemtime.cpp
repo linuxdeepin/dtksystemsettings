@@ -145,8 +145,8 @@ TEST_F(TestDSystemTime, NTPSynchronized)  // return true
 
 TEST_F(TestDSystemTime, timezone)  // return Asia/Tokyo
 {
-    ASSERT_EQ("Asia/Tokyo", m_date_fakeInterface->timeZone());
-    EXPECT_EQ("Asia/Tokyo", m_dsystemtime->timeZone());
+    ASSERT_EQ("Asia/Tokyo", m_date_fakeInterface->timezone());
+    EXPECT_EQ("Asia/Tokyo", m_dsystemtime->timezone());
 }
 
 TEST_F(TestDSystemTime, RTCTimeUSec)  // return 42
@@ -161,10 +161,10 @@ TEST_F(TestDSystemTime, timeDate)  // return 1666171692
     EXPECT_EQ(qint64(1666171692 / 1000), m_dsystemtime->timeDate().toMSecsSinceEpoch());
 }
 
-TEST_F(TestDSystemTime, ListTimeZones)  // return {"Asia/Tokyo", "Asia/Shanghai", "Asia/Hongkong", "Asia/Korea"}
+TEST_F(TestDSystemTime, ListTimezones)  // return {"Asia/Tokyo", "Asia/Shanghai", "Asia/Hongkong", "Asia/Korea"}
 {
-    ASSERT_EQ("Asia/Hongkong", m_date_fakeInterface->ListTimeZones()[2]);
-    EXPECT_EQ("Asia/Korea", m_dsystemtime->listTimeZones()[3]);
+    ASSERT_EQ("Asia/Hongkong", m_date_fakeInterface->ListTimezones()[2]);
+    EXPECT_EQ("Asia/Korea", m_dsystemtime->listTimezones()[3]);
 }
 
 TEST_F(TestDSystemTime, SetLocalRTC)  // focus local_rtc
@@ -191,10 +191,10 @@ TEST_F(TestDSystemTime, SetAbsoluteTime)  // focus usec_utc
     EXPECT_EQ(1666171692, m_date_fakeInterface->setTime_sig / 1000);
 }
 
-TEST_F(TestDSystemTime, SetTimeZone)  // focus timezone
+TEST_F(TestDSystemTime, SetTimezone)  // focus timezone
 {
-    m_date_fakeInterface->SetTimeZone("Asia/Shanghai", true);
-    ASSERT_EQ("Asia/Shanghai", m_date_fakeInterface->setTimeZone_sig);
-    m_dsystemtime->setTimeZone("Asia/Tokyo", true);
-    EXPECT_EQ("Asia/Tokyo", m_date_fakeInterface->setTimeZone_sig);
+    m_date_fakeInterface->SetTimezone("Asia/Shanghai", true);
+    ASSERT_EQ("Asia/Shanghai", m_date_fakeInterface->setTimezone_sig);
+    m_dsystemtime->setTimezone("Asia/Tokyo", true);
+    EXPECT_EQ("Asia/Tokyo", m_date_fakeInterface->setTimezone_sig);
 }

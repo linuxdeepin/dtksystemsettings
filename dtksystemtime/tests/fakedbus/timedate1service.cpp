@@ -58,7 +58,7 @@ bool TimeDate1Service::NTPSynchronized() const
     return true;
 }
 
-QString TimeDate1Service::timeZone() const
+QString TimeDate1Service::timezone() const
 {
     return "Asia/Tokyo";
 }
@@ -73,7 +73,7 @@ quint64 TimeDate1Service::timeUSec() const
     return 1666171692;
 }
 
-QStringList TimeDate1Service::ListTimeZones() const
+QStringList TimeDate1Service::ListTimezones() const
 {
     return {"Asia/Tokyo", "Asia/Shanghai", "Asia/Hongkong", "Asia/Korea"};
 }
@@ -101,9 +101,9 @@ void TimeDate1Service::SetTime(const qint64 usec_utc, const bool relative, const
     return;
 }
 
-void TimeDate1Service::SetTimeZone(const QString &timezone, const bool interactive)
+void TimeDate1Service::SetTimezone(const QString &timezone, const bool interactive)
 {
-    setTimeZone_sig = timezone;
+    setTimezone_sig = timezone;
     Q_UNUSED(interactive);
     Q_UNUSED(timezone);
     return;

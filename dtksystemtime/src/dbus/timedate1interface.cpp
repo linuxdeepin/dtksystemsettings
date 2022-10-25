@@ -47,9 +47,9 @@ bool TimeDate1Interface::NTPSynchronized() const
     return qdbus_cast<bool>(m_inter->property("NTPSynchronized"));
 }
 
-QString TimeDate1Interface::timeZone() const
+QString TimeDate1Interface::timezone() const
 {
-    return qdbus_cast<QString>(m_inter->property("TimeZone"));
+    return qdbus_cast<QString>(m_inter->property("Timezone"));
 }
 
 quint64 TimeDate1Interface::RTCTimeUSec() const
@@ -61,9 +61,9 @@ quint64 TimeDate1Interface::timeUSec() const
 {
     return qdbus_cast<quint64>(m_inter->property("TimeUSec"));
 }
-QDBusPendingReply<QStringList> TimeDate1Interface::listTimeZones() const
+QDBusPendingReply<QStringList> TimeDate1Interface::listTimezones() const
 {
-    QDBusPendingReply<> reply = m_inter->asyncCall(QLatin1String("ListTimeZones"));
+    QDBusPendingReply<> reply = m_inter->asyncCall(QLatin1String("ListTimezones"));
     return reply;
 };
 
@@ -86,10 +86,10 @@ QDBusPendingReply<> TimeDate1Interface::setTime(const qint64 usec_utc, const boo
     return reply;
 };
 
-QDBusPendingReply<> TimeDate1Interface::setTimeZone(const QString &timezone, const bool interactive)
+QDBusPendingReply<> TimeDate1Interface::setTimezone(const QString &timezone, const bool interactive)
 {
     QDBusPendingReply<> reply =
-        m_inter->asyncCallWithArgumentList(QLatin1String("SetTimeZone"), {QVariant::fromValue(timezone), interactive});
+        m_inter->asyncCallWithArgumentList(QLatin1String("SetTimezone"), {QVariant::fromValue(timezone), interactive});
     return reply;
 };
 
