@@ -13,7 +13,6 @@ add_executable(
 target_link_libraries(
     ${BIN1} PRIVATE
     Qt${QT_VERSION_MAJOR}::Core
-    Qt${QT_VERSION_MAJOR}::Gui
     Qt${QT_VERSION_MAJOR}::DBus
     dtkpower
 )
@@ -27,7 +26,6 @@ add_executable(
 target_link_libraries(
     ${BIN2} PRIVATE
     Qt${QT_VERSION_MAJOR}::Core
-    Qt${QT_VERSION_MAJOR}::Gui
     Qt${QT_VERSION_MAJOR}::DBus
     dtkpower
 )
@@ -41,7 +39,6 @@ add_executable(
 target_link_libraries(
     ${BIN3} PRIVATE
     Qt${QT_VERSION_MAJOR}::Core
-    Qt${QT_VERSION_MAJOR}::Gui
     Qt${QT_VERSION_MAJOR}::DBus
     dtkpower
 )
