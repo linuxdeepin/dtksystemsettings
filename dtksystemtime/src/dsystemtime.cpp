@@ -183,6 +183,7 @@ void DSystemTime::enableNTP(const bool use_NTP, const bool interactive)
 {
     Q_D(DSystemTime);
     QDBusPendingReply<> reply = d->m_timedate_inter->setNTP(use_NTP, interactive);
+    reply.waitForFinished();
     if (!reply.isValid()) {
         qWarning() << reply.error().message();
     }
@@ -192,6 +193,7 @@ void DSystemTime::setRelativeTime(const qint64 usec_utc, const bool interactive)
 {
     Q_D(DSystemTime);
     QDBusPendingReply<> reply = d->m_timedate_inter->setTime(usec_utc, 1, interactive);
+    reply.waitForFinished();
     if (!reply.isValid()) {
         qWarning() << reply.error().message();
     }
@@ -201,12 +203,17 @@ void DSystemTime::setAbsoluteTime(const QDateTime &time, const bool interactive)
 {
     Q_D(DSystemTime);
     QDBusPendingReply<> reply = d->m_timedate_inter->setTime(time.toMSecsSinceEpoch() * 1000, 0, interactive);
+    reply.waitForFinished();
+    if (!reply.isValid()) {
+        qWarning() << reply.error().message();
+    }
 }
 
 void DSystemTime::setTimezone(const QString &timezone, const bool interactive)
 {
     Q_D(DSystemTime);
     QDBusPendingReply<> reply = d->m_timedate_inter->setTimezone(timezone, interactive);
+    reply.waitForFinished();
     if (!reply.isValid()) {
         qWarning() << reply.error().message();
     }

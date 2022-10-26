@@ -16,5 +16,16 @@ int main(int argc, char **argv)
     qDebug() << systemTime.fallbackNTPServers()[1];
     qDebug() << systemTime.systemNTPServers().isEmpty();
     qDebug() << systemTime.canNTP();
+    qDebug() << systemTime.localRTC();
+    qDebug() << systemTime.NTP();
+    qDebug() << systemTime.NTPSynchronized();
+    qDebug() << systemTime.timezone();
+    qDebug() << systemTime.RTCTimeUSec();
     qDebug() << systemTime.timeDate();
+    qDebug() << systemTime.fallbackNTPServers();
+    qDebug() << systemTime.linkNTPServers();
+    qDebug() << systemTime.systemNTPServers();
+    qDebug() << systemTime.frequency();
+    qDebug() << systemTime.serverName();
+    systemTime.setTimezone("Asia/Yangon", 1);
 }
