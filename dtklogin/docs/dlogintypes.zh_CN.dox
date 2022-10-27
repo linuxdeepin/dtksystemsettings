@@ -17,6 +17,8 @@ dlogintypes.h 中定义了login组件需要使用到的一些自定义数据结�
 关机不关闭电源
 @var ShutdownType ShutdownType::DryHalt
 实际并不执行关机
+@var ShutdownType ShutdownType::Unknown
+未知操作
 
 @struct Dtk::Login::ScheduledShutdownValue dlogintypes.h
 @brief 定义定时关机所用数据结构
@@ -109,6 +111,8 @@ dlogintypes.h 中定义了login组件需要使用到的一些自定义数据结�
 已激活
 @var SessionState::Closing
 关闭中
+@var SessionState::Unknown
+未知
 
 @enum Dtk::Login::SessionType
 @brief 会话类型
@@ -139,11 +143,13 @@ Wayland环境
 @var UserState::Offline
 离线
 @var UserState::Lingering
-滞留中，
+滞留中
 @var UserState::Online
 在线
 @var UserState::Active
 已激活
+@var UserState::Closing
+关闭中
 @var UserState::Unknown
 未知
 

@@ -1,6 +1,6 @@
 ## dtklogin
 
-login DBus interfaces binding for Qt5
+Development Tool Kit Login module, used for login user, session and seat etc.
 
 [中文文档](./README.zh_CN.md)
 
@@ -40,10 +40,7 @@ sudo make install
 We encourage you to report issues and contribute changes
 
 - [Contribution guide for developers](https://github.com/linuxdeepin/developer-center/wiki/Contribution-Guidelines-for-Developers-en) (English)
-（*please update to the actual Transifex link of this project*）
 
 ## License
 
-License description here. The license name is suggested to use the same one as [SPDX license identifier](https://spdx.org/licenses). Following is an example:
-
-Project Name is licensed under [GPL-3.0-or-later](LICENSE).
+This project is licensed under [LGPL-3.0-or-later](../LICENSE).

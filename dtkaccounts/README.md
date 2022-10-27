@@ -2,9 +2,12 @@
 
 accounts DBus interface binding for Qt5
 
+[中文文档](./README.zh_CN.md)
+
 ## Dependencies
 
 ### build on debian/uos
+
 requirements:
 
 - qtbase5-dev
@@ -40,4 +43,4 @@ We encourage you to report issues and contribute changes
 
 ## License
 
-This project is licensed under [LGPL-3.0-only](LICENSE).
+This project is licensed under [LGPL-3.0-or-later](../LICENSE).

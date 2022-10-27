@@ -1,6 +1,6 @@
 ## 项目名称
 
-TODO: 完善文档
+TODO: 完善文档，添加英文README，并且添加英文README到中文README的链接
 
 ## 编译依赖
 
@@ -36,10 +36,10 @@ sudo make install
 
 我们鼓励您报告问题并贡献更改
 
-* [开发者代码贡献指南](https://github.com/linuxdeepin/developer-center/wiki/Contribution-Guidelines-for-Developers)（中文)
+- [开发者代码贡献指南](https://github.com/linuxdeepin/developer-center/wiki/Contribution-Guidelines-for-Developers)（中文)
 
 - [开发者贡献指南](https://github.com/linuxdeepin/developer-center/wiki/Contribution-Guidelines-for-Developers-en) (英文)
 
 ## 开源许可
 
-本项目采用[LGPL-3.0-only](LICENSE)授权。
+本项目采用[LGPL-3.0-or-later](../LICENSE)授权。
