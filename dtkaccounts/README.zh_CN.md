@@ -41,4 +41,4 @@ sudo make install
 
 ## 开源许可
 
-本项目采用[LGPL-3.0-only](LICENSE)授权。
+本项目采用[LGPL-3.0-or-later](../LICENSE)授权。

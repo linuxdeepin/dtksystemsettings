@@ -1,5 +1,7 @@
 @~chinese
 
+\mainpage
+
 # 项目介绍
 
 dtkpower是对于deepin/UOS系统上的upowerdbus接口和dde-daemon接口的封装，其目的是在于方便第三方开发者轻松且快速的调用接口进行开发。

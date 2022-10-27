@@ -36,16 +36,13 @@ sudo make install
 - [官方论坛](https://bbs.deepin.org/)
 - [开发者中心](https://github.com/linuxdeepin/developer-center)
 - [Wiki](https://wiki.deepin.org/)
-（按照项目实际情况放帮助链接）
 
 ## 贡献指南
 
 我们鼓励您报告问题并做出更改
 
 - [开发者代码贡献指南](https://github.com/linuxdeepin/developer-center/wiki/Contribution-Guidelines-for-Developers)
-（按照项目实际情况放贡献指南链接）
 
 ## 开源许可证
 
-许可证说明，建议使用SPDX规范描述许可证。例如：
-[项目名称] 在 [GPL-3.0-or-later]下发布。
+本项目采用[LGPL-3.0-or-later](../LICENSE)授权。

@@ -1,5 +1,7 @@
 @~chinese
 
+\mainpage
+
 ## 项目介绍
 
 dtklogin是对systemd-logind的DBus接口和dde-daemon提供的相关接口的封装。用于观察和管理用户 login 以及 seat 的状态。
@@ -26,7 +28,7 @@ dtklogin是对systemd-logind的DBus接口和dde-daemon提供的相关接口的�
 
 ## 说明
 
-这些文件配置了 systemd 登录管理器的各种参数，有关语法的描述，请参见[systemd.syntax](https://www-freedesktop-org.translate.goog/software/systemd/man/systemd.syntax.html)。
+这些文件配置了 systemd 登录管理器的各种参数，有关语法的描述，请参见[systemd.syntax](https://www.freedesktop.org/software/systemd/man/systemd.syntax.html)。
 
 ## 配置目录和优先级
 

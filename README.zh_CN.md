@@ -1,4 +1,5 @@
-# Deepin Tool Kit System Settings
+# Development Tool Kit System Settings
+
 ------------
 基于Qt风格的Deepin系统设置开发库。
 
@@ -10,7 +11,7 @@
 * cmake >= 3.13
 * doxygen
 
-## 安装
+## 构建安装
 
 ### 从源代码构建
 
@@ -46,4 +47,3 @@ sudo cmake --build build --target install
 ## 协议
 
 DTK工具包遵循协议 [LGPL-3.0-or-later](LICENSE).
-

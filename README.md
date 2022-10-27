@@ -1,4 +1,5 @@
-# Deepin Tool Kit System Settings
+# Development Tool Kit System Settings
+
 ------------
 Qt-based development library for system settings on Deepin.
 
@@ -10,7 +11,7 @@ Qt-based development library for system settings on Deepin.
 * cmake >= 3.13
 * doxygen
 
-## Install
+## Build and install
 
 ### Build from source code
 
@@ -45,4 +46,4 @@ We encourage you to report issues and contribute changes
 
 ## License
 
-deepin-tool-kit is licensed under [LGPL-3.0-or-later](LICENSE).
+Development Tool Kit is licensed under [LGPL-3.0-or-later](LICENSE).
