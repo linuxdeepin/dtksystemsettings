@@ -7,8 +7,11 @@
 #include "daccountstypes.h"
 #include <QSharedPointer>
 #include <QStringList>
+#include <DExpected>
 
 DACCOUNTS_BEGIN_NAMESPACE
+
+DCORE_USE_NAMESPACE
 
 class DAccountsManagerPrivate;
 class DAccountsUser;
@@ -31,7 +34,7 @@ public slots:
     void deleteUser(const QString &name, const bool rmFiles);
     QSharedPointer<DAccountsUser> findUserByName(const QString &name);
     QSharedPointer<DAccountsUser> findUserById(const qint64 uid);
-    QStringList groups();
+    DExpected<QStringList> groups();
     QStringList presetGroups(const AccountTypes &type);
     ValidMsg isPasswordValid(const QString &password);
     ValidMsg isUsernameValid(const QString &name);

@@ -14,6 +14,7 @@ add_executable(${BIN_NAME}
 )
 
 include_directories(../include)
+find_package(DtkCore REQUIRED)
 
 target_include_directories(${BIN_NAME} PUBLIC
     Qt${QT_VERSION_MAJOR}::Core
