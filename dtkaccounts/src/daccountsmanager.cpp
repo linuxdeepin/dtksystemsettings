@@ -98,7 +98,7 @@ QSharedPointer<DAccountsUser> DAccountsManager::findUserById(const qint64 uid)
     return ptr;
 }
 
-QStringList DAccountsManager::groups()
+DExpected<QStringList> DAccountsManager::groups()
 {
     QStringList list;
     struct group *grp = nullptr;
@@ -107,7 +107,8 @@ QStringList DAccountsManager::groups()
         list.push_back(grp->gr_name);
     if (errno != 0) {
         list.clear();
-        qWarning() << strerror(errno);
+        endgrent();
+        return DUnexpected{DError{errno, strerror(errno)}};
     }
     endgrent();
     return list;

@@ -31,7 +31,11 @@ void Demo::run()
     auto newuser = manager.createUser("qwer", "testqwer", AccountTypes::Default);
 
     manager.deleteUser("qwer", true);
-    qDebug() << manager.groups();
+    auto groups = manager.groups();
+    if (groups)
+        qDebug() << groups.value();
+    else
+        qDebug() << groups.error();
 
     qDebug() << user->UID();
     qDebug() << user->UUID();
