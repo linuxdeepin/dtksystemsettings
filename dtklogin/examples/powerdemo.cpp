@@ -18,9 +18,24 @@ int PowerDemo::run()
 {
     m_manager->inhibit(InhibitBehavior::Sleep, "demo", "block reboot", InhibitMode::Block);
     m_manager->inhibit(InhibitBehavior::Shutdown, "demo", "delay shutdown", InhibitMode::Delay);
-    qDebug() << m_manager->listInhibitors();
-    qDebug() << m_manager->canSuspend();
-    qDebug() << m_manager->canPowerOff();
+    auto eInhibitors = m_manager->listInhibitors();
+    if (eInhibitors) {
+        qDebug() << eInhibitors.value();
+    } else {
+        qDebug() << eInhibitors.error();
+    }
+    auto eStatus = m_manager->canSuspend();
+    if (eStatus) {
+        qDebug() << eStatus.value();
+    } else {
+        qDebug() << eStatus.error();
+    }
+    eStatus = m_manager->canPowerOff();
+    if (eStatus) {
+        qDebug() << eStatus.value();
+    } else {
+        qDebug() << eStatus.error();
+    }
     auto time = QDateTime::currentDateTime();
     m_manager->scheduleShutdown(ShutdownType::Reboot, time.addSecs(1000));
     qDebug() << m_manager->scheduledShutdown();

@@ -22,6 +22,7 @@ target_compile_definitions(${BIN_NAME} PRIVATE VERSION="${CMAKE_PROJECT_VERSION}
 target_include_directories(${BIN_NAME} PUBLIC
     Qt${QT_VERSION_MAJOR}::Core
     Qt${QT_VERSION_MAJOR}::DBus
+    ${DtkCore_INCLUDE_DIRS}
     ../include
     ./dbus
 )
@@ -29,6 +30,7 @@ target_include_directories(${BIN_NAME} PUBLIC
 target_link_libraries(${BIN_NAME} PRIVATE
     Qt${QT_VERSION_MAJOR}::Core
     Qt${QT_VERSION_MAJOR}::DBus
+    ${DtkCore_LIBRARIES}
 )
 
 install(FILES ${INCLUDE_FILES} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${BIN_NAME})

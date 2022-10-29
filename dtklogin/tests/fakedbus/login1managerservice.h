@@ -125,10 +125,10 @@ public Q_SLOTS:  // METHODS
     QDBusUnixFileDescriptor Inhibit(const QString &what, const QString &who, const QString &why, const QString &mode);
     void KillSession(const QString &session_id, const QString &who, qint32 signal_number);
     void KillUser(quint32 uid, qint32 signal_number);
-    QList<DLOGIN_NAMESPACE::DBusInhibitor> ListInhibitors();
-    QList<DLOGIN_NAMESPACE::DBusSeat> ListSeats();
-    QList<DLOGIN_NAMESPACE::DBusSession> ListSessions();
-    QList<DLOGIN_NAMESPACE::DBusUser> ListUsers();
+    QList<DTK_LOGIN_NAMESPACE::DBusInhibitor> ListInhibitors();
+    QList<DTK_LOGIN_NAMESPACE::DBusSeat> ListSeats();
+    QList<DTK_LOGIN_NAMESPACE::DBusSession> ListSessions();
+    QList<DTK_LOGIN_NAMESPACE::DBusUser> ListUsers();
     void LockSession(const QString &session_id);
     void LockSessions();
     void PowerOff(bool interactive);

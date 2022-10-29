@@ -7,7 +7,6 @@
 #include "dtklogin_global.h"
 #include <qobject.h>
 
-class DDBusInterface;
 DLOGIN_BEGIN_NAMESPACE
 class Login1UserInterface;
 class DLoginUser;

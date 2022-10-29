@@ -20,11 +20,12 @@
 #include "dloginsession_p.h"
 #include "dloginuser_p.h"
 #include "dloginmanager_p.h"
-#include "ddbusinterface.h"
+#include <ddbusinterface.h>
 #include "login1managerinterface.h"
 #include "dloginutils.h"
 
 DLOGIN_USE_NAMESPACE
+
 class TestDLoginManager : public testing::Test
 {
 public:
@@ -497,10 +498,11 @@ INSTANTIATE_TEST_CASE_P(Default,
 
 TEST_F(TestDLoginManager, cancelScheduledShutdown)
 {
+    ASSERT_TRUE(m_dLoginManager->cancelScheduledShutdown().hasValue());
     m_fakeService->m_cancelScheduledShutdown = false;
-    EXPECT_FALSE(m_dLoginManager->cancelScheduledShutdown());
+    EXPECT_EQ(false, m_dLoginManager->cancelScheduledShutdown().value());
     m_fakeService->m_cancelScheduledShutdown = true;
-    EXPECT_TRUE(m_dLoginManager->cancelScheduledShutdown());
+    EXPECT_EQ(true, m_dLoginManager->cancelScheduledShutdown().value());
 }
 
 TEST_F(TestDLoginManager, findSeatById)
@@ -510,10 +512,12 @@ TEST_F(TestDLoginManager, findSeatById)
     m_fakeService->m_seatPath = QDBusObjectPath(testPath);
     m_fakeService->m_seatId = "seat1";
     auto dSeat = m_dLoginManager->findSeatById("seat0");
+    ASSERT_TRUE(dSeat.hasValue());
+    auto vSeat = dSeat.value();
     EXPECT_EQ("seat0", m_fakeService->m_seatId);
-    ASSERT_NE(dSeat->d_ptr, nullptr);
-    ASSERT_NE(dSeat->d_ptr->m_inter, nullptr);
-    EXPECT_EQ(testPath, dSeat->d_ptr->m_inter->m_path);
+    ASSERT_NE(vSeat->d_ptr, nullptr);
+    ASSERT_NE(vSeat->d_ptr->m_inter, nullptr);
+    EXPECT_EQ(testPath, vSeat->d_ptr->m_inter->m_path);
 }
 
 TEST_F(TestDLoginManager, findSessionById)
@@ -523,10 +527,12 @@ TEST_F(TestDLoginManager, findSessionById)
     m_fakeService->m_sessionPath = QDBusObjectPath(testPath);
     m_fakeService->m_sessionId = "session1";
     auto dSession = m_dLoginManager->findSessionById("session0");
+    ASSERT_TRUE(dSession.hasValue());
+    auto vSession = dSession.value();
     EXPECT_EQ("session0", m_fakeService->m_sessionId);
-    ASSERT_NE(dSession->d_ptr, nullptr);
-    ASSERT_NE(dSession->d_ptr->m_inter, nullptr);
-    EXPECT_EQ(testPath, dSession->d_ptr->m_inter->m_path);
+    ASSERT_NE(vSession->d_ptr, nullptr);
+    ASSERT_NE(vSession->d_ptr->m_inter, nullptr);
+    EXPECT_EQ(testPath, vSession->d_ptr->m_inter->m_path);
 }
 
 TEST_F(TestDLoginManager, findSessionByPID)
@@ -536,10 +542,12 @@ TEST_F(TestDLoginManager, findSessionByPID)
     m_fakeService->m_sessionPath = QDBusObjectPath(testPath);
     m_fakeService->m_PID = 1024;
     auto dSession = m_dLoginManager->findSessionByPID(2048);
+    ASSERT_TRUE(dSession.hasValue());
+    auto vSession = dSession.value();
     EXPECT_EQ(2048, m_fakeService->m_PID);
-    ASSERT_NE(dSession->d_ptr, nullptr);
-    ASSERT_NE(dSession->d_ptr->m_inter, nullptr);
-    EXPECT_EQ(testPath, dSession->d_ptr->m_inter->m_path);
+    ASSERT_NE(vSession->d_ptr, nullptr);
+    ASSERT_NE(vSession->d_ptr->m_inter, nullptr);
+    EXPECT_EQ(testPath, vSession->d_ptr->m_inter->m_path);
 }
 
 TEST_F(TestDLoginManager, findUserById)
@@ -549,10 +557,12 @@ TEST_F(TestDLoginManager, findUserById)
     m_fakeService->m_userPath = QDBusObjectPath(testPath);
     m_fakeService->m_UID = 1024;
     auto dUser = m_dLoginManager->findUserById(2048);
+    ASSERT_TRUE(dUser.hasValue());
+    auto vUser = dUser.value();
     EXPECT_EQ(2048, m_fakeService->m_UID);
-    ASSERT_NE(dUser->d_ptr, nullptr);
-    ASSERT_NE(dUser->d_ptr->m_inter, nullptr);
-    EXPECT_EQ(testPath, dUser->d_ptr->m_inter->m_path);
+    ASSERT_NE(vUser->d_ptr, nullptr);
+    ASSERT_NE(vUser->d_ptr->m_inter, nullptr);
+    EXPECT_EQ(testPath, vUser->d_ptr->m_inter->m_path);
 }
 
 TEST_F(TestDLoginManager, findUserByPID)
@@ -562,10 +572,12 @@ TEST_F(TestDLoginManager, findUserByPID)
     m_fakeService->m_userPath = QDBusObjectPath(testPath);
     m_fakeService->m_PID = 1024;
     auto dUser = m_dLoginManager->findUserByPID(2048);
+    ASSERT_TRUE(dUser.hasValue());
+    auto vUser = dUser.value();
     EXPECT_EQ(2048, m_fakeService->m_PID);
-    ASSERT_NE(dUser->d_ptr, nullptr);
-    ASSERT_NE(dUser->d_ptr->m_inter, nullptr);
-    EXPECT_EQ(testPath, dUser->d_ptr->m_inter->m_path);
+    ASSERT_NE(vUser->d_ptr, nullptr);
+    ASSERT_NE(vUser->d_ptr->m_inter, nullptr);
+    EXPECT_EQ(testPath, vUser->d_ptr->m_inter->m_path);
 }
 
 TEST_F(TestDLoginManager, halt)
@@ -654,7 +666,9 @@ TEST_P(TestInhibit, inhibit)
     dbusInhibitor.why = "";
     dbusInhibitor.mode = "";
     m_fakeService->m_inhibitFileDescriptor.giveFileDescriptor(params.fd);
-    int fd = m_dLoginManager->inhibit(params.what, params.who, params.why, params.mode);
+    auto eFd = m_dLoginManager->inhibit(params.what, params.who, params.why, params.mode);
+    ASSERT_TRUE(eFd.hasValue());
+    auto fd = eFd.value();
     EXPECT_EQ(fd, params.fd);
     QStringList expected = params.strWhat.split(":");
     QStringList dbusWhat = dbusInhibitor.what.split(":");
@@ -721,7 +735,9 @@ TEST_F(TestDLoginManager, listInhibitors)
 {
     m_fakeService->m_inhibitors = {DBusInhibitor{"sleep:shutdown", "test", "test", "block", 1000, 1},
                                    DBusInhibitor{"handle-hibernate-key:handle-power-key", "uos", "test", "delay", 1001, 2}};
-    auto inhibitors = m_dLoginManager->listInhibitors();
+    auto eInhibitors = m_dLoginManager->listInhibitors();
+    ASSERT_TRUE(eInhibitors.hasValue());
+    auto inhibitors = eInhibitors.value();
     ASSERT_THAT(inhibitors, testing::SizeIs(2));
     EXPECT_EQ(InhibitBehavior::Sleep | InhibitBehavior::Shutdown, inhibitors[0].what);
     EXPECT_EQ("test", inhibitors[0].who);
@@ -737,7 +753,10 @@ TEST_F(TestDLoginManager, listSeats)
     dbusSeats = {{"seat0", QDBusObjectPath("/org/freedesktop/login1/seat0")},
                  {"seat1", QDBusObjectPath("/org/freedesktop/login1/seat1")},
                  {"seat2", QDBusObjectPath("/org/freedesktop/login1/seat2")}};
-    QList<QString> seats = m_dLoginManager->listSeats();
+
+    auto eSeats = m_dLoginManager->listSeats();
+    ASSERT_TRUE(eSeats.hasValue());
+    auto seats = eSeats.value();
     ASSERT_THAT(seats, testing::SizeIs(3));
     EXPECT_EQ("seat0", seats[0]);
     EXPECT_EQ("seat1", seats[1]);
@@ -750,7 +769,9 @@ TEST_F(TestDLoginManager, listSessions)
     dbusSessions = {{"session0", 1000, "test0", "seat0", QDBusObjectPath("/org/freedesktop/login1/session0")},
                     {"session1", 1001, "test1", "seat1", QDBusObjectPath("/org/freedesktop/login1/session1")},
                     {"session2", 1002, "test2", "seat2", QDBusObjectPath("/org/freedesktop/login1/session2")}};
-    QList<QString> sessions = m_dLoginManager->listSessions();
+    auto eSessions = m_dLoginManager->listSessions();
+    ASSERT_TRUE(eSessions.hasValue());
+    auto sessions = eSessions.value();
     ASSERT_THAT(sessions, testing::SizeIs(3));
     EXPECT_EQ("session0", sessions[0]);
     EXPECT_EQ("session1", sessions[1]);
@@ -763,7 +784,9 @@ TEST_F(TestDLoginManager, listUsers)
     dbusUsers = {{1000, "test0", QDBusObjectPath("/org/freedesktop/login1/user1000")},
                  {1001, "test1", QDBusObjectPath("/org/freedesktop/login1/user1001")},
                  {1002, "test2", QDBusObjectPath("/org/freedesktop/login1/user1002")}};
-    QList<quint32> users = m_dLoginManager->listUsers();
+    auto eUsers = m_dLoginManager->listUsers();
+    ASSERT_TRUE(eUsers.hasValue());
+    auto users = eUsers.value();
     ASSERT_THAT(users, testing::SizeIs(3));
     EXPECT_EQ(1000, users[0]);
     EXPECT_EQ(1001, users[1]);
@@ -854,9 +877,11 @@ TEST_F(TestDLoginManager, currentSeat)
     Login1SeatService seat(Service, testPath);
     m_fakeService->m_seatPath = QDBusObjectPath(testPath);
     auto dSeat = m_dLoginManager->currentSeat();
-    ASSERT_NE(dSeat->d_ptr, nullptr);
-    ASSERT_NE(dSeat->d_ptr->m_inter, nullptr);
-    EXPECT_EQ(testPath, dSeat->d_ptr->m_inter->m_path);
+    ASSERT_TRUE(dSeat.hasValue());
+    auto vSeat = dSeat.value();
+    ASSERT_NE(vSeat->d_ptr, nullptr);
+    ASSERT_NE(vSeat->d_ptr->m_inter, nullptr);
+    EXPECT_EQ(testPath, vSeat->d_ptr->m_inter->m_path);
 }
 
 TEST_F(TestDLoginManager, currentSession)
@@ -865,9 +890,11 @@ TEST_F(TestDLoginManager, currentSession)
     Login1SessionService session(Service, testPath);
     m_fakeService->m_sessionPath = QDBusObjectPath(testPath);
     auto dSession = m_dLoginManager->currentSession();
-    ASSERT_NE(dSession->d_ptr, nullptr);
-    ASSERT_NE(dSession->d_ptr->m_inter, nullptr);
-    EXPECT_EQ(testPath, dSession->d_ptr->m_inter->m_path);
+    ASSERT_TRUE(dSession.hasValue());
+    auto vSession = dSession.value();
+    ASSERT_NE(vSession->d_ptr, nullptr);
+    ASSERT_NE(vSession->d_ptr->m_inter, nullptr);
+    EXPECT_EQ(testPath, vSession->d_ptr->m_inter->m_path);
 }
 
 TEST_F(TestDLoginManager, currentUser)
@@ -876,7 +903,9 @@ TEST_F(TestDLoginManager, currentUser)
     Login1UserService user(Service, testPath);
     m_fakeService->m_userPath = QDBusObjectPath(testPath);
     auto dUser = m_dLoginManager->currentUser();
-    ASSERT_NE(dUser->d_ptr, nullptr);
-    ASSERT_NE(dUser->d_ptr->m_inter, nullptr);
-    EXPECT_EQ(testPath, dUser->d_ptr->m_inter->m_path);
+    ASSERT_TRUE(dUser.hasValue());
+    auto vUser = dUser.value();
+    ASSERT_NE(vUser->d_ptr, nullptr);
+    ASSERT_NE(vUser->d_ptr->m_inter, nullptr);
+    EXPECT_EQ(testPath, vUser->d_ptr->m_inter->m_path);
 }

@@ -41,7 +41,7 @@ public:  // PROPERTIES
     Q_PROPERTY(bool IdleHint MEMBER m_idleHint READ idleHint);
     Q_PROPERTY(quint64 IdleSinceHint MEMBER m_idleSinceHint READ idleSinceHint);
     Q_PROPERTY(quint64 IdleSinceHintMonotonic MEMBER m_idleSinceHintMonotonic READ idleSinceHintMonotonic);
-    Q_PROPERTY(QList<DLOGIN_NAMESPACE::DBusSessionPath> Sessions MEMBER m_sessions READ sessions);
+    Q_PROPERTY(QList<DTK_LOGIN_NAMESPACE::DBusSessionPath> Sessions MEMBER m_sessions READ sessions);
 
     DBusSessionPath activeSession() const;
     bool canGraphical() const;
@@ -50,7 +50,7 @@ public:  // PROPERTIES
     QString id() const;
     quint64 idleSinceHint() const;
     quint64 idleSinceHintMonotonic() const;
-    QList<DLOGIN_NAMESPACE::DBusSessionPath> sessions() const;
+    QList<DTK_LOGIN_NAMESPACE::DBusSessionPath> sessions() const;
 
 public Q_SLOTS:  // METHODS
     void ActivateSession(const QString &sessionId);

@@ -21,6 +21,8 @@
 #include "dloginuser.h"
 #include "dloginutils.h"
 
+using DTK_CORE_NAMESPACE::DError;
+using DTK_CORE_NAMESPACE::DUnexpected;
 DLOGIN_BEGIN_NAMESPACE
 DLoginManager::DLoginManager(QObject *parent)
     : QObject(parent)
@@ -262,418 +264,436 @@ quint64 DLoginManager::userStopDelayUSec() const
 
 // public slots
 
-void DLoginManager::activateSession(const QString &sessionId)
+DExpected<void> DLoginManager::activateSession(const QString &sessionId)
 {
     Q_D(DLoginManager);
     QDBusPendingReply<> reply = d->m_inter->activateSession(sessionId);
     reply.waitForFinished();
     if (!reply.isValid()) {
-        qWarning() << reply.error().message();
+        return DUnexpected<>{DError{reply.error().type(), reply.error().message()}};
     }
+    return {};
 }
 
-void DLoginManager::activateSessionOnSeat(const QString &sessionId, const QString &seatId)
+DExpected<void> DLoginManager::activateSessionOnSeat(const QString &sessionId, const QString &seatId)
 {
     Q_D(DLoginManager);
     QDBusPendingReply<> reply = d->m_inter->activateSessionOnSeat(sessionId, seatId);
     reply.waitForFinished();
     if (!reply.isValid()) {
-        qWarning() << reply.error().message();
+        return DUnexpected<>{DError{reply.error().type(), reply.error().message()}};
     }
+    return {};
 }
 
-ExecuteStatus DLoginManager::canHalt()
+DExpected<ExecuteStatus> DLoginManager::canHalt()
 {
     Q_D(DLoginManager);
     QDBusPendingReply<QString> reply = d->m_inter->canHalt();
     reply.waitForFinished();
     if (!reply.isValid()) {
-        qWarning() << reply.error().message();
-        return {};
+        return DUnexpected<>{DError{reply.error().type(), reply.error().message()}};
     }
     return Utils::stringToStatus(reply.value());
 }
 
-ExecuteStatus DLoginManager::canHibernate()
+DExpected<DTK_LOGIN_NAMESPACE::ExecuteStatus> DLoginManager::canHibernate()
 {
     Q_D(DLoginManager);
     QDBusPendingReply<QString> reply = d->m_inter->canHibernate();
     reply.waitForFinished();
     if (!reply.isValid()) {
-        qWarning() << reply.error().message();
-        return {};
+        return DUnexpected<>{DError{reply.error().type(), reply.error().message()}};
     }
     return Utils::stringToStatus(reply.value());
 }
 
-ExecuteStatus DLoginManager::canHybridSleep()
+DExpected<DTK_LOGIN_NAMESPACE::ExecuteStatus> DLoginManager::canHybridSleep()
 {
     Q_D(DLoginManager);
     QDBusPendingReply<QString> reply = d->m_inter->canHybridSleep();
     reply.waitForFinished();
     if (!reply.isValid()) {
-        qWarning() << reply.error().message();
-        return {};
+        return DUnexpected<>{DError{reply.error().type(), reply.error().message()}};
     }
     return Utils::stringToStatus(reply.value());
 }
 
-ExecuteStatus DLoginManager::canPowerOff()
+DExpected<DTK_LOGIN_NAMESPACE::ExecuteStatus> DLoginManager::canPowerOff()
 {
     Q_D(DLoginManager);
     QDBusPendingReply<QString> reply = d->m_inter->canPowerOff();
     reply.waitForFinished();
     if (!reply.isValid()) {
-        qWarning() << reply.error().message();
-        return {};
+        return DUnexpected<>{DError{reply.error().type(), reply.error().message()}};
     }
     return Utils::stringToStatus(reply.value());
 }
 
-ExecuteStatus DLoginManager::canReboot()
+DExpected<DTK_LOGIN_NAMESPACE::ExecuteStatus> DLoginManager::canReboot()
 {
     Q_D(DLoginManager);
     QDBusPendingReply<QString> reply = d->m_inter->canReboot();
     reply.waitForFinished();
     if (!reply.isValid()) {
-        qWarning() << reply.error().message();
-        return {};
+        return DUnexpected<>{DError{reply.error().type(), reply.error().message()}};
     }
     return Utils::stringToStatus(reply.value());
 }
 
-ExecuteStatus DLoginManager::canSuspend()
+DExpected<DTK_LOGIN_NAMESPACE::ExecuteStatus> DLoginManager::canSuspend()
 {
     Q_D(DLoginManager);
     QDBusPendingReply<QString> reply = d->m_inter->canSuspend();
     reply.waitForFinished();
     if (!reply.isValid()) {
-        qWarning() << reply.error().message();
-        return {};
+        return DUnexpected<>{DError{reply.error().type(), reply.error().message()}};
     }
     return Utils::stringToStatus(reply.value());
 }
 
-ExecuteStatus DLoginManager::canSuspendThenHibernate()
+DExpected<DTK_LOGIN_NAMESPACE::ExecuteStatus> DLoginManager::canSuspendThenHibernate()
 {
     Q_D(DLoginManager);
     QDBusPendingReply<QString> reply = d->m_inter->canSuspendThenHibernate();
     reply.waitForFinished();
     if (!reply.isValid()) {
-        qWarning() << reply.error().message();
-        return {};
+        return DUnexpected<>{DError{reply.error().type(), reply.error().message()}};
     }
     return Utils::stringToStatus(reply.value());
 }
 
-bool DLoginManager::cancelScheduledShutdown()
+DExpected<bool> DLoginManager::cancelScheduledShutdown()
 {
     Q_D(DLoginManager);
     QDBusPendingReply<bool> reply = d->m_inter->cancelScheduledShutdown();
     reply.waitForFinished();
     if (!reply.isValid()) {
-        qWarning() << reply.error().message();
-        return false;
+        return DUnexpected<>{DError{reply.error().type(), reply.error().message()}};
     }
     return reply.value();
 }
 
-QSharedPointer<DLoginSeat> DLoginManager::findSeatById(const QString &seatId)
+DExpected<QSharedPointer<DLoginSeat>> DLoginManager::findSeatById(const QString &seatId)
 {
     Q_D(DLoginManager);
     QDBusPendingReply<QDBusObjectPath> reply = d->m_inter->getSeat(seatId);
     reply.waitForFinished();
     if (!reply.isValid()) {
-        qWarning() << reply.error().message();
-        return {};
+        return DUnexpected<>{DError{reply.error().type(), reply.error().message()}};
     }
     return QSharedPointer<DLoginSeat>(new DLoginSeat(reply.value().path()));
 }
 
-QSharedPointer<DLoginSession> DLoginManager::findSessionById(const QString &sessionId)
+DExpected<QSharedPointer<DLoginSession>> DLoginManager::findSessionById(const QString &sessionId)
 {
     Q_D(DLoginManager);
     QDBusPendingReply<QDBusObjectPath> reply = d->m_inter->getSession(sessionId);
     reply.waitForFinished();
     if (!reply.isValid()) {
-        qWarning() << reply.error().message();
-        return {};
+        return DUnexpected<>{DError{reply.error().type(), reply.error().message()}};
     }
     return QSharedPointer<DLoginSession>(new DLoginSession(reply.value().path()));
 }
 
-QSharedPointer<DLoginSession> DLoginManager::findSessionByPID(const quint32 PID)
+DExpected<QSharedPointer<DLoginSession>> DLoginManager::findSessionByPID(quint32 PID)
 {
     Q_D(DLoginManager);
     QDBusPendingReply<QDBusObjectPath> reply = d->m_inter->getSessionByPID(PID);
     reply.waitForFinished();
     if (!reply.isValid()) {
-        qWarning() << reply.error().message();
-        return {};
+        return DUnexpected<>{DError{reply.error().type(), reply.error().message()}};
     }
     return QSharedPointer<DLoginSession>(new DLoginSession(reply.value().path()));
 }
 
-QSharedPointer<DLoginUser> DLoginManager::findUserById(const quint32 UID)
+DExpected<QSharedPointer<DLoginUser>> DLoginManager::findUserById(quint32 UID)
 {
     Q_D(DLoginManager);
     QDBusPendingReply<QDBusObjectPath> reply = d->m_inter->getUser(UID);
     reply.waitForFinished();
     if (!reply.isValid()) {
-        qWarning() << reply.error().message();
-        return {};
+        return DUnexpected<>{DError{reply.error().type(), reply.error().message()}};
     }
     return QSharedPointer<DLoginUser>(new DLoginUser(reply.value().path()));
 }
 
-QSharedPointer<DLoginUser> DLoginManager::findUserByPID(const quint32 PID)
+DExpected<QSharedPointer<DLoginUser>> DLoginManager::findUserByPID(quint32 PID)
 {
     Q_D(DLoginManager);
     QDBusPendingReply<QDBusObjectPath> reply = d->m_inter->getUserByPID(PID);
     reply.waitForFinished();
     if (!reply.isValid()) {
-        qWarning() << reply.error().message();
-        return {};
+        return DUnexpected<>{DError{reply.error().type(), reply.error().message()}};
     }
     return QSharedPointer<DLoginUser>(new DLoginUser(reply.value().path()));
 }
 
-void DLoginManager::halt(const bool interactive)
+DExpected<void> DLoginManager::halt(bool interactive)
 {
     Q_D(DLoginManager);
     QDBusPendingReply<> reply = d->m_inter->halt(interactive);
     reply.waitForFinished();
     if (!reply.isValid()) {
-        qWarning() << reply.error().message();
+        return DUnexpected<>{DError{reply.error().type(), reply.error().message()}};
     }
+    return {};
 }
 
-void DLoginManager::hibernate(const bool interactive)
+DExpected<void> DLoginManager::hibernate(bool interactive)
 {
     Q_D(DLoginManager);
     QDBusPendingReply<> reply = d->m_inter->hibernate(interactive);
     reply.waitForFinished();
     if (!reply.isValid()) {
-        qWarning() << reply.error().message();
+        return DUnexpected<>{DError{reply.error().type(), reply.error().message()}};
     }
+    return {};
 }
 
-void DLoginManager::hybridSleep(const bool interactive)
+DExpected<void> DLoginManager::hybridSleep(bool interactive)
 {
     Q_D(DLoginManager);
     QDBusPendingReply<> reply = d->m_inter->hybridSleep(interactive);
     reply.waitForFinished();
     if (!reply.isValid()) {
-        qWarning() << reply.error().message();
+        return DUnexpected<>{DError{reply.error().type(), reply.error().message()}};
     }
+    return {};
 }
 
-int DLoginManager::inhibit(int what, const QString &who, const QString &why, const InhibitMode &mode)
+DExpected<int> DLoginManager::inhibit(int what, const QString &who, const QString &why, InhibitMode mode)
 {
     Q_D(DLoginManager);
     QDBusPendingReply<QDBusUnixFileDescriptor> reply =
         d->m_inter->inhibit(Utils::decodeBehavior(what), who, why, Utils::modeToString(mode));
     reply.waitForFinished();
     if (!reply.isValid()) {
-        qWarning() << reply.error().message();
-        return -1;
+        return DUnexpected<>{DError{reply.error().type(), reply.error().message()}};
     }
     return reply.value().takeFileDescriptor();
 }
 
-void DLoginManager::killSession(const QString &sessionId, const SessionRole &who, const qint32 signalNumber)
+DExpected<void> DLoginManager::killSession(const QString &sessionId, SessionRole who, qint32 signalNumber)
 {
     Q_D(DLoginManager);
     QDBusPendingReply<> reply = d->m_inter->killSession(sessionId, Utils::sessionRoleToString(who), signalNumber);
     reply.waitForFinished();
     if (!reply.isValid()) {
-        qWarning() << reply.error().message();
+        return DUnexpected<>{DError{reply.error().type(), reply.error().message()}};
     }
+    return {};
 }
 
-void DLoginManager::killUser(const quint32 uid, const qint32 signalNumber)
+DExpected<void> DLoginManager::killUser(quint32 UID, qint32 signalNumber)
 {
     Q_D(DLoginManager);
-    QDBusPendingReply<> reply = d->m_inter->killUser(uid, signalNumber);
+    QDBusPendingReply<> reply = d->m_inter->killUser(UID, signalNumber);
     reply.waitForFinished();
     if (!reply.isValid()) {
-        qWarning() << reply.error().message();
+        return DUnexpected<>{DError{reply.error().type(), reply.error().message()}};
     }
+    return {};
 }
 
-QList<Inhibitor> DLoginManager::listInhibitors()
+DExpected<QList<Inhibitor>> DLoginManager::listInhibitors()
 {
     Q_D(DLoginManager);
     QDBusPendingReply<QList<DBusInhibitor>> reply = d->m_inter->listInhibitors();
     reply.waitForFinished();
     QList<Inhibitor> inhibitors;
     if (!reply.isValid()) {
-        qWarning() << reply.error().message();
-        return inhibitors;
+        return DUnexpected<>{DError{reply.error().type(), reply.error().message()}};
     }
-    for (auto &&inhibitor_p : reply.value()) {
-        inhibitors.append(Utils::inhibitorFromDBus(inhibitor_p));
+    for (auto &&inhibitorDBus : reply.value()) {
+        inhibitors.append(Utils::inhibitorFromDBus(inhibitorDBus));
     }
     return inhibitors;
 }
 
-QList<QString> DLoginManager::listSeats()
+DExpected<QList<QString>> DLoginManager::listSeats()
 {
     Q_D(DLoginManager);
     QDBusPendingReply<QList<DBusSeat>> reply = d->m_inter->listSeats();
     reply.waitForFinished();
     QList<QString> seats;
     if (!reply.isValid()) {
-        qWarning() << reply.error().message();
-        return seats;
+        return DUnexpected<>{DError{reply.error().type(), reply.error().message()}};
     }
-    for (auto &&seat_p : reply.value()) {
-        seats.append(seat_p.seatId);
+    for (auto &&seatDBus : reply.value()) {
+        seats.append(seatDBus.seatId);
     }
     return seats;
 }
 
-QList<QString> DLoginManager::listSessions()
+DExpected<QList<QString>> DLoginManager::listSessions()
 {
     Q_D(DLoginManager);
     QDBusPendingReply<QList<DBusSession>> reply = d->m_inter->listSessions();
     reply.waitForFinished();
     QList<QString> sessions;
     if (!reply.isValid()) {
-        qWarning() << reply.error().message();
-        return sessions;
+        return DUnexpected<>{DError{reply.error().type(), reply.error().message()}};
     }
-    for (auto &&session_p : reply.value()) {
-        sessions.append(session_p.sessionId);
+    for (auto &&sessionDBus : reply.value()) {
+        sessions.append(sessionDBus.sessionId);
     }
     return sessions;
 }
 
-QList<quint32> DLoginManager::listUsers()
+DExpected<QList<quint32>> DLoginManager::listUsers()
 {
     Q_D(DLoginManager);
     QDBusPendingReply<QList<DBusUser>> reply = d->m_inter->listUsers();
     reply.waitForFinished();
     QList<quint32> users;
     if (!reply.isValid()) {
-        qWarning() << reply.error().message();
-        return users;
+        return DUnexpected<>{DError{reply.error().type(), reply.error().message()}};
     }
-    for (auto &&user_p : reply.value()) {
-        users.append(user_p.userId);
+    for (auto &&userDBus : reply.value()) {
+        users.append(userDBus.userId);
     }
     return users;
 }
 
-void DLoginManager::lockSession(const QString &sessionId)
+DExpected<void> DLoginManager::lockSession(const QString &sessionId)
 {
     Q_D(DLoginManager);
     QDBusPendingReply<> reply = d->m_inter->lockSession(sessionId);
     reply.waitForFinished();
     if (!reply.isValid()) {
-        qWarning() << reply.error().message();
+        return DUnexpected<>{DError{reply.error().type(), reply.error().message()}};
     }
+    return {};
 }
 
-void DLoginManager::powerOff(const bool interactive)
+DExpected<void> DLoginManager::powerOff(bool interactive)
 {
     Q_D(DLoginManager);
     QDBusPendingReply<> reply = d->m_inter->powerOff(interactive);
     reply.waitForFinished();
     if (!reply.isValid()) {
-        qWarning() << reply.error().message();
+        return DUnexpected<>{DError{reply.error().type(), reply.error().message()}};
     }
+    return {};
 }
 
-void DLoginManager::reboot(const bool interactive)
+DExpected<void> DLoginManager::reboot(bool interactive)
 {
     Q_D(DLoginManager);
     QDBusPendingReply<> reply = d->m_inter->reboot(interactive);
     reply.waitForFinished();
     if (!reply.isValid()) {
-        qWarning() << reply.error().message();
+        return DUnexpected<>{DError{reply.error().type(), reply.error().message()}};
     }
+    return {};
 }
 
-void DLoginManager::scheduleShutdown(const ShutdownType &type, const QDateTime &usec)
+DExpected<void> DLoginManager::scheduleShutdown(ShutdownType type, const QDateTime &usec)
 {
     Q_D(DLoginManager);
     QDBusPendingReply<> reply = d->m_inter->scheduleShutdown(Utils::shutdownTypeToString(type), usec.toMSecsSinceEpoch() * 1000);
     reply.waitForFinished();
     if (!reply.isValid()) {
-        qWarning() << reply.error().message();
+        return DUnexpected<>{DError{reply.error().type(), reply.error().message()}};
     }
+    return {};
 }
 
-void DLoginManager::setUserLinger(const quint32 UID, const bool enable, const bool interactive)
+DExpected<void> DLoginManager::setUserLinger(quint32 UID, bool enable, bool interactive)
 {
     Q_D(DLoginManager);
     QDBusPendingReply<> reply = d->m_inter->setUserLinger(UID, enable, interactive);
     reply.waitForFinished();
     if (!reply.isValid()) {
-        qWarning() << reply.error().message();
+        return DUnexpected<>{DError{reply.error().type(), reply.error().message()}};
     }
+    return {};
 }
 
-void DLoginManager::suspend(const bool interactive)
+DExpected<void> DLoginManager::suspend(bool interactive)
 {
     Q_D(DLoginManager);
     QDBusPendingReply<> reply = d->m_inter->suspend(interactive);
     reply.waitForFinished();
     if (!reply.isValid()) {
-        qWarning() << reply.error().message();
+        return DUnexpected<>{DError{reply.error().type(), reply.error().message()}};
     }
+    return {};
 }
 
-void DLoginManager::suspendThenHibernate(const bool interactive)
+DExpected<void> DLoginManager::suspendThenHibernate(bool interactive)
 {
     Q_D(DLoginManager);
     QDBusPendingReply<> reply = d->m_inter->suspendThenHibernate(interactive);
     reply.waitForFinished();
     if (!reply.isValid()) {
-        qWarning() << reply.error().message();
+        return DUnexpected<>{DError{reply.error().type(), reply.error().message()}};
     }
+    return {};
 }
 
-void DLoginManager::terminateSession(const QString &sessionId)
+DExpected<void> DLoginManager::terminateSession(const QString &sessionId)
 {
     Q_D(DLoginManager);
     QDBusPendingReply<> reply = d->m_inter->terminateSession(sessionId);
     reply.waitForFinished();
     if (!reply.isValid()) {
-        qWarning() << reply.error().message();
+        return DUnexpected<>{DError{reply.error().type(), reply.error().message()}};
     }
+    return {};
 }
 
-void DLoginManager::terminateUser(const quint32 uid)
+DExpected<void> DLoginManager::terminateUser(quint32 uid)
 {
     Q_D(DLoginManager);
     QDBusPendingReply<> reply = d->m_inter->terminateUser(uid);
     reply.waitForFinished();
     if (!reply.isValid()) {
-        qWarning() << reply.error().message();
+        return DUnexpected<>{DError{reply.error().type(), reply.error().message()}};
+    }
+    return {};
+}
+
+DExpected<void> DLoginManager::logout()
+{
+    auto eSession = currentSession();
+    if (eSession) {
+        eSession.value()->terminate();
+        return {};
+    } else {
+        return DUnexpected{eSession.error()};
     }
 }
 
-void DLoginManager::logout()
-{
-    QSharedPointer<DLoginSession> session = currentSession();
-    session->terminate();
-}
-
-QSharedPointer<DLoginSeat> DLoginManager::currentSeat()
+DExpected<QSharedPointer<DLoginSeat>> DLoginManager::currentSeat()
 {
     DLoginSeat current(QStringLiteral("/org/freedesktop/login1/seat/self"));
-    return QSharedPointer<DLoginSeat>(findSeatById(current.id()));
+    auto eSeat = findSeatById(current.id());
+    if (eSeat) {
+        return eSeat.value();
+    } else {
+        return DUnexpected{eSeat.error()};
+    }
 }
-QSharedPointer<DLoginSession> DLoginManager::currentSession()
+DExpected<QSharedPointer<DLoginSession>> DLoginManager::currentSession()
 {
     DLoginSession current(QStringLiteral("/org/freedesktop/login1/session/self"));
-    return QSharedPointer<DLoginSession>(findSessionById(current.id()));
+    auto eSession = findSessionById(current.id());
+    if (eSession) {
+        return eSession.value();
+    } else {
+        return DUnexpected{eSession.error()};
+    }
 }
-QSharedPointer<DLoginUser> DLoginManager::currentUser()
+DExpected<QSharedPointer<DLoginUser>> DLoginManager::currentUser()
 {
     DLoginUser current(QStringLiteral("/org/freedesktop/login1/user/self"));
-    return QSharedPointer<DLoginUser>(findUserById(current.UID()));
+    auto eUser = findUserById(current.UID());
+    if (eUser) {
+        return eUser.value();
+    } else {
+        return DUnexpected{eUser.error()};
+    }
 }
 DLOGIN_END_NAMESPACE

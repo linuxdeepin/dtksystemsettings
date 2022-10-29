@@ -5,11 +5,12 @@
 #pragma once
 
 #include <qobject.h>
+#include <dexpected.h>
 
 #include "dtklogin_global.h"
 
 DLOGIN_BEGIN_NAMESPACE
-
+using DCORE_NAMESPACE::DExpected;
 class DLoginSeatPrivate;
 
 class DLoginSeat : public QObject
@@ -38,8 +39,8 @@ public:
     quint64 idleSinceHintMonotonic() const;
 
 public Q_SLOTS:
-    void activateSession(const QString &sessionId);
-    void switchTo(const quint32 VTNr);
+    DExpected<void> activateSession(const QString &sessionId);
+    DExpected<void> switchTo(quint32 VTNr);
 
 private:
     friend class DLoginManager;

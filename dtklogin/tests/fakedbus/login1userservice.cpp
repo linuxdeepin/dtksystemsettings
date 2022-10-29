@@ -116,7 +116,7 @@ void Login1UserService::Terminate()
 {
     m_terminated = true;
 }
-QList<DLOGIN_NAMESPACE::DBusSessionPath> Login1UserService::sessions() const
+QList<DTK_LOGIN_NAMESPACE::DBusSessionPath> Login1UserService::sessions() const
 {
     return m_sessions;
 }

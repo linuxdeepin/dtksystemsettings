@@ -25,11 +25,13 @@ target_include_directories(${BIN_NAME} PUBLIC
     ../src/dbus
     ../src
     ./fakedbus
+    ${DtkCore_INCLUDE_DIRS}
 )
 
 target_link_libraries(${BIN_NAME} PRIVATE
-    Qt5::Core
-    Qt5::DBus
+    Qt${QT_VERSION_MAJOR}::Core
+    Qt${QT_VERSION_MAJOR}::DBus
+    ${DtkCore_LIBRARIES}
     -lpthread
     -lgcov
     -lgtest

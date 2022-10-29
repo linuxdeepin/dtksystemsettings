@@ -5,11 +5,12 @@
 #pragma once
 
 #include <qobject.h>
+#include <dexpected.h>
 
 #include "dlogintypes.h"
 
 DLOGIN_BEGIN_NAMESPACE
-
+using DCORE_NAMESPACE::DExpected;
 class DLoginSessionPrivate;
 
 class DLoginSession : public QObject
@@ -77,16 +78,16 @@ signals:
     void autostartRemoved(const QString &fileName);
 
 public slots:
-    void activate();
-    void kill(SessionRole who, const qint32 signalNumber);
-    void lock();
-    void setIdleHint(const bool idle);
-    void setType(SessionType type);
-    void terminate();
-    QStringList autostartList();
-    bool isAutostart(const QString &fileName);
-    bool removeAutostart(const QString &fileName);
-    bool addAutostart(const QString &fileName);
+    DExpected<void> activate();
+    DExpected<void> kill(DTK_LOGIN_NAMESPACE::SessionRole who, qint32 signalNumber);
+    DExpected<void> lock();
+    DExpected<void> setIdleHint(bool idle);
+    DExpected<void> setType(DTK_LOGIN_NAMESPACE::SessionType type);
+    DExpected<void> terminate();
+    DExpected<QStringList> autostartList();
+    DExpected<bool> isAutostart(const QString &fileName);
+    DExpected<bool> removeAutostart(const QString &fileName);
+    DExpected<bool> addAutostart(const QString &fileName);
 
 private:
     friend class DLoginManager;

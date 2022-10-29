@@ -12,8 +12,13 @@
 PropertyDemo::PropertyDemo(QObject *parent)
     : Demo(parent)
     , m_manager(new DLoginManager)
-    , m_currentSession(m_manager->currentSession())
 {
+    auto current = m_manager->currentSession();
+    if (current) {
+        m_currentSession = current.value();
+    } else {
+        m_currentSession = {};
+    }
 }
 
 int PropertyDemo::run()
@@ -26,28 +31,28 @@ int PropertyDemo::run()
     }
     qDebug() << m_manager->scheduledShutdown();
     auto user = m_manager->findUserById(1000);
-    mo = user->metaObject();
+    mo = user.value()->metaObject();
     for (int i = 0; i < mo->propertyCount(); i++) {
         QMetaProperty mp = mo->property(i);
         qDebug() << "Property:" << mp.name() << ", type:" << mp.typeName() << ", readable:" << mp.isReadable()
-                 << ", writable:" << mp.isWritable() << ", value:" << mp.read(user.data());
+                 << ", writable:" << mp.isWritable() << ", value:" << mp.read(user.value().data());
     }
-    qDebug() << user->UID();
+    qDebug() << user.value()->UID();
     auto session = m_manager->findSessionById(m_currentSession->id());
-    mo = session->metaObject();
+    mo = session.value()->metaObject();
     for (int i = 0; i < mo->propertyCount(); i++) {
         QMetaProperty mp = mo->property(i);
         qDebug() << "Property:" << mp.name() << ", type:" << mp.typeName() << ", readable:" << mp.isReadable()
-                 << ", writable:" << mp.isWritable() << ", value:" << mp.read(session.data());
+                 << ", writable:" << mp.isWritable() << ", value:" << mp.read(session.value().data());
     }
-    qDebug() << session->id();
+    qDebug() << session.value()->id();
     auto seat = m_manager->currentSeat();
-    mo = seat->metaObject();
+    mo = seat.value()->metaObject();
     for (int i = 0; i < mo->propertyCount(); i++) {
         QMetaProperty mp = mo->property(i);
         qDebug() << "Property:" << mp.name() << ", type:" << mp.typeName() << ", readable:" << mp.isReadable()
-                 << ", writable:" << mp.isWritable() << ", value:" << mp.read(seat.data());
+                 << ", writable:" << mp.isWritable() << ", value:" << mp.read(seat.value().data());
     }
-    qDebug() << seat->id();
+    qDebug() << seat.value()->id();
     return 0;
 }
