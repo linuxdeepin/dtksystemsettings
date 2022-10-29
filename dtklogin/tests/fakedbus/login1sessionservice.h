@@ -49,14 +49,14 @@ public:  // PROPERTIES
     Q_PROPERTY(QString RemoteHost MEMBER m_remoteHost READ remoteHost);
     Q_PROPERTY(QString RemoteUser MEMBER m_remoteUser READ remoteUser);
     Q_PROPERTY(QString Scope MEMBER m_scope READ scope);
-    Q_PROPERTY(DLOGIN_NAMESPACE::DBusSeatPath Seat MEMBER m_seat READ seat);
+    Q_PROPERTY(DTK_LOGIN_NAMESPACE::DBusSeatPath Seat MEMBER m_seat READ seat);
     Q_PROPERTY(QString Service MEMBER m_applicationService READ service);
     Q_PROPERTY(QString State MEMBER m_state READ state);
     Q_PROPERTY(QString TTY MEMBER m_TTY READ TTY);
     Q_PROPERTY(quint64 Timestamp MEMBER m_timestamp READ timestamp);
     Q_PROPERTY(quint64 TimestampMonotonic MEMBER m_timestampMonotonic READ timestampMonotonic);
     Q_PROPERTY(QString Type MEMBER m_type READ type);
-    Q_PROPERTY(DLOGIN_NAMESPACE::DBusUserPath User MEMBER m_user READ user);
+    Q_PROPERTY(DTK_LOGIN_NAMESPACE::DBusUserPath User MEMBER m_user READ user);
     Q_PROPERTY(quint32 VTNr MEMBER m_VTNr READ VTNr);
 
     bool active() const;
@@ -75,14 +75,14 @@ public:  // PROPERTIES
     QString remoteHost() const;
     QString remoteUser() const;
     QString scope() const;
-    DLOGIN_NAMESPACE::DBusSeatPath seat() const;
+    DTK_LOGIN_NAMESPACE::DBusSeatPath seat() const;
     QString service() const;
     QString state() const;
     QString TTY() const;
     quint64 timestamp() const;
     quint64 timestampMonotonic() const;
     QString type() const;
-    DLOGIN_NAMESPACE::DBusUserPath user() const;
+    DTK_LOGIN_NAMESPACE::DBusUserPath user() const;
     quint32 VTNr() const;
 
 public Q_SLOTS:  // METHODS

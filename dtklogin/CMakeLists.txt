@@ -39,6 +39,7 @@ endif ()
 
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core DBus)
+find_package(Dtk REQUIRED COMPONENTS Core)
 
 add_subdirectory(src)
 add_subdirectory(examples)

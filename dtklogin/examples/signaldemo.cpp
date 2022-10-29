@@ -11,8 +11,13 @@
 SignalDemo::SignalDemo(QObject *parent)
     : Demo(parent)
     , m_manager(new DLoginManager)
-    , m_currentSession(m_manager->currentSession())
 {
+    auto current = m_manager->currentSession();
+    if (current) {
+        m_currentSession = current.value();
+    } else {
+        m_currentSession = {};
+    }
 }
 
 int SignalDemo::run()

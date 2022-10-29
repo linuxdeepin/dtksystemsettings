@@ -16,6 +16,10 @@
 #include "dloginutils.h"
 
 DLOGIN_BEGIN_NAMESPACE
+using DCORE_NAMESPACE::DExpected;
+using DCORE_NAMESPACE::DUnexpected;
+using DCORE_NAMESPACE::DError;
+
 DLoginUser::DLoginUser(const QString &path, QObject *parent)
     : QObject(parent)
     , d_ptr(new DLoginUserPrivate(this))
@@ -134,24 +138,26 @@ quint64 DLoginUser::loginTimeMonotonic() const
 
 // public slots
 
-void DLoginUser::kill(const qint32 signalNumber)
+DExpected<void> DLoginUser::kill(qint32 signalNumber)
 {
     Q_D(DLoginUser);
     QDBusPendingReply<> reply = d->m_inter->kill(signalNumber);
     reply.waitForFinished();
     if (!reply.isValid()) {
-        qWarning() << reply.error().message();
+        return DUnexpected{DError{reply.error().type(), reply.error().message()}};
     }
+    return {};
 }
 
-void DLoginUser::terminate()
+DExpected<void> DLoginUser::terminate()
 {
     Q_D(DLoginUser);
     QDBusPendingReply<> reply = d->m_inter->terminate();
     reply.waitForFinished();
     if (!reply.isValid()) {
-        qWarning() << reply.error().message();
+        return DUnexpected{DError{reply.error().type(), reply.error().message()}};
     }
+    return {};
 }
 
 DLOGIN_END_NAMESPACE

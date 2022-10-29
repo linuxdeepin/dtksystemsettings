@@ -62,6 +62,37 @@ struct Inhibitor
     friend QDebug operator<<(QDebug debug, const Inhibitor &inhibitor);
 };
 
+enum DLoginErrorCode {
+    NoError = 0,
+    Other = 1,
+    Failed,
+    NoMemory,
+    ServiceUnknown,
+    NoReply,
+    BadAddress,
+    NotSupported,
+    LimitsExceeded,
+    AccessDenied,
+    NoServer,
+    Timeout,
+    NoNetwork,
+    AddressInUse,
+    Disconnected,
+    InvalidArgs,
+    UnknownMethod,
+    TimedOut,
+    InvalidSignature,
+    UnknownInterface,
+    UnknownObject,
+    UnknownProperty,
+    PropertyReadOnly,
+    InternalError,
+    InvalidService,
+    InvalidObjectPath,
+    InvalidInterface,
+    InvalidMember
+};
+
 QDebug operator<<(QDebug debug, const ShutdownType &type);
 QDebug operator<<(QDebug debug, const ScheduledShutdownValue &scheduledShutdown);
 QDebug operator<<(QDebug debug, const PowerAction &action);
@@ -75,14 +106,14 @@ QDebug operator<<(QDebug debug, const UserState &userState);
 
 DLOGIN_END_NAMESPACE
 
-Q_DECLARE_METATYPE(DLOGIN_NAMESPACE::ShutdownType)
-Q_DECLARE_METATYPE(DLOGIN_NAMESPACE::ScheduledShutdownValue)
-Q_DECLARE_METATYPE(DLOGIN_NAMESPACE::PowerAction)
-Q_DECLARE_METATYPE(DLOGIN_NAMESPACE::ExecuteStatus)
-Q_DECLARE_METATYPE(DLOGIN_NAMESPACE::SessionRole)
-Q_DECLARE_METATYPE(DLOGIN_NAMESPACE::InhibitMode)
-Q_DECLARE_METATYPE(DLOGIN_NAMESPACE::SessionState)
-Q_DECLARE_METATYPE(DLOGIN_NAMESPACE::SessionType)
-Q_DECLARE_METATYPE(DLOGIN_NAMESPACE::SessionClass)
-Q_DECLARE_METATYPE(DLOGIN_NAMESPACE::UserState)
-Q_DECLARE_METATYPE(DLOGIN_NAMESPACE::Inhibitor)
+Q_DECLARE_METATYPE(DTK_LOGIN_NAMESPACE::ShutdownType)
+Q_DECLARE_METATYPE(DTK_LOGIN_NAMESPACE::ScheduledShutdownValue)
+Q_DECLARE_METATYPE(DTK_LOGIN_NAMESPACE::PowerAction)
+Q_DECLARE_METATYPE(DTK_LOGIN_NAMESPACE::ExecuteStatus)
+Q_DECLARE_METATYPE(DTK_LOGIN_NAMESPACE::SessionRole)
+Q_DECLARE_METATYPE(DTK_LOGIN_NAMESPACE::InhibitMode)
+Q_DECLARE_METATYPE(DTK_LOGIN_NAMESPACE::SessionState)
+Q_DECLARE_METATYPE(DTK_LOGIN_NAMESPACE::SessionType)
+Q_DECLARE_METATYPE(DTK_LOGIN_NAMESPACE::SessionClass)
+Q_DECLARE_METATYPE(DTK_LOGIN_NAMESPACE::UserState)
+Q_DECLARE_METATYPE(DTK_LOGIN_NAMESPACE::Inhibitor)

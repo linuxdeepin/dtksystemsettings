@@ -7,10 +7,12 @@
 #include <qobject.h>
 #include <qscopedpointer.h>
 #include <qsharedpointer.h>
+#include <dexpected.h>
 
 #include "dlogintypes.h"
 
 DLOGIN_BEGIN_NAMESPACE
+using DCORE_NAMESPACE::DExpected;
 
 class DLoginManagerPrivate;
 class DLoginSeat;
@@ -101,44 +103,44 @@ Q_SIGNALS:
     void userRemoved(quint32 UID);
 
 public Q_SLOTS:
-    void activateSession(const QString &sessionId);
-    void activateSessionOnSeat(const QString &sessionId, const QString &seatId);
-    ExecuteStatus canHalt();
-    ExecuteStatus canHibernate();
-    ExecuteStatus canHybridSleep();
-    ExecuteStatus canPowerOff();
-    ExecuteStatus canReboot();
-    ExecuteStatus canSuspend();
-    ExecuteStatus canSuspendThenHibernate();
-    bool cancelScheduledShutdown();
-    QSharedPointer<DLoginSeat> findSeatById(const QString &seatId);
-    QSharedPointer<DLoginSession> findSessionById(const QString &sessionId);
-    QSharedPointer<DLoginSession> findSessionByPID(const quint32 PID);
-    QSharedPointer<DLoginUser> findUserById(const quint32 UID);
-    QSharedPointer<DLoginUser> findUserByPID(const quint32 PID);
-    void halt(const bool interactive = false);
-    void hibernate(const bool interactive = false);
-    void hybridSleep(const bool interactive = false);
-    int inhibit(int what, const QString &who, const QString &why, const InhibitMode &mode);
-    void killSession(const QString &sessionId, const SessionRole &who, const qint32 signalNumber);
-    void killUser(const quint32 uid, const qint32 signalNumber);
-    QList<Inhibitor> listInhibitors();
-    QList<QString> listSeats();
-    QList<QString> listSessions();
-    QList<quint32> listUsers();
-    void lockSession(const QString &sessionId);
-    void powerOff(const bool interactive = false);
-    void reboot(const bool interactive = false);
-    void scheduleShutdown(const ShutdownType &type, const QDateTime &usec);
-    void setUserLinger(const quint32 UID, const bool enable, const bool interactive);
-    void suspend(const bool interactive = false);
-    void suspendThenHibernate(const bool interactive = false);
-    void terminateSession(const QString &sessionId);
-    void terminateUser(const quint32 uid);
-    void logout();
-    QSharedPointer<DLoginSeat> currentSeat();
-    QSharedPointer<DLoginSession> currentSession();
-    QSharedPointer<DLoginUser> currentUser();
+    DExpected<void> activateSession(const QString &sessionId);
+    DExpected<void> activateSessionOnSeat(const QString &sessionId, const QString &seatId);
+    DExpected<DTK_LOGIN_NAMESPACE::ExecuteStatus> canHalt();
+    DExpected<DTK_LOGIN_NAMESPACE::ExecuteStatus> canHibernate();
+    DExpected<DTK_LOGIN_NAMESPACE::ExecuteStatus> canHybridSleep();
+    DExpected<DTK_LOGIN_NAMESPACE::ExecuteStatus> canPowerOff();
+    DExpected<DTK_LOGIN_NAMESPACE::ExecuteStatus> canReboot();
+    DExpected<DTK_LOGIN_NAMESPACE::ExecuteStatus> canSuspend();
+    DExpected<DTK_LOGIN_NAMESPACE::ExecuteStatus> canSuspendThenHibernate();
+    DExpected<bool> cancelScheduledShutdown();
+    DExpected<QSharedPointer<DTK_LOGIN_NAMESPACE::DLoginSeat>> findSeatById(const QString &seatId);
+    DExpected<QSharedPointer<DTK_LOGIN_NAMESPACE::DLoginSession>> findSessionById(const QString &sessionId);
+    DExpected<QSharedPointer<DTK_LOGIN_NAMESPACE::DLoginSession>> findSessionByPID(quint32 PID);
+    DExpected<QSharedPointer<DTK_LOGIN_NAMESPACE::DLoginUser>> findUserById(quint32 UID);
+    DExpected<QSharedPointer<DTK_LOGIN_NAMESPACE::DLoginUser>> findUserByPID(quint32 PID);
+    DExpected<void> halt(bool interactive = false);
+    DExpected<void> hibernate(bool interactive = false);
+    DExpected<void> hybridSleep(bool interactive = false);
+    DExpected<int> inhibit(int what, const QString &who, const QString &why, DTK_LOGIN_NAMESPACE::InhibitMode mode);
+    DExpected<void> killSession(const QString &sessionId, DTK_LOGIN_NAMESPACE::SessionRole who, qint32 signalNumber);
+    DExpected<void> killUser(quint32 UID, qint32 signalNumber);
+    DExpected<QList<DTK_LOGIN_NAMESPACE::Inhibitor>> listInhibitors();
+    DExpected<QList<QString>> listSeats();
+    DExpected<QList<QString>> listSessions();
+    DExpected<QList<quint32>> listUsers();
+    DExpected<void> lockSession(const QString &sessionId);
+    DExpected<void> powerOff(bool interactive = false);
+    DExpected<void> reboot(bool interactive = false);
+    DExpected<void> scheduleShutdown(DTK_LOGIN_NAMESPACE::ShutdownType type, const QDateTime &usec);
+    DExpected<void> setUserLinger(quint32 UID, bool enable, bool interactive);
+    DExpected<void> suspend(bool interactive = false);
+    DExpected<void> suspendThenHibernate(bool interactive = false);
+    DExpected<void> terminateSession(const QString &sessionId);
+    DExpected<void> terminateUser(quint32 uid);
+    DExpected<void> logout();
+    DExpected<QSharedPointer<DTK_LOGIN_NAMESPACE::DLoginSeat>> currentSeat();
+    DExpected<QSharedPointer<DTK_LOGIN_NAMESPACE::DLoginSession>> currentSession();
+    DExpected<QSharedPointer<DTK_LOGIN_NAMESPACE::DLoginUser>> currentUser();
 
 private:
     QScopedPointer<DLoginManagerPrivate> d_ptr;

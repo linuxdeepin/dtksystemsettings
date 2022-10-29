@@ -7,7 +7,6 @@
 #include "dtklogin_global.h"
 #include <qobject.h>
 
-class DDBusInterface;
 class QFileSystemWatcher;
 DLOGIN_BEGIN_NAMESPACE
 class DLoginSession;

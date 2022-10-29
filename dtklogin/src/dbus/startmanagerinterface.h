@@ -6,9 +6,11 @@
 #include "dtklogin_global.h"
 #include <qobject.h>
 #include <qdbuspendingreply.h>
+#include <ddbusinterface.h>
+
+using DTK_CORE_NAMESPACE::DDBusInterface;
 
 class QDBusConnection;
-class DDBusInterface;
 
 DLOGIN_BEGIN_NAMESPACE
 

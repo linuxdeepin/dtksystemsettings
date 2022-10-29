@@ -84,18 +84,12 @@ Inhibitor inhibitorFromDBus(const DBusInhibitor &inhibitorDBus)
 }
 QString statusToString(const ExecuteStatus &status)
 {
-    switch (status) {
-        case ExecuteStatus::Yes:
-            return "yes";
-        case ExecuteStatus::No:
-            return "no";
-        case ExecuteStatus::Challenge:
-            return "challenge";
-        case ExecuteStatus::Na:
-            return "na";
-        default:
-            return "";
-    }
+    static const QMap<ExecuteStatus, QString> statusMap = {{ExecuteStatus::Yes, "yes"},
+                                                            {ExecuteStatus::No, "no"},
+                                                            {ExecuteStatus::Challenge, "challenge"},
+                                                            {ExecuteStatus::Na, "na"},
+                                                            {ExecuteStatus::Unknown, ""}};
+    return statusMap[status];
 }
 ExecuteStatus stringToStatus(const QString &strStatus)
 {

@@ -16,6 +16,9 @@
 #include "login1seatinterface.h"
 
 DLOGIN_BEGIN_NAMESPACE
+using DCORE_NAMESPACE::DExpected;
+using DCORE_NAMESPACE::DUnexpected;
+using DCORE_NAMESPACE::DError;
 DLoginSeat::DLoginSeat(const QString &path, QObject *parent)
     : QObject(parent)
     , d_ptr(new DLoginSeatPrivate(this))
@@ -87,24 +90,26 @@ quint64 DLoginSeat::idleSinceHintMonotonic() const
     return d->m_inter->idleSinceHintMonotonic();
 }
 
-void DLoginSeat::activateSession(const QString &sessionId)
+DExpected<void> DLoginSeat::activateSession(const QString &sessionId)
 {
     Q_D(DLoginSeat);
     QDBusPendingReply<> reply = d->m_inter->activateSession(sessionId);
     reply.waitForFinished();
     if (!reply.isValid()) {
-        qWarning() << reply.error().message();
+        return DUnexpected{DError{reply.error().type(), reply.error().message()}};
     }
+    return {};
 }
 
-void DLoginSeat::switchTo(const uint VTNr)
+DExpected<void> DLoginSeat::switchTo(quint32 VTNr)
 {
     Q_D(DLoginSeat);
     QDBusPendingReply<> reply = d->m_inter->switchTo(VTNr);
     reply.waitForFinished();
     if (!reply.isValid()) {
-        qWarning() << reply.error().message();
+        return DUnexpected{DError{reply.error().type(), reply.error().message()}};
     }
+    return {};
 }
 
 DLoginSeat::~DLoginSeat() = default;

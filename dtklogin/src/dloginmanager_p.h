@@ -7,8 +7,6 @@
 #include "dloginmanager.h"
 
 #include <qobject.h>
-
-class DDBusInterface;
 DLOGIN_BEGIN_NAMESPACE
 class Login1ManagerInterface;
 

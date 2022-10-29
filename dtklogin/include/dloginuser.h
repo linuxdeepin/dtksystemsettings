@@ -5,11 +5,12 @@
 #pragma once
 
 #include <qobject.h>
+#include <dexpected.h>
 
 #include "dlogintypes.h"
 
 DLOGIN_BEGIN_NAMESPACE
-
+using DCORE_NAMESPACE::DExpected;
 class DLoginUserPrivate;
 
 class DLoginUser : public QObject
@@ -51,8 +52,8 @@ public:
     quint64 loginTimeMonotonic() const;
 
 public Q_SLOTS:
-    void kill(const qint32 signalNumber);
-    void terminate();
+    DExpected<void> kill(qint32 signalNumber);
+    DExpected<void> terminate();
 
 private:
     explicit DLoginUser(const QString &path, QObject *parent = nullptr);

@@ -11,7 +11,6 @@
 #include <qprocess.h>
 #include <qfile.h>
 #include <ostream>
-#include "ddbusinterface.h"
 #include "sessionmanagerservice.h"
 #include "startmanagerservice.h"
 #include "dloginutils.h"
@@ -552,7 +551,9 @@ TEST_P(TestAutostart, getAutostartApps)
         return;
     }
     EXPECT_THAT(autostartApps, testing::IsEmpty());
-    autostartApps = m_dLoginSession->autostartList();
+    auto eAutostartApps = m_dLoginSession->autostartList();
+    ASSERT_TRUE(eAutostartApps.hasValue());
+    autostartApps = eAutostartApps.value();
     foreach (const auto app, params.autostartAppsResult) {
         if (autostartApps.contains(catPath(app))) {
             autostartApps.removeOne(catPath(app));
@@ -570,7 +571,9 @@ TEST_P(TestAutostart, getAutostartApps)
             QFile::copy(fileInfo.absoluteFilePath(), first + "/" + fileInfo.fileName());
         }
     }
-    autostartApps = m_dLoginSession->autostartList();
+    eAutostartApps = m_dLoginSession->autostartList();
+    ASSERT_TRUE(eAutostartApps.hasValue());
+    autostartApps = eAutostartApps.value();
     foreach (const auto app, params.autostartAppsResult) {
         if (autostartApps.contains(catPath(app))) {
             autostartApps.removeOne(catPath(app));
@@ -611,7 +614,9 @@ TEST_P(TestAutostart, isAutostart)
     } else {
         fileName = params.isAutostartFileName;
     }
-    bool result = m_dLoginSession->isAutostart(fileName);
+    auto eResult = m_dLoginSession->isAutostart(fileName);
+    ASSERT_TRUE(eResult.hasValue());
+    bool result = eResult.value();
     EXPECT_EQ(params.isAutostartResult, result);
 }
 
@@ -785,11 +790,15 @@ TEST_F(TestDLoginSession, addAutostart)
 {
     m_startManagerService->m_fileName = "";
     m_startManagerService->m_success = false;
-    bool result = m_dLoginSession->addAutostart("test");
+    auto eResult = m_dLoginSession->addAutostart("test");
+    ASSERT_TRUE(eResult.hasValue());
+    bool result = eResult.value();
     EXPECT_FALSE(result);
     EXPECT_EQ("test", m_startManagerService->m_fileName);
     m_startManagerService->m_success = true;
-    result = m_dLoginSession->addAutostart("test");
+    eResult = m_dLoginSession->addAutostart("test");
+    ASSERT_TRUE(eResult.hasValue());
+    result = eResult.value();
     EXPECT_TRUE(result);
 }
 
@@ -797,10 +806,14 @@ TEST_F(TestDLoginSession, removeAutostart)
 {
     m_startManagerService->m_fileName = "";
     m_startManagerService->m_success = false;
-    bool result = m_dLoginSession->removeAutostart("test");
+    auto eResult = m_dLoginSession->removeAutostart("test");
+    ASSERT_TRUE(eResult.hasValue());
+    bool result = eResult.value();
     EXPECT_FALSE(result);
     EXPECT_EQ("test", m_startManagerService->m_fileName);
     m_startManagerService->m_success = true;
-    result = m_dLoginSession->removeAutostart("test");
+    eResult = m_dLoginSession->removeAutostart("test");
+    ASSERT_TRUE(eResult.hasValue());
+    result = eResult.value();
     EXPECT_TRUE(result);
 }

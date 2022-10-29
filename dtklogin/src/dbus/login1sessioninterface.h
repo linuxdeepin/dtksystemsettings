@@ -5,8 +5,9 @@
 #pragma once
 #include "dlogintypes_p.h"
 #include <qdbuspendingreply.h>
+#include <ddbusinterface.h>
 
-class DDBusInterface;
+using DTK_CORE_NAMESPACE::DDBusInterface;
 DLOGIN_BEGIN_NAMESPACE
 
 class Login1SessionInterface : public QObject

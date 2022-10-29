@@ -21,6 +21,9 @@
 #include "sessionmanagerinterface.h"
 #include "dloginutils.h"
 DLOGIN_BEGIN_NAMESPACE
+using DCORE_NAMESPACE::DExpected;
+using DCORE_NAMESPACE::DUnexpected;
+using DCORE_NAMESPACE::DError;
 
 DLoginSession::DLoginSession(const QString &path, QObject *parent)
     : QObject(parent)
@@ -211,65 +214,71 @@ quint64 DLoginSession::createdTimeMonotonic() const
     return d->m_inter->timestampMonotonic();
 }
 
-void DLoginSession::activate()
+DExpected<void> DLoginSession::activate()
 {
     Q_D(DLoginSession);
     QDBusPendingReply<> reply = d->m_inter->activate();
     reply.waitForFinished();
     if (!reply.isValid()) {
-        qWarning() << reply.error().message();
+        return DUnexpected{DError{reply.error().type(), reply.error().message()}};
     }
+    return {};
 }
 
-void DLoginSession::kill(SessionRole who, const qint32 signalNumber)
+DExpected<void> DLoginSession::kill(SessionRole who, qint32 signalNumber)
 {
     Q_D(DLoginSession);
     QDBusPendingReply<> reply = d->m_inter->kill(Utils::sessionRoleToString(who), signalNumber);
     reply.waitForFinished();
     if (!reply.isValid()) {
-        qWarning() << reply.error().message();
+        return DUnexpected{DError{reply.error().type(), reply.error().message()}};
     }
+    return {};
 }
-void DLoginSession::lock()
+DExpected<void> DLoginSession::lock()
 {
     Q_D(DLoginSession);
     QDBusPendingReply<> reply = d->m_inter->lock();
     reply.waitForFinished();
     if (!reply.isValid()) {
-        qWarning() << reply.error().message();
+        return DUnexpected{DError{reply.error().type(), reply.error().message()}};
     }
+    return {};
 }
-void DLoginSession::setIdleHint(const bool idle)
+DExpected<void> DLoginSession::setIdleHint(bool idle)
 {
     Q_D(DLoginSession);
     QDBusPendingReply<> reply = d->m_inter->setIdleHint(idle);
     reply.waitForFinished();
     if (!reply.isValid()) {
-        qWarning() << reply.error().message();
+        return DUnexpected{DError{reply.error().type(), reply.error().message()}};
     }
+    return {};
 }
 
-void DLoginSession::setType(SessionType type)
+DExpected<void> DLoginSession::setType(SessionType type)
 {
     Q_D(DLoginSession);
     QDBusPendingReply<> reply = d->m_inter->setType(Utils::sessionTypeToString(type));
     reply.waitForFinished();
     if (!reply.isValid()) {
-        qWarning() << reply.error().message();
+        return DUnexpected{DError{reply.error().type(), reply.error().message()}};
     }
+    return {};
 }
 
-void DLoginSession::terminate()
+DExpected<void> DLoginSession::terminate()
 {
     Q_D(DLoginSession);
     QDBusPendingReply<> reply = d->m_inter->terminate();
     reply.waitForFinished();
     if (!reply.isValid()) {
-        qWarning() << reply.error().message();
+        return DUnexpected{DError{reply.error().type(), reply.error().message()}};
     }
+    return {};
 }
 
-QStringList DLoginSession::autostartList()
+DExpected<QStringList> DLoginSession::autostartList()
 {
     Q_D(DLoginSession);
     QStringList autostartApps;
@@ -289,11 +298,11 @@ QStringList DLoginSession::autostartList()
     return autostartApps;
 }
 
-bool DLoginSession::isAutostart(const QString &fileName)
+DExpected<bool> DLoginSession::isAutostart(const QString &fileName)
 {
     Q_D(DLoginSession);
     if (QDir::isAbsolutePath(fileName)) {
-        QStringList autostartApps = autostartList();
+        QStringList autostartApps = autostartList().value();
         return autostartApps.contains(fileName);
     } else {
         if (fileName.contains("/")) {
@@ -314,27 +323,25 @@ bool DLoginSession::isAutostart(const QString &fileName)
     }
 }
 
-bool DLoginSession::removeAutostart(const QString &fileName)
+DExpected<bool> DLoginSession::removeAutostart(const QString &fileName)
 {
     Q_D(const DLoginSession);
     auto reply = d->m_startManagerInter->removeAutostart(fileName);
     reply.waitForFinished();
     if (!reply.isValid()) {
-        qWarning() << reply.error().message();
-        return false;
+        return DUnexpected{DError{reply.error().type(), reply.error().message()}};
     } else {
         return reply.value();
     }
 }
 
-bool DLoginSession::addAutostart(const QString &fileName)
+DExpected<bool> DLoginSession::addAutostart(const QString &fileName)
 {
     Q_D(const DLoginSession);
     auto reply = d->m_startManagerInter->addAutostart(fileName);
     reply.waitForFinished();
     if (!reply.isValid()) {
-        qWarning() << reply.error().message();
-        return false;
+        return DUnexpected{DError{reply.error().type(), reply.error().message()}};
     } else {
         return reply.value();
     }
@@ -347,7 +354,7 @@ bool DLoginSessionPrivate::enableAutostartWatch()
     auto notWatched = m_fileWatcher->addPaths(autostartDirs);
     // For desktop file handler
     connect(m_fileWatcher, &QFileSystemWatcher::directoryChanged, this, [=](const QString &path) {
-        QStringList autostartApps = q->autostartList();
+        QStringList autostartApps = q->autostartList().value();
         QStringList fileUnderPath;
         foreach (const QString &autostartApp, autostartApps) {
             if (autostartApp.startsWith(path)) {
@@ -369,7 +376,7 @@ bool DLoginSessionPrivate::enableAutostartWatch()
     });
     // for directory itself to be removed.
     connect(m_fileWatcher, &QFileSystemWatcher::fileChanged, this, [=](const QString &path) {
-        QStringList autostartApps = q->autostartList();
+        QStringList autostartApps = q->autostartList().value();
         foreach (const QString &autostartApp, autostartApps) {
             if (autostartApp.startsWith(path)) {
                 emit q->autostartRemoved(autostartApp);

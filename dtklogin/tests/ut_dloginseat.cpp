@@ -8,7 +8,6 @@
 #include "login1seatinterface.h"
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
-#include "ddbusinterface.h"
 
 DLOGIN_USE_NAMESPACE
 

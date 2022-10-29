@@ -39,7 +39,7 @@ public:  // PROPERTIES
     Q_PROPERTY(DBusSessionPath Display MEMBER m_display READ display);
     Q_PROPERTY(bool IdleHint MEMBER m_idleHint READ idleHint);
     Q_PROPERTY(bool Linger MEMBER m_linger READ linger);
-    Q_PROPERTY(QList<DLOGIN_NAMESPACE::DBusSessionPath> Sessions MEMBER m_sessions READ sessions);
+    Q_PROPERTY(QList<DTK_LOGIN_NAMESPACE::DBusSessionPath> Sessions MEMBER m_sessions READ sessions);
     Q_PROPERTY(quint32 UID MEMBER m_UID READ UID);
     Q_PROPERTY(quint32 GID MEMBER m_GID READ GID);
     Q_PROPERTY(QString Name MEMBER m_name READ name);
@@ -53,7 +53,7 @@ public:  // PROPERTIES
     Q_PROPERTY(quint64 TimestampMonotonic MEMBER m_timestampMonotonic READ timestampMonotonic);
 
     DBusSessionPath display() const;
-    QList<DLOGIN_NAMESPACE::DBusSessionPath> sessions() const;
+    QList<DTK_LOGIN_NAMESPACE::DBusSessionPath> sessions() const;
     quint32 UID() const;
     quint32 GID() const;
     bool idleHint() const;

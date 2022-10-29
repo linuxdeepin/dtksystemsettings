@@ -8,8 +8,9 @@
 #include <qdbusunixfiledescriptor.h>
 #include "dlogintypes_p.h"
 #include "dlogintypes.h"
+#include <ddbusinterface.h>
 
-class DDBusInterface;
+using DTK_CORE_NAMESPACE::DDBusInterface;
 class QDBusObjectPath;
 DLOGIN_BEGIN_NAMESPACE class Login1ManagerInterface : public QObject
 {
@@ -137,9 +138,9 @@ public slots:
     QDBusPendingReply<> killSession(const QString &sessionId, const QString &who, qint32 signalNumber);
     QDBusPendingReply<> killUser(quint32 UID, qint32 signalName);
     QDBusPendingReply<QList<DBusInhibitor>> listInhibitors();
-    QDBusPendingReply<QList<DLOGIN_NAMESPACE::DBusSeat>> listSeats();
-    QDBusPendingReply<QList<DLOGIN_NAMESPACE::DBusSession>> listSessions();
-    QDBusPendingReply<QList<DLOGIN_NAMESPACE::DBusUser>> listUsers();
+    QDBusPendingReply<QList<DTK_LOGIN_NAMESPACE::DBusSeat>> listSeats();
+    QDBusPendingReply<QList<DTK_LOGIN_NAMESPACE::DBusSession>> listSessions();
+    QDBusPendingReply<QList<DTK_LOGIN_NAMESPACE::DBusUser>> listUsers();
     QDBusPendingReply<> lockSession(const QString &sessionId);
     QDBusPendingReply<> lockSessions();
     QDBusPendingReply<> powerOff(bool interactive);
