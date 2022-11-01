@@ -19,4 +19,5 @@ add_subdirectory(dtkpower)
 add_subdirectory(dtkaccounts)
 add_subdirectory(dtksystemtime)
 add_subdirectory(dtkrfmanager)
+add_subdirectory(getjobs)
 
