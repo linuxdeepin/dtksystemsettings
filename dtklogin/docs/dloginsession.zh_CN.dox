@@ -138,45 +138,45 @@ DLoginSession 中定义了会话管理的接口
 @brief 自启应用被删除信号
 @param fileName 自启应用的desktop文件
 
-@fn void DLoginSession::activate()
+@fn DExpected<void> DLoginSession::activate()
 @brief 对 Manger对象的相应调用
 对应Login上的Activate方法，类似Manger对象的相应调用
 
-@fn void DLoginSession::kill(const QString who, const uint signal_number)
+@fn DExpected<void> DLoginSession::kill(const QString who, const uint signal_number)
 @brief 和Manager相应对象调用类似
 对应Login上的Kill方法，和Manager对象相应调用类似
 
-@fn void DLoginSession::lock()
+@fn DExpected<void> DLoginSession::lock()
 @brief 和Manager相应对象调用类似
 对应Login上的Kill方法，和Manager对象相应调用类似
 
-@fn void DLoginSession::setIdleHint(const bool idle)
+@fn DExpected<void> DLoginSession::setIdleHint(const bool idle)
 @brief 改变session的空闲状态
 由session对象调用时候以便更改会话的空闲状态
 
-@fn void DLoginSession::setType(const SessionType &type)
+@fn DExpected<void> DLoginSession::setType(const SessionType &type)
 @brief 更改session的类型
 对应Login上的SetType() 方法。该方法允许动态改变会话类型，只能由session当前的控制器调用。如果尚未调用TakeControl()方法，这个方法会失效。此外，一旦控制被释放，session类型会重置，或者使用ReleaseControl方法或者关闭D-Bus连接可以实现重置的效果。这个应该有助于防止session进入不一致的状态，比如控制器崩溃时候。唯一的参数 argument type是指的新的session 类型。
 
-@fn void DLoginSession::terminate()
+@fn DExpected<void> DLoginSession::terminate()
 @brief 和Manger对象的相应工作方式类似
 和Manger对象的相应工作方式类似
 
-@fn QStringList DLoginSession::autostartList();
+@fn DExpected<QStringList> DLoginSession::autostartList();
 @brief 列出所有自启动应用名
 @return 返回一个列表
 
-@fn bool DLoginSession::isAutostart(const QString &fileName);
+@fn DExpected<bool> DLoginSession::isAutostart(const QString &fileName);
 @brief 是否自动启动
 @param[in] fileName 传入一个文件名将判断这个文件是否自动启动
 @return 布尔值
 
-@fn bool DLoginSession::removeAutostart(const QString &fileName);
+@fn DExpected<bool> DLoginSession::removeAutostart(const QString &fileName);
 @brief 移除自动启动
 @param[in] fileName 传入一个文件名将移除这个文件的自动启动
 @return 布尔值，操作是否成功
 
-@fn bool DLoginSession::addAutostart(const QString &fileName);
+@fn DExpected<bool> DLoginSession::addAutostart(const QString &fileName);
 @brief 添加自动启动
 @param[in] fileName 传入一个文件名将添加这个文件的自动启动
 @return 布尔值，操作是否成功
