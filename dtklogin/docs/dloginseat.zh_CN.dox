@@ -53,10 +53,10 @@ dloginseat.h 中定义了管理用户seat的接口。
 @brief 对空闲状态进行编码
 @return 返回一个整型值
 
-@fn void DLoginSeat::activateSession(const QString &sessionId)
+@fn DExpected<void> DLoginSeat::activateSession(const QString &sessionId)
 @brief 将指定id的会话带到前台
 
-@fn void DLoginSeat::switchTo(const uint VTNr)
+@fn DExpected<void> DLoginSeat::switchTo(const uint VTNr)
 @brief 切换到虚拟终端上的会话
 @param VTNr 虚拟终端号
 

@@ -76,10 +76,10 @@ Login1User类中定义了用户管理的接口
 @return 用户自登陆到现在过去的时间
 
 
-@fn void DLoginUser::kill(const qint32 signal_number);
+@fn DExpected<void> DLoginUser::kill(const qint32 signal_number);
 @brief 发送unix信号
 对应Dbus上的kill信号，功能同manager的的KillUser一样，向用户所有进程发送Unix信号，需要信号编号，杀死进程
-@fn void DLoginUser::terminate()
+@fn DExpected<void> DLoginUser::terminate()
 @brief 强制终止用户所有进程
 对应DBus上对应的Terminate 信号，强制终止该用户的所有进程。
 
