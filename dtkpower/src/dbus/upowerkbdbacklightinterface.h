@@ -4,12 +4,13 @@
 
 #pragma once
 
-#include "ddbusinterface.h"
 #include "dtkpower_global.h"
 #include <qdbuspendingreply.h>
 #include <qscopedpointer.h>
+#include <ddbusinterface.h>
 
 DPOWER_BEGIN_NAMESPACE
+using DCORE_NAMESPACE::DDBusInterface;
 class DKbdBacklightPrivate;
 
 class UPowerKbdBacklightInterface : public QObject

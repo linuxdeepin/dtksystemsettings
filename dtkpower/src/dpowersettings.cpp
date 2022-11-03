@@ -13,6 +13,9 @@
 #include "dpowertypes.h"
 
 DPOWER_BEGIN_NAMESPACE
+using DCORE_NAMESPACE::DExpected;
+using DCORE_NAMESPACE::DError;
+using DCORE_NAMESPACE::DUnexpected;
 
 void DPowerSettingsPrivate::connectDBusSignal()
 {
@@ -412,13 +415,14 @@ void DPowerSettings::setSleepLock(const bool value)
     d->m_daemonPowerInter->setSleepLock(value);
 }
 
-void DPowerSettings::reset()
+DExpected<void> DPowerSettings::reset()
 {
     Q_D(DPowerSettings);
     auto reply = d->m_daemonPowerInter->reset();
     reply.waitForFinished();
     if (!reply.isValid()) {
-        qWarning() << reply.error().message();
+        return DUnexpected<>{DError{reply.error().type(), reply.error().message()}};
     }
+    return {};
 }
 DPOWER_END_NAMESPACE

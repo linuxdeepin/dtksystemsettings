@@ -12,6 +12,9 @@
 #include "dbus/upowerdeviceinterface.h"
 
 DPOWER_BEGIN_NAMESPACE
+using DCORE_NAMESPACE::DExpected;
+using DCORE_NAMESPACE::DError;
+using DCORE_NAMESPACE::DUnexpected;
 
 DPowerDevice::DPowerDevice(const QString &name, QObject *parent)
     : QObject(parent)
@@ -241,56 +244,55 @@ QString DPowerDevice::deviceName() const
 }
 
 // pubilc slots
-QList<History> DPowerDevice::history(const QString &type, const uint timespan, const uint resolution) const
+DExpected<QList<History>> DPowerDevice::history(const QString &type, const uint timespan, const uint resolution) const
 {
     Q_D(const DPowerDevice);
     QDBusPendingReply<QList<History_p>> reply = d->m_device_inter->getHistory(type, timespan, resolution);
     reply.waitForFinished();
     QList<History> historys;
     if (!reply.isValid()) {
-        qWarning() << reply.error().message();
-        return historys;
+        return DUnexpected<>{DError{reply.error().type(), reply.error().message()}};
     }
 
-    for (auto &&history_p : reply.value()) {
+    for (auto &&historyDBus : reply.value()) {
         History history;
-        history.value = history_p.value;
-        history.state = history_p.state;
-        history.time = history_p.time;
+        history.value = historyDBus.value;
+        history.state = historyDBus.state;
+        history.time = historyDBus.time;
         historys.append(history);
-    }  // TODO:修改此处，需要简化
+    }
+
     return historys;
 }
 
-QList<Statistic> DPowerDevice::statistics(const QString &type) const
+DExpected<QList<Statistic>> DPowerDevice::statistics(const QString &type) const
 {
     Q_D(const DPowerDevice);
     QDBusPendingReply<QList<Statistic_p>> reply = d->m_device_inter->getStatistics(type);
     reply.waitForFinished();
     QList<Statistic> statistics;
     if (!reply.isValid()) {
-        qWarning() << reply.error().message();
-        return statistics;
+        return DUnexpected<>{DError{reply.error().type(), reply.error().message()}};
     }
 
-    for (auto &&statistic_p : reply.value()) {
+    for (auto &&statisticDBus : reply.value()) {
         Statistic statistic;
-        statistic.value = statistic_p.value;
-        statistic.accuracy = statistic_p.accuracy;
-
+        statistic.value = statisticDBus.value;
+        statistic.accuracy = statisticDBus.accuracy;
         statistics.append(statistic);
     }
     return statistics;
 }
 
-void DPowerDevice::refresh()
+DExpected<void> DPowerDevice::refresh()
 {
     Q_D(DPowerDevice);
     QDBusPendingReply<> reply = d->m_device_inter->refresh();
     reply.waitForFinished();
     if (!reply.isValid()) {
-        qWarning() << reply.error().message();
+        return DUnexpected<>{DError{reply.error().type(), reply.error().message()}};
     }
+    return {};
 }
 
 DPOWER_END_NAMESPACE

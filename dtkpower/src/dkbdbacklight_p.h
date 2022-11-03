@@ -6,7 +6,6 @@
 
 #include "dkbdbacklight.h"
 
-class DDBusInterface;
 DPOWER_BEGIN_NAMESPACE
 
 class UPowerKbdBacklightInterface;

@@ -237,7 +237,7 @@ TEST_F(TestDPowerDevice, history)
     ASSERT_EQ(100, reval[0].value);
     ASSERT_EQ(100, reval[0].state);
     ASSERT_EQ(200, reval[1].value);
-    auto reval1 = m_dpowerDevice->history("type", 100, 100);
+    auto reval1 = m_dpowerDevice->history("type", 100, 100).value();
     ASSERT_EQ(100, reval1[0].time);
     ASSERT_EQ(100, reval1[0].value);
     ASSERT_EQ(100, reval1[0].state);
@@ -250,7 +250,7 @@ TEST_F(TestDPowerDevice, statistic)
     ASSERT_EQ(100, reval[0].accuracy);
     ASSERT_EQ(200, reval[1].value);
     ASSERT_EQ(200, reval[1].accuracy);
-    auto reval1 = m_dpowerDevice->statistics("type");
+    auto reval1 = m_dpowerDevice->statistics("type").value();
     ASSERT_EQ(100, reval1[0].value);
     ASSERT_EQ(100, reval1[0].accuracy);
     ASSERT_EQ(200, reval1[1].value);
