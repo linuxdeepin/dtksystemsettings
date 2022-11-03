@@ -5,9 +5,13 @@
 #pragma once
 
 #include <qobject.h>
+#include <dexpected.h>
+
 #include "dtkpower_global.h"
 
 DPOWER_BEGIN_NAMESPACE
+using DCORE_NAMESPACE::DExpected;
+
 class DPowerSettingsPrivate;
 enum class PowerMode;
 enum class LidClosedAction;
@@ -129,7 +133,7 @@ signals:
     void cpuBoostChanged(const bool value);
 
 public slots:
-    void reset();
+    DExpected<void> reset();
 
 private:
     QScopedPointer<DPowerSettingsPrivate> d_ptr;

@@ -11,7 +11,11 @@
 #include "dbus/upowerkbdbacklightinterface.h"
 #include "dpowertypes.h"
 
+
 DPOWER_BEGIN_NAMESPACE
+using DCORE_NAMESPACE::DExpected;
+using DCORE_NAMESPACE::DError;
+using DCORE_NAMESPACE::DUnexpected;
 
 void DKbdBacklightPrivate::connectDBusSignal()
 {
@@ -43,38 +47,37 @@ DKbdBacklight::DKbdBacklight(QObject *parent)
 DKbdBacklight::~DKbdBacklight() {}
 
 // pubilc slots
-qint32 DKbdBacklight::brightness() const
+DExpected<qint32> DKbdBacklight::brightness() const
 {
     Q_D(const DKbdBacklight);
     QDBusPendingReply<qint32> reply = d->m_kb_inter->getBrightness();
     reply.waitForFinished();
     if (!reply.isValid()) {
-        qWarning() << reply.error().message();
-        return false;
+        return DUnexpected<>{DError{reply.error().type(), reply.error().message()}};
     }
     return reply.value();
 }
 
-qint32 DKbdBacklight::maxBrightness() const
+DExpected<qint32> DKbdBacklight::maxBrightness() const
 {
     Q_D(const DKbdBacklight);
     QDBusPendingReply<qint32> reply = d->m_kb_inter->getMaxBrightness();
     reply.waitForFinished();
     if (!reply.isValid()) {
-        qWarning() << reply.error().message();
-        return false;
+        return DUnexpected<>{DError{reply.error().type(), reply.error().message()}};
     }
     return reply.value();
 }
 
-void DKbdBacklight::setBrightness(const qint32 value)
+DExpected<void> DKbdBacklight::setBrightness(const qint32 value)
 {
     Q_D(DKbdBacklight);
     QDBusPendingReply<> reply = d->m_kb_inter->setBrightness(value);
     reply.waitForFinished();
     if (!reply.isValid()) {
-        qWarning() << reply.error().message();
+        return DUnexpected<>{DError{reply.error().type(), reply.error().message()}};
     }
+    return {};
 }
 
 DPOWER_END_NAMESPACE

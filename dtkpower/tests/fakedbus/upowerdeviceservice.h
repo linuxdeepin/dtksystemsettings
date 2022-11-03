@@ -81,8 +81,8 @@ public:
     QString deviceName() const;
 
 public slots:
-    Q_SCRIPTABLE QList<Dtk::Power::History_p> GetHistory(const QString &type, const uint timespan, const uint resolution) const;
-    Q_SCRIPTABLE QList<Dtk::Power::Statistic_p> GetStatistics(const QString &type) const;
+    Q_SCRIPTABLE QList<DTK_POWER_NAMESPACE::History_p> GetHistory(const QString &type, const uint timespan, const uint resolution) const;
+    Q_SCRIPTABLE QList<DTK_POWER_NAMESPACE::Statistic_p> GetStatistics(const QString &type) const;
     // void refresh();
 private:
     void registerService();

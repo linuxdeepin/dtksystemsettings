@@ -6,9 +6,13 @@
 
 #include <qobject.h>
 #include <qscopedpointer.h>
+#include <dexpected.h>
+
 #include "dtkpower_global.h"
 
 DPOWER_BEGIN_NAMESPACE
+using DCORE_NAMESPACE::DExpected;
+
 class DKbdBacklightPrivate;
 enum class KbdSource;
 
@@ -23,9 +27,9 @@ signals:
     void brightnessChangedWithSource(const qint32 value, const KbdSource &source);
 
 public slots:
-    qint32 brightness() const;
-    qint32 maxBrightness() const;
-    void setBrightness(const qint32 value);
+    DExpected<qint32> brightness() const;
+    DExpected<qint32> maxBrightness() const;
+    DExpected<void> setBrightness(const qint32 value);
 
 private:
     QScopedPointer<DKbdBacklightPrivate> d_ptr;

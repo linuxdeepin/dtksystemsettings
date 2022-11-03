@@ -5,9 +5,13 @@
 #pragma once
 
 #include <qobject.h>
+#include <dexpected.h>
+
 #include "dtkpower_global.h"
 
 DPOWER_BEGIN_NAMESPACE
+using DCORE_NAMESPACE::DExpected;
+
 class DPowerManagerPrivate;
 class DPowerDevice;
 class DKbdBacklight;
@@ -42,9 +46,9 @@ signals:
     void lidIsPresentChanged(const bool &value);
 
 public slots:
-    QStringList devices() const;
-    QString criticalAction() const;
-    void refresh();
+    DExpected<QStringList> devices() const;
+    DExpected<QString> criticalAction() const;
+    DExpected<void> refresh();
 
 private:
     QScopedPointer<DPowerManagerPrivate> d_ptr;

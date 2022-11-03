@@ -15,6 +15,9 @@
 #include "dbus/upowermanagerinterface.h"
 
 DPOWER_BEGIN_NAMESPACE
+using DCORE_NAMESPACE::DExpected;
+using DCORE_NAMESPACE::DError;
+using DCORE_NAMESPACE::DUnexpected;
 
 void DPowerManagerPrivate::connectDBusSignal()
 {
@@ -59,7 +62,11 @@ bool DPowerManager::lidIsPresent() const
 
 bool DPowerManager::hasBattery() const
 {
-    for (auto const &str : devices()) {
+    auto res = devices();
+    if(!res)
+        return false;
+
+    for (auto const &str : res.value()) {
         if (str.contains("BAT", Qt::CaseSensitive))
             return true;
     }
@@ -95,32 +102,30 @@ QString DPowerManager::daemonVersion() const
 }
 
 // pubilc slots
-QStringList DPowerManager::devices() const
+DExpected<QStringList> DPowerManager::devices() const
 {
     Q_D(const DPowerManager);
     QDBusPendingReply<QList<QDBusObjectPath>> reply = d->m_manager_inter->enumerateDevices();
     reply.waitForFinished();
     QStringList devices;
     if (!reply.isValid()) {
-        qWarning() << reply.error().message();
-        return devices;
+        return DUnexpected{DError{reply.error().type(), reply.error().message()}};
     }
-    for (auto &&device_p : reply.value()) {
-        devices.append(device_p.path().mid(32));
+    for (auto &&deviceDBus : reply.value()) {
+        devices.append(deviceDBus.path().mid(32));
     }
     return devices;
 }
 
-QString DPowerManager::criticalAction() const
+DExpected<QString> DPowerManager::criticalAction() const
 {
     Q_D(const DPowerManager);
     QDBusPendingReply<QString> reply = d->m_manager_inter->getCriticalAction();
     reply.waitForFinished();
     if (!reply.isValid()) {
-        qWarning() << reply.error().message();
-        return reply;
+        return DUnexpected{DError{reply.error().type(), reply.error().message()}};
     }
-    return reply;
+    return reply.value();
 }
 
 QSharedPointer<DPowerDevice> DPowerManager::displayDevice() const
@@ -139,7 +144,11 @@ QSharedPointer<DPowerDevice> DPowerManager::displayDevice() const
 
 QSharedPointer<DPowerDevice> DPowerManager::findDeviceByName(const QString &name) const
 {
-    if (!devices().contains(name)) {
+    auto res = devices();
+    if(!res)
+        return nullptr;
+
+    if (!res.value().contains(name)) {
         qWarning() << QStringLiteral("Device does not exist");
         return nullptr;
     }
@@ -156,9 +165,13 @@ QSharedPointer<DKbdBacklight> DPowerManager::kbdBacklight() const
     return QSharedPointer<DKbdBacklight>(new DKbdBacklight());
 }
 
-void DPowerManager::refresh()
+DExpected<void> DPowerManager::refresh()
 {
-    const auto &names = devices();
+    auto res = devices();
+    if(!res)
+        return {};
+
+    const auto &names = res.value();
     for (const auto &name : names) {
         auto device = findDeviceByName(name);
         device->refresh();

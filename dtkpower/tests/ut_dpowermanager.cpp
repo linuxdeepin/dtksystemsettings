@@ -65,7 +65,7 @@ TEST_F(TestDPowerManager, criticalAction)
 
 TEST_F(TestDPowerManager, devices)
 {
-    QStringList list = m_dpowermanager->devices();
+    QStringList list = m_dpowermanager->devices().value();
     ASSERT_EQ("battery_BAT1", list[0]);
 }
 

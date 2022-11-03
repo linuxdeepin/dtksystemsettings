@@ -30,3 +30,6 @@ enum class LidClosedAction : qint32 { Suspend = 1, Hibernate, TurnoffScreen, DoN
 enum class PowerBtnAction : qint32 { Shutdown = 0, Suspend, Hibernate, TurnoffScreen, DoNothing, Unknown };
 
 DPOWER_END_NAMESPACE
+
+Q_DECLARE_METATYPE(DTK_POWER_NAMESPACE::History)
+Q_DECLARE_METATYPE(DTK_POWER_NAMESPACE::Statistic)

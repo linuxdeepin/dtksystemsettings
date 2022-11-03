@@ -4,6 +4,8 @@
 #include "./upowerdeviceservice.h"
 #include <qdbusconnection.h>
 
+DPOWER_USE_NAMESPACE
+
 UPowerDeviceService::UPowerDeviceService(QObject *parent)
     : QObject(parent)
     , m_reset(false)
@@ -163,28 +165,27 @@ QString UPowerDeviceService::deviceName() const
 {
     return name;
 }
-QList<Dtk::Power::History_p>
-UPowerDeviceService::GetHistory(const QString &type, const uint timespan, const uint resolution) const
+QList<History_p> UPowerDeviceService::GetHistory(const QString &type, const uint timespan, const uint resolution) const
 {
-    Dtk::Power::History_p history;
+    History_p history;
     history.time = timespan;
     history.value = 100;
     history.state = resolution;
     Q_UNUSED(type)
-    QList<Dtk::Power::History_p> reval;
+    QList<History_p> reval;
     reval.append(history);
     history.value = 200;
     reval.append(history);
     return reval;
 }
 
-QList<Dtk::Power::Statistic_p> UPowerDeviceService::GetStatistics(const QString &type) const
+QList<Statistic_p> UPowerDeviceService::GetStatistics(const QString &type) const
 {
     Q_UNUSED(type)
-    Dtk::Power::Statistic_p statistic;
+    Statistic_p statistic;
     statistic.accuracy = 100;
     statistic.value = 100;
-    QList<Dtk::Power::Statistic_p> reval;
+    QList<Statistic_p> reval;
     reval.append(statistic);
     statistic.accuracy = 200;
     statistic.value = 200;

@@ -6,10 +6,12 @@
 
 #include <qscopedpointer.h>
 #include <qdatetime.h>
+#include <dexpected.h>
 
 #include "dpowertypes.h"
 
 DPOWER_BEGIN_NAMESPACE
+using DCORE_NAMESPACE::DExpected;
 
 class DPowerDevicePrivate;
 
@@ -93,9 +95,9 @@ signals:
     void iconNameChanged(const QString &value);
 
 public slots:
-    QList<History> history(const QString &type, const uint timespan, const uint resolution) const;
-    QList<Statistic> statistics(const QString &type) const;
-    void refresh();
+    DExpected<QList<DTK_POWER_NAMESPACE::History>> history(const QString &type, const uint timespan, const uint resolution) const;
+    DExpected<QList<DTK_POWER_NAMESPACE::Statistic>> statistics(const QString &type) const;
+    DExpected<void> refresh();
 
 private:
     QScopedPointer<DPowerDevicePrivate> d_ptr;

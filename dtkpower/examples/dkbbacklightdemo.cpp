@@ -9,12 +9,15 @@
 #include <qobject.h>
 #include <qeventloop.h>
 DPOWER_USE_NAMESPACE
+
 int main(int argc, char **argv)
 {
     QCoreApplication app(argc, argv);
     Dtk::Power::DPowerManager manager;
     auto kb = manager.kbdBacklight();
-    qDebug() << kb->brightness();
+    auto tmp = *(kb->brightness());
+    qDebug() << tmp;
+    qDebug() << kb->brightness().value();
     qDebug() << "*************************************************";
     kb->setBrightness(1);
     QObject::connect(kb.data(), &Dtk::Power::DKbdBacklight::brightnessChanged, &app, [=](const qint32 value) {

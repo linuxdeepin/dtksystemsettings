@@ -50,9 +50,11 @@ if (BUILD_DOCS AND DOXYGEN_FOUND)
     add_subdirectory(docs)
 endif ()
 
-# test
+
+
+## test
 if (BUILD_TESTING)
-   add_subdirectory(tests)
+    add_subdirectory(tests)
 endif ()
 
 # for pc file config
