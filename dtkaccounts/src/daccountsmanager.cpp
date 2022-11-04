@@ -10,6 +10,10 @@
 
 DACCOUNTS_BEGIN_NAMESPACE
 
+using DCORE_NAMESPACE::DExpected;
+using DCORE_NAMESPACE::DUnexpected;
+using DCORE_NAMESPACE::DError;
+
 DAccountsManagerPrivate::DAccountsManagerPrivate(DAccountsManager *parent)
     : q_ptr(parent)
     , m_dAccountsInter(new DAccountsInterface(this))
@@ -48,51 +52,49 @@ QList<quint64> DAccountsManager::userList() const
     return list;
 }
 
-QSharedPointer<DAccountsUser> DAccountsManager::createUser(const QString &name, const QString &fullName, const AccountTypes &type)
+DExpected<QSharedPointer<DAccountsUser>>  DAccountsManager::createUser(const QString &name, const QString &fullName, const AccountTypes &type)
 {
     Q_D(const DAccountsManager);
     auto reply = d->m_dSystemAccountsInter->createUser(name, fullName, static_cast<qint32>(type));
     reply.waitForFinished();
     if (!reply.isValid()) {
-        qWarning() << reply.error().message();
-        return nullptr;
+        return DUnexpected<>{DError{reply.error().type(), reply.error().message()}};
     }
     auto uid = d->getUIDFromObjectPath(reply.value().path());
     QSharedPointer<DAccountsUser> ptr(new DAccountsUser(uid, nullptr));
     return ptr;
 }
 
-void DAccountsManager::deleteUser(const QString &name, bool rmFiles)
+DExpected<void> DAccountsManager::deleteUser(const QString &name, bool rmFiles)
 {
     Q_D(const DAccountsManager);
     auto reply = d->m_dSystemAccountsInter->deleteUser(name, rmFiles);
     reply.waitForFinished();
     if (!reply.isValid())
-        qWarning() << reply.error().message();
+        return DUnexpected<>{DError{reply.error().type(), reply.error().message()}};
+    return {};
 }
 
-QSharedPointer<DAccountsUser> DAccountsManager::findUserByName(const QString &name)
+DExpected<QSharedPointer<DAccountsUser>> DAccountsManager::findUserByName(const QString &name)
 {
     Q_D(const DAccountsManager);
     auto reply = d->m_dAccountsInter->findUserByName(name);
     reply.waitForFinished();
     if (!reply.isValid()) {
-        qWarning() << reply.error().message();
-        return nullptr;
+        return DUnexpected<>{DError{reply.error().type(), reply.error().message()}};
     }
     auto uid = d->getUIDFromObjectPath(reply.value().path());
     QSharedPointer<DAccountsUser> ptr(new DAccountsUser(uid, nullptr));
     return ptr;
 }
 
-QSharedPointer<DAccountsUser> DAccountsManager::findUserById(const qint64 uid)
+DExpected<QSharedPointer<DAccountsUser>> DAccountsManager::findUserById(const qint64 uid)
 {
     Q_D(const DAccountsManager);
     auto reply = d->m_dAccountsInter->findUserById(uid);
     reply.waitForFinished();
     if (!reply.isValid()) {
-        qWarning() << reply.error().message();
-        return nullptr;
+        return DUnexpected<>{DError{reply.error().type(), reply.error().message()}};
     }
     QSharedPointer<DAccountsUser> ptr(new DAccountsUser(uid, nullptr));
     return ptr;
@@ -108,59 +110,53 @@ DExpected<QStringList> DAccountsManager::groups()
     if (errno != 0) {
         list.clear();
         endgrent();
-        return DUnexpected{DError{errno, strerror(errno)}};
+        return DUnexpected<>{DError{errno, strerror(errno)}};
     }
     endgrent();
     return list;
 }
 
-QStringList DAccountsManager::presetGroups(const AccountTypes &type)
+DExpected<QStringList> DAccountsManager::presetGroups(const AccountTypes &type)
 {
     Q_D(const DAccountsManager);
     if (type == AccountTypes::Unknown) {
-        qWarning() << "Unknown account type";
-        return {};
+        return DUnexpected<>{DError{-1, QString("Unknown account type")}};
     }
     auto reply = d->m_dSystemAccountsInter->getPresetGroups(static_cast<qint32>(type));
     reply.waitForFinished();
     if (!reply.isValid()) {
-        qWarning() << reply.error().message();
-        return {};
+        return DUnexpected<>{DError{reply.error().type(), reply.error().message()}};
     }
     return reply.value();
 }
 
-ValidMsg DAccountsManager::isPasswordValid(const QString &password)
+DExpected<ValidMsg> DAccountsManager::isPasswordValid(const QString &password)
 {
     Q_D(const DAccountsManager);
     ValidMsg msg;
     auto reply = d->m_dSystemAccountsInter->isPasswordValid(password);
     reply.waitForFinished();
     if (!reply.isValid()) {
-        qWarning() << reply.error().message();
-        return msg;
+        return DUnexpected<>{DError{reply.error().type(), reply.error().message()}};
     }
 
     const auto &valid = reply.argumentAt(0);
     if (!valid.isValid()) {
-        qWarning() << "can't get ValidMsg: valid is invalid";
-        return msg;
+        return DUnexpected<>{DError{-1, QString("can't get ValidMsg: valid is invalid")}};
     } else {
         msg.valid = valid.toBool();
     }
 
     const auto &errmsg = reply.argumentAt(1);
     if (!msg.valid and !errmsg.isValid()) {
-        qWarning() << "can't get ValidMsg: errmsg is invalid";
-        return msg;
+        return DUnexpected<>{DError{-1, QString("can't get ValidMsg: errmsg is invalid")}};
     } else {
         msg.msg = errmsg.toString();
     }
 
     const auto &errcode = reply.argumentAt(2);
     if (!msg.valid and !errcode.isValid()) {
-        qWarning() << "can't get ValidMsg: errcode is invalid";
-        return msg;
+        return DUnexpected<>{DError{-1, QString("can't get ValidMsg: errcode is invalid")}};
     } else {
         msg.code = errcode.toInt();
     }
@@ -168,34 +164,31 @@ ValidMsg DAccountsManager::isPasswordValid(const QString &password)
     return msg;
 }
 
-ValidMsg DAccountsManager::isUsernameValid(const QString &username)
+DExpected<ValidMsg> DAccountsManager::isUsernameValid(const QString &username)
 {
     Q_D(const DAccountsManager);
     ValidMsg msg;
     auto reply = d->m_dSystemAccountsInter->isUsernameValid(username);
     reply.waitForFinished();
     if (!reply.isValid()) {
-        qWarning() << reply.error().message();
-        return msg;
+        return DUnexpected<>{DError{reply.error().type(), reply.error().message()}};
     }
+
     const auto &valid = reply.argumentAt(0);
     if (!valid.isValid()) {
-        qWarning() << "can't get ValidMsg: valid is invalid";
-        return msg;
+        return DUnexpected<>{DError{-1, QString("can't get ValidMsg: valid is invalid")}};
     }
     msg.valid = valid.toBool();
 
     const auto &errmsg = reply.argumentAt(1);
     if (!msg.valid and !errmsg.isValid()) {
-        qWarning() << "can't get ValidMsg: errmsg is invalid";
-        return msg;
+        return DUnexpected<>{DError{-1, QString("can't get ValidMsg: errmsg is invalid")}};
     }
     msg.msg = errmsg.toString();
 
     const auto &errcode = reply.argumentAt(2);
     if (!msg.valid and !errcode.isValid()) {
-        qWarning() << "can't get ValidMsg: errcode is invalid";
-        return msg;
+        return DUnexpected<>{DError{-1, QString("can't get ValidMsg: errcode is invalid")}};
     }
     msg.code = errcode.toInt();
 

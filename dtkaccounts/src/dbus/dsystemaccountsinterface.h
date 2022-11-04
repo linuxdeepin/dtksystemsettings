@@ -7,10 +7,11 @@
 #include <QDBusPendingReply>
 #include <QStringList>
 #include <QScopedPointer>
-#include "ddbusinterface.h"
+#include <DDBusInterface>
 #include "daccountstypes.h"
 
 DACCOUNTS_BEGIN_NAMESPACE
+using DTK_CORE_NAMESPACE::DDBusInterface;
 
 class DSystemAccountsInterface : public QObject
 {

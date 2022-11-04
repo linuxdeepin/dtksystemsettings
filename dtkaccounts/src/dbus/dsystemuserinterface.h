@@ -4,12 +4,13 @@
 
 #pragma once
 
-#include "ddbusinterface.h"
 #include "daccountstypes_p.h"
 #include <QDBusPendingReply>
 #include <QStringList>
+#include <DDBusInterface>
 
 DACCOUNTS_BEGIN_NAMESPACE
+using DTK_CORE_NAMESPACE::DDBusInterface;
 
 class DSystemUserInterface : public QObject
 {
