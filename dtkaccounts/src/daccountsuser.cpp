@@ -16,6 +16,10 @@
 
 DACCOUNTS_BEGIN_NAMESPACE
 
+using DCORE_NAMESPACE::DExpected;
+using DCORE_NAMESPACE::DUnexpected;
+using DCORE_NAMESPACE::DError;
+
 DAccountsUserPrivate::DAccountsUserPrivate(const quint64 uid, DAccountsUser *parent)
     : q_ptr(parent)
 {
@@ -275,43 +279,47 @@ QDateTime DAccountsUser::createdTime() const
     return QDateTime::fromSecsSinceEpoch(d->m_dSystemUserInter->createdTime());
 }
 
-void DAccountsUser::setNopasswdLogin(const bool enabled)
+DExpected<void> DAccountsUser::setNopasswdLogin(const bool enabled)
 {
     Q_D(const DAccountsUser);
     auto reply = d->m_dSystemUserInter->enableNoPasswdLogin(enabled);
     reply.waitForFinished();
     if (!reply.isValid())
-        qWarning() << reply.error().message();
+        return DUnexpected<>{DError{reply.error().type(), reply.error().message()}};
+    return {};
 }
 
-void DAccountsUser::setAutomaticLogin(bool enabled)
+DExpected<void> DAccountsUser::setAutomaticLogin(bool enabled)
 {
     Q_D(const DAccountsUser);
     auto reply = d->m_dSystemUserInter->setAutomaticLogin(enabled);
     reply.waitForFinished();
     if (!reply.isValid())
-        qWarning() << reply.error().message();
+        return DUnexpected<>{DError{reply.error().type(), reply.error().message()}};
+    return {};
 }
 
-void DAccountsUser::setFullName(const QString &fullname)
+DExpected<void> DAccountsUser::setFullName(const QString &fullname)
 {
     Q_D(const DAccountsUser);
     auto reply = d->m_dUserInter->setRealName(fullname);
     reply.waitForFinished();
     if (!reply.isValid())
-        qWarning() << reply.error().message();
+        return DUnexpected<>{DError{reply.error().type(), reply.error().message()}};
+    return {};
 }
 
-void DAccountsUser::setGroups(const QStringList &newgroups)
+DExpected<void> DAccountsUser::setGroups(const QStringList &newgroups)
 {
     Q_D(const DAccountsUser);
     auto reply = d->m_dSystemUserInter->setGroups(newgroups);
     reply.waitForFinished();
     if (!reply.isValid())
-        qWarning() << reply.error().message();
+        return DUnexpected<>{DError{reply.error().type(), reply.error().message()}};
+    return {};
 }
 
-void DAccountsUser::setLayoutList(const QList<QByteArray> &newlayouts)
+DExpected<void> DAccountsUser::setLayoutList(const QList<QByteArray> &newlayouts)
 {
     Q_D(const DAccountsUser);
     QStringList tmp;
@@ -321,118 +329,131 @@ void DAccountsUser::setLayoutList(const QList<QByteArray> &newlayouts)
     auto reply = d->m_dSystemUserInter->setHistoryLayout(tmp);
     reply.waitForFinished();
     if (!reply.isValid())
-        qWarning() << reply.error().message();
+        return DUnexpected<>{DError{reply.error().type(), reply.error().message()}};
+    return {};
 }
 
-void DAccountsUser::setHomeDir(const QString &newhomedir)
+DExpected<void> DAccountsUser::setHomeDir(const QString &newhomedir)
 {
     Q_D(const DAccountsUser);
     auto reply = d->m_dUserInter->setHomeDirectory(newhomedir);
     reply.waitForFinished();
     if (!reply.isValid())
-        qWarning() << reply.error().message();
+        return DUnexpected<>{DError{reply.error().type(), reply.error().message()}};
+    return {};
 }
 
-void DAccountsUser::setIconFile(const QUrl &newiconURL)
+DExpected<void> DAccountsUser::setIconFile(const QUrl &newiconURL)
 {
     Q_D(const DAccountsUser);
     auto reply = d->m_dSystemUserInter->setIconFile(newiconURL.toString());
     reply.waitForFinished();
     if (!reply.isValid())
-        qWarning() << reply.error().message();
+        return DUnexpected<>{DError{reply.error().type(), reply.error().message()}};
+    return {};
 }
 
-void DAccountsUser::setLayout(const QByteArray &newlayout)
+DExpected<void> DAccountsUser::setLayout(const QByteArray &newlayout)
 {
     Q_D(const DAccountsUser);
     auto reply = d->m_dSystemUserInter->setLayout(newlayout);
     reply.waitForFinished();
     if (!reply.isValid())
-        qWarning() << reply.error().message();
+        return DUnexpected<>{DError{reply.error().type(), reply.error().message()}};
+    return {};
 }
 
-void DAccountsUser::setLocale(const QByteArray &newlocale)
+DExpected<void> DAccountsUser::setLocale(const QByteArray &newlocale)
 {
     Q_D(const DAccountsUser);
     auto reply = d->m_dSystemUserInter->setLocale(newlocale);
     reply.waitForFinished();
     if (!reply.isValid())
-        qWarning() << reply.error().message();
+        return DUnexpected<>{DError{reply.error().type(), reply.error().message()}};
+    return {};
 }
 
-void DAccountsUser::setLocked(const bool locked)
+DExpected<void> DAccountsUser::setLocked(const bool locked)
 {
     Q_D(const DAccountsUser);
     auto reply = d->m_dSystemUserInter->setLocked(locked);
     reply.waitForFinished();
     if (!reply.isValid())
-        qWarning() << reply.error().message();
+        return DUnexpected<>{DError{reply.error().type(), reply.error().message()}};
+    return {};
 }
 
-void DAccountsUser::setMaxPasswordAge(const int newndays)
+DExpected<void> DAccountsUser::setMaxPasswordAge(const int newndays)
 {
     Q_D(const DAccountsUser);
     auto reply = d->m_dSystemUserInter->setMaxPasswordAge(newndays);
     reply.waitForFinished();
     if (!reply.isValid())
-        qWarning() << reply.error().message();
+        return DUnexpected<>{DError{reply.error().type(), reply.error().message()}};
+    return {};
 }
 
-void DAccountsUser::setPassword(const QByteArray &newpassword)
+DExpected<void> DAccountsUser::setPassword(const QByteArray &newpassword)
 {
     Q_D(const DAccountsUser);
     auto reply = d->m_dSystemUserInter->setPassword(Dutils::encryptPassword(newpassword));
     reply.waitForFinished();
     if (!reply.isValid())
-        qWarning() << reply.error().message();
+        return DUnexpected<>{DError{reply.error().type(), reply.error().message()}};
+    return {};
 }
 
-void DAccountsUser::setPasswordHint(const QString &newpasswordhint)
+DExpected<void> DAccountsUser::setPasswordHint(const QString &newpasswordhint)
 {
     Q_D(const DAccountsUser);
     auto reply = d->m_dSystemUserInter->setPasswordHint(newpasswordhint);
     reply.waitForFinished();
     if (!reply.isValid())
-        qWarning() << reply.error().message();
+        return DUnexpected<>{DError{reply.error().type(), reply.error().message()}};
+    return {};
 }
 
-void DAccountsUser::setShell(const QString &newshellpath)
+DExpected<void> DAccountsUser::setShell(const QString &newshellpath)
 {
     Q_D(const DAccountsUser);
     auto reply = d->m_dUserInter->setShell(newshellpath);
     reply.waitForFinished();
     if (!reply.isValid())
-        qWarning() << reply.error().message();
+        return DUnexpected<>{DError{reply.error().type(), reply.error().message()}};
+    return {};
 }
 
-void DAccountsUser::addGroup(const QString &group)
+DExpected<void> DAccountsUser::addGroup(const QString &group)
 {
     Q_D(const DAccountsUser);
     auto reply = d->m_dSystemUserInter->addGroup(group);
     reply.waitForFinished();
     if (!reply.isValid())
-        qWarning() << reply.error().message();
+        return DUnexpected<>{DError{reply.error().type(), reply.error().message()}};
+    return {};
 }
 
-void DAccountsUser::deleteGroup(const QString &group)
+DExpected<void> DAccountsUser::deleteGroup(const QString &group)
 {
     Q_D(const DAccountsUser);
     auto reply = d->m_dSystemUserInter->deleteGroup(group);
     reply.waitForFinished();
     if (!reply.isValid())
-        qWarning() << reply.error().message();
+        return DUnexpected<>{DError{reply.error().type(), reply.error().message()}};
+    return {};
 }
 
-void DAccountsUser::deleteIconFile(const QUrl &iconURL)
+DExpected<void> DAccountsUser::deleteIconFile(const QUrl &iconURL)
 {
     Q_D(const DAccountsUser);
     auto reply = d->m_dSystemUserInter->deleteIconFile(iconURL.toLocalFile());
     reply.waitForFinished();
     if (!reply.isValid())
-        qWarning() << reply.error().message();
+        return DUnexpected<>{DError{reply.error().type(), reply.error().message()}};
+    return {};
 }
 
-bool DAccountsUser::isPasswordExpired() const
+DExpected<bool> DAccountsUser::isPasswordExpired() const
 {
     auto age = maxPasswordAge();
     if (age > 0)
@@ -440,15 +461,14 @@ bool DAccountsUser::isPasswordExpired() const
     return false;
 }
 
-ReminderInfo DAccountsUser::getReminderInfo() const
+DExpected<ReminderInfo> DAccountsUser::getReminderInfo() const
 {
     Q_D(const DAccountsUser);
     ReminderInfo info;
     auto reply = d->m_dSystemUserInter->getReminderInfo();
     reply.waitForFinished();
     if (!reply.isValid()) {
-        qWarning() << reply.error().message();
-        return info;
+        return DUnexpected<>{DError{reply.error().type(), reply.error().message()}};
     }
     const auto &info_p = reply.value();
 
@@ -478,15 +498,14 @@ ReminderInfo DAccountsUser::getReminderInfo() const
     return info;
 }
 
-PasswdExpirInfo DAccountsUser::passwordExpirationInfo(qint64 &dayLeft) const
+DExpected<PasswdExpirInfo> DAccountsUser::passwordExpirationInfo(qint64 &dayLeft) const
 {
     Q_D(const DAccountsUser);
     PasswdExpirInfo info;
     auto reply = d->m_dSystemUserInter->passwordExpiredInfo();
     reply.waitForFinished();
     if (!reply.isValid()) {
-        qWarning() << reply.error().message();
-        return PasswdExpirInfo::Unknown;
+        return DUnexpected<>{DError{reply.error().type(), reply.error().message()}};
     }
 
     const auto &expireStatus = reply.argumentAt(0);

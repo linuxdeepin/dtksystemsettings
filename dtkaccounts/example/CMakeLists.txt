@@ -14,15 +14,18 @@ add_executable(${BIN_NAME}
 )
 
 include_directories(../include)
+
 find_package(DtkCore REQUIRED)
 
 target_include_directories(${BIN_NAME} PUBLIC
     Qt${QT_VERSION_MAJOR}::Core
     Qt${QT_VERSION_MAJOR}::DBus
+    ${DtkCore_INCLUDE_DIRS}
 )
 
 target_link_libraries(${BIN_NAME} PRIVATE
     Qt${QT_VERSION_MAJOR}::Core
     Qt${QT_VERSION_MAJOR}::DBus
     ${LIB_NAME}
+    ${DtkCore_LIBRARIES}
 )

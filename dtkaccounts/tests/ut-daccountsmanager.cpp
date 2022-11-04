@@ -38,7 +38,7 @@ TEST_F(TestDAccountsManager, userList)
 TEST_F(TestDAccountsManager, createUser)
 {
     EXPECT_EQ(false, m_fakeinter->m_createUserTrigger);
-    m_damanager->createUser("aaa", "bbb", Dtk::Accounts::AccountTypes::Default);
+    m_damanager->createUser("aaa", "bbb", AccountTypes::Default);
     EXPECT_EQ(true, m_fakeinter->m_createUserTrigger);
 }
 
@@ -66,7 +66,7 @@ TEST_F(TestDAccountsManager, findUserByName)
 TEST_F(TestDAccountsManager, presetGroups)
 {
     EXPECT_EQ(false, m_fakeinter->m_presetGroupsTrigger);
-    m_damanager->presetGroups(Dtk::Accounts::AccountTypes::Default);
+    m_damanager->presetGroups(AccountTypes::Default);
     EXPECT_EQ(true, m_fakeinter->m_presetGroupsTrigger);
 }
 

@@ -30,14 +30,14 @@ public:
 
 public slots:
 
-    QSharedPointer<DAccountsUser> createUser(const QString &name, const QString &fullName, const AccountTypes &type);
-    void deleteUser(const QString &name, const bool rmFiles);
-    QSharedPointer<DAccountsUser> findUserByName(const QString &name);
-    QSharedPointer<DAccountsUser> findUserById(const qint64 uid);
+    DExpected<QSharedPointer<DTK_ACCOUNT_NAMESPACE::DAccountsUser>> createUser(const QString &name, const QString &fullName, const DTK_ACCOUNT_NAMESPACE::AccountTypes &type);
+    DExpected<void> deleteUser(const QString &name, const bool rmFiles);
+    DExpected<QSharedPointer<DTK_ACCOUNT_NAMESPACE::DAccountsUser>> findUserByName(const QString &name);
+    DExpected<QSharedPointer<DTK_ACCOUNT_NAMESPACE::DAccountsUser>> findUserById(const qint64 uid);
     DExpected<QStringList> groups();
-    QStringList presetGroups(const AccountTypes &type);
-    ValidMsg isPasswordValid(const QString &password);
-    ValidMsg isUsernameValid(const QString &name);
+    DExpected<QStringList> presetGroups(const DTK_ACCOUNT_NAMESPACE::AccountTypes &type);
+    DExpected<DTK_ACCOUNT_NAMESPACE::ValidMsg> isPasswordValid(const QString &password);
+    DExpected<DTK_ACCOUNT_NAMESPACE::ValidMsg> isUsernameValid(const QString &name);
 
 signals:
     void UserAdded(const quint64 uid);

@@ -6,7 +6,13 @@
 
 Demo::Demo()
 {
-    user = manager.findUserByName("test");
+    auto ret = manager.findUserByName("test");
+    if (ret) {
+        user = ret.value();
+    } else {
+        qDebug() << ret.error();
+    }
+
     connect(&manager, &DAccountsManager::UserAdded, this, [](const quint64 uid) { qDebug() << "new user add:" << uid; });
     connect(&manager, &DAccountsManager::UserDeleted, this, [](const quint64 uid) { qDebug() << "delete user:" << uid; });
     connect(user.data(), &DAccountsUser::automaticLoginChanged, this, [](const bool) { qDebug() << "automaticLoginChanged"; });
@@ -28,7 +34,13 @@ Demo::Demo()
 void Demo::run()
 {
     manager.isUsernameValid("qwer");
-    auto newuser = manager.createUser("qwer", "testqwer", AccountTypes::Default);
+
+    auto ret = manager.createUser("qwer", "testqwer", AccountTypes::Default);
+    if (ret) {
+        auto newuser = ret.value();
+    } else {
+        qDebug() << ret.error();
+    }
 
     manager.deleteUser("qwer", true);
     auto groups = manager.groups();

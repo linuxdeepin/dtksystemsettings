@@ -47,21 +47,12 @@ QString Dutils::getUserConfigValue(const QByteArray &username, keyType key)
 
 QString Dutils::getUserConfigKey(keyType key)
 {
-    switch (key) {
-        case keyType::IconFile:
-            return "Icon";
-        case keyType::LayoutList:
-            return "HistoryLayout";
-        case keyType::Layout:
-            return "Layout";
-        case keyType::Locale:
-            return "Locale";
-        case keyType::UserUUID:
-            return "UUID";
-        default:
-            break;
-    }
-    return "";
+    static const QMap<keyType, QString> keyMap = {{keyType::IconFile, "Icon"},
+                                                  {keyType::LayoutList, "HistoryLayout"},
+                                                  {keyType::Layout, "Layout"},
+                                                  {keyType::Locale, "Locale"},
+                                                  {keyType::UserUUID, "UserUUID"}};
+    return keyMap[key];
 }
 
 qint64 Dutils::setUserConfigValue(const QByteArray &username, keyType key, const QByteArray &value)

@@ -5,10 +5,11 @@
 #pragma once
 
 #include <QDBusPendingReply>
+#include <DDBusInterface>
 #include "daccountstypes.h"
-#include "ddbusinterface.h"
 
 DACCOUNTS_BEGIN_NAMESPACE
+using DTK_CORE_NAMESPACE::DDBusInterface;
 
 class DUserInterface : public QObject
 {

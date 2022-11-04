@@ -8,8 +8,11 @@
 #include <QDateTime>
 #include <QUrl>
 #include <QObject>
+#include <DExpected>
 
 DACCOUNTS_BEGIN_NAMESPACE
+
+DCORE_USE_NAMESPACE
 
 class DAccountsUserPrivate;
 
@@ -70,27 +73,27 @@ public:
 
 public slots:
 
-    void setAutomaticLogin(const bool enabled);
-    void setFullName(const QString &newfullname);
-    void setGroups(const QStringList &newgroups);
-    void setLayoutList(const QList<QByteArray> &newlayouts);
-    void setHomeDir(const QString &newhomedir);
-    void setIconFile(const QUrl &newiconURL);
-    void setLayout(const QByteArray &newlayout);
-    void setLocale(const QByteArray &newlocale);  // TODO:这个方法只能由控制中心调用
-    void setLocked(const bool locked);
-    void setMaxPasswordAge(const int newndays);
-    void setPassword(const QByteArray &newpassword);
-    void setPasswordHint(const QString &newpasswordhint);
-    void setShell(const QString &newshellpath);
-    void setNopasswdLogin(const bool enabled);
+    DExpected<void> setAutomaticLogin(const bool enabled);
+    DExpected<void> setFullName(const QString &newfullname);
+    DExpected<void> setGroups(const QStringList &newgroups);
+    DExpected<void> setLayoutList(const QList<QByteArray> &newlayouts);
+    DExpected<void> setHomeDir(const QString &newhomedir);
+    DExpected<void> setIconFile(const QUrl &newiconURL);
+    DExpected<void> setLayout(const QByteArray &newlayout);
+    DExpected<void> setLocale(const QByteArray &newlocale);  // TODO:这个方法只能由控制中心调用
+    DExpected<void> setLocked(const bool locked);
+    DExpected<void> setMaxPasswordAge(const int newndays);
+    DExpected<void> setPassword(const QByteArray &newpassword);
+    DExpected<void> setPasswordHint(const QString &newpasswordhint);
+    DExpected<void> setShell(const QString &newshellpath);
+    DExpected<void> setNopasswdLogin(const bool enabled);
 
-    void addGroup(const QString &group);
-    void deleteGroup(const QString &group);
-    void deleteIconFile(const QUrl &iconURL);
-    bool isPasswordExpired() const;
-    ReminderInfo getReminderInfo() const;
-    PasswdExpirInfo passwordExpirationInfo(qint64 &dayLeft) const;
+    DExpected<void> addGroup(const QString &group);
+    DExpected<void> deleteGroup(const QString &group);
+    DExpected<void> deleteIconFile(const QUrl &iconURL);
+    DExpected<bool> isPasswordExpired() const;
+    DExpected<DTK_ACCOUNT_NAMESPACE::ReminderInfo> getReminderInfo() const;
+    DExpected<DTK_ACCOUNT_NAMESPACE::PasswdExpirInfo> passwordExpirationInfo(qint64 &dayLeft) const;
 
 signals:
     void automaticLoginChanged(const bool enabled);

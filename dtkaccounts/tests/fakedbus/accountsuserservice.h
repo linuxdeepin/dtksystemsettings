@@ -221,7 +221,7 @@ public slots:
         m_deleteIconFileTrigger = true;
     }
 
-    Q_SCRIPTABLE Dtk::Accounts::ReminderInfo_p GetReminderInfo()
+    Q_SCRIPTABLE DTK_ACCOUNT_NAMESPACE::ReminderInfo_p GetReminderInfo()
     {
         m_getReminderInfoTrigger = true;
         return {};
