@@ -6,10 +6,7 @@
 
 #include "dsystemtime.h"
 
-class DDBusInterface;
-
 DSYSTEMTIME_BEGIN_NAMESPACE
-
 class TimeDate1Interface;
 class TimeSync1Interface;
 class DSystemTimePrivate : public QObject

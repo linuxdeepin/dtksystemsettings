@@ -9,9 +9,10 @@
 #include <qdbuspendingreply.h>
 #include "dtksystemtime_global.h"
 #include "dsystemtimetypes_p.h"
-#include "ddbusinterface.h"
+#include <ddbusinterface.h>
 
 DSYSTEMTIME_BEGIN_NAMESPACE
+using DCORE_NAMESPACE::DDBusInterface;
 class TimeSync1Interface : public QObject
 {
     Q_OBJECT

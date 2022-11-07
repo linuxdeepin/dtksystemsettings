@@ -11,10 +11,13 @@
 #include <qobject.h>
 #include <qscopedpointer.h>
 #include <qdatetime.h>
+#include <dexpected.h>
+
 #include "dtksystemtime_global.h"
 #include "dsystemtimetypes.h"
 
 DSYSTEMTIME_BEGIN_NAMESPACE
+using DCORE_NAMESPACE::DExpected;
 class DSystemTimePrivate;
 class DSystemTime : public QObject
 {
@@ -61,13 +64,14 @@ public:
     quint64 pollIntervalUSec() const;
     quint64 rootDistanceMaxUSec() const;
     // slot
-public slots:
-    QStringList listTimezones() const;
-    void setLocalRTC(const bool local_rtc, const bool fix_system, const bool interactive);  // TODO: fix system是否可以被丢掉
-    void enableNTP(const bool use_NTP, const bool interactive);
-    void setRelativeTime(const qint64 usec_utc, const bool interactive);
-    void setAbsoluteTime(const QDateTime &time, const bool interactive);
-    void setTimezone(const QString &timezone, const bool interactive);
+public Q_SLOTS:
+    DExpected<QStringList> listTimezones() const;
+    DExpected<void>
+    setLocalRTC(bool localRTC, bool fixSystem, bool interactive);
+    DExpected<void> enableNTP(bool useNTP, bool interactive);
+    DExpected<void> setRelativeTime(qint64 usecUTC, bool interactive);
+    DExpected<void> setAbsoluteTime(const QDateTime &time, bool interactive);
+    DExpected<void> setTimezone(const QString &timezone, bool interactive);
 
 private:
     QScopedPointer<DSystemTimePrivate> d_ptr;

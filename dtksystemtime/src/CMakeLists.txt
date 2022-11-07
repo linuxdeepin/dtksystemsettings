@@ -12,7 +12,10 @@ add_library(${BIN_NAME} SHARED
     ${SRCS}
 )
 
-include_directories(../include)
+include_directories(
+    ../include
+    ${DtkCore_INCLUDE_DIRS}
+)
 
 set_target_properties(${BIN_NAME} PROPERTIES
     VERSION ${CMAKE_PROJECT_VERSION}
@@ -23,6 +26,7 @@ target_compile_definitions(${BIN_NAME} PRIVATE VERSION="${CMAKE_PROJECT_VERSION}
 target_link_libraries(${BIN_NAME} PRIVATE
     Qt${QT_VERSION_MAJOR}::Core
     Qt${QT_VERSION_MAJOR}::DBus
+    ${DtkCore_LIBRARIES}
 )
 
 install(FILES ${INCLUDE_FILES} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${BIN_NAME})
