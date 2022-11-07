@@ -15,6 +15,7 @@ file(GLOB_RECURSE TEST_FILES "./*.h" "./*.cpp")
 include_directories(
     "../include"
     "../src/dbus"
+    ${DtkCore_INCLUDE_DIRS}
 )
 
 add_definitions(-DUSE_FAKE_INTERFACE)
@@ -25,19 +26,13 @@ add_executable(${BIN_NAME}
     ${TEST_FILES}
 )
 
-
-target_include_directories(${BIN_NAME} PUBLIC
-    Qt${QT_VERSION_MAJOR}::Core
-    Qt${QT_VERSION_MAJOR}::DBus
-)
-
 target_link_libraries(${BIN_NAME} PRIVATE
     Qt${QT_VERSION_MAJOR}::Core
-
     Qt${QT_VERSION_MAJOR}::DBus
-    -lpthread
-    -lgcov
-    -lgtest
+    ${DtkCore_LIBRARIES}
+    pthread
+    gcov
+    gtest
 )
 
 if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")

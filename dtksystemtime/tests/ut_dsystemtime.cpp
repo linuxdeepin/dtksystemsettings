@@ -164,7 +164,9 @@ TEST_F(TestDSystemTime, timeDate)  // return 1666171692
 TEST_F(TestDSystemTime, ListTimezones)  // return {"Asia/Tokyo", "Asia/Shanghai", "Asia/Hongkong", "Asia/Korea"}
 {
     ASSERT_EQ("Asia/Hongkong", m_date_fakeInterface->ListTimezones()[2]);
-    EXPECT_EQ("Asia/Korea", m_dsystemtime->listTimezones()[3]);
+    auto eTimezones = m_dsystemtime->listTimezones();
+    ASSERT_TRUE(eTimezones.hasValue());
+    EXPECT_EQ("Asia/Korea", eTimezones.value()[3]);
 }
 
 TEST_F(TestDSystemTime, SetLocalRTC)  // focus local_rtc

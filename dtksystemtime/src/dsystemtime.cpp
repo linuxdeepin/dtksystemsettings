@@ -10,7 +10,11 @@
 #include <qdbusreply.h>
 #include <qdebug.h>
 #include <qdatetime.h>
+#include <dexpected.h>
 DSYSTEMTIME_BEGIN_NAMESPACE
+using DCORE_NAMESPACE::DExpected;
+using DCORE_NAMESPACE::DError;
+using DCORE_NAMESPACE::DUnexpected;
 DSystemTime::DSystemTime(QObject *parent)
     : QObject(parent)
     , d_ptr(new DSystemTimePrivate(this))
@@ -154,69 +158,72 @@ QDateTime DSystemTime::timeDate() const
 }
 
 // slots
-QStringList DSystemTime::listTimezones() const
+DExpected<QStringList> DSystemTime::listTimezones() const
 {
     Q_D(const DSystemTime);
     QDBusPendingReply<QStringList> reply = d->m_timedate_inter->listTimezones();
     reply.waitForFinished();
     QStringList timezones;
     if (!reply.isValid()) {
-        qWarning() << reply.error().message();
-        return timezones;
-        ;
+        return DUnexpected{DError{reply.error().type(), reply.error().message()}};
     }
     timezones = reply.value();
     return timezones;
 }
 
-void DSystemTime::setLocalRTC(const bool local_rtc, const bool fix_system, const bool interactive)
+DExpected<void> DSystemTime::setLocalRTC(bool localRTC, bool fixSystem, bool interactive)
 {
     Q_D(DSystemTime);
-    QDBusPendingReply<> reply = d->m_timedate_inter->setLocalRTC(local_rtc, fix_system, interactive);
+    QDBusPendingReply<> reply = d->m_timedate_inter->setLocalRTC(localRTC, fixSystem, interactive);
     reply.waitForFinished();
     if (!reply.isValid()) {
-        qWarning() << reply.error().message();
+        return DUnexpected{DError{reply.error().type(), reply.error().message()}};
     }
+    return {};
 }
 
-void DSystemTime::enableNTP(const bool use_NTP, const bool interactive)
+DExpected<void> DSystemTime::enableNTP(bool useNTP, bool interactive)
 {
     Q_D(DSystemTime);
-    QDBusPendingReply<> reply = d->m_timedate_inter->setNTP(use_NTP, interactive);
+    QDBusPendingReply<> reply = d->m_timedate_inter->setNTP(useNTP, interactive);
     reply.waitForFinished();
     if (!reply.isValid()) {
-        qWarning() << reply.error().message();
+        return DUnexpected{DError{reply.error().type(), reply.error().message()}};
     }
+    return {};
 }
 
-void DSystemTime::setRelativeTime(const qint64 usec_utc, const bool interactive)
+DExpected<void> DSystemTime::setRelativeTime(qint64 usecUTC, bool interactive)
 {
     Q_D(DSystemTime);
-    QDBusPendingReply<> reply = d->m_timedate_inter->setTime(usec_utc, 1, interactive);
+    QDBusPendingReply<> reply = d->m_timedate_inter->setTime(usecUTC, 1, interactive);
     reply.waitForFinished();
     if (!reply.isValid()) {
-        qWarning() << reply.error().message();
+        return DUnexpected{DError{reply.error().type(), reply.error().message()}};
     }
+    return {};
 }
 
-void DSystemTime::setAbsoluteTime(const QDateTime &time, const bool interactive)
+DExpected<void> DSystemTime::setAbsoluteTime(const QDateTime &time, bool interactive)
 {
     Q_D(DSystemTime);
     QDBusPendingReply<> reply = d->m_timedate_inter->setTime(time.toMSecsSinceEpoch() * 1000, 0, interactive);
     reply.waitForFinished();
     if (!reply.isValid()) {
-        qWarning() << reply.error().message();
+        return DUnexpected{DError{reply.error().type(), reply.error().message()}};
     }
+    return {};
 }
 
-void DSystemTime::setTimezone(const QString &timezone, const bool interactive)
+DExpected<void> DSystemTime::setTimezone(const QString &timezone, bool interactive)
 {
     Q_D(DSystemTime);
     QDBusPendingReply<> reply = d->m_timedate_inter->setTimezone(timezone, interactive);
     reply.waitForFinished();
     if (!reply.isValid()) {
-        qWarning() << reply.error().message();
+        return DUnexpected{DError{reply.error().type(), reply.error().message()}};
     }
+    return {};
 }
 
 DSYSTEMTIME_END_NAMESPACE

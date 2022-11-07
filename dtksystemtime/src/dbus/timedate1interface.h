@@ -9,9 +9,11 @@
 #include <qscopedpointer.h>
 #include <qdbuspendingreply.h>
 #include "dtksystemtime_global.h"
-#include "ddbusinterface.h"
+#include <ddbusinterface.h>
+
 
 DSYSTEMTIME_BEGIN_NAMESPACE
+using DCORE_NAMESPACE::DDBusInterface;
 class TimeDate1Interface : public QObject
 {
     Q_OBJECT

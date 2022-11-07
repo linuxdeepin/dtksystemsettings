@@ -7,11 +7,12 @@
 #include <qobject.h>
 #include <qscopedpointer.h>
 #include <qdbuspendingreply.h>
-#include "ddbusinterface.h"
+#include <ddbusinterface.h>
 #include "dsystemtimetypes_p.h"
 #include "dtksystemtime_global.h"
 
 DSYSTEMTIME_BEGIN_NAMESPACE
+using DCORE_NAMESPACE::DDBusInterface;
 class TimeSync1Service : public QObject
 {
     Q_OBJECT

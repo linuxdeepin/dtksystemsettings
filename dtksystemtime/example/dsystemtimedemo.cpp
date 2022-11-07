@@ -11,7 +11,7 @@ DSYSTEMTIME_USE_NAMESPACE
 int main(int argc, char **argv)
 {
     QCoreApplication app(argc, argv);
-    Dtk::SystemTime::DSystemTime systemTime;
+    DSystemTime systemTime;
     qDebug() << systemTime.serverName();
     qDebug() << systemTime.fallbackNTPServers()[1];
     qDebug() << systemTime.systemNTPServers().isEmpty();

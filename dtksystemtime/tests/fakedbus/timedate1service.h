@@ -8,8 +8,9 @@
 #include <qobject.h>
 #include <qscopedpointer.h>
 #include <qdbuspendingreply.h>
-#include "ddbusinterface.h"
+#include <ddbusinterface.h>
 
+using DTK_CORE_NAMESPACE::DDBusInterface;
 class TimeDate1Service : public QObject
 {
     Q_OBJECT

@@ -4,13 +4,15 @@
 #ifndef DSYSTEMTIME_GLOBLE_H
 #define DSYSTEMTIME_GLOBLE_H
 
-#define DSYSTEMTIME_NAMESPACE Dtk::SystemTime
+#define DTK_NAMESPACE Dtk
+#define DSYSTEMTIME_NAMESPACE SystemTime
+#define DTK_SYSTEMTIME_NAMESPACE DTK_NAMESPACE::DSYSTIME_NAMESPACE
 
-#define DSYSTEMTIME_USE_NAMESPACE using namespace DSYSTEMTIME_NAMESPACE;
+#define DSYSTEMTIME_USE_NAMESPACE using namespace DTK_SYSTEMTIME_NAMESPACE;
 
 #define DSYSTEMTIME_BEGIN_NAMESPACE                                                                                              \
-    namespace Dtk {                                                                                                              \
-    namespace SystemTime {
+    namespace DTK_NAMESPACE {                                                                                                    \
+    namespace DSYSTIME_NAMESPACE {
 #define DSYSTEMTIME_END_NAMESPACE                                                                                                \
     }                                                                                                                            \
     }
