@@ -86,7 +86,7 @@ void Demo::run()
     m_rfMgr->blockWifi(true);
     m_rfMgr->isWifiBlocked();
 
-    m_rfMgr->blockbluetooth(true);
+    m_rfMgr->blockBluetooth(true);
     m_rfMgr->isBluetoothBlocked();
 
     m_rfMgr->blockAll(true);

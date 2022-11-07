@@ -49,7 +49,7 @@
 @return 支持的设备信息列表
 @see RfDevice DRfmanager::count
 
-@fn void DRfmanager::blockbluetooth(bool bluetoothBlocked = true)
+@fn void DRfmanager::blockBluetooth(bool bluetoothBlocked = true)
 @brief 禁用或者启用蓝牙设备
 @param [in] bluetoothBlocked 禁用或者启用, 默认禁用
 
@@ -85,4 +85,3 @@
 @param [out] idx 禁用状态变化后的设备编号
 
 */
-

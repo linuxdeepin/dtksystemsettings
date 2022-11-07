@@ -379,7 +379,7 @@ QList<DRfmanager::RfDevice> DRfmanager::deviceList() const
     return d->deviceList;
 }
 
-bool DRfmanager::blockbluetooth(bool bluetoothBlocked /*= true*/)
+DExpected<bool> DRfmanager::blockBluetooth(bool bluetoothBlocked /*= true*/)
 {
     Q_D(DRfmanager);
     if (d->bluetoothBlocked == bluetoothBlocked && count() > 0)
@@ -388,7 +388,7 @@ bool DRfmanager::blockbluetooth(bool bluetoothBlocked /*= true*/)
     return block(BLUETOOTH, bluetoothBlocked);
 }
 
-bool DRfmanager::blockWifi(bool wifiBlocked /*= true*/)
+DExpected<bool> DRfmanager::blockWifi(bool wifiBlocked /*= true*/)
 {
     Q_D(DRfmanager);
     if (d->wifiBlocked == wifiBlocked && count() > 0)
@@ -397,7 +397,7 @@ bool DRfmanager::blockWifi(bool wifiBlocked /*= true*/)
     return block(WLAN, wifiBlocked);
 }
 
-bool DRfmanager::blockAll(bool blockAll /*= true*/)
+DExpected<bool> DRfmanager::blockAll(bool blockAll /*= true*/)
 {
     Q_D(DRfmanager);
     if (d->allBlocked == blockAll && count() > 0)
