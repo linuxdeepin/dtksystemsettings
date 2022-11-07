@@ -63,7 +63,7 @@ void DRfmanagerPrivate::init()
 
     QSocketNotifier *sn = new QSocketNotifier(fd, QSocketNotifier::Read, this);
     connect(sn, &QSocketNotifier::destroyed, this, [fd]() { close(fd); });
-    connect(sn, &QSocketNotifier::activated, this, [fd, this](int socket){
+    connect(sn, &QSocketNotifier::activated, this, [fd, this](int socket) {
         if (socket == fd)
             readRf(fd);
     });
@@ -71,7 +71,7 @@ void DRfmanagerPrivate::init()
 
 int DRfmanagerPrivate::openRf(int openMode, bool nonblock)
 {
-    int fd =open(D_PATH_DEV_RFKILL, openMode);
+    int fd = open(D_PATH_DEV_RFKILL, openMode);
     if (fd < 0) {
         qWarning("cannot open " D_PATH_DEV_RFKILL);
         return fd;
@@ -101,7 +101,7 @@ void DRfmanagerPrivate::readRf(int fd)
 
 int DRfmanagerPrivate::readRfEvent(int fd, rfkill_event *event)
 {
-    ssize_t	len = read(fd, event, sizeof(rfkill_event));
+    ssize_t len = read(fd, event, sizeof(rfkill_event));
     if (len < 0) {
         if (errno == EAGAIN)
             return -1;
@@ -110,8 +110,8 @@ int DRfmanagerPrivate::readRfEvent(int fd, rfkill_event *event)
         return -1;
     }
 
-    if (len < RFKILL_EVENT_SIZE_V1) {
-        qWarning("wrong size of rfkill event: %zu < %d", len, RFKILL_EVENT_SIZE_V1);
+    if (static_cast<unsigned long>(len) < RFKILL_EVENT_SIZE_V1) {
+        qWarning("wrong size of rfkill event: %zu < %lu", len, RFKILL_EVENT_SIZE_V1);
         return -1;
     }
 
@@ -126,7 +126,7 @@ bool DRfmanagerPrivate::writeRfEvent(int fd, rfkill_event *event)
     else
         updateDevice(*event);
 
-    return len = sizeof(rfkill_event);
+    return len == sizeof(rfkill_event);
 }
 
 QString DRfmanagerPrivate::deviceName(quint32 idx)
@@ -143,9 +143,8 @@ QString DRfmanagerPrivate::deviceName(quint32 idx)
 
 bool DRfmanagerPrivate::deviceFromId(quint32 idx, DRfmanager::RfDevice *device)
 {
-    auto it = std::find_if(deviceList.begin(), deviceList.end(), [idx](const DRfmanager::RfDevice &dev){
-        return idx == dev.idx;
-    });
+    auto it =
+        std::find_if(deviceList.begin(), deviceList.end(), [idx](const DRfmanager::RfDevice &dev) { return idx == dev.idx; });
 
     if (device && it != deviceList.end())
         *device = *it;
@@ -172,13 +171,13 @@ void DRfmanagerPrivate::updateDevice(const rfkill_event &re)
             emit q->countChanged(deviceList.count());
             updateDeviceInfo(re);
             break;
-    case DRfmanager::CHANGE:
-    case DRfmanager::CHANGE_ALL:
-        updateDeviceInfo(re);
-        if (re.idx != INT_MAX)
-            emit q->blockedChanged(re.idx);
-        break;
-    default:
+        case DRfmanager::CHANGE:
+        case DRfmanager::CHANGE_ALL:
+            updateDeviceInfo(re);
+            if (re.idx != INT_MAX)
+                emit q->blockedChanged(re.idx);
+            break;
+        default:
             break;
     }
 }
@@ -211,9 +210,7 @@ void DRfmanagerPrivate::updateDeviceInfo(const rfkill_event &re)
     allBlocked = isBlocked(DRfmanager::ALL);
 
 #ifdef QT_DEBUG
-    qDebug() << "wifiBlocked:" << wifiBlocked <<
-               "\tbluetoothBlocked:" << bluetoothBlocked <<
-               "\tallBlocked:" << allBlocked;
+    qDebug() << "wifiBlocked:" << wifiBlocked << "\tbluetoothBlocked:" << bluetoothBlocked << "\tallBlocked:" << allBlocked;
 #endif
 
     // if device not found blocked state switch to false
@@ -249,7 +246,7 @@ void DRfmanagerPrivate::appendDevice(const rfkill_event &re)
 qint8 DRfmanagerPrivate::isBlocked(DRfmanager::RfType type)
 {
     int count = 0;
-    auto cmpFunc = [&](DRfmanager::RfDevice device)->bool {
+    auto cmpFunc = [&](DRfmanager::RfDevice device) -> bool {
         if (type != device.type && type != DRfmanager::ALL)
             return false;
 
@@ -318,7 +315,7 @@ bool DRfmanager::block(quint32 id, bool blocked)
     event.soft = blocked;
 
     DRfmanager::RfDevice device;
-    if(d->deviceFromId(id, &device)) {
+    if (d->deviceFromId(id, &device)) {
         event.type = device.type;
         event.hard = device.hardBlocked;
     }
@@ -385,7 +382,7 @@ QList<DRfmanager::RfDevice> DRfmanager::deviceList() const
 bool DRfmanager::blockbluetooth(bool bluetoothBlocked /*= true*/)
 {
     Q_D(DRfmanager);
-    if (d->bluetoothBlocked == bluetoothBlocked  && count() > 0)
+    if (d->bluetoothBlocked == bluetoothBlocked && count() > 0)
         return true;
 
     return block(BLUETOOTH, bluetoothBlocked);
@@ -415,11 +412,8 @@ QDebug operator<<(QDebug dbg, const DRfmanager::RfDevice &device)
     QDebugStateSaver save(dbg);
     dbg.resetFormat();
 
-    dbg << "id:" << device.idx <<
-           "\ttype:" << device.type <<
-           "\tdevice:" << device.name <<
-           "\tsoft blocked:" << device.softBlocked <<
-           "\thard blocked:" << device.hardBlocked << "\n";
+    dbg << "id:" << device.idx << "\ttype:" << device.type << "\tdevice:" << device.name
+        << "\tsoft blocked:" << device.softBlocked << "\thard blocked:" << device.hardBlocked << "\n";
     return dbg;
 }
 #endif

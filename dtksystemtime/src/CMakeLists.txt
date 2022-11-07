@@ -6,7 +6,7 @@ file(GLOB_RECURSE SRCS
     "./*.h"
     "./*.cpp"
 )
-message("name = ${BIN_NAME}")
+
 add_library(${BIN_NAME} SHARED
     ${INCLUDE_FILES}
     ${SRCS}
