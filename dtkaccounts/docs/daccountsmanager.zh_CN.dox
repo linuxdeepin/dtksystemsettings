@@ -64,7 +64,8 @@ daccountsmanager.h是对于一组用于查询和管理用户帐户信息的D-BUS
 @brief 当用户被删除时发送信号
 @param[in] uid 被删除用户的uid
 
-@property DAccountsManager::userList
+@fn QList<quint64> DAccountsManager::userList() const
 @brief 所有用户的uid组成的列表
+@return 由uid组成的列表
 
 */

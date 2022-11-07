@@ -10,9 +10,9 @@
 
 DACCOUNTS_BEGIN_NAMESPACE
 
+using DCORE_NAMESPACE::DError;
 using DCORE_NAMESPACE::DExpected;
 using DCORE_NAMESPACE::DUnexpected;
-using DCORE_NAMESPACE::DError;
 
 DAccountsManagerPrivate::DAccountsManagerPrivate(DAccountsManager *parent)
     : q_ptr(parent)
@@ -36,15 +36,14 @@ DAccountsManager::DAccountsManager(QObject *parent)
 
 DAccountsManager::~DAccountsManager() {}
 
-QList<quint64> DAccountsManager::userList() const
+DExpected<QList<quint64>> DAccountsManager::userList() const
 {
     Q_D(const DAccountsManager);
     QList<quint64> list;
     auto reply = d->m_dAccountsInter->listCachedUsers();
     reply.waitForFinished();
     if (!reply.isValid()) {
-        qWarning() << reply.error().message();
-        return list;
+        return DUnexpected{DCORE_NAMESPACE::emplace_tag::USE_EMPLACE, reply.error().type(), reply.error().message()};
     }
     for (const auto &user : reply.value()) {
         list.append(d->getUIDFromObjectPath(user.path()));
@@ -52,7 +51,8 @@ QList<quint64> DAccountsManager::userList() const
     return list;
 }
 
-DExpected<QSharedPointer<DAccountsUser>>  DAccountsManager::createUser(const QString &name, const QString &fullName, const AccountTypes &type)
+DExpected<QSharedPointer<DAccountsUser>>
+DAccountsManager::createUser(const QString &name, const QString &fullName, const AccountTypes &type)
 {
     Q_D(const DAccountsManager);
     auto reply = d->m_dSystemAccountsInter->createUser(name, fullName, static_cast<qint32>(type));
