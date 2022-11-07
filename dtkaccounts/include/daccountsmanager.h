@@ -24,13 +24,10 @@ public:
     explicit DAccountsManager(QObject *parent = nullptr);
     virtual ~DAccountsManager();
 
-    Q_PROPERTY(QList<quint64> userList READ userList)
-
-    QList<quint64> userList() const;  // TODO:创建或删除userlist无法及时刷新，调用sleep(1)正常
-
 public slots:
-
-    DExpected<QSharedPointer<DTK_ACCOUNT_NAMESPACE::DAccountsUser>> createUser(const QString &name, const QString &fullName, const DTK_ACCOUNT_NAMESPACE::AccountTypes &type);
+    DExpected<QList<quint64>> userList() const;  // TODO:创建或删除userlist无法及时刷新，调用sleep(1)正常
+    DExpected<QSharedPointer<DTK_ACCOUNT_NAMESPACE::DAccountsUser>>
+    createUser(const QString &name, const QString &fullName, const DTK_ACCOUNT_NAMESPACE::AccountTypes &type);
     DExpected<void> deleteUser(const QString &name, const bool rmFiles);
     DExpected<QSharedPointer<DTK_ACCOUNT_NAMESPACE::DAccountsUser>> findUserByName(const QString &name);
     DExpected<QSharedPointer<DTK_ACCOUNT_NAMESPACE::DAccountsUser>> findUserById(const qint64 uid);
