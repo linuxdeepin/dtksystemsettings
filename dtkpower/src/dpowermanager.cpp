@@ -15,8 +15,8 @@
 #include "dbus/upowermanagerinterface.h"
 
 DPOWER_BEGIN_NAMESPACE
-using DCORE_NAMESPACE::DExpected;
 using DCORE_NAMESPACE::DError;
+using DCORE_NAMESPACE::DExpected;
 using DCORE_NAMESPACE::DUnexpected;
 
 void DPowerManagerPrivate::connectDBusSignal()
@@ -63,7 +63,7 @@ bool DPowerManager::lidIsPresent() const
 bool DPowerManager::hasBattery() const
 {
     auto res = devices();
-    if(!res)
+    if (!res)
         return false;
 
     for (auto const &str : res.value()) {
@@ -145,7 +145,7 @@ QSharedPointer<DPowerDevice> DPowerManager::displayDevice() const
 QSharedPointer<DPowerDevice> DPowerManager::findDeviceByName(const QString &name) const
 {
     auto res = devices();
-    if(!res)
+    if (!res)
         return nullptr;
 
     if (!res.value().contains(name)) {
@@ -168,7 +168,7 @@ QSharedPointer<DKbdBacklight> DPowerManager::kbdBacklight() const
 DExpected<void> DPowerManager::refresh()
 {
     auto res = devices();
-    if(!res)
+    if (!res)
         return {};
 
     const auto &names = res.value();
@@ -176,6 +176,7 @@ DExpected<void> DPowerManager::refresh()
         auto device = findDeviceByName(name);
         device->refresh();
     }
+    return {};
 }
 
 DPOWER_END_NAMESPACE
