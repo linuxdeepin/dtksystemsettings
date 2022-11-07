@@ -367,7 +367,7 @@ DLoginManager 中定义了登录管理对象的接口。
 @brief 当前的session
 @return 返回当前的seat对象
 
-@fn QSharedPointer<DLoginSeat> DLoginManager::currentUser()
+@fn QSharedPointer<DLoginUser> DLoginManager::currentUser()
 @brief 当前的user
 @return 返回当前的user对象
 
