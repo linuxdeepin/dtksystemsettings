@@ -34,7 +34,7 @@ void Demo::run()
     m_rfMgr->blockWifi(!isWifiBlocked);
     qInfo() << "isWifiBlocked:" << m_rfMgr->isWifiBlocked();
 
-    m_rfMgr->blockbluetooth(!isBluetoothBlocked);
+    m_rfMgr->blockBluetooth(!isBluetoothBlocked);
     qInfo() << "isBluetoothBlocked:" << m_rfMgr->isBluetoothBlocked();
 
     m_rfMgr->blockAll(!isAllBlocked);

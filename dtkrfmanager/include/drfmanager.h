@@ -6,13 +6,15 @@
 
 #include <dtkrfmanager_global.h>
 #include <QObject>
+#include <dexpected.h>
 
 DRFMGR_BEGIN_NAMESPACE
+using DCORE_NAMESPACE::DExpected;
 class DRfmanagerPrivate;
 class LIBDTKRFMRGSHARED_EXPORT DRfmanager : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(bool bluetoothBlocked READ isBluetoothBlocked WRITE blockbluetooth NOTIFY bluetoothBlockedChanged)
+    Q_PROPERTY(bool bluetoothBlocked READ isBluetoothBlocked WRITE blockBluetooth NOTIFY bluetoothBlockedChanged)
     Q_PROPERTY(bool wifiBlocked READ isWifiBlocked WRITE blockWifi NOTIFY wifiBlockedChanged)
     Q_PROPERTY(int count READ count NOTIFY countChanged)
     Q_PROPERTY(bool allBlocked READ isAllBlocked WRITE blockAll NOTIFY allBlockedChanged)
@@ -68,9 +70,9 @@ public:
     QList<RfDevice> deviceList() const;
 
 public slots:
-    bool blockbluetooth(bool bluetoothBlocked = true);
-    bool blockWifi(bool wifiBlocked = true);
-    bool blockAll(bool blockAll = true);
+    DExpected<bool> blockBluetooth(bool bluetoothBlocked = true);
+    DExpected<bool> blockWifi(bool wifiBlocked = true);
+    DExpected<bool> blockAll(bool blockAll = true);
 
 signals:
     void bluetoothBlockedChanged(bool bluetoothBlocked);

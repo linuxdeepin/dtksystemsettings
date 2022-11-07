@@ -49,9 +49,9 @@ TEST_F(TestDRfmanager, blockId)
 
 TEST_F(TestDRfmanager, blockbluetooth)
 {
-//    ASSERT_TRUE(rfmanager->blockbluetooth());
+//    ASSERT_TRUE(rfmanager->blockBluetooth());
 //    ASSERT_TRUE(rfmanager->isBluetoothBlocked());
-//    ASSERT_TRUE(rfmanager->blockbluetooth(false));
+//    ASSERT_TRUE(rfmanager->blockBluetooth(false));
     ASSERT_FALSE(rfmanager->isBluetoothBlocked());
 }
 
