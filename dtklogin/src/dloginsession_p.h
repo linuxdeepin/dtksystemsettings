@@ -35,7 +35,6 @@ private:
     StartManagerInterface *m_startManagerInter;
     SessionManagerInterface *m_sessionManagerInter;
     DLoginSession *q_ptr;
-    QFileSystemWatcher *m_fileWatcher;
     Q_DECLARE_PUBLIC(DLoginSession)
 };
 

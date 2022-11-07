@@ -55,7 +55,6 @@ DLoginSession::DLoginSession(const QString &path, QObject *parent)
         new StartManagerInterface(StartManagerService, StartManagerPath, QDBusConnection::sessionBus(), this);
     d->m_sessionManagerInter =
         new SessionManagerInterface(SessionManagerService, SessionManagerPath, QDBusConnection::sessionBus(), this);
-    d->m_fileWatcher = new QFileSystemWatcher(this);
     connect(
         d->m_startManagerInter, &StartManagerInterface::autostartChanged, this, [=](const QString &status, const QString &name) {
             if (status == "added") {
@@ -345,45 +344,6 @@ DExpected<bool> DLoginSession::addAutostart(const QString &fileName)
     } else {
         return reply.value();
     }
-}
-
-bool DLoginSessionPrivate::enableAutostartWatch()
-{
-    Q_Q(DLoginSession);
-    QStringList autostartDirs = getAutostartDirs();
-    auto notWatched = m_fileWatcher->addPaths(autostartDirs);
-    // For desktop file handler
-    connect(m_fileWatcher, &QFileSystemWatcher::directoryChanged, this, [=](const QString &path) {
-        QStringList autostartApps = q->autostartList().value();
-        QStringList fileUnderPath;
-        foreach (const QString &autostartApp, autostartApps) {
-            if (autostartApp.startsWith(path)) {
-                fileUnderPath.append(autostartApp);
-            }
-        }
-        QStringList newAutostartApps = getAutostartApps(path);
-        foreach (const QString &app, newAutostartApps) {
-            if (!fileUnderPath.contains(app)) {
-                emit q->autostartAdded(app);
-            } else {
-                fileUnderPath.removeAll(app);
-            }
-        }
-        foreach (const QString &app, fileUnderPath) {
-            // removed
-            emit q->autostartRemoved(app);
-        }
-    });
-    // for directory itself to be removed.
-    connect(m_fileWatcher, &QFileSystemWatcher::fileChanged, this, [=](const QString &path) {
-        QStringList autostartApps = q->autostartList().value();
-        foreach (const QString &autostartApp, autostartApps) {
-            if (autostartApp.startsWith(path)) {
-                emit q->autostartRemoved(autostartApp);
-            }
-        }
-    });
-    return notWatched.empty();
 }
 
 QString DLoginSessionPrivate::getUserAutostartDir()
