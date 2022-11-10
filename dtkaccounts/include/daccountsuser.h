@@ -9,7 +9,8 @@
 #include <QUrl>
 #include <QObject>
 #include <DExpected>
-
+using AccountsReminderInfo = DTK_ACCOUNTS_NAMESPACE::ReminderInfo;
+using AccountsPasswdExpirInfo = DTK_ACCOUNTS_NAMESPACE::PasswdExpirInfo;
 DACCOUNTS_BEGIN_NAMESPACE
 
 DCORE_USE_NAMESPACE
@@ -92,8 +93,8 @@ public slots:
     DExpected<void> deleteGroup(const QString &group);
     DExpected<void> deleteIconFile(const QUrl &iconURL);
     DExpected<bool> isPasswordExpired() const;
-    DExpected<DTK_ACCOUNT_NAMESPACE::ReminderInfo> getReminderInfo() const;
-    DExpected<DTK_ACCOUNT_NAMESPACE::PasswdExpirInfo> passwordExpirationInfo(qint64 &dayLeft) const;
+    DExpected<AccountsReminderInfo> getReminderInfo() const;
+    DExpected<AccountsPasswdExpirInfo> passwordExpirationInfo(qint64 &dayLeft) const;
 
 signals:
     void automaticLoginChanged(const bool enabled);

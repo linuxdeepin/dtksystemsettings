@@ -9,6 +9,9 @@
 #include <dexpected.h>
 
 #include "dpowertypes.h"
+using PowerHistoryList = QList<DTK_POWER_NAMESPACE::History>;
+using PowerStatisticList = QList<DTK_POWER_NAMESPACE::Statistic>;
+
 
 DPOWER_BEGIN_NAMESPACE
 using DCORE_NAMESPACE::DExpected;
@@ -95,8 +98,8 @@ signals:
     void iconNameChanged(const QString &value);
 
 public slots:
-    DExpected<QList<DTK_POWER_NAMESPACE::History>> history(const QString &type, const uint timespan, const uint resolution) const;
-    DExpected<QList<DTK_POWER_NAMESPACE::Statistic>> statistics(const QString &type) const;
+    DExpected<PowerHistoryList> history(const QString &type, const uint timespan, const uint resolution) const;
+    DExpected<PowerStatisticList> statistics(const QString &type) const;
     DExpected<void> refresh();
 
 private:

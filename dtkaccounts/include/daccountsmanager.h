@@ -10,11 +10,17 @@
 #include <DExpected>
 
 DACCOUNTS_BEGIN_NAMESPACE
+class DAccountsUser;
+DACCOUNTS_END_NAMESPACE
 
-DCORE_USE_NAMESPACE
+using AccountsUserPtr = QSharedPointer<DTK_ACCOUNTS_NAMESPACE::DAccountsUser>;
+using AccountsValidMsg = DTK_ACCOUNTS_NAMESPACE::ValidMsg;
+using DAccountTypes = DTK_ACCOUNTS_NAMESPACE::AccountTypes;
+
+DACCOUNTS_BEGIN_NAMESPACE
+using DCORE_NAMESPACE::DExpected;
 
 class DAccountsManagerPrivate;
-class DAccountsUser;
 
 class DAccountsManager : public QObject
 {
@@ -26,15 +32,14 @@ public:
 
 public slots:
     DExpected<QList<quint64>> userList() const;  // TODO:创建或删除userlist无法及时刷新，调用sleep(1)正常
-    DExpected<QSharedPointer<DTK_ACCOUNT_NAMESPACE::DAccountsUser>>
-    createUser(const QString &name, const QString &fullName, const DTK_ACCOUNT_NAMESPACE::AccountTypes &type);
+    DExpected<AccountsUserPtr> createUser(const QString &name, const QString &fullName, const DAccountTypes &type);
     DExpected<void> deleteUser(const QString &name, const bool rmFiles);
-    DExpected<QSharedPointer<DTK_ACCOUNT_NAMESPACE::DAccountsUser>> findUserByName(const QString &name);
-    DExpected<QSharedPointer<DTK_ACCOUNT_NAMESPACE::DAccountsUser>> findUserById(const qint64 uid);
+    DExpected<AccountsUserPtr> findUserByName(const QString &name);
+    DExpected<AccountsUserPtr> findUserById(const qint64 uid);
     DExpected<QStringList> groups();
-    DExpected<QStringList> presetGroups(const DTK_ACCOUNT_NAMESPACE::AccountTypes &type);
-    DExpected<DTK_ACCOUNT_NAMESPACE::ValidMsg> isPasswordValid(const QString &password);
-    DExpected<DTK_ACCOUNT_NAMESPACE::ValidMsg> isUsernameValid(const QString &name);
+    DExpected<QStringList> presetGroups(const DAccountTypes &type);
+    DExpected<AccountsValidMsg> isPasswordValid(const QString &password);
+    DExpected<AccountsValidMsg> isUsernameValid(const QString &name);
 
 signals:
     void UserAdded(const quint64 uid);
