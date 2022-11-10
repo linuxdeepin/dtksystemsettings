@@ -374,7 +374,7 @@ DExpected<bool> DLoginManager::cancelScheduledShutdown()
     return reply.value();
 }
 
-DExpected<QSharedPointer<DLoginSeat>> DLoginManager::findSeatById(const QString &seatId)
+DExpected<LoginSeatPtr> DLoginManager::findSeatById(const QString &seatId)
 {
     Q_D(DLoginManager);
     QDBusPendingReply<QDBusObjectPath> reply = d->m_inter->getSeat(seatId);
@@ -385,7 +385,7 @@ DExpected<QSharedPointer<DLoginSeat>> DLoginManager::findSeatById(const QString 
     return QSharedPointer<DLoginSeat>(new DLoginSeat(reply.value().path()));
 }
 
-DExpected<QSharedPointer<DLoginSession>> DLoginManager::findSessionById(const QString &sessionId)
+DExpected<LoginSessionPtr> DLoginManager::findSessionById(const QString &sessionId)
 {
     Q_D(DLoginManager);
     QDBusPendingReply<QDBusObjectPath> reply = d->m_inter->getSession(sessionId);
@@ -396,7 +396,7 @@ DExpected<QSharedPointer<DLoginSession>> DLoginManager::findSessionById(const QS
     return QSharedPointer<DLoginSession>(new DLoginSession(reply.value().path()));
 }
 
-DExpected<QSharedPointer<DLoginSession>> DLoginManager::findSessionByPID(quint32 PID)
+DExpected<LoginSessionPtr> DLoginManager::findSessionByPID(quint32 PID)
 {
     Q_D(DLoginManager);
     QDBusPendingReply<QDBusObjectPath> reply = d->m_inter->getSessionByPID(PID);
@@ -407,7 +407,7 @@ DExpected<QSharedPointer<DLoginSession>> DLoginManager::findSessionByPID(quint32
     return QSharedPointer<DLoginSession>(new DLoginSession(reply.value().path()));
 }
 
-DExpected<QSharedPointer<DLoginUser>> DLoginManager::findUserById(quint32 UID)
+DExpected<LoginUserPtr> DLoginManager::findUserById(quint32 UID)
 {
     Q_D(DLoginManager);
     QDBusPendingReply<QDBusObjectPath> reply = d->m_inter->getUser(UID);
@@ -418,7 +418,7 @@ DExpected<QSharedPointer<DLoginUser>> DLoginManager::findUserById(quint32 UID)
     return QSharedPointer<DLoginUser>(new DLoginUser(reply.value().path()));
 }
 
-DExpected<QSharedPointer<DLoginUser>> DLoginManager::findUserByPID(quint32 PID)
+DExpected<LoginUserPtr> DLoginManager::findUserByPID(quint32 PID)
 {
     Q_D(DLoginManager);
     QDBusPendingReply<QDBusObjectPath> reply = d->m_inter->getUserByPID(PID);
@@ -496,7 +496,7 @@ DExpected<void> DLoginManager::killUser(quint32 UID, qint32 signalNumber)
     return {};
 }
 
-DExpected<QList<Inhibitor>> DLoginManager::listInhibitors()
+DExpected<LoginInhibitorList> DLoginManager::listInhibitors()
 {
     Q_D(DLoginManager);
     QDBusPendingReply<QList<DBusInhibitor>> reply = d->m_inter->listInhibitors();
@@ -511,12 +511,12 @@ DExpected<QList<Inhibitor>> DLoginManager::listInhibitors()
     return inhibitors;
 }
 
-DExpected<QList<QString>> DLoginManager::listSeats()
+DExpected<QStringList> DLoginManager::listSeats()
 {
     Q_D(DLoginManager);
     QDBusPendingReply<QList<DBusSeat>> reply = d->m_inter->listSeats();
     reply.waitForFinished();
-    QList<QString> seats;
+    QStringList seats;
     if (!reply.isValid()) {
         return DUnexpected<>{DError{reply.error().type(), reply.error().message()}};
     }
@@ -526,12 +526,12 @@ DExpected<QList<QString>> DLoginManager::listSeats()
     return seats;
 }
 
-DExpected<QList<QString>> DLoginManager::listSessions()
+DExpected<QStringList> DLoginManager::listSessions()
 {
     Q_D(DLoginManager);
     QDBusPendingReply<QList<DBusSession>> reply = d->m_inter->listSessions();
     reply.waitForFinished();
-    QList<QString> sessions;
+    QStringList sessions;
     if (!reply.isValid()) {
         return DUnexpected<>{DError{reply.error().type(), reply.error().message()}};
     }
@@ -666,7 +666,7 @@ DExpected<void> DLoginManager::logout()
     }
 }
 
-DExpected<QSharedPointer<DLoginSeat>> DLoginManager::currentSeat()
+DExpected<LoginSeatPtr> DLoginManager::currentSeat()
 {
     DLoginSeat current(QStringLiteral("/org/freedesktop/login1/seat/self"));
     auto eSeat = findSeatById(current.id());
@@ -676,7 +676,7 @@ DExpected<QSharedPointer<DLoginSeat>> DLoginManager::currentSeat()
         return DUnexpected{eSeat.error()};
     }
 }
-DExpected<QSharedPointer<DLoginSession>> DLoginManager::currentSession()
+DExpected<LoginSessionPtr> DLoginManager::currentSession()
 {
     DLoginSession current(QStringLiteral("/org/freedesktop/login1/session/self"));
     auto eSession = findSessionById(current.id());
@@ -686,7 +686,7 @@ DExpected<QSharedPointer<DLoginSession>> DLoginManager::currentSession()
         return DUnexpected{eSession.error()};
     }
 }
-DExpected<QSharedPointer<DLoginUser>> DLoginManager::currentUser()
+DExpected<LoginUserPtr> DLoginManager::currentUser()
 {
     DLoginUser current(QStringLiteral("/org/freedesktop/login1/user/self"));
     auto eUser = findUserById(current.UID());
