@@ -12,17 +12,17 @@ set (DOXYGEN_EXTRACT_STATIC YES)
 set (DOXYGEN_OUTPUT_LANGUAGE "Chinese")
 set (DOXYGEN_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/docs/)
 set (DOXYGEN_QHG_LOCATION "qhelpgenerator")
-set (DOXYGEN_QHP_NAMESPACE "org.deepin.dde.${CMAKE_PROJECT_NAME}")
-set (DOXYGEN_QCH_FILE "${CMAKE_PROJECT_NAME}.qch")
+set (DOXYGEN_QHP_NAMESPACE "org.deepin.dtk.rfmanager")
+set (DOXYGEN_QCH_FILE "${BIN_NAME}.qch")
 set (DOXYGEN_QHP_VIRTUAL_FOLDER ${CMAKE_PROJECT_NAME})
 set (DOXYGEN_HTML_EXTRA_STYLESHEET "" CACHE STRING "Doxygen custom stylesheet for HTML output")
 set (DOXYGEN_TAGFILES "qtcore.tags=qthelp://doc.qt.io/qt-5/" CACHE STRING "Doxygen tag files")
 set (DOXYGEN_MACRO_EXPANSION "YES")
 set (DOXYGEN_EXPAND_ONLY_PREDEF "YES")
 set (DOXYGEN_PREDEFINED
-    "\"DRFMGR_BEGIN_NAMESPACE=namespace Dtk::RfMgr{\""
-    "\"DRFMGR_BEGIN_NAMESPACE=}\""
-    "\"DRFMGR_BEGIN_NAMESPACE=using namespace Dtk::RfMgr;\""
+    "DRFMGR_BEGIN_NAMESPACE=namespace Dtk { namespace RfMgr {"
+    "DRFMGR_END_NAMESPACE=}}"
+    "DRFMGR_USE_NAMESPACE=using namespace Dtk::RfMgr;"
 )
 if(BUILD_THEME)
 set (DOXYGEN_HTML_EXTRA_STYLESHEET "../doxygentheme/doxygen-awesome.css"
@@ -48,4 +48,4 @@ doxygen_add_docs (doxygen_dtkrfmgr
     COMMENT "Generate documentation via Doxygen"
 )
 
-install (FILES ${CMAKE_CURRENT_BINARY_DIR}/html/${CMAKE_PROJECT_NAME}.qch DESTINATION ${QCH_INSTALL_DESTINATION})
+install (FILES ${CMAKE_CURRENT_BINARY_DIR}/html/${BIN_NAME}.qch DESTINATION ${QCH_INSTALL_DESTINATION})

@@ -20,9 +20,9 @@ set (DOXYGEN_TAGFILES "qtcore.tags=qthelp://doc.qt.io/qt-5/" CACHE STRING "Doxyg
 set (DOXYGEN_MACRO_EXPANSION "YES")
 set (DOXYGEN_EXPAND_ONLY_PREDEF "YES")
 set (DOXYGEN_PREDEFINED
-    "\"DSYSTEMTIME_BEGIN_NAMESPACE=namespace Dtk { namespace SystemTime {\""
-    "\"DSYSTEMTIME_END_NAMESPACE=}}\""
-    "\"DTIME_USE_NAMESPACE=using namespace Dtk::SystemTime;\""
+    "DSYSTEMTIME_BEGIN_NAMESPACE=namespace Dtk { namespace SystemTime {"
+    "DSYSTEMTIME_END_NAMESPACE=}}"
+    "DTIME_USE_NAMESPACE=using namespace Dtk::SystemTime;"
 )
 
 if(BUILD_THEME)

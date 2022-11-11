@@ -20,9 +20,9 @@ set (DOXYGEN_TAGFILES "qtcore.tags=qthelp://doc.qt.io/qt-5/" CACHE STRING "Doxyg
 set (DOXYGEN_MACRO_EXPANSION "YES")
 set (DOXYGEN_EXPAND_ONLY_PREDEF "YES")
 set (DOXYGEN_PREDEFINED
-    "\"DPOWER_BEGIN_NAMESPACE=namespace Dtk { namespace Power {\""
-    "\"DPOWER_END_NAMESPACE=}}\""
-    "\"DPOWER_USE_NAMESPACE=using namespace Dtk::Power;\""
+    "DPOWER_BEGIN_NAMESPACE=namespace Dtk { namespace Power {"
+    "DPOWER_END_NAMESPACE=}}"
+    "DPOWER_USE_NAMESPACE=using namespace Dtk::Power;"
 )
 
 if(BUILD_THEME)
