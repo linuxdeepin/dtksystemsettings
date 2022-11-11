@@ -32,3 +32,8 @@ License: CC0-1.0
 Files: */include/D*
 Copyright: None
 License: CC0-1.0
+
+#doxygentheme
+Files: doxygentheme/*
+Copyright: Copyright (c) 2021 - 2022 jothepro
+License: MIT
