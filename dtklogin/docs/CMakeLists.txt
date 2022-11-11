@@ -20,9 +20,9 @@ set (DOXYGEN_TAGFILES "qtcore.tags=qthelp://doc.qt.io/qt-5/" CACHE STRING "Doxyg
 set (DOXYGEN_MACRO_EXPANSION "YES")
 set (DOXYGEN_EXPAND_ONLY_PREDEF "YES")
 set (DOXYGEN_PREDEFINED
-    "\"DLOGIN_BEGIN_NAMESPACE=namespace Dtk {namespace Login {\""
-    "\"DLOGIN_END_NAMESPACE=}}\""
-    "\"DLOGIN_USE_NAMESPACE=using namespace Dtk::Login;\""
+    "DLOGIN_BEGIN_NAMESPACE=namespace Dtk {namespace Login {"
+    "DLOGIN_END_NAMESPACE=}}"
+    "DLOGIN_USE_NAMESPACE=using namespace Dtk::Login;"
 )
 
 if(BUILD_THEME)
