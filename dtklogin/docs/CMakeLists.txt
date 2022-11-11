@@ -25,6 +25,22 @@ set (DOXYGEN_PREDEFINED
     "\"DLOGIN_USE_NAMESPACE=using namespace Dtk::Login;\""
 )
 
+if(BUILD_THEME)
+set (DOXYGEN_HTML_EXTRA_STYLESHEET "../doxygentheme/doxygen-awesome.css"
+                                "../doxygentheme/doxygen-awesome-sidebar-only.css"
+                                "../doxygentheme/doxygen-awesome-sidebar-only-darkmode-toggle.css"
+                                )
+set (DOXYGEN_HTML_EXTRA_FILES "../doxygentheme/doxygen-awesome-darkmode-toggle.js"
+                            "../doxygentheme/doxygen-awesome-fragment-copy-button.js"
+                            "../doxygentheme/doxygen-awesome-paragraph-link.js"
+                            "../doxygentheme/doxygen-awesome-interactive-toc.js"
+                            )
+set (DOXYGEN_GENERATE_TREEVIEW "YES")
+set (DOXYGEN_DISABLE_INDEX "NO")
+set (DOXYGEN_FULL_SIDEBAR "NO")
+set (DOXYGEN_HTML_HEADER "../doxygentheme/header.html")
+endif()
+
 doxygen_add_docs (doxygen_dtklogin
     ${CMAKE_CURRENT_SOURCE_DIR}/../include
     ${CMAKE_CURRENT_SOURCE_DIR}/../docs
