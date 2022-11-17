@@ -8,7 +8,7 @@
 #include <DDBusInterface>
 #include "dnotificationtypes.h"
 
-DNOTIFICATION_BEGIN_NAMESPACE
+DNOTIFICATIONS_BEGIN_NAMESPACE
 
 using DTK_CORE_NAMESPACE::DDBusInterface;
 class DNotificationInterface : public QObject
@@ -57,4 +57,4 @@ private:
     DDBusInterface *m_inter;
 };
 
-DNOTIFICATION_END_NAMESPACE
+DNOTIFICATIONS_END_NAMESPACE

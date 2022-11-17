@@ -7,7 +7,7 @@
 #include "dnotificationdndmodeconfig.h"
 #include "dabstractnotificationmodeconfig_p.h"
 
-DNOTIFICATION_BEGIN_NAMESPACE
+DNOTIFICATIONS_BEGIN_NAMESPACE
 
 class DNotificationInterface;
 
@@ -21,4 +21,4 @@ public:
     DNotificationInterface *m_dNoticationInter;
 };
 
-DNOTIFICATION_END_NAMESPACE
+DNOTIFICATIONS_END_NAMESPACE

@@ -7,7 +7,7 @@
 #include <QString>
 #include <QJsonObject>
 
-DNOTIFICATION_BEGIN_NAMESPACE
+DNOTIFICATIONS_BEGIN_NAMESPACE
 
 namespace Utils {
     QVariantMap string2Map(const QString &text);
@@ -15,4 +15,4 @@ namespace Utils {
     DNotificationData jsonObject2DNotificationData(const QJsonObject &obj);
 }  // namespace Utils
 
-DNOTIFICATION_END_NAMESPACE
+DNOTIFICATIONS_END_NAMESPACE

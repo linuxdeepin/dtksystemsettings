@@ -8,7 +8,7 @@
 #include "dbus/dnotificationinterface.h"
 #include <QDebug>
 
-DNOTIFICATION_BEGIN_NAMESPACE
+DNOTIFICATIONS_BEGIN_NAMESPACE
 
 using DCORE_NAMESPACE::DError;
 using DCORE_NAMESPACE::DExpected;
@@ -250,4 +250,4 @@ DExpected<void> DNotificationManager::hideNotificationCenter()
     return {};
 }
 
-DNOTIFICATION_END_NAMESPACE
+DNOTIFICATIONS_END_NAMESPACE

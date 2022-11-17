@@ -9,7 +9,7 @@
 
 #include "dtknotification_global.h"
 
-DNOTIFICATION_BEGIN_NAMESPACE
+DNOTIFICATIONS_BEGIN_NAMESPACE
 DCORE_USE_NAMESPACE
 
 class DNotificationAppConfigPrivate;
@@ -62,4 +62,4 @@ private:
 };
 typedef QSharedPointer<DNotificationAppConfig> DNotificationAppConfigPtr;
 
-DNOTIFICATION_END_NAMESPACE
+DNOTIFICATIONS_END_NAMESPACE

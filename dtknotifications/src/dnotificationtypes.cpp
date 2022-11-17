@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 #include "dnotificationtypes.h"
 
-DNOTIFICATION_BEGIN_NAMESPACE
+DNOTIFICATIONS_BEGIN_NAMESPACE
 
 QDebug operator<<(QDebug debug, const DNotificationData &nofiticationData)
 {
@@ -26,4 +26,4 @@ QDebug operator<<(QDebug debug, const ServerInformation &serverInformation)
     return debug;
 }
 
-DNOTIFICATION_END_NAMESPACE
+DNOTIFICATIONS_END_NAMESPACE

@@ -1,6 +1,8 @@
-## dtkaccounts
+## dtknotifications
 
-accounts DBus interface binding for Qt5
+Development Tool Kit Notifications module, used for system notification and message.
+
+[中文文档](./README.zh_CN.md)
 
 ## Dependencies
 
@@ -21,10 +23,6 @@ cmake --build build/
 cd build
 sudo make install
 ```
-
-# Documentations
-
-null
 
 ## Getting help
 

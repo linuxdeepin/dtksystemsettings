@@ -1,6 +1,6 @@
 ## 项目名称
 
-dtkaccounts是对systemd-accounts接口进行封装。
+dtknotifications是对dde-osd的DBus接口进行封装。用于系统通知和消息。
 
 ## 编译依赖
 
@@ -22,10 +22,6 @@ cmake --build build/
 cd build
 sudo make install
 ```
-
-# 文档
-
-暂无
 
 ## 获取帮助
 

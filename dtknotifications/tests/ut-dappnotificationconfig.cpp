@@ -6,7 +6,7 @@
 #include "dnotificationappconfig.h"
 #include "fakedbus/notificationmanagerservice.h"
 
-DNOTIFICATION_USE_NAMESPACE
+DNOTIFICATIONS_USE_NAMESPACE
 
 class TestDNotificationAppConfig: public testing::Test
 {

@@ -8,8 +8,7 @@
 #include <QDebugStateSaver>
 #include "dtknotification_global.h"
 
-DNOTIFICATION_BEGIN_NAMESPACE
-
+DNOTIFICATIONS_BEGIN_NAMESPACE
 struct DNotificationData
 {
     QString appName;
@@ -61,9 +60,9 @@ struct ServerInformation {
 QDebug operator<<(QDebug debug, const DNotificationData &nofitication);
 QDebug operator<<(QDebug debug, const ServerInformation &serverInformation);
 
-DNOTIFICATION_END_NAMESPACE
+DNOTIFICATIONS_END_NAMESPACE
 
-Q_DECLARE_METATYPE(DNOTIFICATION_NAMESPACE::ClosedReason)
-Q_DECLARE_METATYPE(DNOTIFICATION_NAMESPACE::ServerInformation)
-Q_DECLARE_METATYPE(DNOTIFICATION_NAMESPACE::AppNotificationConfigItem)
-Q_DECLARE_METATYPE(DNOTIFICATION_NAMESPACE::DNDModeNotificaitonConfigItem)
+Q_DECLARE_METATYPE(DNOTIFICATIONS_NAMESPACE::ClosedReason)
+Q_DECLARE_METATYPE(DNOTIFICATIONS_NAMESPACE::ServerInformation)
+Q_DECLARE_METATYPE(DNOTIFICATIONS_NAMESPACE::AppNotificationConfigItem)
+Q_DECLARE_METATYPE(DNOTIFICATIONS_NAMESPACE::DNDModeNotificaitonConfigItem)

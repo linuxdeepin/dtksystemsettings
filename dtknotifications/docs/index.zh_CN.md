@@ -1,12 +1,14 @@
 @~chinese
 
+\mainpage
+
 ## 项目介绍
 
-dtkaccounts是对于deepin/UOS系统上的org.freedesktop.Accounts的dbus接口和com.deepin.daemon.Accounts的dbus接口的封装，同时使用Qt以及Linux原生接口实现了一部分功能，其目的是在于方便第三方开发者轻松且快速的调用接口进行开发。
+dtknotifications是对于deepin/UOS系统上的org.freedesktop.Notifications的dbus接口和com.deepin.dde.Notification的dbus接口的封装，同时使用Qt以及Linux原生接口实现了一部分功能，其目的是在于方便第三方开发者轻松且快速的调用接口进行开发。
 
 ## 项目结构
 
-对外暴露出 `daccountsmanager.h` `daccountsuser.h` `daccountstypes.h`这三个类，用户和账户信息的管理通过构造其对象来进行操作。
+对外暴露出 `dnotificationmanager.h` `dabstractnotificationmodeconfig.h` `dnotificationdndmodeconfig.h` `dnotificationappconfig.h` `dnotificationtypes.h`这五个类，系统通知和消息的管理通过构造其对象来进行操作。
 
 ## 如何使用项目
 
@@ -19,87 +21,92 @@ dtkaccounts是对于deepin/UOS系统上的org.freedesktop.Accounts的dbus接口�
 `main.cpp`
 
 ```cpp
-#include "demo.h"
-#include <QCoreApplication>
-
 int main(int argc, char **argv)
 {
     QCoreApplication app(argc, argv);
-    Demo d;
-    d.run();
+    DNotificationManager manager;
+    QObject::connect(&manager, &DNotificationManager::actionInvoked, []{ qDebug() << "actionInvoked"; });
+    QObject::connect(&manager, &DNotificationManager::notificationClosed, []{ qDebug() << "notificationClosed"; });
+    QObject::connect(&manager, &DNotificationManager::recordAdded, []{ qDebug() << "recordAdded"; });
+    QObject::connect(&manager, &DNotificationManager::appNotificationConfigChanged, []{ qDebug() << "appInfoChanged"; });
+    QObject::connect(&manager, &DNotificationManager::dndModeNotificationConfigChanged, []{ qDebug() << "systemInfoChanged"; });
+    QObject::connect(&manager, &DNotificationManager::appAdded, []{ qDebug() << "appAdded"; });
+    QObject::connect(&manager, &DNotificationManager::appRemoved, []{ qDebug() << "appRemoved"; });
+
+    qDebug() << "*******************recordCount******************************";
+    qDebug() << "recordCount:" << manager.recordCount().value();
+
+    DNotificationData notificationData;
+    qDebug() << "*******************allRecords******************************";
+    auto records = manager.allRecords();
+    bool first = true;
+    QString offsetId;
+    for (auto record : records.value()) {
+        if (first) {
+            first = false;
+        }
+        if (record.appName == "deepin-screen-recorder") {
+            offsetId = record.id;
+            notificationData = record;
+        }
+        qDebug() << record;
+    }
+
+    qDebug() << "******************getRecordsFromId*******************************";
+    auto offsetRecords = manager.getRecordsFromId(2, offsetId);
+    for (auto record : offsetRecords.value()) {
+        qDebug() << record;
+    }
+
+    qDebug() << "*******************getRecordById******************************";
+    auto record = manager.getRecordById(offsetId);
+    qDebug() << offsetId << ":" << record.value();
+
+    qDebug() << "*******************serverInformation******************************";
+    qDebug() << manager.serverInformation().value();
+
+    qDebug() << "*******************capbilities******************************";
+    qDebug() << manager.capbilities().value();
+
+    qDebug() << "*******************appList******************************";
+    qDebug() << manager.appList().value();
+
+    qDebug() << "*******************appInfo******************************";
+    DNotificationAppConfigPtr appNotificationConfigPtr = manager.notificationAppConfig(notificationData.id);
+    qDebug() << appNotificationConfigPtr->appName();
+
+    qDebug() << "*******************setAppInfo******************************";
+    QString appName("flameshot");
+    appNotificationConfigPtr->setSoundEnabled(false);
+    qDebug() << "soundEnabled:" << appNotificationConfigPtr->soundEnabled();
+
+    qDebug() << "*******************systemInformation******************************";
+    DNotificationDNDModeConfigPtr dndModeNotificatinConfigPtr = manager.notificationDNDModeConfig();
+    qDebug() << "dndModeEnabled:" << dndModeNotificatinConfigPtr->DNDModeInLockScreenEnabled();
+
+    qDebug() << "*******************setSystemInfo******************************";
+    QString sysName("22:00");
+    dndModeNotificatinConfigPtr->setStartTime(sysName);
+    qDebug() << dndModeNotificatinConfigPtr->startTime();
+
+    qDebug() << "*******************notify******************************";
+    notificationData.appName = "new-application";
+    notificationData.id = "2022";
+
+    qDebug() << manager.notify(notificationData.appName, notificationData.replacesId, notificationData.appIcon, notificationData.summary).value();
+
+    qDebug() << "*******************closeNotification******************************";
+    QThread::msleep(2000);
+    manager.closeNotification(notificationData.id.toUInt());
+
+    manager.showNotificationCenter();
+
+    qDebug() << "*******************hide******************************";
+    QThread::msleep(1000);
+    manager.hide();
+
     return app.exec();
 }
+
 ```
 
-`demo.h`
-
-```cpp
-#pragma once
-
-#include "daccountsmanager.h"
-#include "daccountsuser.h"
-#include "daccountstypes.h"
-#include <QObject>
-
-DACCOUNTS_USE_NAMESPACE
-
-class Demo : public QObject
-{
-    Q_OBJECT
-public:
-    Demo();
-    void run();
-
-private:
-    DAccountsManager manager;
-    QSharedPointer<DAccountsUser> user{nullptr};
-};
-```
-
-`demo.cpp`
-
-```cpp
-#include "demo.h"
-#include <QDebug>
-
-Demo::Demo()
-{
-    user = manager.findUserByName("test"); //创建DaccountsUser对象的方法之一，剩下还有createUser和findUserById
-
-    //以下信号按需连接
-    connect(&manager, &DAccountsManager::UserAdded, this, [](const quint64 uid) { qDebug() << "new user add:" << uid; });
-    connect(&manager, &DAccountsManager::UserDeleted, this, [](const quint64 uid) { qDebug() << "delete user:" << uid; });
-    connect(user.data(), &DAccountsUser::automaticLoginChanged, this, [](const bool) { qDebug() << "automaticLoginChanged"; });
-    connect(user.data(), &DAccountsUser::noPasswdLoginChanged, this, [](const bool) { qDebug() << "noPasswdLoginChanged"; });
-    connect(user.data(), &DAccountsUser::groupsChanged, this, [](const QStringList &) { qDebug() << "groupsChanged"; });
-    connect(user.data(), &DAccountsUser::iconFileListChanged, this, [](const QList<QByteArray> &) {
-        qDebug() << "iconFileListChanged";
-    });
-    connect(user.data(), &DAccountsUser::iconFileChanged, this, [](const QUrl &) { qDebug() << "iconFileChanged"; });
-    connect(
-        user.data(), &DAccountsUser::layoutListChanged, this, [](const QList<QByteArray> &) { qDebug() << "layoutListChanged"; });
-    connect(user.data(), &DAccountsUser::layoutChanged, this, [](const QByteArray &) { qDebug() << "layoutChanged"; });
-    connect(user.data(), &DAccountsUser::maxPasswordAgeChanged, this, [](const qint32) { qDebug() << "maxPasswordAgeChanged"; });
-    connect(user.data(), &DAccountsUser::passwordHintChanged, this, [](const QString &) { qDebug() << "passwordHintChanged"; });
-    connect(user.data(), &DAccountsUser::localeChanged, this, [](const QByteArray &) { qDebug() << "localeChanged"; });
-    connect(user.data(), &DAccountsUser::lockedChanged, this, [](const bool) { qDebug() << "lockedChanged"; });
-}
-
-void Demo::run()
-{
-    manager.isUsernameValid("qwer");
-    auto newuser = manager.createUser("qwer", "testqwer", AccountTypes::Default);
-
-    manager.deleteUser("qwer", true);
-    qDebug() << manager.groups();
-
-    qDebug() << user->UID();
-    qDebug() << user->UUID();
-    user->setIconFile(QUrl("file:///var/lib/AccountsService/icons/13.png")); //注意QUrl其中参数格式要统一
-    user->addGroup("libvirt");
-    user->deleteGroup("libvirt");
-    user->deleteIconFile(QUrl("file:///var/lib/AccountsService/icons/local/qwer-dfgdsd31dfs"));
-    user->setLayout("cn;");
-    user->setLayoutList({"cn;","jp;","en;"}); //对布局设置时注意格式
-}
-```

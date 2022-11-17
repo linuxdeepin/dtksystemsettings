@@ -7,7 +7,7 @@
 #include "dbus/dnotificationinterface.h"
 #include <QDebug>
 
-DNOTIFICATION_BEGIN_NAMESPACE
+DNOTIFICATIONS_BEGIN_NAMESPACE
 
 DNotificationAppConfigPrivate::DNotificationAppConfigPrivate(const QString &id, DNotificationAppConfig *parent)
     : q_ptr(parent)
@@ -189,4 +189,4 @@ DExpected<void> DNotificationAppConfig::setShowInLockScreenEnabled(const bool en
     Q_EMIT showInLockScreenEnabledChanged(d->m_id, enabled);
     return {};
 }
-DNOTIFICATION_END_NAMESPACE
+DNOTIFICATIONS_END_NAMESPACE

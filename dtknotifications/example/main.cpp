@@ -9,7 +9,8 @@
 #include <QDebug>
 #include <qeventloop.h>
 
-DNOTIFICATION_USE_NAMESPACE
+DNOTIFICATIONS_USE_NAMESPACE
+
 int main(int argc, char **argv)
 {
     QCoreApplication app(argc, argv);
@@ -88,11 +89,12 @@ int main(int argc, char **argv)
     QThread::msleep(2000);
     manager.closeNotification(notificationData.id.toUInt());
 
+    qDebug() << "*******************showNotificationCenter******************************";
     manager.showNotificationCenter();
 
-    qDebug() << "*******************hide******************************";
-//    QThread::msleep(1000);
-//    manager.hide();
+    qDebug() << "*******************hideNotificationCenter******************************";
+    QThread::msleep(1000);
+    manager.hideNotificationCenter();
 
     return app.exec();
 }
