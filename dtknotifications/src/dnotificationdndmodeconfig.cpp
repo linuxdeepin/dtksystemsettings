@@ -7,7 +7,7 @@
 #include "dbus/dnotificationinterface.h"
 #include <QDebug>
 
-DNOTIFICATION_BEGIN_NAMESPACE
+DNOTIFICATIONS_BEGIN_NAMESPACE
 
 DNotificationDNDModeConfigPrivate::DNotificationDNDModeConfigPrivate(const QString &name, DNotificationDNDModeConfig *q)
     : DAbstractNotificationModeConfigPrivate(name, q)
@@ -181,4 +181,4 @@ DExpected<void> DNotificationDNDModeConfig::setShowIconEnabled(bool enabled)
     Q_EMIT showIconEnabledChanged(enabled);
     return {};
 }
-DNOTIFICATION_END_NAMESPACE
+DNOTIFICATIONS_END_NAMESPACE

@@ -1,10 +1,10 @@
 /*!
 @~chinese
-@file dappnotificationconfig.h
+@file dnotificationappconfig.h
 
-dappnotificationconfig.h是对于在通知应用配置接口的封装。
+dnotificationappconfig.h是对于在通知应用配置接口的封装。
 
-@class Dtk::Notifications::DNotificationAppConfig dappnotificationconfig.h
+@class Dtk::Notifications::DNotificationAppConfig dnotificationappconfig.h
 @brief DAppNotificationConfig类
 
 @fn DNotificationAppConfig::DNotificationAppConfig(const QString &id, QObject *parent = nullptr)
@@ -19,7 +19,7 @@ dappnotificationconfig.h是对于在通知应用配置接口的封装。
 @fn QString DNotificationAppConfig::appIcon() const
 @brief 应用图标名称
 @return 应用图标名称字符串
-
+    
 @fn bool DNotificationAppConfig::notificationEnabled() const
 @brief 判断是否打开通知
 @return 代表是否打开通知的布尔值

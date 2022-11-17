@@ -7,7 +7,7 @@
 #include <qdbusmetatype.h>
 #include "dtknotification_global.h"
 
-DNOTIFICATION_BEGIN_NAMESPACE
+DNOTIFICATIONS_BEGIN_NAMESPACE
 
 struct DBusServerInformation {
     QString name;
@@ -18,7 +18,7 @@ struct DBusServerInformation {
 QDBusArgument &operator<<(QDBusArgument &arg, const DBusServerInformation &serverInformation);
 const QDBusArgument &operator>>(const QDBusArgument &arg, DBusServerInformation &serverInformation);
 
-DNOTIFICATION_END_NAMESPACE
+DNOTIFICATIONS_END_NAMESPACE
 
-Q_DECLARE_METATYPE(DNOTIFICATION_NAMESPACE::DBusServerInformation)
+Q_DECLARE_METATYPE(DNOTIFICATIONS_NAMESPACE::DBusServerInformation)
 

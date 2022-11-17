@@ -2,10 +2,10 @@
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
-#define DNOTIFICATION_NAMESPACE Dtk::Notifications
+#define DNOTIFICATIONS_NAMESPACE Dtk::Notifications
 
-#define DNOTIFICATION_USE_NAMESPACE using namespace DNOTIFICATION_NAMESPACE;
+#define DNOTIFICATIONS_USE_NAMESPACE using namespace DNOTIFICATIONS_NAMESPACE;
 
-#define DNOTIFICATION_BEGIN_NAMESPACE namespace Dtk { namespace Notifications {
+#define DNOTIFICATIONS_BEGIN_NAMESPACE namespace Dtk { namespace Notifications {
 
-#define DNOTIFICATION_END_NAMESPACE }}
+#define DNOTIFICATIONS_END_NAMESPACE }}

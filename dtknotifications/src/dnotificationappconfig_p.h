@@ -7,7 +7,7 @@
 #include <QObject>
 #include <dtknotification_global.h>
 
-DNOTIFICATION_BEGIN_NAMESPACE
+DNOTIFICATIONS_BEGIN_NAMESPACE
 
 class DNotificationAppConfig;
 class DNotificationInterface;
@@ -25,4 +25,4 @@ public:
     Q_DECLARE_PUBLIC(DNotificationAppConfig)
 };
 
-DNOTIFICATION_END_NAMESPACE
+DNOTIFICATIONS_END_NAMESPACE

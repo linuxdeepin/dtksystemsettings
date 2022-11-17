@@ -12,7 +12,7 @@ set (DOXYGEN_EXTRACT_STATIC YES)
 set (DOXYGEN_OUTPUT_LANGUAGE "Chinese")
 set (DOXYGEN_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/docs/)
 set (DOXYGEN_QHG_LOCATION "qhelpgenerator")
-set (DOXYGEN_QHP_NAMESPACE "org.deepin.dde.${CMAKE_PROJECT_NAME}")
+set (DOXYGEN_QHP_NAMESPACE "org.deepin.dtk.${CMAKE_PROJECT_NAME}")
 set (DOXYGEN_QCH_FILE "${CMAKE_PROJECT_NAME}.qch")
 set (DOXYGEN_QHP_VIRTUAL_FOLDER ${CMAKE_PROJECT_NAME})
 set (DOXYGEN_HTML_EXTRA_STYLESHEET "" CACHE STRING "Doxygen custom stylesheet for HTML output")
@@ -20,9 +20,9 @@ set (DOXYGEN_TAGFILES "qtcore.tags=qthelp://doc.qt.io/qt-5/" CACHE STRING "Doxyg
 set (DOXYGEN_MACRO_EXPANSION "YES")
 set (DOXYGEN_EXPAND_ONLY_PREDEF "YES")
 set (DOXYGEN_PREDEFINED
-    "\"DNOTIFICATION_BEGIN_NAMESPACE=namespace Dtk::Notifications{\""
-    "\"DNOTIFICATION_END_NAMESPACE=}\""
-    "\"DNOTIFICATION_USE_NAMESPACE=using namespace Dtk::Notifications;\""
+    "DNOTIFICATIONS_BEGIN_NAMESPACE=namespace Dtk { namespace Notifications{"
+    "DNOTIFICATIONS_END_NAMESPACE=}}"
+    "DNOTIFICATIONS_USE_NAMESPACE=using namespace Dtk::Notifications;"
 )
 
 if(BUILD_THEME)
@@ -41,7 +41,7 @@ set (DOXYGEN_FULL_SIDEBAR "NO")
 set (DOXYGEN_HTML_HEADER "../doxygentheme/header.html")
 endif()
 
-doxygen_add_docs (doxygen_dtknotification
+doxygen_add_docs (doxygen_dtknotifications
     ${CMAKE_CURRENT_SOURCE_DIR}/../include
     ${CMAKE_CURRENT_SOURCE_DIR}/../docs
     ALL

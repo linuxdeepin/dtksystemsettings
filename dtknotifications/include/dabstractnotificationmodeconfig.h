@@ -9,7 +9,7 @@
 
 #include "dtknotification_global.h"
 
-DNOTIFICATION_BEGIN_NAMESPACE
+DNOTIFICATIONS_BEGIN_NAMESPACE
 DCORE_USE_NAMESPACE
 
 class DAbstractNotificationModeConfigPrivate;
@@ -23,7 +23,7 @@ class DAbstractNotificationModeConfig : public QObject
 
 public:
     explicit DAbstractNotificationModeConfig(const QString &name, QObject *parent = nullptr);
-    virtual ~DAbstractNotificationModeConfig();
+    virtual ~DAbstractNotificationModeConfig() override;
 
     QString name() const;
 
@@ -39,4 +39,4 @@ protected:
 };
 typedef QSharedPointer<DAbstractNotificationModeConfig> DAbstractNotificationModeConfigPtr;
 
-DNOTIFICATION_END_NAMESPACE
+DNOTIFICATIONS_END_NAMESPACE

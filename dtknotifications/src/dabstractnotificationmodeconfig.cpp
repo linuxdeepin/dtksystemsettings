@@ -6,7 +6,7 @@
 #include "dabstractnotificationmodeconfig_p.h"
 #include <QDebug>
 
-DNOTIFICATION_BEGIN_NAMESPACE
+DNOTIFICATIONS_BEGIN_NAMESPACE
 
 DAbstractNotificationModeConfigPrivate::DAbstractNotificationModeConfigPrivate(const QString &name, DAbstractNotificationModeConfig *q)
     : q_ptr(q),
@@ -39,4 +39,4 @@ DAbstractNotificationModeConfig::DAbstractNotificationModeConfig(DAbstractNotifi
 
 }
 
-DNOTIFICATION_END_NAMESPACE
+DNOTIFICATIONS_END_NAMESPACE

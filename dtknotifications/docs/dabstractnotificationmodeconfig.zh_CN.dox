@@ -1,13 +1,13 @@
 /*!
 @~chinese
-@file dabstractmodenotificationconfig.h
+@file dabstractnotificationmodeconfig.h
 
-dabstractmodenotificationconfig.h是对于某种模式下通知系统配置抽象接口的封装。
+dabstractnotificationmodeconfig.h是对于某种模式下通知系统配置抽象接口。
 
-@class Dtk::Notifications::DAbstractNotificationModeConfig dabstractmodenotificationconfig.h
+@class Dtk::Notifications::DAbstractNotificationModeConfig dabstractnotificationmodeconfig.h
 @brief DAbstractModeNotificationConfig类
 
-@fn DAbstractNotificationModeConfig::DAbstractNotificationModeConfig(const QString &name, QObject *parent = nullptr)
+@fn DAbstractNotificationModeConfig::DAbstractNotificationModeConfig(const QString &name, QObject *parent=nullptr)
 @brief 构造通知系统模式配置对象
 @param[in] name 模式名称
 @param[in] parent 父对象
@@ -16,13 +16,13 @@ dabstractmodenotificationconfig.h是对于某种模式下通知系统配置抽�
 @brief 获取模式的名称（独一无二的标识）
 @return 表示模式名称的字符串
 
-@fn bool DAbstractNotificationModeConfig::enabled() const = 0
+@fn virtual bool DAbstractNotificationModeConfig::enabled() const
 @brief 判断是否启用了该模式
 @return 该模式是否启用
 @retval true 已启用
 @retval false 没有启用
 
-@fn void DAbstractNotificationModeConfig::setEnabled(const bool enabled)
+@fn virtual void DAbstractNotificationModeConfig::setEnabled(bool enabled)
 @brief 设置当前模式是否启用
 @param[in] enabled 代表是否启用该模式的布尔值
 

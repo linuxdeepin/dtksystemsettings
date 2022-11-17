@@ -8,7 +8,7 @@
 #include "dtknotification_global.h"
 #include "dabstractnotificationmodeconfig.h"
 
-DNOTIFICATION_BEGIN_NAMESPACE
+DNOTIFICATIONS_BEGIN_NAMESPACE
 
 class DNotificationDNDModeConfigPrivate;
 class DNotificationDNDModeConfig : public DAbstractNotificationModeConfig
@@ -52,4 +52,4 @@ Q_SIGNALS:
 };
 typedef QSharedPointer<DNotificationDNDModeConfig> DNotificationDNDModeConfigPtr;
 
-DNOTIFICATION_END_NAMESPACE
+DNOTIFICATIONS_END_NAMESPACE

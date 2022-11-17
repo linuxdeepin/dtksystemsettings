@@ -7,7 +7,7 @@
 #include "dnotificationtypes_p.h"
 #include <qdbusmetatype.h>
 
-DNOTIFICATION_BEGIN_NAMESPACE
+DNOTIFICATIONS_BEGIN_NAMESPACE
 
 void registerMetaType()
 {
@@ -38,4 +38,4 @@ const QDBusArgument &operator>>(const QDBusArgument &arg, DBusServerInformation 
     arg.endStructure();
     return arg;
 }
-DNOTIFICATION_END_NAMESPACE
+DNOTIFICATIONS_END_NAMESPACE

@@ -5,7 +5,7 @@
 
 #include "dnotificationinterface.h"
 
-DNOTIFICATION_BEGIN_NAMESPACE
+DNOTIFICATIONS_BEGIN_NAMESPACE
 
 using DTK_CORE_NAMESPACE::DDBusInterface;
 DNotificationInterface::DNotificationInterface(QObject *parent)
@@ -149,4 +149,4 @@ void DNotificationInterface::receiveSystemInfoChanged(uint item, QDBusVariant va
     DNDModeNotificaitonConfigItem sysConfigItem = static_cast<DNDModeNotificaitonConfigItem>(item);
     Q_EMIT systemInfoChanged(sysConfigItem, var.variant());
 }
-DNOTIFICATION_END_NAMESPACE
+DNOTIFICATIONS_END_NAMESPACE

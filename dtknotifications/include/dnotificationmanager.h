@@ -9,7 +9,7 @@
 #include "dnotificationdndmodeconfig.h"
 #include <dexpected.h>
 
-DNOTIFICATION_BEGIN_NAMESPACE
+DNOTIFICATIONS_BEGIN_NAMESPACE
 DCORE_USE_NAMESPACE
 
 class DNotificationManagerPrivate;
@@ -62,4 +62,4 @@ private:
     Q_DECLARE_PRIVATE(DNotificationManager)
 };
 
-DNOTIFICATION_END_NAMESPACE
+DNOTIFICATIONS_END_NAMESPACE

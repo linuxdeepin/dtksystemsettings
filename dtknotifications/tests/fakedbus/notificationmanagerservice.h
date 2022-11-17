@@ -6,7 +6,8 @@
 
 #include <QDBusObjectPath>
 #include "dnotificationtypes.h"
-DNOTIFICATION_USE_NAMESPACE
+
+DNOTIFICATIONS_USE_NAMESPACE
 
 class FakeNotificationManagerService : public QObject
 {
