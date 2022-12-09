@@ -24,16 +24,11 @@ Copyright: None
 License: CC0-1.0
 
 # desktop files for test
-Files: dtklogin/tests/resource/*
+Files: tests/login/resource/*
 Copyright: None
 License: CC0-1.0
 
 # HEADERS
-Files: */include/D*
+Files: include/*/D*
 Copyright: None
 License: CC0-1.0
-
-#doxygentheme
-Files: doxygentheme/*
-Copyright: Copyright (c) 2021 - 2022 jothepro
-License: MIT

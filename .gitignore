@@ -39,3 +39,14 @@ lupdate.sh
 
 # ctest
 Testing/
+
+# debian tmp files
+debian/tmp
+debian/.debhelper
+debian/libdtksystemsettings1
+debian/libdtksystemsettings-dev
+debian/files
+debian/*.log
+debian/*.substvars
+debian/debhelper-build-stamp
+obj-x86_64-linux-gnu
