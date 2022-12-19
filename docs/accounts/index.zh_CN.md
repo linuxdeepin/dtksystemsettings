@@ -1,6 +1,4 @@
-@~chinese
-
-\mainpage
+@page dtkaccounts dtkaccounts
 
 ## 项目介绍
 
@@ -105,3 +103,6 @@ void Demo::run()
     user->setLayoutList({"cn;","jp;","en;"}); //对布局设置时注意格式
 }
 ```
+
+@defgroup dtkaccounts
+@brief dtkaccounts是对于deepin/UOS系统上用户管理模块的封装

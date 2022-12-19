@@ -1,8 +1,8 @@
 /*!
 @~chinese
 @file dloginmanager.h
-
-dloginmanager.h 中定义了登录管理对象的接口。
+@ingroup dtklogin
+@brief dloginmanager.h 中定义了登录管理对象的接口。
 
 @class Dtk::Login::DLoginManager dloginmanager.h
 @brief DLoginManager 类

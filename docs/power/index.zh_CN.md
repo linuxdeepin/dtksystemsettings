@@ -1,6 +1,4 @@
-@~chinese
-
-\mainpage
+@page dtkpower dtkpower
 
 # 项目介绍
 
@@ -84,3 +82,6 @@ int main(int argc, char **argv)
 dpowersetting是对于电脑的电源进行相关设置，这些设置是（目前）依赖于dde-daemon实现的，所以在不存在dde-daemon的电脑上是无法进行调用。这个的调用方法就很简单，只需要直接创建dpowersettings对象即可。
 
 需要注意的是，在设置一些电源选项（如混合睡眠，休眠)之前最好通过dtklogin对应方法确定其是否被支持，否则可能会出现意料之外的错误（如电脑黑屏无法被唤醒的情况)
+
+@defgroup dtkpower
+@brief 电源管理模块

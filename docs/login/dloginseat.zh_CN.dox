@@ -1,8 +1,8 @@
 /*!
 @~chinese
 @file dloginseat.h
-
-dloginseat.h 中定义了管理用户seat的接口。
+@ingroup dtklogin
+@brief dloginseat.h 中定义了管理用户seat的接口。
 
 @class Dtk::Login::DLoginSeat dloginseat.h
 @brief DLoginSeat

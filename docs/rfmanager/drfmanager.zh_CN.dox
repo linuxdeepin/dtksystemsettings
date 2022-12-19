@@ -1,10 +1,11 @@
 /*!
 @~chinese
+@ingroup dtkrfmanager
 @file drfmanager.h
 
 `dtkrfmanager` 是对于 `deepin/UOS` 系统上的 `rfkill` 的封装，其目的是在于方便第三方开发者轻松且快速的调用接口管理无线设备。
 
-@class DRfmanager drfmanager.h
+@class Dtk::RfMgr::DRfmanager drfmanager.h
 @brief DRfmanager 类
 
 @fn DRfmanager::DRfmanager(QObject *parent = nullptr)

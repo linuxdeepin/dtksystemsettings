@@ -1,8 +1,8 @@
 /*!
 @~chinese
 @file daccountsuser.h
-
-daccountsuser.h是对于一组用于管理用户账户属性和相关信息的D-BUS接口的封装。
+@ingroup dtkaccounts
+@brief daccountsuser.h是对于一组用于管理用户账户属性和相关信息的D-BUS接口的封装。
 
 @class Dtk::Accounts::DAccountsUser daccountsuser.h
 @brief DAccountsUser类
