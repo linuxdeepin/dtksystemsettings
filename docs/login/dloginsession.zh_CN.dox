@@ -1,8 +1,8 @@
 /*!
 @~chinese
 @file dloginsession.h
-
-loginsession.h 中定义了会话管理的接口
+@ingroup dtklogin
+@brief loginsession.h 中定义了会话管理的接口
 
 @class Dtk::Login::DLoginSession dloginsession.h
 @brief DLoginSession 类
@@ -156,7 +156,7 @@ DLoginSession 中定义了会话管理的接口
 
 @fn void DLoginSession::setType(const SessionType &type)
 @brief 更改session的类型
-对应Login上的SetType() 方法。该方法允许动态改变会话类型，只能由session当前的控制器调用。如果尚未调用TakeControl()方法，这个方法会失效。此外，一旦控制被释放，session类型会重置，或者使用ReleaseControl方法或者关闭D-Bus连接可以实现重置的效果。这个应该有助于防止session进入不一致的状态，比如控制器崩溃时候。唯一的参数 argument type是指的新的session 类型。
+@detials 对应Login上的SetType() 方法。该方法允许动态改变会话类型，只能由session当前的控制器调用。如果尚未调用TakeControl()方法，这个方法会失效。此外，一旦控制被释放，session类型会重置，或者使用ReleaseControl方法或者关闭D-Bus连接可以实现重置的效果。这个应该有助于防止session进入不一致的状态，比如控制器崩溃时候。唯一的参数 argument type是指的新的session 类型。
 
 @fn void DLoginSession::terminate()
 @brief 和Manger对象的相应工作方式类似
@@ -201,24 +201,21 @@ Acitve是一个布尔类型，如果为真代表这个session为活跃状态。�
 
 @property DLoginSession::sessionClass
 @brief session的class
-
-_class() 函数编码。它是"user"(给普通的用户会话)，"greeter"给显示管理器的伪会话或者"lock-screen" (给关闭窗口会话)
+@detials _class() 函数编码。它是"user"(给普通的用户会话)，"greeter"给显示管理器的伪会话或者"lock-screen" (给关闭窗口会话)
 
 @property DLoginSession::desktop
 @brief 当前session运行的桌面环境
 
 @property DLoginSession::display
 @brief x11显示名字的编码
-
-如果当前会话是x11图形登陆，display会对x11显示名称进行编码，如果不是，返回空字符串
+@detials 如果当前会话是x11图形登陆，display会对x11显示名称进行编码，如果不是，返回空字符串
 
 @property DLoginSession::id
 @brief 当前session的id
 
 @property DLoginSession::name
 @brief 用户名称
-
-当前登陆用户名称
+@detials 当前登陆用户名称
 
 @property DLoginSession::remoteHost
 @brief  远程用户的host名称
@@ -237,8 +234,7 @@ _class() 函数编码。它是"user"(给普通的用户会话)，"greeter"给显
 
 @property DLoginSession::state
 @brief 编码session的状态
-
-session有3种状态，"online","active","closing"。当session已经登陆了但是没有active,也就是说没有在前景上显示，显示为online；当session已经登陆了并且active了，也就是说在前景上显示，此时状态显示为"active",当session 正常退出，但是session的一些进程仍然存在时候，返回为closing。在未来可能会根据新的需求增加其他状态
+@detials session有3种状态，"online","active","closing"。当session已经登陆了但是没有active,也就是说没有在前景上显示，显示为online；当session已经登陆了并且active了，也就是说在前景上显示，此时状态显示为"active",当session 正常退出，但是session的一些进程仍然存在时候，返回为closing。在未来可能会根据新的需求增加其他状态
 
 @property DLoginSession::TTY
 @brief 如果为文本登陆返回对应内核的tty路径
@@ -278,15 +274,13 @@ session有3种状态，"online","active","closing"。当session已经登陆了�
 
 @property DLoginSession::idleSinceHintMonotonic
 @brief session空闲状态
-描述session的空闲状态,类似于管理器对象上各个属性如何为整个系统执行操作
+@detials 描述session的空闲状态,类似于管理器对象上各个属性如何为整个系统执行操作
 
-@property DLoginSession::createdTime 
+@property DLoginSession::createdTime
 @brief 返回会话的创建时间
+@detials timestamp 返回CLOCK_REALTIME。CLOCK_REALTIME 是对于机器绝对时间的猜测。
 
-timestamp 返回CLOCK_REALTIME。CLOCK_REALTIME 是对于机器绝对时间的猜测。
-
-@property DLoginSession::createdTimeMonotonic 
+@property DLoginSession::createdTimeMonotonic
 @brief 以CLOCK_MONOTONIC的形式获取session创建的时间戳
-
-timestampMonotonic() 返回CLOCK_MONOTONIC,该时间表示来自过去某个任意点经过的绝对时间，不受系统时钟变化影响
+@detials timestampMonotonic() 返回CLOCK_MONOTONIC,该时间表示来自过去某个任意点经过的绝对时间，不受系统时钟变化影响
 */

@@ -1,5 +1,5 @@
-@~chinese
-\mainpage
+@page dtkrfmanager dtkrfmanager
+
 
 ## 项目介绍
 
@@ -96,3 +96,5 @@ void Demo::run()
     m_rfMgr->isblockAll();
 }
 ```
+@defgroup dtkrfmanager
+@brief dtk无线设备管理模块

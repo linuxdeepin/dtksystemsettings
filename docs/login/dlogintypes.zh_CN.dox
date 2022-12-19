@@ -1,5 +1,6 @@
 /*!
 @~chinese
+@ingroup dtklogin
 @file dlogintypes.h
 dlogintypes.h 中定义了login组件需要使用到的一些自定义数据结构。
 

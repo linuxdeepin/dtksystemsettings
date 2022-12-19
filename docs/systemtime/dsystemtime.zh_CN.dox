@@ -1,5 +1,6 @@
 /*!
 @~chinese
+@ingroup dtksystemtime
 @file dsystemtime.h
 
 dsystemtime.h是用于管理系统时间和系统时间同步的接口
@@ -91,4 +92,5 @@ dsystemtime.h是用于管理系统时间和系统时间同步的接口
 @param[in] timezone 时区
 @param[in] interactive 如果为true则会调用polkit进行鉴权
 \sa DSystemTime::listTimezones() const
+
 */

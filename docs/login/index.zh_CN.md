@@ -1,6 +1,6 @@
-@~chinese
+@page dtklogin dtklogin
 
-\mainpage
+
 
 ## 项目介绍
 
@@ -297,3 +297,6 @@ int PowerDemo::run()
 ```
 
 调用相关方法可以执行系统相关操作，并触发信号
+
+@defgroup dtklogin
+@brief dtklogin模块是对于系统登陆相关的操作的封装，包括用户、会话、自启动、电源管理等

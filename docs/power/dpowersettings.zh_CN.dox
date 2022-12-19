@@ -1,8 +1,9 @@
 /*!
 @~chinese
+@ingroup dtkpower
 @file dpowersettings.h
 
-dpowersettings类是对于dde桌面环境下的电源设备进行电源模式设置和屏幕亮度调整的类，目前依赖于dde-daemon进行实现
+dpowersettings类是对于dde桌面环境下的电源设备进行电源模式设置和屏幕亮度调整的类, 目前依赖于dde-daemon进行实现
 
 @class Dtk::Power::DPowerSettings dpowersettings.h
 @brief DPowerSettings class.
@@ -13,39 +14,33 @@ DPowerSettings类
 
 @fn QString DPowerSettings::cpuGovernor() const
 @brief 获取当前cpu电源策略
-@return 返回字符串，为当前cpu电源策略
+@return 返回字符串, 为当前cpu电源策略
 
 @fn PowerMode DPowerSettings::powerMode() const
 @brief 获取当前系统电源策略
-@note 系统电源策略不等同与cpu电源策略，系统电源策略是指的是整个平台的设置，包括网卡cpu、gpu和屏幕亮度
-@return 返回枚举，为当前系统电源策略
+@note 系统电源策略不等同与cpu电源策略, 系统电源策略是指的是整个平台的设置, 包括网卡cpu、gpu和屏幕亮度
+@return 返回枚举, 为当前系统电源策略
 
 @fn QString DPowerSettings::setPowerMode(const QString &mode)
 @brief 设置当前系统电源策略
-@note 系统电源策略不等同与cpu电源策略，系统电源策略是指的是整个平台的设置，包括网卡cpu、gpu和屏幕亮度
-@param[in] mode: 电源策略：performance(性能优先) balance(平衡) powersave(节能)
+@note 系统电源策略不等同与cpu电源策略, 系统电源策略是指的是整个平台的设置, 包括网卡cpu、gpu和屏幕亮度
+@param[in] mode: 电源策略:performance(性能优先) balance(平衡) powersave(节能)
 
 @fn bool DPowerSettings::autoPowerSavingOnBattery() const
-@brief 是否开启在使用电池的时候开启自动节能模式，断开ac电源之后自动调整电源模式到节能
+@brief 是否开启在使用电池的时候开启自动节能模式, 断开ac电源之后自动调整电源模式到节能
 @return 布尔值
 
 @fn void DPowerSettings::setAutoPowerSavingOnBattery(const bool enabled)
-@brief 设置开启在使用电池的时候开启自动节能模式，断开ac电源之后自动调整电源模式到节能
+@brief 设置开启在使用电池的时候开启自动节能模式, 断开ac电源之后自动调整电源模式到节能
 @param[in] enabled 布尔值,默认为enabled
 
 @fn bool DPowerSettings::autoPowerSavingWhenBatteryLow() const
-@brief 是否开启在使用电池且电量低的时候开启自动节能模式，电池电量低将自动调整电源模式到节能
+@brief 是否开启在使用电池且电量低的时候开启自动节能模式, 电池电量低将自动调整电源模式到节能
 @return 布尔值
 
 @fn void DPowerSettings::setAutoPowerSavingWhenBatteryLow(const bool enabled)
-@brief 设置开启在使用电池且电量低的时候开启自动节能模式，电池电量低将自动调整电源模式到节能
+@brief 设置开启在使用电池且电量低的时候开启自动节能模式, 电池电量低将自动调整电源模式到节能
 @param[in] enabled 布尔值,默认为enabled
-
-
-    // void setPowerSavingBrightnessData(const QString &data);
-    // quint32 powerSavingBrightnessDropPercent() const;
-    // void setPowerSavingBrightnessDropPercent(const quint32 value);
-
 
 @fn qint32 DPowerSettings::batteryLidClosedAction() const
 @brief 获取使用电池时笔记本盖子关闭时的行为
@@ -58,7 +53,7 @@ DPowerSettings类
 
 @fn void DPowerSettings::setBatteryLidClosedAction(const qint32 value)
 @brief 设置使用电池时笔记本盖子关闭行为
-@param[in] value 传入一个int值，依次为以下枚举：
+@param[in] value 传入一个int值, 依次为以下枚举：
         powerActionshutdown
         powerActionsuspend
         powerActionHibernate
@@ -118,7 +113,7 @@ DPowerSettings类
 
 @fn void DPowerSettings::setLinePowerLidClosedAction(const qint32 value)
 @brief 设置使用电源时笔记本盖子关闭行为
-@param[in] value 传入一个int值，依次为以下枚举：
+@param[in] value 传入一个int值, 依次为以下枚举：
         powerActionshutdown
         powerActionsuspend
         powerActionHibernate
@@ -203,13 +198,9 @@ DPowerSettings类
 @fn void DPowerSettings::reset()
 @brief 重置设置
 
-
-
-
 @fn void DPowerSettings::cpuGovernorChanged(const QString &value)
 @brief cpu电源策略发生改变
 @param[in] value cpu电源策略
-
 
 @fn void DPowerSettings::powerModeChanged(const PowerMode &mode)
 @brief 平台电源策略发生改变

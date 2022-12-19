@@ -1,8 +1,8 @@
 /*!
 @~chinese
 @file daccountsmanager.h
-
-daccountsmanager.h是对于一组用于查询和管理用户帐户信息的D-BUS接口的封装。
+@ingroup dtkaccounts
+@brief daccountsmanager.h是对于一组用于查询和管理用户帐户信息的D-BUS接口的封装。
 
 @class Dtk::Accounts::DAccountsManager daccountsmanager.h
 @brief DAccountsManager类

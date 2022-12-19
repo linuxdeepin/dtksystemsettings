@@ -1,5 +1,6 @@
 /*!
 @~chinese
+@ingroup dtksystemtime
 @file dsystemtimetypes.h
 
 @struct Dtk::SystemTime::Address
@@ -8,7 +9,6 @@
 存储类型
 @var Dtk::SystemTime::Address Address::ip
 存储NTP服务器ip地址
-
 
 @struct Dtk::SystemTime::Message
 @brief 存储NTP服务器返回的信息
@@ -52,30 +52,4 @@ NTP报文到达目的端(服务器)的本地时间
 @var Dtk::SystemTime::Message Message::samples_jitter
 抖动
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 */
-
-
-    quint64 dest_time;          /*!< @~english The time to reply to the NTP server after the NTP message is received locally*/
-    bool spike;
-    quint64 packet_count;
-    quint64 samples_jitter;

@@ -1,5 +1,6 @@
 /*!
 @~chinese
+@ingroup dtkpower
 @file dpowertypes.h
 dpowertypes.h 中定义了dpower组件需要使用到的一些自定义数据结构。
 
@@ -64,14 +65,5 @@ Unknown
 什么也没做
 @var Dtk::Power::LidClosedAction LidClosedAction::Unknown
 未知
-
-
-
-
-
-
-
-
-
 
 */

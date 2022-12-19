@@ -1,8 +1,8 @@
 /*!
 @~chinese
 @file daccountstypes.h
-
-在daccountstypes.h中定义了一些dtkaccounts模块中所用到的自定义类型。
+@ingroup dtkaccounts
+@brief 在daccountstypes.h中定义了一些dtkaccounts模块中所用到的自定义类型。
 
 @struct Dtk::Accounts::ShadowInfo daccountstypes.h
 @brief 存储/etc/shadow文件中的一些信息
