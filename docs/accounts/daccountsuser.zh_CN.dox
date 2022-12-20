@@ -5,7 +5,7 @@
 @brief daccountsuser.h是对于一组用于管理用户账户属性和相关信息的D-BUS接口的封装。
 
 @class Dtk::Accounts::DAccountsUser daccountsuser.h
-@brief DAccountsUser类
+@brief 用户属性相关信息的封装类
 
 @fn AccountType DAccountsUser::accountType() const
 @brief 获取当前用户的用户类型

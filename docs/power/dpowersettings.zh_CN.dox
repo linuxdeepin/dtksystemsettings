@@ -2,12 +2,10 @@
 @~chinese
 @ingroup dtkpower
 @file dpowersettings.h
-
-dpowersettings类是对于dde桌面环境下的电源设备进行电源模式设置和屏幕亮度调整的类, 目前依赖于dde-daemon进行实现
+@details dpowersettings类是对于dde桌面环境下的电源设备进行电源模式设置和屏幕亮度调整的类, 目前依赖于dde-daemon进行实现
 
 @class Dtk::Power::DPowerSettings dpowersettings.h
-@brief DPowerSettings class.
-DPowerSettings类
+@brief 电源策略设置类
 
 @fn  DPowerSettings::DPowerSettings(QObject *parent=nullptr)
 @brief 构造函数

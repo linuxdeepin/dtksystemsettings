@@ -2,16 +2,14 @@
 @~chinese
 @ingroup dtkpower
 @file dpowerdevice.h
-
-dpowerdevice.h 是对于dbus接口中关于电源设备(包括且不限于：dc电源, 笔记本电池, ups不间断电源, 使用干电池的鼠标键盘
+@details dpowerdevice.h 是对于dbus接口中关于电源设备(包括且不限于:dc电源, 笔记本电池, ups不间断电源, 使用干电池的鼠标键盘
 (其实即使不使用干电池也能被管理)等内部外部设备的数据和属性功能读取的详细管理接口。)
 @class Dtk::Power::DPowerDevice dpowerdevice.h
-@brief DPowerDevice class.
-DPowerDevice类
+@brief 电源设备类，用于管理电源设备的数据和属性
 
 @fn DPowerDevice::DPowerDevice(const QString &path, QObject *parent = nullptr)
 @brief DPowerDevice类的构造函数
-@detials 此构造函数为私有, 需要传入设备的地址进行构造, 获取设备地址需要使用`DPowerManager::devices`方法然后使用`DPowerManager::findDeviceByName`进行构建,或者使用`DPowerManager::displayDevice`方法获取dispaly对象
+@details 此构造函数为私有, 需要传入设备的地址进行构造, 获取设备地址需要使用`DPowerManager::devices`方法然后使用`DPowerManager::findDeviceByName`进行构建,或者使用`DPowerManager::displayDevice`方法获取dispaly对象
 @pragma[in] path:设备地址
 \sa Dtk::Power::DPowerManager::findDeviceByName() const
 
@@ -41,7 +39,7 @@ DPowerDevice类
 
 @fn double DPowerDevice::capacity() const
 @brief 电源的容量表示为0和100之间的百分比。
-@detials 电池的容量会随着使用的增长而减少。
+@details 电池的容量会随着使用的增长而减少。
     小于75%的容量值通常表示您应该更新电池。通常, 此值与 (full-design / full) * 100相同。
     但是, 某些原始电源无法报告容量, 在这种情况下, 容量属性将被取消。
 @note 仅当type属性类型具有值`battery`时, 此属性才有效
@@ -74,13 +72,13 @@ DPowerDevice类
 
 @fn double DPowerDevice::luminosity() const
 @brief 仪表记录的光度
-@detials(我也不能理解光度是什么意思, 大概也许可能是屏幕亮度或者环境亮度？
+@details(我也不能理解光度是什么意思, 大概也许可能是屏幕亮度或者环境亮度？
     使用d-feet软件也无法获取其值)
 @return 双精度浮点数
 
 @fn double DPowerDevice::percentage() const
 @brief 功率源中剩余的能量表示为0和100之间的百分比。
-@detials 通常这与 (energy - energy-empty) / (energy-full - energy-empty)相同。
+@details 通常这与 (energy - energy-empty) / (energy-full - energy-empty)相同。
         但是, 某些原始电源只能报告百分比, 在这种情况下, 在设置此属性时, 将取消设置energy* 属性。
 @note 仅当type属性类型具有值`battery`时, 此属性才有效
 @note 如果battery level被设置为无以外的东西, 百分比将是一个近似值。
@@ -248,7 +246,5 @@ DPowerDevice类
 @fn void DPowerDevice::iconNameChanged(const QString &value)
 @brief 电源图标发生改变
 @param[in] value 电源图标名
-
-
 
 */

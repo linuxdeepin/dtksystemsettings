@@ -1,9 +1,12 @@
 @page dtkrfmanager dtkrfmanager
-
+@brief dtk无线设备管理模块
 
 ## 项目介绍
 
-`dtkrfmanager` 是对于 `deepin/UOS` 系统上的 rfkill 的封装，其目的是在于方便第三方开发者轻松且快速的调用接口管理无线设备。
+`dtkrfmanager` 是对于 `deepin/UOS` 系统上的 rfkill 的封装，其目的是在于方便第三方开发者轻松且快速的调用接口管理无线设备。<br>
+@htmlonly
+<a href="group__dtkrfmanager.html" >接口文档</a>
+@endhtmlonly
 
 ## 项目结构
 
@@ -98,3 +101,5 @@ void Demo::run()
 ```
 @defgroup dtkrfmanager
 @brief dtk无线设备管理模块
+@details 示例文档:
+@subpage dtkrfmanager

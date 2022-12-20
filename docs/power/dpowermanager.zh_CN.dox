@@ -2,12 +2,10 @@
 @~chinese
 @ingroup dtkpower
 @file dpowermanager.h
-
-dpowermanager.h 是对于dbus接口中关于电源设备(包括且不限于：dc电源, 笔记本电池, ups不间断电源, 使用干电池的鼠标键盘(其实即使不使用干电池也能被管理)等内部外部设备的管理接口。)
+@details dpowermanager.h 是对于dbus接口中关于电源设备(包括且不限于:dc电源, 笔记本电池, ups不间断电源, 使用干电池的鼠标键盘(其实即使不使用干电池也能被管理)等内部外部设备的管理接口。)
 
 @class Dtk::Power::DPowerManager dpowermanager.h
-@brief DPowerManager class.
-DPowerManager类
+@brief 电源设备管理类, 用于管理电源设备, 包括电源设备的创建, 电源设备的属性获取, 电源设备的状态获取等
 
 @fn bool DPowerManager::lidIsClosed() const
 @brief 笔记本盖子关闭(或者二合一设备关上皮套)通过霍尔传感器读取相关数值

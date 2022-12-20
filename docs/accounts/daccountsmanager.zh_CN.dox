@@ -5,7 +5,7 @@
 @brief daccountsmanager.h是对于一组用于查询和管理用户帐户信息的D-BUS接口的封装。
 
 @class Dtk::Accounts::DAccountsManager daccountsmanager.h
-@brief DAccountsManager类
+@brief 管理用户账户信息
 
 @fn DAccountsManager::DAccountsManager(QObject *parent = nullptr)
 @brief 构造manager对象,并且进行信号的连接
