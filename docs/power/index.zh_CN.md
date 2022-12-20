@@ -1,8 +1,13 @@
 @page dtkpower dtkpower
+@brief dtk电源管理模块
 
 # 项目介绍
 
-dtkpower是对于deepin/UOS系统上的upowerdbus接口和dde-daemon接口的封装，其目的是在于方便第三方开发者轻松且快速的调用接口进行开发。
+dtkpower是对于deepin/UOS系统上的upowerdbus接口和dde-daemon接口的封装，其目的是在于方便第三方开发者轻松且快速的调用接口进行开发。<br>
+@htmlonly
+<a href="group__dtkpower.html" >接口文档</a>
+@endhtmlonly
+
 
 ## 项目结构
 
@@ -85,3 +90,5 @@ dpowersetting是对于电脑的电源进行相关设置，这些设置是（目�
 
 @defgroup dtkpower
 @brief 电源管理模块
+@details 示例文档:
+@subpage dtkpower

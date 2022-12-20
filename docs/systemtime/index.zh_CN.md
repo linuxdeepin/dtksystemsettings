@@ -1,10 +1,12 @@
 @page dtksystemtime dtksystemtime
-
+@brief dtk时间同步管理模块
 
 ## 项目介绍
 
-`dtksystemtime` 是对于 `deepin/UOS` 系统上关于时间同步相关接口的封装
-
+`dtksystemtime` 是对于 `deepin/UOS` 系统上关于时间同步相关接口的封装<br>
+@htmlonly
+<a href="group__dtksystemtime.html" >接口文档</a>
+@endhtmlonly
 ## 项目结构
 
 对外暴露出 `dsystemtime.h` 这个头文件
@@ -49,3 +51,5 @@ int main(int argc, char **argv)
 ```
 @defgroup dtksystemtime
 @brief dtk时间同步管理模块
+@details 示例文档:
+@subpage dtksystemtime

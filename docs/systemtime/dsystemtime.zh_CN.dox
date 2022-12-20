@@ -2,11 +2,10 @@
 @~chinese
 @ingroup dtksystemtime
 @file dsystemtime.h
-
-dsystemtime.h是用于管理系统时间和系统时间同步的接口
+@details dsystemtime.h是用于管理系统时间和系统时间同步的接口
 
 @class Dtk::SystemTime::DSystemTime dsystemtime.h
-@brief DSystemTime 类
+@brief 用于管理系统时间和系统时间同步
 
 @fn bool DSystemTime::canNTP() const
 @brief 是否有通过网络进行时间同步的服务

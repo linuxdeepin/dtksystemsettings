@@ -6,9 +6,7 @@
 dloginuser.h 中定义了会话管理的接口
 
 @class Dtk::Login::DLoginUser dloginuser.h
-@brief DLoginUser 类
-
-Login1User类中定义了用户管理的接口
+@brief 定义了用户管理的接口
 
 @fn DLoginUser::DLoginUser()
 @brief 此函数为私有构造函数，应使用DLoginManager获取该对象，需要通过调用`DLoginManager::findUserById()`、`DLoginManager::findUserByPID()`或者`DLoginManager::currentUser()`函数获取

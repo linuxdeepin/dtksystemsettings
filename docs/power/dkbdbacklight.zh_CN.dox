@@ -2,12 +2,11 @@
 @~chinese
 @ingroup dtkpower
 @file dkbdbacklight.h
-
-@detials dkbdbacklight.h 是对于dbus接口中控制键盘背光部分功能的封装, 注意：此键盘背光仅仅指部分笔记本电脑键盘背光
+@details dkbdbacklight.h 是对于dbus接口中控制键盘背光部分功能的封装, 注意：此键盘背光仅仅指部分笔记本电脑键盘背光
 通常情况下外接的键盘背光并不受到此接口控制, 部分笔记本电脑背光因为是纯硬件控制, 所以有可能不存在此接口。
 
 @class Dtk::Power::DKbdBacklight dkbdbacklight.h
-@brief DKbdBacklight class.
+@brief 对于背光键盘的一些接口的封装(部分设备硬件不支持)
 
 DKbdBacklight类
 @fn DKbdBacklight::DKbdBacklight

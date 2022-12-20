@@ -5,8 +5,7 @@
 @brief dloginseat.h 中定义了管理用户seat的接口。
 
 @class Dtk::Login::DLoginSeat dloginseat.h
-@brief DLoginSeat
-    DLoginSeat 中定义了管理用户seat的接口。
+@brief 定义了管理用户seat的接口。
 @note seat一般情况下只有seat0，seat由分配给特定工作场所的所有硬件设备组成。
     它由至少一个图形设备组成，通常还包括键盘、鼠标。它还可以包括摄像机、声卡等。
     seat由seat名称标识，这些字符串是字符串(<= 255 个字符），以四个字符 "seat" 开头，

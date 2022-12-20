@@ -99,7 +99,7 @@ dlogintypes.h 中定义了login组件需要使用到的一些自定义数据结�
 @var InhibitMode::Block
 完全禁止操作，直到锁被释放。
 @var InhibitMode::Delay
-只是暂时禁止操作，直到锁被释放或达到一定的时间。DLoginManager::inhibitDelayMaxUSec获取超时时间。这旨在提供需要在系统挂起之前以同步方式执行操作但不允许无限期阻止挂起的应用程序使用。此模式仅适用于睡眠和关机的锁定。
+只是暂时禁止操作, 直到锁被释放或达到一定的时间。DLoginManager::inhibitDelayMaxUSec获取超时时间。这旨在提供需要在系统挂起之前以同步方式执行操作但不允许无限期阻止挂起的应用程序使用。此模式仅适用于睡眠和关机的锁定。
 \sa DLoginManager::inhibitDelayMaxUSec
 @var InhibitMode::Unknown
 未知

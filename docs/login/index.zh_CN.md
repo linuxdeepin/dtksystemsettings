@@ -1,10 +1,12 @@
 @page dtklogin dtklogin
-
-
+@brief dtk登录管理模块
 
 ## 项目介绍
 
-dtklogin是对systemd-logind的DBus接口和dde-daemon提供的相关接口的封装。用于观察和管理用户 login 以及 seat 的状态。
+dtklogin是对systemd-logind的DBus接口和dde-daemon提供的相关接口的封装。用于观察和管理用户 login 以及 seat 的状态。<br>
+@htmlonly
+<a href="group__dtklogin.html" >接口文档</a>
+@endhtmlonly
 
 ## 项目结构
 
@@ -300,3 +302,5 @@ int PowerDemo::run()
 
 @defgroup dtklogin
 @brief dtklogin模块是对于系统登陆相关的操作的封装，包括用户、会话、自启动、电源管理等
+@details 示例文档:
+@subpage dtklogin
