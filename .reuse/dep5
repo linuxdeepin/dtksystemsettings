@@ -29,6 +29,6 @@ Copyright: None
 License: CC0-1.0
 
 # HEADERS
-Files: include/*/D*
+Files: include/*/D* include/D*
 Copyright: None
 License: CC0-1.0
