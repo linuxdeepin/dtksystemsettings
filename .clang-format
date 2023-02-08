@@ -1,17 +1,17 @@
-# Copyright (C) 2016 Olivier Goffart <ogoffart@woboq.com>
+# This is the clang-format style used by qt releated deepin projects.
 #
-# You may use this file under the terms of the 3-clause BSD license.
-# See the file LICENSE from this package for details.
-
-# This is the clang-format configuration style to be used by Qt,
-# based on the rules from https://wiki.qt.io/Qt_Coding_Style and
-# https://wiki.qt.io/Coding_Conventions
+# This file is modified from https://github.com/qt/qt5/blob/5b22f8ec2e4fbb58e362b709ee82f2dbd8afdfd3/_clang-format
+# based on the rules from https://github.com/linuxdeepin/deepin-styleguide,
+# https://wiki.qt.io/Qt_Coding_Style and https://wiki.qt.io/Coding_Conventions
+#
+# This is for clang-format >= 14.0.0
 
 ---
 # Webkit style was loosely based on the Qt style
 BasedOnStyle: WebKit
 
-Standard: c++17
+# deepin project might not use same standard.
+Standard: Auto
 
 # Column width is limited to 100 in accordance with Qt Coding Style.
 # https://wiki.qt.io/Qt_Coding_Style
@@ -36,20 +36,18 @@ BreakBeforeBinaryOperators: NonAssignment
 # Braces are usually attached, but not after functions or class declarations.
 BreakBeforeBraces: Custom
 BraceWrapping:
-    AfterClass: true
-    AfterControlStatement: false
-    AfterEnum: false
-    AfterFunction: true
-    AfterNamespace: false
-    AfterObjCDeclaration: false
-    AfterStruct: true
-    AfterUnion: false
-    BeforeCatch: false
-    BeforeElse: false
-    IndentBraces: false
+  AfterClass: true
+  AfterControlStatement: false
+  AfterEnum: false
+  AfterFunction: true
+  AfterNamespace: false
+  AfterObjCDeclaration: false
+  AfterStruct: true
+  AfterUnion: false
+  BeforeCatch: false
+  BeforeElse: false
+  IndentBraces: false
 
-# When constructor initializers do not fit on one line, put them each on a new line.
-ConstructorInitializerAllOnOneLineOrOnePerLine: true
 # Indent initializers by 4 spaces
 ConstructorInitializerIndentWidth: 4
 
@@ -74,17 +72,45 @@ AlwaysBreakTemplateDeclarations: true
 # clang-format does not handle that.
 AllowShortFunctionsOnASingleLine: Inline
 
-# The coding style specifies some include order categories, but also tells to
-# separate categories with an empty line. It does not specify the order within
-# the categories. Since the SortInclude feature of clang-format does not
-# re-order includes separated by empty lines, the feature is not used.
-SortIncludes: false
+# As clang-format 13 can regroup includes we enable this feature.
+# basically according to https://wiki.qt.io/Coding_Conventions#Including_headers
+# and https://github.com/linuxdeepin/deepin-styleguide
+IncludeBlocks: Regroup
+IncludeCategories:
+  # gtest/gmock's h files
+  - Regex: '^<g(test|mock)/'
+    Priority: 1
+    CaseSensitive: true
+  # Your project's h files.
+  - Regex: '^"'
+    Priority: 2
+  # DTK libraries' h files
+  - Regex: '^<D[A-Z]'
+    Priority: 4
+    CaseSensitive: true
+  # QT libraries' h files
+  - Regex: '^<(Q[A-Z]|Qt)'
+    Priority: 5
+    CaseSensitive: true
+  # C++ system headers (as of C++23).
+  - Regex: '^<(algorithm|any|array|atomic|barrier|bit|bitset|cassert|ccomplex|cctype|cerrno|cfenv|cfloat|charconv|chrono|cinttypes|ciso646|climits|clocale|cmath|codecvt|compare|complex|concepts|condition_variable|coroutine|csetjmp|csignal|cstdalign|cstdarg|cstdbool|cstddef|cstdint|cstdio|cstdlib|cstring|ctgmath|ctime|cuchar|cwchar|cwctype|deque|exception|execution|expected|filesystem|flat_map|flat_set|format|forward_list|fstream|functional|future|generator|initializer_list|iomanip|ios|iosfwd|iostream|istream|iterator|latch|limits|list|locale|map|mdspan|memory|memory_resource|mutex|new|numbers|numeric|optional|ostream|print|queue|random|ranges|ratio|regex|scoped_allocator|semaphore|set|shared_mutex|source_location|span|spanstream|sstream|stack|stacktrace|stdexcept|stdfloat|stop_token|streambuf|string|string_view|strstream|syncstream|system_error|thread|tuple|type_traits|typeindex|typeinfo|unordered_map|unordered_set|utility|valarray|variant|vector|version)>$'
+    Priority: 6
+    CaseSensitive: true
+  # C system headers.
+  - Regex: '^<(aio|arpa/inet|assert|complex|cpio|ctype|curses|dirent|dlfcn|errno|fcntl|fenv|float|fmtmsg|fnmatch|ftw|glob|grp|iconv|inttypes|iso646|langinfo|libgen|limits|locale|math|monetary|mqueue|ndbm|netdb|net/if|netinet/in|netinet/tcp|nl_types|poll|pthread|pwd|regex|sched|search|semaphore|setjmp|signal|spawn|stdalign|stdarg|stdatomic|stdbool|stddef|stdint|stdio|stdlib|stdnoreturn|string|strings|stropts|sys/ipc|syslog|sys/mman|sys/msg|sys/resource|sys/select|sys/sem|sys/shm|sys/socket|sys/stat|sys/statvfs|sys/time|sys/times|sys/types|sys/uio|sys/un|sys/utsname|sys/wait|tar|term|termios|tgmath|threads|time|trace|uchar|ulimit|uncntrl|unistd|utime|utmpx|wchar|wctype|wordexp)\.h>$'
+    Priority: 7
+    CaseSensitive: true
+  # other libraries' h files.
+  - Regex: '^<'
+    Priority: 3
+IncludeIsMainRegex: '((T|t)est)?$'
+SortIncludes: true
 
 # macros for which the opening brace stays attached.
 ForEachMacros:   [ foreach, Q_FOREACH, BOOST_FOREACH, forever, Q_FOREVER, QBENCHMARK, QBENCHMARK_ONCE ]
 
 # Break constructor initializers before the colon and after the commas.
-BreakConstructorInitializers: BeforeColon
+BreakConstructorInitializers: BeforeComma
 
 # Add "// namespace <namespace>" comments on closing brace for a namespace
 # Ignored for namespaces that qualify as a short namespace,
@@ -105,3 +131,15 @@ AlignEscapedNewlines: Left
 # initializer list in list-initialization.
 SpaceBeforeCpp11BracedList: false
 
+AllowAllArgumentsOnNextLine: false
+AllowShortLambdasOnASingleLine: Empty
+AlignTrailingComments: true
+BinPackArguments: false
+BinPackParameters: false
+# EmptyLineAfterAccessModifier: Never
+PackConstructorInitializers: Never
+PenaltyReturnTypeOnItsOwnLine: 100
+SeparateDefinitionBlocks: Always
+WhitespaceSensitiveMacros:
+  - Q_PROPERTY
+  - Q_INTERFACES
