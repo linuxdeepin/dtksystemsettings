@@ -12,8 +12,8 @@
 #include <qdatetime.h>
 #include <dexpected.h>
 DSYSTEMTIME_BEGIN_NAMESPACE
-using DCORE_NAMESPACE::DExpected;
 using DCORE_NAMESPACE::DError;
+using DCORE_NAMESPACE::DExpected;
 using DCORE_NAMESPACE::DUnexpected;
 DSystemTime::DSystemTime(QObject *parent)
     : QObject(parent)

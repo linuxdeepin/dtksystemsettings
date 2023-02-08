@@ -12,7 +12,6 @@
 using PowerHistoryList = QList<DTK_POWER_NAMESPACE::History>;
 using PowerStatisticList = QList<DTK_POWER_NAMESPACE::Statistic>;
 
-
 DPOWER_BEGIN_NAMESPACE
 using DCORE_NAMESPACE::DExpected;
 

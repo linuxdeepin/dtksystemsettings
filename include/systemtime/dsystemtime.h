@@ -66,8 +66,7 @@ public:
     // slot
 public Q_SLOTS:
     DExpected<QStringList> listTimezones() const;
-    DExpected<void>
-    setLocalRTC(bool localRTC, bool fixSystem, bool interactive);
+    DExpected<void> setLocalRTC(bool localRTC, bool fixSystem, bool interactive);
     DExpected<void> enableNTP(bool useNTP, bool interactive);
     DExpected<void> setRelativeTime(qint64 usecUTC, bool interactive);
     DExpected<void> setAbsoluteTime(const QDateTime &time, bool interactive);

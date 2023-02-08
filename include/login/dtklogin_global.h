@@ -8,7 +8,7 @@
 #define DLOGIN_USE_NAMESPACE using namespace DTK_LOGIN_NAMESPACE;
 
 #define DLOGIN_BEGIN_NAMESPACE                                                                                                   \
-    namespace DTK_NAMESPACE {                                                                                                              \
+    namespace DTK_NAMESPACE {                                                                                                    \
     namespace DLOGIN_NAMESPACE {
 #define DLOGIN_END_NAMESPACE                                                                                                     \
     }                                                                                                                            \

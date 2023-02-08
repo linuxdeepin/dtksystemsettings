@@ -6,7 +6,6 @@
 
 #include "dpowerdevice.h"
 
-
 DPOWER_BEGIN_NAMESPACE
 
 class UPowerDeviceInterface;

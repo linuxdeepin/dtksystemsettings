@@ -98,7 +98,8 @@ signals:
     void IconNameChanged(const QString &value);
 
 public slots:
-    QDBusPendingReply<QList<DTK_POWER_NAMESPACE::History_p>> getHistory(const QString &type, const uint timespan, const uint resolution) const;
+    QDBusPendingReply<QList<DTK_POWER_NAMESPACE::History_p>>
+    getHistory(const QString &type, const uint timespan, const uint resolution) const;
     QDBusPendingReply<QList<DTK_POWER_NAMESPACE::Statistic_p>> getStatistics(const QString &type) const;
     QDBusPendingReply<> refresh();
 

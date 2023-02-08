@@ -13,8 +13,8 @@
 #include "dpowertypes.h"
 
 DPOWER_BEGIN_NAMESPACE
-using DCORE_NAMESPACE::DExpected;
 using DCORE_NAMESPACE::DError;
+using DCORE_NAMESPACE::DExpected;
 using DCORE_NAMESPACE::DUnexpected;
 
 void DPowerSettingsPrivate::connectDBusSignal()
