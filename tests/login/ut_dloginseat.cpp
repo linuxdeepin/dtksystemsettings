@@ -2,12 +2,13 @@
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
+#include <gmock/gmock.h>
+#include <gtest/gtest.h>
+
 #include "dloginseat.h"
 #include "dloginseat_p.h"
-#include "login1seatservice.h"
 #include "login1seatinterface.h"
-#include <gtest/gtest.h>
-#include <gmock/gmock.h>
+#include "login1seatservice.h"
 
 DLOGIN_USE_NAMESPACE
 
@@ -37,8 +38,10 @@ const QString TestDLoginSeat::Service = QStringLiteral("org.freedesktop.fakelogi
 
 TEST_F(TestDLoginSeat, propertySessions)
 {
-    m_fakeService->m_sessions = {{"session0", QDBusObjectPath("/org/freedesktop/login1/session0")},
-                                 {"session1", QDBusObjectPath("/org/freedesktop/login1/session0")}};
+    m_fakeService->m_sessions = {
+        { "session0", QDBusObjectPath("/org/freedesktop/login1/session0") },
+        { "session1", QDBusObjectPath("/org/freedesktop/login1/session0") }
+    };
     auto sessionList = m_dLoginSeat->sessions();
     ASSERT_THAT(sessionList, testing::SizeIs(2));
     EXPECT_EQ("session0", sessionList[0]);

@@ -5,13 +5,15 @@
 #pragma once
 
 #include "dtklogin_global.h"
+
+#include <qdatetime.h>
 #include <qobject.h>
 #include <qvariant.h>
-#include <qdatetime.h>
 
 DLOGIN_BEGIN_NAMESPACE
 // Do not use any unknown enum
 enum class ShutdownType { PowerOff, DryPowerOff, Reboot, DryReboot, Halt, DryHalt, Unknown };
+
 struct ScheduledShutdownValue
 {
     ShutdownType type;

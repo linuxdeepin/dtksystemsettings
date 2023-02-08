@@ -4,9 +4,9 @@
 
 #pragma once
 
+#include <qdebug.h>
 #include <qobject.h>
 #include <qscopedpointer.h>
-#include <qdebug.h>
 
 class DaemonPowerService : public QObject
 {
@@ -33,45 +33,107 @@ public:
     Q_PROPERTY(qint32 LowPowerNotifyThreshold READ lowPowerNotifyThreshold WRITE setLowPowerNotifyThreshold);
     Q_PROPERTY(bool ScreenBlackLock READ screenBlackLock WRITE setScreenBlackLock);
     Q_PROPERTY(bool SleepLock READ sleepLock WRITE setSleepLock);
+
     inline qint32 batteryLidClosedAction() const { return m_batteryLidClosedAction; }
+
     inline void setBatteryLidClosedAction(const qint32 value) { m_batteryLidClosedAction = value; }
+
     inline qint32 batteryLockDelay() const { return m_batteryLockDelay; }
+
     inline void setBatteryLockDelay(const qint32 value) { m_batteryLockDelay = value; }
+
     inline qint32 batteryPressPowerBtnAction() const { return m_batteryPressPowerBtnAction; }
-    inline void setBatteryPressPowerBtnAction(const qint32 value) { m_batteryPressPowerBtnAction = value; }
+
+    inline void setBatteryPressPowerBtnAction(const qint32 value)
+    {
+        m_batteryPressPowerBtnAction = value;
+    }
+
     inline qint32 batteryScreenBlackDelay() const { return m_batteryScreenBlackDelay; }
-    inline void setBatteryScreenBlackDelay(const qint32 value) { m_batteryScreenBlackDelay = value; }
+
+    inline void setBatteryScreenBlackDelay(const qint32 value)
+    {
+        m_batteryScreenBlackDelay = value;
+    }
+
     inline qint32 batteryScreensaverDelay() const { return m_batteryScreensaverDelay; }
-    inline void setBatteryScreensaverDelay(const qint32 value) { m_batteryScreensaverDelay = value; }
+
+    inline void setBatteryScreensaverDelay(const qint32 value)
+    {
+        m_batteryScreensaverDelay = value;
+    }
+
     inline qint32 batterySleepDelay() const { return m_batterySleepDelay; }
+
     inline void setBatterySleepDelay(const qint32 value) { m_batterySleepDelay = value; }
+
     inline qint32 linePowerLidClosedAction() const { return m_linePowerLidClosedAction; }
-    inline void setLinePowerLidClosedAction(const qint32 value) { m_linePowerLidClosedAction = value; }
+
+    inline void setLinePowerLidClosedAction(const qint32 value)
+    {
+        m_linePowerLidClosedAction = value;
+    }
+
     inline qint32 linePowerLockDelay() const { return m_linePowerLockDelay; }
+
     inline void setLinePowerLockDelay(const qint32 value) { m_linePowerLockDelay = value; }
+
     inline qint32 linePowerPressPowerBtnAction() const { return m_linePowerPressPowerBtnAction; }
-    inline void setLinePowerPressPowerBtnAction(const qint32 value) { m_linePowerPressPowerBtnAction = value; }
+
+    inline void setLinePowerPressPowerBtnAction(const qint32 value)
+    {
+        m_linePowerPressPowerBtnAction = value;
+    }
+
     inline qint32 linePowerScreenBlackDelay() const { return m_linePowerScreenBlackDelay; }
-    inline void setLinePowerScreenBlackDelay(const qint32 value) { m_linePowerScreenBlackDelay = value; }
+
+    inline void setLinePowerScreenBlackDelay(const qint32 value)
+    {
+        m_linePowerScreenBlackDelay = value;
+    }
+
     inline qint32 linePowerScreensaverDelay() const { return m_linePowerScreensaverDelay; }
-    inline void setLinePowerScreensaverDelay(const qint32 value) { m_linePowerScreensaverDelay = value; }
+
+    inline void setLinePowerScreensaverDelay(const qint32 value)
+    {
+        m_linePowerScreensaverDelay = value;
+    }
+
     inline qint32 linePowerSleepDelay() const { return m_linePowerSleepDelay; }
+
     inline void setLinePowerSleepDelay(const qint32 value) { m_linePowerSleepDelay = value; }
+
     inline qint32 lowPowerAutoSleepThreshold() const { return m_lowPowerAutoSleepThreshold; }
-    inline void setLowPowerAutoSleepThreshold(const qint32 value) { m_lowPowerAutoSleepThreshold = value; }
+
+    inline void setLowPowerAutoSleepThreshold(const qint32 value)
+    {
+        m_lowPowerAutoSleepThreshold = value;
+    }
+
     inline bool lowPowerNotifyEnable() const { return m_lowPowerNotifyEnable; }
+
     inline void setLowPowerNotifyEnable(const bool value) { m_lowPowerNotifyEnable = value; }
+
     inline qint32 lowPowerNotifyThreshold() const { return m_lowPowerNotifyThreshold; }
-    inline void setLowPowerNotifyThreshold(const qint32 value) { m_lowPowerNotifyThreshold = value; }
+
+    inline void setLowPowerNotifyThreshold(const qint32 value)
+    {
+        m_lowPowerNotifyThreshold = value;
+    }
+
     inline bool screenBlackLock() const { return m_screenBlackLock; }
+
     inline void setScreenBlackLock(const bool value) { m_screenBlackLock = value; }
+
     inline bool sleepLock() const { return m_sleepLock; }
+
     inline void setSleepLock(const bool value) { m_sleepLock = value; }
 
 signals:
     Q_SCRIPTABLE void PropertiesChanged(const QVariantMap &properties);
 
 public slots:
+
     Q_SCRIPTABLE void Reset() { m_reset = true; }
 
 public:

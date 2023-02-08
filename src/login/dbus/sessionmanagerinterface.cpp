@@ -3,8 +3,10 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
 #include "sessionmanagerinterface.h"
-#include <qdbusconnection.h>
+
 #include "ddbusinterface.h"
+
+#include <qdbusconnection.h>
 #include <qdebug.h>
 DLOGIN_BEGIN_NAMESPACE
 
@@ -24,7 +26,8 @@ bool SessionManagerInterface::Locked()
 
 QDBusPendingReply<> SessionManagerInterface::SetLocked(const bool locked)
 {
-    QDBusPendingReply<> reply = m_interface->asyncCallWithArgumentList("SetLocked", {QVariant::fromValue(locked)});
+    QDBusPendingReply<> reply =
+            m_interface->asyncCallWithArgumentList("SetLocked", { QVariant::fromValue(locked) });
     return reply;
 }
 

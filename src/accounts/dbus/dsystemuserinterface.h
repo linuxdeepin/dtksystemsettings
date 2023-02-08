@@ -5,9 +5,11 @@
 #pragma once
 
 #include "daccountstypes_p.h"
+
+#include <DDBusInterface>
+
 #include <QDBusPendingReply>
 #include <QStringList>
-#include <DDBusInterface>
 
 DACCOUNTS_BEGIN_NAMESPACE
 using DTK_CORE_NAMESPACE::DDBusInterface;
@@ -20,18 +22,23 @@ public:
     explicit DSystemUserInterface(const QString &path, QObject *parent = nullptr);
     virtual ~DSystemUserInterface() = default;
 
-    Q_PROPERTY(bool AutomaticLogin READ automaticLogin WRITE setAutomaticLogin NOTIFY AutomaticLoginChanged)
+    Q_PROPERTY(bool AutomaticLogin READ automaticLogin WRITE setAutomaticLogin NOTIFY
+                       AutomaticLoginChanged)
     Q_PROPERTY(qint32 AccountType READ accountType NOTIFY AccountTypeChanged)
     Q_PROPERTY(QStringList Groups READ groups WRITE setGroups NOTIFY GroupsChanged)
-    Q_PROPERTY(QStringList HistoryLayout READ historyLayout WRITE setHistoryLayout NOTIFY HistoryLayoutChanged)
+    Q_PROPERTY(QStringList HistoryLayout READ historyLayout WRITE setHistoryLayout NOTIFY
+                       HistoryLayoutChanged)
     Q_PROPERTY(QStringList IconList READ iconList NOTIFY IconListChanged)
     Q_PROPERTY(QString IconFile READ iconFile WRITE setIconFile NOTIFY IconFileChanged)
     Q_PROPERTY(QString Layout READ layout WRITE setLayout NOTIFY LayoutChanged)
     Q_PROPERTY(QString Locale READ locale WRITE setLocale NOTIFY LocaleChanged)
-    Q_PROPERTY(qint32 MaxPasswordAge READ maxPasswordAge WRITE setMaxPasswordAge NOTIFY MaxPasswordAgeChanged)
+    Q_PROPERTY(qint32 MaxPasswordAge READ maxPasswordAge WRITE setMaxPasswordAge NOTIFY
+                       MaxPasswordAgeChanged)
     Q_PROPERTY(qint32 PasswordLastChange READ passwordLastChange NOTIFY PasswordLastChangeChanged)
-    Q_PROPERTY(bool NoPasswdLogin READ noPasswdLogin WRITE enableNoPasswdLogin NOTIFY NoPasswdLoginChanged)
-    Q_PROPERTY(QString PasswordHint READ passwordHint WRITE setPasswordHint NOTIFY PasswordHintChanged)
+    Q_PROPERTY(bool NoPasswdLogin READ noPasswdLogin WRITE enableNoPasswdLogin NOTIFY
+                       NoPasswdLoginChanged)
+    Q_PROPERTY(
+            QString PasswordHint READ passwordHint WRITE setPasswordHint NOTIFY PasswordHintChanged)
     Q_PROPERTY(bool Locked READ locked WRITE setLocked NOTIFY LockedChanged)
     Q_PROPERTY(QString UUID READ UUID NOTIFY UUIDChanged)
     Q_PROPERTY(quint64 createdTime READ createdTime NOTIFY CreatedTimeChanged)

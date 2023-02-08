@@ -3,16 +3,19 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
 #include "upowermanagerinterface.h"
+
 #include "dpowertypes.h"
 
-#include <QDBusObjectPath>
-#include <QSharedPointer>
-#include <cstddef>
 #include <qdbusconnection.h>
 #include <qdbusextratypes.h>
 #include <qdbuspendingreply.h>
 #include <qlist.h>
 #include <qstringliteral.h>
+
+#include <QDBusObjectPath>
+#include <QSharedPointer>
+
+#include <cstddef>
 
 DPOWER_BEGIN_NAMESPACE
 UPowerManagerInterface::UPowerManagerInterface(QObject *parent)
@@ -28,14 +31,24 @@ UPowerManagerInterface::UPowerManagerInterface(QObject *parent)
     const QString &Path = QStringLiteral("/org/freedesktop/UPower");
     const QString &Interface = QStringLiteral("org.freedesktop.UPower");
     QDBusConnection connection = QDBusConnection::systemBus();
-    connection.connect(Service, Path, Interface, "DeviceAdded", this, SIGNAL(DeviceAdded(QDBusObjectPath)));
-    connection.connect(Service, Path, Interface, "DeviceRemove", this, SIGNAL(DeviceRemove(QDBusObjectPath)));
+    connection.connect(Service,
+                       Path,
+                       Interface,
+                       "DeviceAdded",
+                       this,
+                       SIGNAL(DeviceAdded(QDBusObjectPath)));
+    connection.connect(Service,
+                       Path,
+                       Interface,
+                       "DeviceRemove",
+                       this,
+                       SIGNAL(DeviceRemove(QDBusObjectPath)));
 
 #endif
     m_inter = new DDBusInterface(Service, Path, Interface, connection, this);
 }
 
-UPowerManagerInterface::~UPowerManagerInterface() {}
+UPowerManagerInterface::~UPowerManagerInterface() { }
 
 // properties
 bool UPowerManagerInterface::lidIsClosed() const

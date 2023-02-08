@@ -3,9 +3,11 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
 #pragma once
-#include <qstring.h>
-#include "dlogintypes_p.h"
 #include "dlogintypes.h"
+#include "dlogintypes_p.h"
+
+#include <qstring.h>
+
 #include <ostream>
 
 DLOGIN_BEGIN_NAMESPACE
@@ -37,7 +39,7 @@ QString userStateToString(const UserState &userState);
 UserState stringToUserState(const QString &strState);
 bool registerAllStringConverter();
 
-}  // namespace Utils
+} // namespace Utils
 
 std::ostream &operator<<(std::ostream &os, const QString &str);
 std::ostream &operator<<(std::ostream &os, const QStringList &strList);

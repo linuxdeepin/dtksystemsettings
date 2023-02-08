@@ -3,13 +3,13 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
 #include "dkbdbacklight.h"
-#include "dkbdbacklight_p.h"
-
-#include <qdebug.h>
-#include <qdbuspendingreply.h>
 
 #include "dbus/upowerkbdbacklightinterface.h"
+#include "dkbdbacklight_p.h"
 #include "dpowertypes.h"
+
+#include <qdbuspendingreply.h>
+#include <qdebug.h>
 
 DPOWER_BEGIN_NAMESPACE
 using DCORE_NAMESPACE::DError;
@@ -19,19 +19,24 @@ using DCORE_NAMESPACE::DUnexpected;
 void DKbdBacklightPrivate::connectDBusSignal()
 {
     Q_Q(DKbdBacklight);
-    connect(m_kb_inter, &UPowerKbdBacklightInterface::BrightnessChanged, q, &DKbdBacklight::brightnessChanged);
-    connect(
-        m_kb_inter, &UPowerKbdBacklightInterface::BrightnessChangedWithSource, q, [q](const qint32 value, const QString &source) {
-            QMap<QString, KbdSource> sourceMap;
-            sourceMap["internal"] = KbdSource::Internal;
-            sourceMap["external"] = KbdSource::External;
-            KbdSource realSource;
-            if (sourceMap.contains(source))
-                realSource = sourceMap[source];
-            else
-                realSource = KbdSource::Unknown;
-            emit q->brightnessChangedWithSource(value, realSource);
-        });
+    connect(m_kb_inter,
+            &UPowerKbdBacklightInterface::BrightnessChanged,
+            q,
+            &DKbdBacklight::brightnessChanged);
+    connect(m_kb_inter,
+            &UPowerKbdBacklightInterface::BrightnessChangedWithSource,
+            q,
+            [q](const qint32 value, const QString &source) {
+                QMap<QString, KbdSource> sourceMap;
+                sourceMap["internal"] = KbdSource::Internal;
+                sourceMap["external"] = KbdSource::External;
+                KbdSource realSource;
+                if (sourceMap.contains(source))
+                    realSource = sourceMap[source];
+                else
+                    realSource = KbdSource::Unknown;
+                emit q->brightnessChangedWithSource(value, realSource);
+            });
 }
 
 DKbdBacklight::DKbdBacklight(QObject *parent)
@@ -43,7 +48,7 @@ DKbdBacklight::DKbdBacklight(QObject *parent)
     d->connectDBusSignal();
 }
 
-DKbdBacklight::~DKbdBacklight() {}
+DKbdBacklight::~DKbdBacklight() { }
 
 // pubilc slots
 DExpected<qint32> DKbdBacklight::brightness() const
@@ -52,7 +57,7 @@ DExpected<qint32> DKbdBacklight::brightness() const
     QDBusPendingReply<qint32> reply = d->m_kb_inter->getBrightness();
     reply.waitForFinished();
     if (!reply.isValid()) {
-        return DUnexpected<>{DError{reply.error().type(), reply.error().message()}};
+        return DUnexpected<>{ DError{ reply.error().type(), reply.error().message() } };
     }
     return reply.value();
 }
@@ -63,7 +68,7 @@ DExpected<qint32> DKbdBacklight::maxBrightness() const
     QDBusPendingReply<qint32> reply = d->m_kb_inter->getMaxBrightness();
     reply.waitForFinished();
     if (!reply.isValid()) {
-        return DUnexpected<>{DError{reply.error().type(), reply.error().message()}};
+        return DUnexpected<>{ DError{ reply.error().type(), reply.error().message() } };
     }
     return reply.value();
 }
@@ -74,7 +79,7 @@ DExpected<void> DKbdBacklight::setBrightness(const qint32 value)
     QDBusPendingReply<> reply = d->m_kb_inter->setBrightness(value);
     reply.waitForFinished();
     if (!reply.isValid()) {
-        return DUnexpected<>{DError{reply.error().type(), reply.error().message()}};
+        return DUnexpected<>{ DError{ reply.error().type(), reply.error().message() } };
     }
     return {};
 }

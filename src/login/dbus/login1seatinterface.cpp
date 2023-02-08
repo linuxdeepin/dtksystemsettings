@@ -3,9 +3,11 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
 #include "login1seatinterface.h"
+
 #include "ddbusinterface.h"
-#include <qdbusargument.h>
 #include "dlogintypes_p.h"
+
+#include <qdbusargument.h>
 #include <qdbuspendingreply.h>
 
 DLOGIN_BEGIN_NAMESPACE
@@ -19,6 +21,7 @@ Login1SeatInterface::Login1SeatInterface(const QString &service,
 {
     DBusSessionPath::registerMetaType();
 }
+
 Login1SeatInterface::~Login1SeatInterface() = default;
 
 bool Login1SeatInterface::canGraphical() const
@@ -63,13 +66,17 @@ quint64 Login1SeatInterface::idleSinceHintMonotonic() const
 
 QDBusPendingReply<> Login1SeatInterface::activateSession(const QString &sessionId)
 {
-    QDBusPendingReply<> reply = m_interface->asyncCallWithArgumentList("ActivateSession", {QVariant::fromValue(sessionId)});
+    QDBusPendingReply<> reply =
+            m_interface->asyncCallWithArgumentList("ActivateSession",
+                                                   { QVariant::fromValue(sessionId) });
     return reply;
 }
 
 QDBusPendingReply<> Login1SeatInterface::switchTo(const quint32 VTNr)
 {
-    QDBusPendingReply<> reply = m_interface->asyncCallWithArgumentList(QStringLiteral("SwitchTo"), {QVariant::fromValue(VTNr)});
+    QDBusPendingReply<> reply =
+            m_interface->asyncCallWithArgumentList(QStringLiteral("SwitchTo"),
+                                                   { QVariant::fromValue(VTNr) });
     return reply;
 }
 

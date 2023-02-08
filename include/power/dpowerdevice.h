@@ -4,11 +4,11 @@
 
 #pragma once
 
-#include <qscopedpointer.h>
-#include <qdatetime.h>
-#include <dexpected.h>
-
 #include "dpowertypes.h"
+
+#include <dexpected.h>
+#include <qdatetime.h>
+#include <qscopedpointer.h>
 using PowerHistoryList = QList<DTK_POWER_NAMESPACE::History>;
 using PowerStatisticList = QList<DTK_POWER_NAMESPACE::Statistic>;
 
@@ -97,7 +97,9 @@ signals:
     void iconNameChanged(const QString &value);
 
 public slots:
-    DExpected<PowerHistoryList> history(const QString &type, const uint timespan, const uint resolution) const;
+    DExpected<PowerHistoryList> history(const QString &type,
+                                        const uint timespan,
+                                        const uint resolution) const;
     DExpected<PowerStatisticList> statistics(const QString &type) const;
     DExpected<void> refresh();
 
@@ -110,4 +112,5 @@ private:
 
     friend class DPowerManager;
 };
+
 DPOWER_END_NAMESPACE

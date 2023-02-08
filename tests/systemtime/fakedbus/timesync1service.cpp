@@ -2,7 +2,9 @@
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 #include "timesync1service.h"
+
 #include <qdebug.h>
+
 DSYSTEMTIME_BEGIN_NAMESPACE
 TimeSync1Service::TimeSync1Service(QObject *parent)
 {
@@ -11,6 +13,7 @@ TimeSync1Service::TimeSync1Service(QObject *parent)
     Message_p::registerMetaType();
     registerService();
 }
+
 TimeSync1Service::~TimeSync1Service()
 {
     unRegisterService();

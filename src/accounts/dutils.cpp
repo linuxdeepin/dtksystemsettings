@@ -3,10 +3,12 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
 #include "dutils.h"
-#include <QDir>
-#include <QTextStream>
+
 #include "dglobalconfig.h"
 #include "passwd.h"
+
+#include <QDir>
+#include <QTextStream>
 
 DACCOUNTS_BEGIN_NAMESPACE
 
@@ -47,11 +49,11 @@ QString Dutils::getUserConfigValue(const QByteArray &username, keyType key)
 
 QString Dutils::getUserConfigKey(keyType key)
 {
-    static const QMap<keyType, QString> keyMap = {{keyType::IconFile, "Icon"},
-                                                  {keyType::LayoutList, "HistoryLayout"},
-                                                  {keyType::Layout, "Layout"},
-                                                  {keyType::Locale, "Locale"},
-                                                  {keyType::UserUUID, "UserUUID"}};
+    static const QMap<keyType, QString> keyMap = { { keyType::IconFile, "Icon" },
+                                                   { keyType::LayoutList, "HistoryLayout" },
+                                                   { keyType::Layout, "Layout" },
+                                                   { keyType::Locale, "Locale" },
+                                                   { keyType::UserUUID, "UserUUID" } };
     return keyMap[key];
 }
 
@@ -95,7 +97,7 @@ qint64 Dutils::setUserConfigValue(const QByteArray &username, keyType key, const
     if (!configFile.seek(-line.size())) {
         return 0;
     }
-    if (configFile.write(QByteArray(line.size(), ' ')) != line.size()) {}
+    if (configFile.write(QByteArray(line.size(), ' ')) != line.size()) { }
     QString newline = strkey + "=" + value;
     return configFile.write(newline.toUtf8());
 }

@@ -4,9 +4,10 @@
 
 #pragma once
 #include "dtklogin_global.h"
-#include <qobject.h>
-#include <qdbuspendingreply.h>
+
 #include <ddbusinterface.h>
+#include <qdbuspendingreply.h>
+#include <qobject.h>
 
 using DTK_CORE_NAMESPACE::DDBusInterface;
 
@@ -20,7 +21,11 @@ class StartManagerInterface : public QObject
 
 public:
     static inline const char *staticInterfaceName() { return "com.deepin.StartManager"; }
-    StartManagerInterface(const QString &service, const QString &path, QDBusConnection connection, QObject *parent = nullptr);
+
+    StartManagerInterface(const QString &service,
+                          const QString &path,
+                          QDBusConnection connection,
+                          QObject *parent = nullptr);
 
 Q_SIGNALS:
     void autostartChanged(const QString &status, const QString &name);

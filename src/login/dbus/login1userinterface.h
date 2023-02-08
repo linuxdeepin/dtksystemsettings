@@ -4,16 +4,19 @@
 
 #pragma once
 #include "dlogintypes_p.h"
-#include <qdbuspendingreply.h>
+
 #include <ddbusinterface.h>
+#include <qdbuspendingreply.h>
 
 using DTK_CORE_NAMESPACE::DDBusInterface;
 DLOGIN_BEGIN_NAMESPACE
+
 class Login1UserInterface : public QObject
 {
     Q_OBJECT
 public:
     static inline const char *staticInterfaceName() { return "org.freedesktop.login1.User"; }
+
     Login1UserInterface(const QString &service,
                         const QString &path,
                         const QDBusConnection &connection,
@@ -59,4 +62,5 @@ private:
     DDBusInterface *m_interface;
     QString m_path;
 };
+
 DLOGIN_END_NAMESPACE

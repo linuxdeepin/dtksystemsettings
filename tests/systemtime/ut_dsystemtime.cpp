@@ -6,9 +6,11 @@
 #include "dsystemtime.h"
 #include "fakedbus/timedate1service.h"
 #include "fakedbus/timesync1service.h"
-#include <QDBusConnection>
+
 #include <qdatetime.h>
 #include <qdebug.h>
+
+#include <QDBusConnection>
 DSYSTEMTIME_USE_NAMESPACE
 
 class TestDSystemTime : public testing::Test
@@ -32,8 +34,9 @@ public:
         m_sync_fakeInterface = nullptr;
     }
 
-    void SetUp() override {}
-    void TearDown() override {}
+    void SetUp() override { }
+
+    void TearDown() override { }
 
     static TimeDate1Service *m_date_fakeInterface;
     static DSystemTime *m_dsystemtime;
@@ -45,12 +48,13 @@ TimeDate1Service *TestDSystemTime::m_date_fakeInterface = nullptr;
 TimeSync1Service *TestDSystemTime::m_sync_fakeInterface = nullptr;
 DSystemTime *TestDSystemTime::m_dsystemtime = nullptr;
 
-QT_BEGIN_NAMESPACE  // for QString support
-    inline void
-    PrintTo(const QString &qString, ::std::ostream *os)
+QT_BEGIN_NAMESPACE // for QString support
+        inline void
+        PrintTo(const QString &qString, ::std::ostream *os)
 {
     *os << qUtf8Printable(qString);
 }
+
 QT_END_NAMESPACE
 
 TEST_F(TestDSystemTime, fallbackNTPServers)
@@ -119,49 +123,50 @@ TEST_F(TestDSystemTime, rootDistanceMaxUSec)
     EXPECT_EQ(5, m_dsystemtime->rootDistanceMaxUSec());
 }
 
-TEST_F(TestDSystemTime, canNTP)  // return true
+TEST_F(TestDSystemTime, canNTP) // return true
 {
     ASSERT_TRUE(m_date_fakeInterface->canNTP());
     EXPECT_TRUE(m_dsystemtime->canNTP());
 }
 
-TEST_F(TestDSystemTime, localRTC)  // return true
+TEST_F(TestDSystemTime, localRTC) // return true
 {
     ASSERT_TRUE(m_date_fakeInterface->localRTC());
     EXPECT_TRUE(m_dsystemtime->localRTC());
 }
 
-TEST_F(TestDSystemTime, NTP)  // return true
+TEST_F(TestDSystemTime, NTP) // return true
 {
     ASSERT_TRUE(m_date_fakeInterface->NTP());
     EXPECT_TRUE(m_dsystemtime->NTP());
 }
 
-TEST_F(TestDSystemTime, NTPSynchronized)  // return true
+TEST_F(TestDSystemTime, NTPSynchronized) // return true
 {
     ASSERT_TRUE(m_date_fakeInterface->NTPSynchronized());
     EXPECT_TRUE(m_dsystemtime->NTPSynchronized());
 }
 
-TEST_F(TestDSystemTime, timezone)  // return Asia/Tokyo
+TEST_F(TestDSystemTime, timezone) // return Asia/Tokyo
 {
     ASSERT_EQ("Asia/Tokyo", m_date_fakeInterface->timezone());
     EXPECT_EQ("Asia/Tokyo", m_dsystemtime->timezone());
 }
 
-TEST_F(TestDSystemTime, RTCTimeUSec)  // return 42
+TEST_F(TestDSystemTime, RTCTimeUSec) // return 42
 {
     ASSERT_EQ(42, m_date_fakeInterface->RTCTimeUSec());
     EXPECT_EQ(42, m_dsystemtime->RTCTimeUSec());
 }
 
-TEST_F(TestDSystemTime, timeDate)  // return 1666171692
+TEST_F(TestDSystemTime, timeDate) // return 1666171692
 {
     ASSERT_EQ(1666171692, m_date_fakeInterface->timeUSec());
     EXPECT_EQ(qint64(1666171692 / 1000), m_dsystemtime->timeDate().toMSecsSinceEpoch());
 }
 
-TEST_F(TestDSystemTime, ListTimezones)  // return {"Asia/Tokyo", "Asia/Shanghai", "Asia/Hongkong", "Asia/Korea"}
+TEST_F(TestDSystemTime,
+       ListTimezones) // return {"Asia/Tokyo", "Asia/Shanghai", "Asia/Hongkong", "Asia/Korea"}
 {
     ASSERT_EQ("Asia/Hongkong", m_date_fakeInterface->ListTimezones()[2]);
     auto eTimezones = m_dsystemtime->listTimezones();
@@ -169,7 +174,7 @@ TEST_F(TestDSystemTime, ListTimezones)  // return {"Asia/Tokyo", "Asia/Shanghai"
     EXPECT_EQ("Asia/Korea", eTimezones.value()[3]);
 }
 
-TEST_F(TestDSystemTime, SetLocalRTC)  // focus local_rtc
+TEST_F(TestDSystemTime, SetLocalRTC) // focus local_rtc
 {
     m_date_fakeInterface->SetLocalRTC(true, false, false);
     ASSERT_TRUE(m_date_fakeInterface->setLocalRTC_sig);
@@ -177,7 +182,7 @@ TEST_F(TestDSystemTime, SetLocalRTC)  // focus local_rtc
     EXPECT_FALSE(m_date_fakeInterface->setLocalRTC_sig);
 }
 
-TEST_F(TestDSystemTime, SetLocalTime)  // focus use_NTP
+TEST_F(TestDSystemTime, SetLocalTime) // focus use_NTP
 {
     m_date_fakeInterface->SetNTP(true, false);
     ASSERT_TRUE(m_date_fakeInterface->setLocalTime_sig);
@@ -185,7 +190,7 @@ TEST_F(TestDSystemTime, SetLocalTime)  // focus use_NTP
     EXPECT_FALSE(m_date_fakeInterface->setLocalTime_sig);
 }
 
-TEST_F(TestDSystemTime, SetAbsoluteTime)  // focus usec_utc
+TEST_F(TestDSystemTime, SetAbsoluteTime) // focus usec_utc
 {
     m_date_fakeInterface->SetTime(42, false, false);
     ASSERT_EQ(42, m_date_fakeInterface->setTime_sig);
@@ -193,7 +198,7 @@ TEST_F(TestDSystemTime, SetAbsoluteTime)  // focus usec_utc
     EXPECT_EQ(1666171692, m_date_fakeInterface->setTime_sig / 1000);
 }
 
-TEST_F(TestDSystemTime, SetTimezone)  // focus timezone
+TEST_F(TestDSystemTime, SetTimezone) // focus timezone
 {
     m_date_fakeInterface->SetTimezone("Asia/Shanghai", true);
     ASSERT_EQ("Asia/Shanghai", m_date_fakeInterface->setTimezone_sig);

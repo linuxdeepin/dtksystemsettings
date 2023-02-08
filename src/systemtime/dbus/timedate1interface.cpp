@@ -2,10 +2,11 @@
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 #include "timedate1interface.h"
-#include <qvariant.h>
+
 #include <qdbusconnection.h>
 #include <qdbusextratypes.h>
 #include <qstring.h>
+#include <qvariant.h>
 
 DSYSTEMTIME_BEGIN_NAMESPACE
 TimeDate1Interface::TimeDate1Interface(QObject *parent)
@@ -61,35 +62,45 @@ quint64 TimeDate1Interface::timeUSec() const
 {
     return qdbus_cast<quint64>(m_inter->property("TimeUSec"));
 }
+
 QDBusPendingReply<QStringList> TimeDate1Interface::listTimezones() const
 {
     QDBusPendingReply<> reply = m_inter->asyncCall(QLatin1String("ListTimezones"));
     return reply;
 };
 
-QDBusPendingReply<> TimeDate1Interface::setLocalRTC(const bool local_rtc, const bool fix_system, const bool interactive)
+QDBusPendingReply<> TimeDate1Interface::setLocalRTC(const bool local_rtc,
+                                                    const bool fix_system,
+                                                    const bool interactive)
 {
     QDBusPendingReply<> reply =
-        m_inter->asyncCallWithArgumentList(QLatin1String("SetLocalRTC"), {local_rtc, fix_system, interactive});
+            m_inter->asyncCallWithArgumentList(QLatin1String("SetLocalRTC"),
+                                               { local_rtc, fix_system, interactive });
     return reply;
 };
 
 QDBusPendingReply<> TimeDate1Interface::setNTP(const bool use_NTP, const bool interactive)
 {
-    QDBusPendingReply<> reply = m_inter->asyncCallWithArgumentList(QLatin1String("SetNTP"), {use_NTP, interactive});
+    QDBusPendingReply<> reply =
+            m_inter->asyncCallWithArgumentList(QLatin1String("SetNTP"), { use_NTP, interactive });
     return reply;
 };
 
-QDBusPendingReply<> TimeDate1Interface::setTime(const qint64 usec_utc, const bool relative, const bool interactive)
+QDBusPendingReply<> TimeDate1Interface::setTime(const qint64 usec_utc,
+                                                const bool relative,
+                                                const bool interactive)
 {
-    QDBusPendingReply<> reply = m_inter->asyncCallWithArgumentList(QLatin1String("SetTime"), {usec_utc, relative, interactive});
+    QDBusPendingReply<> reply =
+            m_inter->asyncCallWithArgumentList(QLatin1String("SetTime"),
+                                               { usec_utc, relative, interactive });
     return reply;
 };
 
 QDBusPendingReply<> TimeDate1Interface::setTimezone(const QString &timezone, const bool interactive)
 {
     QDBusPendingReply<> reply =
-        m_inter->asyncCallWithArgumentList(QLatin1String("SetTimezone"), {QVariant::fromValue(timezone), interactive});
+            m_inter->asyncCallWithArgumentList(QLatin1String("SetTimezone"),
+                                               { QVariant::fromValue(timezone), interactive });
     return reply;
 };
 

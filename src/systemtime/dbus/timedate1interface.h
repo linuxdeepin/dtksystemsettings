@@ -5,14 +5,16 @@
 #ifndef TIMEDATE1INTERFACE_H
 #define TIMEDATE1INTERFACE_H
 
+#include "dtksystemtime_global.h"
+
+#include <ddbusinterface.h>
+#include <qdbuspendingreply.h>
 #include <qobject.h>
 #include <qscopedpointer.h>
-#include <qdbuspendingreply.h>
-#include "dtksystemtime_global.h"
-#include <ddbusinterface.h>
 
 DSYSTEMTIME_BEGIN_NAMESPACE
 using DCORE_NAMESPACE::DDBusInterface;
+
 class TimeDate1Interface : public QObject
 {
     Q_OBJECT
@@ -37,7 +39,9 @@ public:
     // slot
 public slots:
     QDBusPendingReply<QStringList> listTimezones() const;
-    QDBusPendingReply<> setLocalRTC(const bool local_rtc, const bool fix_system, const bool interactive);
+    QDBusPendingReply<> setLocalRTC(const bool local_rtc,
+                                    const bool fix_system,
+                                    const bool interactive);
     QDBusPendingReply<> setNTP(const bool use_NTP, const bool interactive);
     QDBusPendingReply<> setTime(const qint64 usec_utc, const bool relative, const bool interactive);
     QDBusPendingReply<> setTimezone(const QString &timezone, const bool interactive);

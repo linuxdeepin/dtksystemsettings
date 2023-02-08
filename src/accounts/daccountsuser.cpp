@@ -3,16 +3,19 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
 #include "daccountsuser.h"
+
 #include "daccountsuser_p.h"
-#include <QMimeDatabase>
+#include "dglobalconfig.h"
+#include "dutils.h"
+
 #include <QDebug>
+#include <QMimeDatabase>
 #include <QRegularExpression>
+
 #include <grp.h>
 #include <pwd.h>
 #include <sys/stat.h>
 #include <unistd.h>
-#include "dutils.h"
-#include "dglobalconfig.h"
 
 DACCOUNTS_BEGIN_NAMESPACE
 
@@ -39,62 +42,95 @@ DAccountsUser::DAccountsUser(const quint64 uid, QObject *parent)
     , d_ptr(new DAccountsUserPrivate(uid, this))
 {
     Q_D(const DAccountsUser);
-    connect(d->m_dSystemUserInter, &DSystemUserInterface::AutomaticLoginChanged, this, [this](const bool enabled) {
-        emit this->automaticLoginChanged(enabled);
-    });
-    connect(d->m_dSystemUserInter, &DSystemUserInterface::GroupsChanged, this, [this](const QStringList &list) {
-        emit this->groupsChanged(list);
-    });
-    connect(d->m_dSystemUserInter, &DSystemUserInterface::LayoutChanged, this, [this](const QString &layout) {
-        emit this->layoutChanged(layout.toUtf8());
-    });
-    connect(d->m_dSystemUserInter, &DSystemUserInterface::HistoryLayoutChanged, this, [this](const QStringList &list) {
-        QList<QByteArray> tmp;
-        for (const auto &v : list)
-            tmp.append(v.toUtf8());
-        emit this->layoutListChanged(tmp);
-    });
-    connect(d->m_dSystemUserInter, &DSystemUserInterface::IconListChanged, this, [this](const QStringList &list) {
-        QList<QByteArray> tmp;
-        for (const auto &v : list)
-            tmp.append(v.toUtf8());
-        emit this->iconFileListChanged(tmp);
-    });
-    connect(d->m_dSystemUserInter, &DSystemUserInterface::IconFileChanged, this, [this](const QString &url) {
-        QUrl tmp(url);
-        emit this->iconFileChanged(url);
-    });
-    connect(d->m_dSystemUserInter, &DSystemUserInterface::LocaleChanged, this, [this](const QString &locale) {
-        emit this->localeChanged(locale.toUtf8());
-    });
-    connect(d->m_dSystemUserInter, &DSystemUserInterface::LockedChanged, this, [this](const bool locked) {
-        emit this->lockedChanged(locked);
-    });
-    connect(d->m_dSystemUserInter, &DSystemUserInterface::MaxPasswordAgeChanged, this, [this](const qint32 nDays) {
-        emit this->maxPasswordAgeChanged(nDays);
-    });
-    connect(d->m_dSystemUserInter, &DSystemUserInterface::NoPasswdLoginChanged, this, [this](const bool enabled) {
-        emit this->noPasswdLoginChanged(enabled);
-    });
-    connect(d->m_dSystemUserInter, &DSystemUserInterface::PasswordHintChanged, this, [this](const QString &hint) {
-        emit this->passwordHintChanged(hint);
-    });
+    connect(d->m_dSystemUserInter,
+            &DSystemUserInterface::AutomaticLoginChanged,
+            this,
+            [this](const bool enabled) {
+                emit this->automaticLoginChanged(enabled);
+            });
+    connect(d->m_dSystemUserInter,
+            &DSystemUserInterface::GroupsChanged,
+            this,
+            [this](const QStringList &list) {
+                emit this->groupsChanged(list);
+            });
+    connect(d->m_dSystemUserInter,
+            &DSystemUserInterface::LayoutChanged,
+            this,
+            [this](const QString &layout) {
+                emit this->layoutChanged(layout.toUtf8());
+            });
+    connect(d->m_dSystemUserInter,
+            &DSystemUserInterface::HistoryLayoutChanged,
+            this,
+            [this](const QStringList &list) {
+                QList<QByteArray> tmp;
+                for (const auto &v : list)
+                    tmp.append(v.toUtf8());
+                emit this->layoutListChanged(tmp);
+            });
+    connect(d->m_dSystemUserInter,
+            &DSystemUserInterface::IconListChanged,
+            this,
+            [this](const QStringList &list) {
+                QList<QByteArray> tmp;
+                for (const auto &v : list)
+                    tmp.append(v.toUtf8());
+                emit this->iconFileListChanged(tmp);
+            });
+    connect(d->m_dSystemUserInter,
+            &DSystemUserInterface::IconFileChanged,
+            this,
+            [this](const QString &url) {
+                QUrl tmp(url);
+                emit this->iconFileChanged(url);
+            });
+    connect(d->m_dSystemUserInter,
+            &DSystemUserInterface::LocaleChanged,
+            this,
+            [this](const QString &locale) {
+                emit this->localeChanged(locale.toUtf8());
+            });
+    connect(d->m_dSystemUserInter,
+            &DSystemUserInterface::LockedChanged,
+            this,
+            [this](const bool locked) {
+                emit this->lockedChanged(locked);
+            });
+    connect(d->m_dSystemUserInter,
+            &DSystemUserInterface::MaxPasswordAgeChanged,
+            this,
+            [this](const qint32 nDays) {
+                emit this->maxPasswordAgeChanged(nDays);
+            });
+    connect(d->m_dSystemUserInter,
+            &DSystemUserInterface::NoPasswdLoginChanged,
+            this,
+            [this](const bool enabled) {
+                emit this->noPasswdLoginChanged(enabled);
+            });
+    connect(d->m_dSystemUserInter,
+            &DSystemUserInterface::PasswordHintChanged,
+            this,
+            [this](const QString &hint) {
+                emit this->passwordHintChanged(hint);
+            });
 }
 
-DAccountsUser::~DAccountsUser() {}
+DAccountsUser::~DAccountsUser() { }
 
 AccountTypes DAccountsUser::accountType() const
 {
     auto typenum = d_ptr->m_dSystemUserInter->accountType();
     switch (typenum) {
-        case 0:
-            return AccountTypes::Default;
-        case 1:
-            return AccountTypes::Admin;
-        case 2:
-            return AccountTypes::Udcp;
-        default:
-            return AccountTypes::Unknown;  // function should not be executed here
+    case 0:
+        return AccountTypes::Default;
+    case 1:
+        return AccountTypes::Admin;
+    case 2:
+        return AccountTypes::Udcp;
+    default:
+        return AccountTypes::Unknown; // function should not be executed here
     }
 }
 
@@ -130,8 +166,8 @@ quint64 DAccountsUser::UID() const
 QStringList DAccountsUser::groups() const
 {
     QStringList groupList;
-    gid_t *groups{nullptr};
-    int ngroups{0};
+    gid_t *groups{ nullptr };
+    int ngroups{ 0 };
     auto username = userName();
     auto gid = GID();
     getgrouplist(username, gid, groups, &ngroups);
@@ -285,7 +321,7 @@ DExpected<void> DAccountsUser::setNopasswdLogin(const bool enabled)
     auto reply = d->m_dSystemUserInter->enableNoPasswdLogin(enabled);
     reply.waitForFinished();
     if (!reply.isValid())
-        return DUnexpected<>{DError{reply.error().type(), reply.error().message()}};
+        return DUnexpected<>{ DError{ reply.error().type(), reply.error().message() } };
     return {};
 }
 
@@ -295,7 +331,7 @@ DExpected<void> DAccountsUser::setAutomaticLogin(bool enabled)
     auto reply = d->m_dSystemUserInter->setAutomaticLogin(enabled);
     reply.waitForFinished();
     if (!reply.isValid())
-        return DUnexpected<>{DError{reply.error().type(), reply.error().message()}};
+        return DUnexpected<>{ DError{ reply.error().type(), reply.error().message() } };
     return {};
 }
 
@@ -305,7 +341,7 @@ DExpected<void> DAccountsUser::setFullName(const QString &fullname)
     auto reply = d->m_dUserInter->setRealName(fullname);
     reply.waitForFinished();
     if (!reply.isValid())
-        return DUnexpected<>{DError{reply.error().type(), reply.error().message()}};
+        return DUnexpected<>{ DError{ reply.error().type(), reply.error().message() } };
     return {};
 }
 
@@ -315,7 +351,7 @@ DExpected<void> DAccountsUser::setGroups(const QStringList &newgroups)
     auto reply = d->m_dSystemUserInter->setGroups(newgroups);
     reply.waitForFinished();
     if (!reply.isValid())
-        return DUnexpected<>{DError{reply.error().type(), reply.error().message()}};
+        return DUnexpected<>{ DError{ reply.error().type(), reply.error().message() } };
     return {};
 }
 
@@ -329,7 +365,7 @@ DExpected<void> DAccountsUser::setLayoutList(const QList<QByteArray> &newlayouts
     auto reply = d->m_dSystemUserInter->setHistoryLayout(tmp);
     reply.waitForFinished();
     if (!reply.isValid())
-        return DUnexpected<>{DError{reply.error().type(), reply.error().message()}};
+        return DUnexpected<>{ DError{ reply.error().type(), reply.error().message() } };
     return {};
 }
 
@@ -339,7 +375,7 @@ DExpected<void> DAccountsUser::setHomeDir(const QString &newhomedir)
     auto reply = d->m_dUserInter->setHomeDirectory(newhomedir);
     reply.waitForFinished();
     if (!reply.isValid())
-        return DUnexpected<>{DError{reply.error().type(), reply.error().message()}};
+        return DUnexpected<>{ DError{ reply.error().type(), reply.error().message() } };
     return {};
 }
 
@@ -349,7 +385,7 @@ DExpected<void> DAccountsUser::setIconFile(const QUrl &newiconURL)
     auto reply = d->m_dSystemUserInter->setIconFile(newiconURL.toString());
     reply.waitForFinished();
     if (!reply.isValid())
-        return DUnexpected<>{DError{reply.error().type(), reply.error().message()}};
+        return DUnexpected<>{ DError{ reply.error().type(), reply.error().message() } };
     return {};
 }
 
@@ -359,7 +395,7 @@ DExpected<void> DAccountsUser::setLayout(const QByteArray &newlayout)
     auto reply = d->m_dSystemUserInter->setLayout(newlayout);
     reply.waitForFinished();
     if (!reply.isValid())
-        return DUnexpected<>{DError{reply.error().type(), reply.error().message()}};
+        return DUnexpected<>{ DError{ reply.error().type(), reply.error().message() } };
     return {};
 }
 
@@ -369,7 +405,7 @@ DExpected<void> DAccountsUser::setLocale(const QByteArray &newlocale)
     auto reply = d->m_dSystemUserInter->setLocale(newlocale);
     reply.waitForFinished();
     if (!reply.isValid())
-        return DUnexpected<>{DError{reply.error().type(), reply.error().message()}};
+        return DUnexpected<>{ DError{ reply.error().type(), reply.error().message() } };
     return {};
 }
 
@@ -379,7 +415,7 @@ DExpected<void> DAccountsUser::setLocked(const bool locked)
     auto reply = d->m_dSystemUserInter->setLocked(locked);
     reply.waitForFinished();
     if (!reply.isValid())
-        return DUnexpected<>{DError{reply.error().type(), reply.error().message()}};
+        return DUnexpected<>{ DError{ reply.error().type(), reply.error().message() } };
     return {};
 }
 
@@ -389,7 +425,7 @@ DExpected<void> DAccountsUser::setMaxPasswordAge(const int newndays)
     auto reply = d->m_dSystemUserInter->setMaxPasswordAge(newndays);
     reply.waitForFinished();
     if (!reply.isValid())
-        return DUnexpected<>{DError{reply.error().type(), reply.error().message()}};
+        return DUnexpected<>{ DError{ reply.error().type(), reply.error().message() } };
     return {};
 }
 
@@ -399,7 +435,7 @@ DExpected<void> DAccountsUser::setPassword(const QByteArray &newpassword)
     auto reply = d->m_dSystemUserInter->setPassword(Dutils::encryptPassword(newpassword));
     reply.waitForFinished();
     if (!reply.isValid())
-        return DUnexpected<>{DError{reply.error().type(), reply.error().message()}};
+        return DUnexpected<>{ DError{ reply.error().type(), reply.error().message() } };
     return {};
 }
 
@@ -409,7 +445,7 @@ DExpected<void> DAccountsUser::setPasswordHint(const QString &newpasswordhint)
     auto reply = d->m_dSystemUserInter->setPasswordHint(newpasswordhint);
     reply.waitForFinished();
     if (!reply.isValid())
-        return DUnexpected<>{DError{reply.error().type(), reply.error().message()}};
+        return DUnexpected<>{ DError{ reply.error().type(), reply.error().message() } };
     return {};
 }
 
@@ -419,7 +455,7 @@ DExpected<void> DAccountsUser::setShell(const QString &newshellpath)
     auto reply = d->m_dUserInter->setShell(newshellpath);
     reply.waitForFinished();
     if (!reply.isValid())
-        return DUnexpected<>{DError{reply.error().type(), reply.error().message()}};
+        return DUnexpected<>{ DError{ reply.error().type(), reply.error().message() } };
     return {};
 }
 
@@ -429,7 +465,7 @@ DExpected<void> DAccountsUser::addGroup(const QString &group)
     auto reply = d->m_dSystemUserInter->addGroup(group);
     reply.waitForFinished();
     if (!reply.isValid())
-        return DUnexpected<>{DError{reply.error().type(), reply.error().message()}};
+        return DUnexpected<>{ DError{ reply.error().type(), reply.error().message() } };
     return {};
 }
 
@@ -439,7 +475,7 @@ DExpected<void> DAccountsUser::deleteGroup(const QString &group)
     auto reply = d->m_dSystemUserInter->deleteGroup(group);
     reply.waitForFinished();
     if (!reply.isValid())
-        return DUnexpected<>{DError{reply.error().type(), reply.error().message()}};
+        return DUnexpected<>{ DError{ reply.error().type(), reply.error().message() } };
     return {};
 }
 
@@ -449,7 +485,7 @@ DExpected<void> DAccountsUser::deleteIconFile(const QUrl &iconURL)
     auto reply = d->m_dSystemUserInter->deleteIconFile(iconURL.toLocalFile());
     reply.waitForFinished();
     if (!reply.isValid())
-        return DUnexpected<>{DError{reply.error().type(), reply.error().message()}};
+        return DUnexpected<>{ DError{ reply.error().type(), reply.error().message() } };
     return {};
 }
 
@@ -468,7 +504,7 @@ DExpected<ReminderInfo> DAccountsUser::getReminderInfo() const
     auto reply = d->m_dSystemUserInter->getReminderInfo();
     reply.waitForFinished();
     if (!reply.isValid()) {
-        return DUnexpected<>{DError{reply.error().type(), reply.error().message()}};
+        return DUnexpected<>{ DError{ reply.error().type(), reply.error().message() } };
     }
     const auto &info_p = reply.value();
 
@@ -505,7 +541,7 @@ DExpected<PasswdExpirInfo> DAccountsUser::passwordExpirationInfo(qint64 &dayLeft
     auto reply = d->m_dSystemUserInter->passwordExpiredInfo();
     reply.waitForFinished();
     if (!reply.isValid()) {
-        return DUnexpected<>{DError{reply.error().type(), reply.error().message()}};
+        return DUnexpected<>{ DError{ reply.error().type(), reply.error().message() } };
     }
 
     const auto &expireStatus = reply.argumentAt(0);
@@ -514,18 +550,18 @@ DExpected<PasswdExpirInfo> DAccountsUser::passwordExpirationInfo(qint64 &dayLeft
         info = PasswdExpirInfo::Unknown;
     } else {
         switch (expireStatus.toInt()) {
-            case 0:
-                info = PasswdExpirInfo::Normal;
-                break;
-            case 1:
-                info = PasswdExpirInfo::Closed;
-                break;
-            case 2:
-                info = PasswdExpirInfo::Expired;
-                break;
-            default:
-                info = PasswdExpirInfo::Unknown;
-                break;
+        case 0:
+            info = PasswdExpirInfo::Normal;
+            break;
+        case 1:
+            info = PasswdExpirInfo::Closed;
+            break;
+        case 2:
+            info = PasswdExpirInfo::Expired;
+            break;
+        default:
+            info = PasswdExpirInfo::Unknown;
+            break;
         }
     }
     const auto &day = reply.argumentAt(1);

@@ -5,12 +5,13 @@
 #pragma once
 
 #include "dtklogin_global.h"
+
 #include <qdbusargument.h>
 #include <qdbusextratypes.h>
 #include <qdbusmetatype.h>
-#include <qmetatype.h>
 #include <qglobal.h>
 #include <qlist.h>
+#include <qmetatype.h>
 #include <qnamespace.h>
 
 DLOGIN_BEGIN_NAMESPACE

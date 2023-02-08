@@ -5,9 +5,10 @@
 #pragma once
 
 #include "dtklogin_global.h"
-#include <qobject.h>
-#include <qdbuspendingreply.h>
+
 #include <ddbusinterface.h>
+#include <qdbuspendingreply.h>
+#include <qobject.h>
 
 using DTK_CORE_NAMESPACE::DDBusInterface;
 class QDBusConnection;
@@ -21,7 +22,11 @@ public:
     bool Locked();
 
     static inline const char *staticInterfaceName() { return "com.deepin.SessionManager"; }
-    SessionManagerInterface(const QString &service, const QString &path, QDBusConnection connection, QObject *parent = nullptr);
+
+    SessionManagerInterface(const QString &service,
+                            const QString &path,
+                            QDBusConnection connection,
+                            QObject *parent = nullptr);
 
 Q_SIGNALS:
     void LockedChanged(bool locked);

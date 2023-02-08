@@ -5,12 +5,14 @@
 #define DSYSTEMTIMETYPES_P_H
 
 #include "dtksystemtime_global.h"
-#include <qnamespace.h>
+
 #include <qdbusargument.h>
 #include <qdbusextratypes.h>
 #include <qdbusmetatype.h>
+#include <qnamespace.h>
 
 DSYSTEMTIME_BEGIN_NAMESPACE
+
 struct Address_p
 {
     qint32 type;
@@ -53,4 +55,4 @@ DSYSTEMTIME_END_NAMESPACE
 Q_DECLARE_METATYPE(DTK_SYSTEMTIME_NAMESPACE::Address_p)
 Q_DECLARE_METATYPE(DTK_SYSTEMTIME_NAMESPACE::Message_p)
 
-#endif  // __DTIMETYPES_H__
+#endif // __DTIMETYPES_H__

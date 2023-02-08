@@ -3,22 +3,27 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
 #pragma once
-#include <qobject.h>
+#include "dlogintypes.h"
+#include "dlogintypes_p.h"
+
+#include <ddbusinterface.h>
 #include <qdbuspendingreply.h>
 #include <qdbusunixfiledescriptor.h>
-#include "dlogintypes_p.h"
-#include "dlogintypes.h"
-#include <ddbusinterface.h>
+#include <qobject.h>
 
 using DTK_CORE_NAMESPACE::DDBusInterface;
 class QDBusObjectPath;
+
 DLOGIN_BEGIN_NAMESPACE class Login1ManagerInterface : public QObject
 {
     Q_OBJECT
 public:
     static inline const char *staticInterfaceName() { return "org.freedesktop.login1.Manager"; }
 
-    Login1ManagerInterface(const QString &service, const QString &path, QDBusConnection connection, QObject *parent = nullptr);
+    Login1ManagerInterface(const QString &service,
+                           const QString &path,
+                           QDBusConnection connection,
+                           QObject *parent = nullptr);
     ~Login1ManagerInterface() override;
 
     Q_PROPERTY(QStringList bootLoaderEntries READ bootLoaderEntries);
@@ -108,7 +113,9 @@ public:
 public slots:
     QDBusPendingReply<> activateSession(const QString &sessionId);
     QDBusPendingReply<> activateSessionOnSeat(const QString &sessionId, const QString &seatId);
-    QDBusPendingReply<> attachDevice(const QString &seatId, const QString &sysfsPath, bool interactive);
+    QDBusPendingReply<> attachDevice(const QString &seatId,
+                                     const QString &sysfsPath,
+                                     bool interactive);
     QDBusPendingReply<QString> canHalt();
     QDBusPendingReply<QString> canHibernate();
     QDBusPendingReply<QString> canHybridSleep();
@@ -135,7 +142,9 @@ public slots:
     QDBusPendingReply<> hybridSleepWithFlags(quint64 flags);
     QDBusPendingReply<QDBusUnixFileDescriptor>
     inhibit(const QString &what, const QString &who, const QString &why, const QString &mode);
-    QDBusPendingReply<> killSession(const QString &sessionId, const QString &who, qint32 signalNumber);
+    QDBusPendingReply<> killSession(const QString &sessionId,
+                                    const QString &who,
+                                    qint32 signalNumber);
     QDBusPendingReply<> killUser(quint32 UID, qint32 signalName);
     QDBusPendingReply<QList<DBusInhibitor>> listInhibitors();
     QDBusPendingReply<QList<DTK_LOGIN_NAMESPACE::DBusSeat>> listSeats();

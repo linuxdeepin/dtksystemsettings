@@ -4,22 +4,25 @@
 
 #include "login1sessionservice.h"
 
-#include <qmetaobject.h>
+#include "dlogintypes_p.h"
+
 #include <qbytearray.h>
 #include <qlist.h>
 #include <qmap.h>
+#include <qmetaobject.h>
 #include <qstring.h>
 #include <qstringlist.h>
 #include <qvariant.h>
 
-#include "dlogintypes_p.h"
-
 DLOGIN_BEGIN_NAMESPACE
+
 /*
  * Implementation of adaptor class Login1SessionAdaptor
  */
 
-Login1SessionService::Login1SessionService(const QString &service, const QString &path, QObject *parent)
+Login1SessionService::Login1SessionService(const QString &service,
+                                           const QString &path,
+                                           QObject *parent)
     : QObject(parent)
     , m_service(service)
     , m_path(path)
@@ -214,4 +217,5 @@ void Login1SessionService::Terminate()
 {
     m_terminated = true;
 }
+
 DLOGIN_END_NAMESPACE

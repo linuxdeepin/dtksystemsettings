@@ -2,6 +2,7 @@
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 #include "dsystemtimetypes_p.h"
+
 #include <qdbusmetatype.h>
 
 DSYSTEMTIME_BEGIN_NAMESPACE
@@ -24,6 +25,7 @@ QDBusArgument &operator<<(QDBusArgument &arg, const Address_p &address)
     arg.endStructure();
     return arg;
 }
+
 const QDBusArgument &operator>>(const QDBusArgument &arg, Address_p &address)
 {
     arg.beginStructure();
@@ -54,6 +56,7 @@ QDBusArgument &operator<<(QDBusArgument &arg, const Message_p &message)
     arg.endStructure();
     return arg;
 }
+
 const QDBusArgument &operator>>(const QDBusArgument &arg, Message_p &message)
 {
     arg.beginStructure();

@@ -5,8 +5,8 @@
 #include "startmanagerservice.h"
 
 #include <qdbusconnection.h>
-#include <qdebug.h>
 #include <qdbuserror.h>
+#include <qdebug.h>
 
 DLOGIN_BEGIN_NAMESPACE
 
@@ -41,12 +41,18 @@ bool StartManagerService::registerService()
         if (errorMsg.isEmpty())
             errorMsg = "maybe it's running";
 
-        qWarning() << QString("Can't register the %1 service, %2.").arg("com.deepin.FakeSessionManager").arg(errorMsg);
+        qWarning() << QString("Can't register the %1 service, %2.")
+                              .arg("com.deepin.FakeSessionManager")
+                              .arg(errorMsg);
         return false;
     }
-    if (!connection.registerObject("/com/deepin/FakeStartManager", this, QDBusConnection::ExportScriptableContents)) {
+    if (!connection.registerObject("/com/deepin/FakeStartManager",
+                                   this,
+                                   QDBusConnection::ExportScriptableContents)) {
         QString errorMsg = connection.lastError().message();
-        qWarning() << QString("Can't register %1 the D-Bus object, %2.").arg("com.deepin.FakeSessionManager").arg(errorMsg);
+        qWarning() << QString("Can't register %1 the D-Bus object, %2.")
+                              .arg("com.deepin.FakeSessionManager")
+                              .arg(errorMsg);
         return false;
     }
     return true;
@@ -58,4 +64,5 @@ void StartManagerService::unRegisterService()
     connection.unregisterObject("/com/deepin/FakeStartManager");
     connection.unregisterService("com.deepin.FakeSessionManager");
 }
+
 DLOGIN_END_NAMESPACE

@@ -3,13 +3,13 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
 #include "dpowerdevice.h"
+
+#include "dbus/upowerdeviceinterface.h"
 #include "dpowerdevice_p.h"
+#include "dpowertypes.h"
 
 #include <qdbuspendingreply.h>
 #include <qdebug.h>
-
-#include "dpowertypes.h"
-#include "dbus/upowerdeviceinterface.h"
 
 DPOWER_BEGIN_NAMESPACE
 using DCORE_NAMESPACE::DError;
@@ -24,36 +24,63 @@ DPowerDevice::DPowerDevice(const QString &name, QObject *parent)
     d->devicename = name;
     d->m_device_inter = new UPowerDeviceInterface(name, this);
 
-    connect(d->m_device_inter, &UPowerDeviceInterface::UpdateTimeChanged, this, [this](const quint64 value) {
-        emit this->updateTimeChanged(QDateTime::fromSecsSinceEpoch(value));
-    });
-    connect(d->m_device_inter, &UPowerDeviceInterface::PercentageChanged, this, [this](const double value) {
-        emit this->percentageChanged(value);
-    });
-    connect(d->m_device_inter, &UPowerDeviceInterface::TimeToEmptyChanged, this, [this](const qint64 value) {
-        emit this->timeToEmptyChanged(value);
-    });
-    connect(d->m_device_inter, &UPowerDeviceInterface::TimeToEmptyChanged, this, [this](const qint64 value) {
-        emit this->timeToEmptyChanged(value);
-    });
-    connect(d->m_device_inter, &UPowerDeviceInterface::TimeToEmptyChanged, this, [this](const qint64 value) {
-        emit this->timeToEmptyChanged(value);
-    });
-    connect(d->m_device_inter, &UPowerDeviceInterface::TimeToFullChanged, this, [this](const qint64 value) {
-        emit this->timeToFullChanged(value);
-    });
-    connect(d->m_device_inter, &UPowerDeviceInterface::EnergyRateChanged, this, [this](const double value) {
-        emit this->energyRateChanged(value);
-    });
-    connect(d->m_device_inter, &UPowerDeviceInterface::EnergyChanged, this, [this](const double value) {
-        emit this->energyChanged(value);
-    });
-    connect(d->m_device_inter, &UPowerDeviceInterface::IconNameChanged, this, [this](const QString &value) {
-        emit this->iconNameChanged(value);
-    });
+    connect(d->m_device_inter,
+            &UPowerDeviceInterface::UpdateTimeChanged,
+            this,
+            [this](const quint64 value) {
+                emit this->updateTimeChanged(QDateTime::fromSecsSinceEpoch(value));
+            });
+    connect(d->m_device_inter,
+            &UPowerDeviceInterface::PercentageChanged,
+            this,
+            [this](const double value) {
+                emit this->percentageChanged(value);
+            });
+    connect(d->m_device_inter,
+            &UPowerDeviceInterface::TimeToEmptyChanged,
+            this,
+            [this](const qint64 value) {
+                emit this->timeToEmptyChanged(value);
+            });
+    connect(d->m_device_inter,
+            &UPowerDeviceInterface::TimeToEmptyChanged,
+            this,
+            [this](const qint64 value) {
+                emit this->timeToEmptyChanged(value);
+            });
+    connect(d->m_device_inter,
+            &UPowerDeviceInterface::TimeToEmptyChanged,
+            this,
+            [this](const qint64 value) {
+                emit this->timeToEmptyChanged(value);
+            });
+    connect(d->m_device_inter,
+            &UPowerDeviceInterface::TimeToFullChanged,
+            this,
+            [this](const qint64 value) {
+                emit this->timeToFullChanged(value);
+            });
+    connect(d->m_device_inter,
+            &UPowerDeviceInterface::EnergyRateChanged,
+            this,
+            [this](const double value) {
+                emit this->energyRateChanged(value);
+            });
+    connect(d->m_device_inter,
+            &UPowerDeviceInterface::EnergyChanged,
+            this,
+            [this](const double value) {
+                emit this->energyChanged(value);
+            });
+    connect(d->m_device_inter,
+            &UPowerDeviceInterface::IconNameChanged,
+            this,
+            [this](const QString &value) {
+                emit this->iconNameChanged(value);
+            });
 }
 
-DPowerDevice::~DPowerDevice() {}
+DPowerDevice::~DPowerDevice() { }
 
 // properties
 
@@ -244,14 +271,17 @@ QString DPowerDevice::deviceName() const
 }
 
 // pubilc slots
-DExpected<QList<History>> DPowerDevice::history(const QString &type, const uint timespan, const uint resolution) const
+DExpected<QList<History>> DPowerDevice::history(const QString &type,
+                                                const uint timespan,
+                                                const uint resolution) const
 {
     Q_D(const DPowerDevice);
-    QDBusPendingReply<QList<History_p>> reply = d->m_device_inter->getHistory(type, timespan, resolution);
+    QDBusPendingReply<QList<History_p>> reply =
+            d->m_device_inter->getHistory(type, timespan, resolution);
     reply.waitForFinished();
     QList<History> historys;
     if (!reply.isValid()) {
-        return DUnexpected<>{DError{reply.error().type(), reply.error().message()}};
+        return DUnexpected<>{ DError{ reply.error().type(), reply.error().message() } };
     }
 
     for (auto &&historyDBus : reply.value()) {
@@ -272,7 +302,7 @@ DExpected<QList<Statistic>> DPowerDevice::statistics(const QString &type) const
     reply.waitForFinished();
     QList<Statistic> statistics;
     if (!reply.isValid()) {
-        return DUnexpected<>{DError{reply.error().type(), reply.error().message()}};
+        return DUnexpected<>{ DError{ reply.error().type(), reply.error().message() } };
     }
 
     for (auto &&statisticDBus : reply.value()) {
@@ -290,7 +320,7 @@ DExpected<void> DPowerDevice::refresh()
     QDBusPendingReply<> reply = d->m_device_inter->refresh();
     reply.waitForFinished();
     if (!reply.isValid()) {
-        return DUnexpected<>{DError{reply.error().type(), reply.error().message()}};
+        return DUnexpected<>{ DError{ reply.error().type(), reply.error().message() } };
     }
     return {};
 }

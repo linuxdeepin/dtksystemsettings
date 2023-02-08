@@ -2,11 +2,15 @@
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 #include "dsystemtime.h"
-#include <QCoreApplication>
-#include <iostream>
+
 #include <qdebug.h>
-#include <qobject.h>
 #include <qeventloop.h>
+#include <qobject.h>
+
+#include <QCoreApplication>
+
+#include <iostream>
+
 DSYSTEMTIME_USE_NAMESPACE
 int main(int argc, char **argv)
 {

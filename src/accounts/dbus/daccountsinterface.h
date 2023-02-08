@@ -4,9 +4,11 @@
 
 #pragma once
 
-#include <QDBusPendingReply>
-#include <DDBusInterface>
 #include "dtkaccounts_global.h"
+
+#include <DDBusInterface>
+
+#include <QDBusPendingReply>
 
 DACCOUNTS_BEGIN_NAMESPACE
 using DTK_CORE_NAMESPACE::DDBusInterface;
@@ -24,7 +26,9 @@ public:
 
 public slots:
     QDBusPendingReply<QDBusObjectPath> cacheUser(const QString &name);
-    QDBusPendingReply<QDBusObjectPath> createUser(const QString &name, const QString &fullname, const qint32 accountType);
+    QDBusPendingReply<QDBusObjectPath> createUser(const QString &name,
+                                                  const QString &fullname,
+                                                  const qint32 accountType);
     QDBusPendingReply<void> deleteUser(const qint64 id, const bool removeFiles);
     QDBusPendingReply<QDBusObjectPath> findUserById(const qint64 id);
     QDBusPendingReply<QDBusObjectPath> findUserByName(const QString &name);

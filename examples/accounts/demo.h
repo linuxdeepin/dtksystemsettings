@@ -5,8 +5,9 @@
 #pragma once
 
 #include "daccountsmanager.h"
-#include "daccountsuser.h"
 #include "daccountstypes.h"
+#include "daccountsuser.h"
+
 #include <QObject>
 
 DACCOUNTS_USE_NAMESPACE
@@ -20,5 +21,5 @@ public:
 
 private:
     DAccountsManager manager;
-    QSharedPointer<DAccountsUser> user{nullptr};
+    QSharedPointer<DAccountsUser> user{ nullptr };
 };

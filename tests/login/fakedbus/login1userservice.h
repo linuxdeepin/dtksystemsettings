@@ -4,16 +4,17 @@
 
 #pragma once
 
-#include <qobject.h>
-#include <QtDBus>
-
 #include "dlogintypes_p.h"
+
+#include <qobject.h>
+
+#include <QtDBus>
 
 QT_BEGIN_NAMESPACE
 class QByteArray;
-template <class T>
+template<class T>
 class QList;
-template <class Key, class Value>
+template<class Key, class Value>
 class QMap;
 class QString;
 class QStringList;
@@ -22,6 +23,7 @@ QT_END_NAMESPACE
 
 DLOGIN_BEGIN_NAMESPACE
 struct DBusSessionPath;
+
 /*
  * Adaptor class for interface org.freedesktop.login1.User
  */
@@ -35,7 +37,7 @@ public:
                       QObject *parent = nullptr);
     ~Login1UserService() override;
 
-public:  // PROPERTIES
+public: // PROPERTIES
     Q_PROPERTY(DBusSessionPath Display MEMBER m_display READ display);
     Q_PROPERTY(bool IdleHint MEMBER m_idleHint READ idleHint);
     Q_PROPERTY(bool Linger MEMBER m_linger READ linger);
@@ -68,7 +70,7 @@ public:  // PROPERTIES
     quint64 timestamp() const;
     quint64 timestampMonotonic() const;
 
-public Q_SLOTS:  // METHODS
+public Q_SLOTS: // METHODS
     void Kill(const qint32 signalNumber);
     void Terminate();
 

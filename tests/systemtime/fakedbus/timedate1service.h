@@ -5,12 +5,13 @@
 #ifndef TIMEDATE1SERVICE_H
 #define TIMEDATE1SERVICE_H
 
+#include <ddbusinterface.h>
+#include <qdbuspendingreply.h>
 #include <qobject.h>
 #include <qscopedpointer.h>
-#include <qdbuspendingreply.h>
-#include <ddbusinterface.h>
 
 using DTK_CORE_NAMESPACE::DDBusInterface;
+
 class TimeDate1Service : public QObject
 {
     Q_OBJECT
@@ -36,7 +37,9 @@ public:
     // slot
 public slots:
     Q_SCRIPTABLE QStringList ListTimezones() const;
-    Q_SCRIPTABLE void SetLocalRTC(const bool local_rtc, const bool fix_system, const bool interactive);
+    Q_SCRIPTABLE void SetLocalRTC(const bool local_rtc,
+                                  const bool fix_system,
+                                  const bool interactive);
     Q_SCRIPTABLE void SetNTP(const bool use_NTP, const bool interactive);
     Q_SCRIPTABLE void SetTime(const qint64 usec_utc, const bool relative, const bool interactive);
     Q_SCRIPTABLE void SetTimezone(const QString &timezone, const bool interactive);

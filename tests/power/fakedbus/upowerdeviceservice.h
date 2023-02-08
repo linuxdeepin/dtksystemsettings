@@ -3,11 +3,13 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 #pragma once
 #include "upowertypes_p.h"
+
+#include <qdatetime.h>
+#include <qdbuspendingreply.h>
+#include <qdebug.h>
 #include <qobject.h>
 #include <qscopedpointer.h>
-#include <qdebug.h>
-#include <qdbuspendingreply.h>
-#include <qdatetime.h>
+
 class UPowerDeviceService : public QObject
 {
     Q_OBJECT
@@ -81,8 +83,9 @@ public:
     QString deviceName() const;
 
 public slots:
-    Q_SCRIPTABLE QList<DTK_POWER_NAMESPACE::History_p>
-    GetHistory(const QString &type, const uint timespan, const uint resolution) const;
+    Q_SCRIPTABLE QList<DTK_POWER_NAMESPACE::History_p> GetHistory(const QString &type,
+                                                                  const uint timespan,
+                                                                  const uint resolution) const;
     Q_SCRIPTABLE QList<DTK_POWER_NAMESPACE::Statistic_p> GetStatistics(const QString &type) const;
     // void refresh();
 private:

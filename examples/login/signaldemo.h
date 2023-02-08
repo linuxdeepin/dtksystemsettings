@@ -7,6 +7,7 @@
 #include "dloginmanager.h"
 
 DLOGIN_USE_NAMESPACE
+
 class SignalDemo : public LoginDemo
 {
     Q_OBJECT

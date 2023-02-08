@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
 #include "daccountstypes_p.h"
+
 #include <QDBusMetaType>
 
 DACCOUNTS_BEGIN_NAMESPACE

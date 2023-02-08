@@ -57,16 +57,17 @@ public:
     explicit FakeAccountsManagerService(QObject *parent = nullptr);
     virtual ~FakeAccountsManagerService();
 
-    bool m_createUserTrigger{false};
-    bool m_deleteUserTrigger{false};
-    bool m_userListTrigger{false};
-    bool m_findUserByIdTrigger{false};
-    bool m_findUserByNameTrigger{false};
-    bool m_presetGroupsTrigger{false};
-    bool m_isPasswordValidTrigger{false};
-    bool m_isUsernameValidTrigger{false};
+    bool m_createUserTrigger{ false };
+    bool m_deleteUserTrigger{ false };
+    bool m_userListTrigger{ false };
+    bool m_findUserByIdTrigger{ false };
+    bool m_findUserByNameTrigger{ false };
+    bool m_presetGroupsTrigger{ false };
+    bool m_isPasswordValidTrigger{ false };
+    bool m_isUsernameValidTrigger{ false };
 
 public slots:
+
     Q_SCRIPTABLE QList<QDBusObjectPath> ListCachedUsers()
     {
         m_userListTrigger = true;
@@ -79,7 +80,7 @@ public slots:
         Q_UNUSED(fullName)
         Q_UNUSED(type)
         m_createUserTrigger = true;
-        return QDBusObjectPath{"/com/deepin/daemon/FakeAccounts/User1000"};
+        return QDBusObjectPath{ "/com/deepin/daemon/FakeAccounts/User1000" };
     }
 
     Q_SCRIPTABLE void DeleteUser(QString name, bool rmFiles)
@@ -93,22 +94,23 @@ public slots:
     {
         Q_UNUSED(uid)
         m_findUserByIdTrigger = true;
-        return QDBusObjectPath{"/com/deepin/daemon/FakeAccounts/User1000"};
+        return QDBusObjectPath{ "/com/deepin/daemon/FakeAccounts/User1000" };
     }
 
     Q_SCRIPTABLE QDBusObjectPath FindUserByName(QString name)
     {
         Q_UNUSED(name)
         m_findUserByNameTrigger = true;
-        return QDBusObjectPath{"/com/deepin/daemon/FakeAccounts/User1000"};
+        return QDBusObjectPath{ "/com/deepin/daemon/FakeAccounts/User1000" };
     }
 
     Q_SCRIPTABLE QStringList GetPresetGroups(qint32 type)
     {
         Q_UNUSED(type)
         m_presetGroupsTrigger = true;
-        return {"preset", "printer"};
+        return { "preset", "printer" };
     }
+
     Q_SCRIPTABLE bool IsPasswordValid(const QString &password, QString &msg, qint32 &code)
     {
         Q_UNUSED(password)
@@ -117,6 +119,7 @@ public slots:
         m_isPasswordValidTrigger = true;
         return true;
     }
+
     Q_SCRIPTABLE bool IsUsernameValid(const QString &username, QString &msg, qint32 &code)
     {
         Q_UNUSED(username)

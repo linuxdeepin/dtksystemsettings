@@ -14,4 +14,5 @@ SystemPowerInterface::SystemPowerInterface(QObject *parent)
 
     m_inter.reset(new DDBusInterface(Service, Path, Interface, QDBusConnection::systemBus(), this));
 }
+
 DPOWER_END_NAMESPACE

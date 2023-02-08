@@ -3,17 +3,17 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
 #pragma once
-#include <qobject.h>
+#include "dlogintypes_p.h"
+
 #include <qdbusabstractadaptor.h>
 #include <qdbusunixfiledescriptor.h>
-
-#include "dlogintypes_p.h"
+#include <qobject.h>
 
 QT_BEGIN_NAMESPACE
 class QByteArray;
-template <class T>
+template<class T>
 class QList;
-template <class Key, class Value>
+template<class Key, class Value>
 class QMap;
 class QString;
 class QStringList;
@@ -36,7 +36,7 @@ public:
                          QObject *parent = nullptr);
     ~Login1ManagerService() override;
 
-public:  // PROPERTIES
+public: // PROPERTIES
     Q_PROPERTY(QString BlockInhibited MEMBER m_blockInhibited READ blockInhibited);
     Q_PROPERTY(QString DelayInhibited MEMBER m_delayInhibited READ delayInhibited);
     Q_PROPERTY(bool Docked MEMBER m_docked READ docked);
@@ -103,7 +103,7 @@ public:  // PROPERTIES
     quint64 sessionsMax() const;
     quint64 userStopDelayUSec() const;
 
-public Q_SLOTS:  // METHODS
+public Q_SLOTS: // METHODS
     void ActivateSession(const QString &session_id);
     void ActivateSessionOnSeat(const QString &session_id, const QString &seat_id);
     QString CanHalt();
@@ -122,7 +122,8 @@ public Q_SLOTS:  // METHODS
     void Halt(bool interactive);
     void Hibernate(bool interactive);
     void HybridSleep(bool interactive);
-    QDBusUnixFileDescriptor Inhibit(const QString &what, const QString &who, const QString &why, const QString &mode);
+    QDBusUnixFileDescriptor
+    Inhibit(const QString &what, const QString &who, const QString &why, const QString &mode);
     void KillSession(const QString &session_id, const QString &who, qint32 signal_number);
     void KillUser(quint32 uid, qint32 signal_number);
     QList<DTK_LOGIN_NAMESPACE::DBusInhibitor> ListInhibitors();
@@ -141,7 +142,7 @@ public Q_SLOTS:  // METHODS
     void TerminateSession(const QString &session_id);
     void TerminateUser(quint32 uid);
 
-Q_SIGNALS:  // SIGNALS
+Q_SIGNALS: // SIGNALS
     void PrepareForShutdown(bool start);
     void PrepareForSleep(bool start);
     void SeatNew(const QString &seat_id, const QDBusObjectPath &object_path);
@@ -235,4 +236,5 @@ private:
     QString m_service;
     QString m_path;
 };
+
 DLOGIN_END_NAMESPACE

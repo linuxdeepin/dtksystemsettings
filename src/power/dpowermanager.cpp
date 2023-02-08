@@ -3,16 +3,16 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
 #include "dpowermanager.h"
+
+#include "dbus/upowermanagerinterface.h"
+#include "dkbdbacklight.h"
+#include "dpowerdevice.h"
 #include "dpowermanager_p.h"
 
-#include <qdebug.h>
-#include <qsharedpointer.h>
 #include <qdbusconnection.h>
 #include <qdbusreply.h>
-
-#include "dpowerdevice.h"
-#include "dkbdbacklight.h"
-#include "dbus/upowermanagerinterface.h"
+#include <qdebug.h>
+#include <qsharedpointer.h>
 
 DPOWER_BEGIN_NAMESPACE
 using DCORE_NAMESPACE::DError;
@@ -22,18 +22,30 @@ using DCORE_NAMESPACE::DUnexpected;
 void DPowerManagerPrivate::connectDBusSignal()
 {
     Q_Q(DPowerManager);
-    connect(m_manager_inter, &UPowerManagerInterface::DeviceAdded, q, [q](const QDBusObjectPath &path) {
-        emit q->deviceAdded(path.path().mid(32));
-    });
-    connect(m_manager_inter, &UPowerManagerInterface::DeviceRemoved, q, [q](const QDBusObjectPath &path) {
-        emit q->deviceRemoved(path.path().mid(32));
-    });
-    connect(m_manager_inter, &UPowerManagerInterface::LidIsClosedChanged, q, [q](const bool &value) {
-        emit q->lidIsClosedChanged(value);
-    });
-    connect(m_manager_inter, &UPowerManagerInterface::LidIsPresentChanged, q, [q](const bool &value) {
-        emit q->lidIsPresentChanged(value);
-    });
+    connect(m_manager_inter,
+            &UPowerManagerInterface::DeviceAdded,
+            q,
+            [q](const QDBusObjectPath &path) {
+                emit q->deviceAdded(path.path().mid(32));
+            });
+    connect(m_manager_inter,
+            &UPowerManagerInterface::DeviceRemoved,
+            q,
+            [q](const QDBusObjectPath &path) {
+                emit q->deviceRemoved(path.path().mid(32));
+            });
+    connect(m_manager_inter,
+            &UPowerManagerInterface::LidIsClosedChanged,
+            q,
+            [q](const bool &value) {
+                emit q->lidIsClosedChanged(value);
+            });
+    connect(m_manager_inter,
+            &UPowerManagerInterface::LidIsPresentChanged,
+            q,
+            [q](const bool &value) {
+                emit q->lidIsPresentChanged(value);
+            });
 }
 
 DPowerManager::DPowerManager(QObject *parent)
@@ -45,7 +57,7 @@ DPowerManager::DPowerManager(QObject *parent)
     d->connectDBusSignal();
 }
 
-DPowerManager::~DPowerManager() {}
+DPowerManager::~DPowerManager() { }
 
 // properties
 bool DPowerManager::lidIsClosed() const
@@ -109,7 +121,7 @@ DExpected<QStringList> DPowerManager::devices() const
     reply.waitForFinished();
     QStringList devices;
     if (!reply.isValid()) {
-        return DUnexpected{DError{reply.error().type(), reply.error().message()}};
+        return DUnexpected{ DError{ reply.error().type(), reply.error().message() } };
     }
     for (auto &&deviceDBus : reply.value()) {
         devices.append(deviceDBus.path().mid(32));
@@ -123,7 +135,7 @@ DExpected<QString> DPowerManager::criticalAction() const
     QDBusPendingReply<QString> reply = d->m_manager_inter->getCriticalAction();
     reply.waitForFinished();
     if (!reply.isValid()) {
-        return DUnexpected{DError{reply.error().type(), reply.error().message()}};
+        return DUnexpected{ DError{ reply.error().type(), reply.error().message() } };
     }
     return reply.value();
 }

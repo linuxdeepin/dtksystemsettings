@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
 #include "dlogintypes_p.h"
+
 #include <qdbusmetatype.h>
 
 DLOGIN_BEGIN_NAMESPACE
@@ -21,6 +22,7 @@ bool DBusSessionPath::operator==(const DBusSessionPath &v)
 {
     return this->path == v.path && this->sessionId == v.sessionId;
 }
+
 bool DBusSessionPath::operator!=(const DBusSessionPath &v)
 {
     return !(*this == v);
@@ -30,6 +32,7 @@ bool DBusSeat::operator==(const DBusSeat &v)
 {
     return this->seatId == v.seatId && this->path == v.path;
 }
+
 bool DBusSeat::operator!=(const DBusSeat &v)
 {
     return !(*this == v);
@@ -39,6 +42,7 @@ bool DBusSeatPath::operator==(const DBusSeatPath &v)
 {
     return this->seatId == v.seatId && this->path == v.path;
 }
+
 bool DBusSeatPath::operator!=(const DBusSeatPath &v)
 {
     return !(*this == v);
@@ -48,6 +52,7 @@ bool DBusUserPath::operator==(const DBusUserPath &v)
 {
     return this->path == v.path && this->userId == v.userId;
 }
+
 bool DBusUserPath::operator!=(const DBusUserPath &v)
 {
     return !(*this == v);

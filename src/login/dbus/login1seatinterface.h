@@ -3,14 +3,16 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
 #pragma once
-#include "dtklogin_global.h"
-#include <qobject.h>
 #include "dlogintypes_p.h"
-#include <qdbuspendingreply.h>
+#include "dtklogin_global.h"
+
 #include <ddbusinterface.h>
+#include <qdbuspendingreply.h>
+#include <qobject.h>
 
 using DTK_CORE_NAMESPACE::DDBusInterface;
 DLOGIN_BEGIN_NAMESPACE
+
 class Login1SeatInterface : public QObject
 {
     Q_OBJECT

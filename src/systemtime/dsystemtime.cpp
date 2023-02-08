@@ -3,18 +3,21 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
 #include "dsystemtime.h"
-#include "dsystemtime_p.h"
+
+#include "dbus/dsystemtimetypes_p.h"
 #include "dbus/timedate1interface.h"
 #include "dbus/timesync1interface.h"
-#include "dbus/dsystemtimetypes_p.h"
+#include "dsystemtime_p.h"
+
+#include <dexpected.h>
+#include <qdatetime.h>
 #include <qdbusreply.h>
 #include <qdebug.h>
-#include <qdatetime.h>
-#include <dexpected.h>
 DSYSTEMTIME_BEGIN_NAMESPACE
 using DCORE_NAMESPACE::DError;
 using DCORE_NAMESPACE::DExpected;
 using DCORE_NAMESPACE::DUnexpected;
+
 DSystemTime::DSystemTime(QObject *parent)
     : QObject(parent)
     , d_ptr(new DSystemTimePrivate(this))
@@ -112,7 +115,8 @@ quint64 DSystemTime::rootDistanceMaxUSec() const
     return d->m_timesync_inter->rootDistanceMaxUSec();
 }
 
-DSystemTime::~DSystemTime() {}
+DSystemTime::~DSystemTime() { }
+
 // properties
 bool DSystemTime::canNTP() const
 {
@@ -165,7 +169,7 @@ DExpected<QStringList> DSystemTime::listTimezones() const
     reply.waitForFinished();
     QStringList timezones;
     if (!reply.isValid()) {
-        return DUnexpected{DError{reply.error().type(), reply.error().message()}};
+        return DUnexpected{ DError{ reply.error().type(), reply.error().message() } };
     }
     timezones = reply.value();
     return timezones;
@@ -177,7 +181,7 @@ DExpected<void> DSystemTime::setLocalRTC(bool localRTC, bool fixSystem, bool int
     QDBusPendingReply<> reply = d->m_timedate_inter->setLocalRTC(localRTC, fixSystem, interactive);
     reply.waitForFinished();
     if (!reply.isValid()) {
-        return DUnexpected{DError{reply.error().type(), reply.error().message()}};
+        return DUnexpected{ DError{ reply.error().type(), reply.error().message() } };
     }
     return {};
 }
@@ -188,7 +192,7 @@ DExpected<void> DSystemTime::enableNTP(bool useNTP, bool interactive)
     QDBusPendingReply<> reply = d->m_timedate_inter->setNTP(useNTP, interactive);
     reply.waitForFinished();
     if (!reply.isValid()) {
-        return DUnexpected{DError{reply.error().type(), reply.error().message()}};
+        return DUnexpected{ DError{ reply.error().type(), reply.error().message() } };
     }
     return {};
 }
@@ -199,7 +203,7 @@ DExpected<void> DSystemTime::setRelativeTime(qint64 usecUTC, bool interactive)
     QDBusPendingReply<> reply = d->m_timedate_inter->setTime(usecUTC, 1, interactive);
     reply.waitForFinished();
     if (!reply.isValid()) {
-        return DUnexpected{DError{reply.error().type(), reply.error().message()}};
+        return DUnexpected{ DError{ reply.error().type(), reply.error().message() } };
     }
     return {};
 }
@@ -207,10 +211,11 @@ DExpected<void> DSystemTime::setRelativeTime(qint64 usecUTC, bool interactive)
 DExpected<void> DSystemTime::setAbsoluteTime(const QDateTime &time, bool interactive)
 {
     Q_D(DSystemTime);
-    QDBusPendingReply<> reply = d->m_timedate_inter->setTime(time.toMSecsSinceEpoch() * 1000, 0, interactive);
+    QDBusPendingReply<> reply =
+            d->m_timedate_inter->setTime(time.toMSecsSinceEpoch() * 1000, 0, interactive);
     reply.waitForFinished();
     if (!reply.isValid()) {
-        return DUnexpected{DError{reply.error().type(), reply.error().message()}};
+        return DUnexpected{ DError{ reply.error().type(), reply.error().message() } };
     }
     return {};
 }
@@ -221,7 +226,7 @@ DExpected<void> DSystemTime::setTimezone(const QString &timezone, bool interacti
     QDBusPendingReply<> reply = d->m_timedate_inter->setTimezone(timezone, interactive);
     reply.waitForFinished();
     if (!reply.isValid()) {
-        return DUnexpected{DError{reply.error().type(), reply.error().message()}};
+        return DUnexpected{ DError{ reply.error().type(), reply.error().message() } };
     }
     return {};
 }

@@ -4,8 +4,9 @@
 
 #pragma once
 #include "dlogintypes_p.h"
-#include <qdbuspendingreply.h>
+
 #include <ddbusinterface.h>
+#include <qdbuspendingreply.h>
 
 using DTK_CORE_NAMESPACE::DDBusInterface;
 DLOGIN_BEGIN_NAMESPACE
@@ -91,7 +92,9 @@ public slots:
     QDBusPendingReply<> pauseDeviceComplete(quint32 major, quint32 minor);
     QDBusPendingReply<> releaseControl();
     QDBusPendingReply<> releaseDevice(quint32 major, quint32 minor);
-    QDBusPendingReply<> setBrightness(const QString &subsystem, const QString &name, quint32 brightness);
+    QDBusPendingReply<> setBrightness(const QString &subsystem,
+                                      const QString &name,
+                                      quint32 brightness);
     QDBusPendingReply<> setIdleHint(bool idle);
     QDBusPendingReply<> setLockedHint(bool locked);
     QDBusPendingReply<> setType(const QString &type);

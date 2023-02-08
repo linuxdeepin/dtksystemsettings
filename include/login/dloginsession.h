@@ -4,10 +4,10 @@
 
 #pragma once
 
-#include <qobject.h>
-#include <dexpected.h>
-
 #include "dlogintypes.h"
+
+#include <dexpected.h>
+#include <qobject.h>
 
 DLOGIN_BEGIN_NAMESPACE
 using DCORE_NAMESPACE::DExpected;
@@ -95,4 +95,5 @@ private:
     QScopedPointer<DLoginSessionPrivate> d_ptr;
     Q_DECLARE_PRIVATE(DLoginSession)
 };
+
 DLOGIN_END_NAMESPACE

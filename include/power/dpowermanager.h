@@ -4,10 +4,10 @@
 
 #pragma once
 
-#include <qobject.h>
-#include <dexpected.h>
-
 #include "dtkpower_global.h"
+
+#include <dexpected.h>
+#include <qobject.h>
 
 DPOWER_BEGIN_NAMESPACE
 using DCORE_NAMESPACE::DExpected;

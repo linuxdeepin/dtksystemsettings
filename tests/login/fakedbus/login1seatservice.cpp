@@ -4,17 +4,18 @@
 
 #include "login1seatservice.h"
 
-#include <qmetaobject.h>
+#include "dlogintypes_p.h"
+
 #include <qbytearray.h>
 #include <qlist.h>
 #include <qmap.h>
+#include <qmetaobject.h>
 #include <qstring.h>
 #include <qstringlist.h>
 #include <qvariant.h>
 
-#include "dlogintypes_p.h"
-
 DLOGIN_BEGIN_NAMESPACE
+
 /*
  * Implementation of adaptor class Login1SeatAdaptor
  */
@@ -82,14 +83,17 @@ QString Login1SeatService::id() const
 {
     return m_id;
 }
+
 quint64 Login1SeatService::idleSinceHint() const
 {
     return m_idleSinceHint;
 }
+
 quint64 Login1SeatService::idleSinceHintMonotonic() const
 {
     return m_idleSinceHintMonotonic;
 }
+
 QList<DBusSessionPath> Login1SeatService::sessions() const
 {
     return m_sessions;
@@ -99,14 +103,17 @@ void Login1SeatService::ActivateSession(const QString &sessionId)
 {
     m_sessionId = sessionId;
 }
+
 void Login1SeatService::SwitchTo(const quint32 VTNr)
 {
     m_VTNr = VTNr;
 }
+
 void Login1SeatService::SwitchToNext()
 {
     m_VTNr++;
 }
+
 void Login1SeatService::SwitchToPrevious()
 {
     m_VTNr--;

@@ -4,15 +4,16 @@
 
 #pragma once
 
-#include <qobject.h>
-#include <QtDBus>
-
 #include "dlogintypes_p.h"
+
+#include <qobject.h>
+
+#include <QtDBus>
 QT_BEGIN_NAMESPACE
 class QByteArray;
-template <class T>
+template<class T>
 class QList;
-template <class Key, class Value>
+template<class Key, class Value>
 class QMap;
 class QString;
 class QStringList;
@@ -20,6 +21,7 @@ class QVariant;
 QT_END_NAMESPACE
 
 DLOGIN_BEGIN_NAMESPACE
+
 /*
  * Adaptor class for interface org.freedesktop.login1.Seat
  */
@@ -33,7 +35,7 @@ public:
                       QObject *parent = nullptr);
     ~Login1SeatService() override;
 
-public:  // PROPERTIES
+public: // PROPERTIES
     Q_PROPERTY(DBusSessionPath ActiveSession MEMBER m_activeSession READ activeSession);
     Q_PROPERTY(bool CanGraphical MEMBER m_canGraphical READ canGraphical);
     Q_PROPERTY(bool CanTTY MEMBER m_canTTY READ canTTY);
@@ -52,7 +54,7 @@ public:  // PROPERTIES
     quint64 idleSinceHintMonotonic() const;
     QList<DTK_LOGIN_NAMESPACE::DBusSessionPath> sessions() const;
 
-public Q_SLOTS:  // METHODS
+public Q_SLOTS: // METHODS
     void ActivateSession(const QString &sessionId);
     void SwitchTo(const quint32 VTNr);
     void SwitchToNext();
@@ -76,4 +78,5 @@ private:
     QString m_service;
     QString m_path;
 };
+
 DLOGIN_END_NAMESPACE

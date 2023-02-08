@@ -9,6 +9,7 @@
 DSYSTEMTIME_BEGIN_NAMESPACE
 class TimeDate1Interface;
 class TimeSync1Interface;
+
 class DSystemTimePrivate : public QObject
 {
     Q_OBJECT
@@ -17,7 +18,8 @@ public:
         : q_ptr(parent)
     {
     }
-    virtual ~DSystemTimePrivate() {}
+
+    virtual ~DSystemTimePrivate() { }
 
 public:
     TimeDate1Interface *m_timedate_inter;

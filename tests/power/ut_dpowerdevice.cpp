@@ -7,11 +7,13 @@
 #include "dpowerdevice.h"
 #include "upowerdeviceservice.h"
 #include "upowertypes_p.h"
-#include <QDBusMessage>
-#include <QDBusConnection>
-#include <QDBusReply>
+
 #include <qdatetime.h>
 #include <qdebug.h>
+
+#include <QDBusConnection>
+#include <QDBusMessage>
+#include <QDBusReply>
 
 DPOWER_USE_NAMESPACE
 
@@ -24,6 +26,7 @@ public:
         m_fakeInterface = new UPowerDeviceService();
         m_dpowerDevice = new DPowerDevice("display");
     }
+
     // 在测试套件中的最后一个测试用例运行结束后，TearDownTestCase 函数会被调用
     static void TearDownTestCase()
     {
@@ -32,21 +35,24 @@ public:
         m_fakeInterface = nullptr;
         m_dpowerDevice = nullptr;
     }
+
     // 每个测试用例开始前，SetUp 函数都会被被调用
-    void SetUp() override {}
+    void SetUp() override { }
+
     // 每个测试用例运行结束后，TearDown 函数都会被被调用
-    void TearDown() override {}
+    void TearDown() override { }
 
     static UPowerDeviceService *m_fakeInterface;
     static DPowerDevice *m_dpowerDevice;
 };
 
-QT_BEGIN_NAMESPACE  // for QString support
-    inline void
-    PrintTo(const QString &qString, ::std::ostream *os)
+QT_BEGIN_NAMESPACE // for QString support
+        inline void
+        PrintTo(const QString &qString, ::std::ostream *os)
 {
     *os << qUtf8Printable(qString);
 }
+
 QT_END_NAMESPACE
 
 UPowerDeviceService *TestDPowerDevice::m_fakeInterface = nullptr;
@@ -219,17 +225,20 @@ TEST_F(TestDPowerDevice, warningLevel)
     ASSERT_EQ(2, m_fakeInterface->warningLevel());
     ASSERT_EQ(2, m_dpowerDevice->warningLevel());
 }
+
 TEST_F(TestDPowerDevice, updateTime)
 {
     ASSERT_EQ(166443275, m_fakeInterface->updateTime());
     qDebug() << m_dpowerDevice->updateTime();
     ASSERT_EQ(166443275, m_dpowerDevice->updateTime().toSecsSinceEpoch());
 }
+
 TEST_F(TestDPowerDevice, deviceName)
 {
     ASSERT_EQ("battery", m_fakeInterface->deviceName());
     ASSERT_EQ("display", m_dpowerDevice->deviceName());
 }
+
 TEST_F(TestDPowerDevice, history)
 {
     auto reval = m_fakeInterface->GetHistory("type", 100, 100);
@@ -243,6 +252,7 @@ TEST_F(TestDPowerDevice, history)
     ASSERT_EQ(100, reval1[0].state);
     ASSERT_EQ(200, reval1[1].value);
 }
+
 TEST_F(TestDPowerDevice, statistic)
 {
     auto reval = m_fakeInterface->GetStatistics("type");

@@ -3,9 +3,10 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
 #include "accountsuserservice.h"
-#include <QDebug>
-#include <QDBusError>
+
 #include <QDBusConnection>
+#include <QDBusError>
+#include <QDebug>
 
 FakeAccountsUserService::FakeAccountsUserService(QObject *parent)
     : QObject(parent)
