@@ -9,7 +9,6 @@
 #include <qscopedpointer.h>
 #include <ddbusinterface.h>
 
-
 DPOWER_BEGIN_NAMESPACE
 using DCORE_NAMESPACE::DDBusInterface;
 class DaemonPowerInterface : public QObject

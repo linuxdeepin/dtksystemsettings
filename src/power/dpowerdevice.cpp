@@ -12,8 +12,8 @@
 #include "dbus/upowerdeviceinterface.h"
 
 DPOWER_BEGIN_NAMESPACE
-using DCORE_NAMESPACE::DExpected;
 using DCORE_NAMESPACE::DError;
+using DCORE_NAMESPACE::DExpected;
 using DCORE_NAMESPACE::DUnexpected;
 
 DPowerDevice::DPowerDevice(const QString &name, QObject *parent)

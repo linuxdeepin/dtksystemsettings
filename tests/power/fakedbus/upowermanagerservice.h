@@ -22,7 +22,7 @@ public:
     inline bool lidIsClosed() const { return false; }
     inline bool lidIsPresent() const { return false; }
     inline bool onBattery() const { return true; }
-    inline QString daemonVersion() const {return "YES";}
+    inline QString daemonVersion() const { return "YES"; }
 
 public slots:
     Q_SCRIPTABLE void Reset() { m_reset = true; }

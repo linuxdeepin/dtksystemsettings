@@ -16,9 +16,9 @@
 #include "dloginutils.h"
 
 DLOGIN_BEGIN_NAMESPACE
+using DCORE_NAMESPACE::DError;
 using DCORE_NAMESPACE::DExpected;
 using DCORE_NAMESPACE::DUnexpected;
-using DCORE_NAMESPACE::DError;
 
 DLoginUser::DLoginUser(const QString &path, QObject *parent)
     : QObject(parent)
