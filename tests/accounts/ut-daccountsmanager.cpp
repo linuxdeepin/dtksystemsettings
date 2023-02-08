@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
 #include <gtest/gtest.h>
+
 #include "daccountsmanager.h"
 #include "fakedbus/accountsmanagerservice.h"
 
@@ -16,16 +17,19 @@ public:
         m_fakeinter = new FakeAccountsManagerService();
         m_damanager = new DAccountsManager();
     }
+
     static void TearDownTestCase()
     {
         delete m_fakeinter;
         delete m_damanager;
     }
-    void SetUp() override {}
-    void TearDown() override {}
 
-    static inline DAccountsManager *m_damanager{nullptr};
-    static inline FakeAccountsManagerService *m_fakeinter{nullptr};
+    void SetUp() override { }
+
+    void TearDown() override { }
+
+    static inline DAccountsManager *m_damanager{ nullptr };
+    static inline FakeAccountsManagerService *m_fakeinter{ nullptr };
 };
 
 TEST_F(TestDAccountsManager, userList)

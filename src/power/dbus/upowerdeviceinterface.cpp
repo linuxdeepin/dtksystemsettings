@@ -3,8 +3,10 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
 #include "upowerdeviceinterface.h"
+
 #include <qglobal.h>
 #include <qvariant.h>
+
 DPOWER_BEGIN_NAMESPACE
 UPowerDeviceInterface::UPowerDeviceInterface(const QString &name, QObject *parent)
     : QObject(parent)
@@ -27,7 +29,7 @@ UPowerDeviceInterface::UPowerDeviceInterface(const QString &name, QObject *paren
     m_inter = new DDBusInterface(Service, Path, Interface, connection, this);
 }
 
-UPowerDeviceInterface::~UPowerDeviceInterface() {}
+UPowerDeviceInterface::~UPowerDeviceInterface() { }
 
 // properties
 bool UPowerDeviceInterface::hasHistory() const
@@ -187,16 +189,19 @@ QString UPowerDeviceInterface::deviceName() const
 
 // pubilc slots
 
-QDBusPendingReply<QList<History_p>>
-UPowerDeviceInterface::getHistory(const QString &type, const quint32 timespan, const quint32 resolution) const
+QDBusPendingReply<QList<History_p>> UPowerDeviceInterface::getHistory(
+        const QString &type, const quint32 timespan, const quint32 resolution) const
 {
-    return m_inter->asyncCallWithArgumentList(
-        "GetHistory", {QVariant::fromValue(type), QVariant::fromValue(timespan), QVariant::fromValue(resolution)});
+    return m_inter->asyncCallWithArgumentList("GetHistory",
+                                              { QVariant::fromValue(type),
+                                                QVariant::fromValue(timespan),
+                                                QVariant::fromValue(resolution) });
 }
 
-QDBusPendingReply<QList<Statistic_p>> UPowerDeviceInterface::getStatistics(const QString &type) const
+QDBusPendingReply<QList<Statistic_p>>
+UPowerDeviceInterface::getStatistics(const QString &type) const
 {
-    return m_inter->asyncCallWithArgumentList("GetStatistics", {QVariant::fromValue(type)});
+    return m_inter->asyncCallWithArgumentList("GetStatistics", { QVariant::fromValue(type) });
 }
 
 QDBusPendingReply<> UPowerDeviceInterface::refresh()

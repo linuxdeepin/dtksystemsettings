@@ -3,8 +3,9 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
 #include <gtest/gtest.h>
-#include "daccountsuser.h"
+
 #include "daccountstypes.h"
+#include "daccountsuser.h"
 #include "fakedbus/accountsuserservice.h"
 
 DACCOUNTS_USE_NAMESPACE
@@ -17,16 +18,19 @@ public:
         m_fakeservice = new FakeAccountsUserService();
         m_dauser = new DAccountsUser(1000);
     }
+
     static void TearDownTestCase()
     {
         delete m_fakeservice;
         delete m_dauser;
     }
-    void SetUp() override {}
-    void TearDown() override {}
 
-    static inline DAccountsUser *m_dauser{nullptr};
-    static inline FakeAccountsUserService *m_fakeservice{nullptr};
+    void SetUp() override { }
+
+    void TearDown() override { }
+
+    static inline DAccountsUser *m_dauser{ nullptr };
+    static inline FakeAccountsUserService *m_fakeservice{ nullptr };
 };
 
 TEST_F(TestDAccountsUser, accountType)
@@ -55,10 +59,10 @@ TEST_F(TestDAccountsUser, fullName)
 
 TEST_F(TestDAccountsUser, layoutList)
 {
-    QList<QByteArray> tmp{"cn;"};
+    QList<QByteArray> tmp{ "cn;" };
     EXPECT_EQ(tmp, m_dauser->layoutList());
     tmp.clear();
-    tmp.append({"en;", "cn;"});
+    tmp.append({ "en;", "cn;" });
     m_dauser->setLayoutList(tmp);
     EXPECT_EQ(tmp, m_dauser->layoutList());
 }

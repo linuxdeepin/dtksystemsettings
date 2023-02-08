@@ -110,17 +110,17 @@ QDBusPendingReply<QList<qint32>> DSystemUserInterface::getSecretQuestions() cons
 
 QDBusPendingReply<void> DSystemUserInterface::addGroup(const QString &group)
 {
-    return m_inter->asyncCallWithArgumentList("AddGroup", {QVariant::fromValue(group)});
+    return m_inter->asyncCallWithArgumentList("AddGroup", { QVariant::fromValue(group) });
 }
 
 QDBusPendingReply<void> DSystemUserInterface::deleteGroup(const QString &group)
 {
-    return m_inter->asyncCallWithArgumentList("DeleteGroup", {QVariant::fromValue(group)});
+    return m_inter->asyncCallWithArgumentList("DeleteGroup", { QVariant::fromValue(group) });
 }
 
 QDBusPendingReply<void> DSystemUserInterface::deleteIconFile(const QString &icon)
 {
-    return m_inter->asyncCallWithArgumentList("DeleteIconFile", {QVariant::fromValue(icon)});
+    return m_inter->asyncCallWithArgumentList("DeleteIconFile", { QVariant::fromValue(icon) });
 }
 
 QDBusPendingReply<qint32, qint64> DSystemUserInterface::passwordExpiredInfo()
@@ -130,66 +130,72 @@ QDBusPendingReply<qint32, qint64> DSystemUserInterface::passwordExpiredInfo()
 
 QDBusPendingReply<void> DSystemUserInterface::enableNoPasswdLogin(const bool enabled)
 {
-    return m_inter->asyncCallWithArgumentList("EnableNoPasswdLogin", {QVariant::fromValue(enabled)});
+    return m_inter->asyncCallWithArgumentList("EnableNoPasswdLogin",
+                                              { QVariant::fromValue(enabled) });
 }
 
 QDBusPendingReply<void> DSystemUserInterface::setAutomaticLogin(const bool enabled)
 {
-    return m_inter->asyncCallWithArgumentList("SetAutomaticLogin", {QVariant::fromValue(enabled)});
+    return m_inter->asyncCallWithArgumentList("SetAutomaticLogin",
+                                              { QVariant::fromValue(enabled) });
 }
 
 QDBusPendingReply<void> DSystemUserInterface::setHistoryLayout(const QStringList &list)
 {
-    return m_inter->asyncCallWithArgumentList("SetHistoryLayout", {QVariant::fromValue(list)});
+    return m_inter->asyncCallWithArgumentList("SetHistoryLayout", { QVariant::fromValue(list) });
 }
 
 QDBusPendingReply<void> DSystemUserInterface::setIconFile(const QString &iconURI)
 {
-    return m_inter->asyncCallWithArgumentList("SetIconFile", {QVariant::fromValue(iconURI)});
+    return m_inter->asyncCallWithArgumentList("SetIconFile", { QVariant::fromValue(iconURI) });
 }
 
 QDBusPendingReply<void> DSystemUserInterface::setLayout(const QString &layout)
 {
-    return m_inter->asyncCallWithArgumentList("SetLayout", {QVariant::fromValue(layout)});
+    return m_inter->asyncCallWithArgumentList("SetLayout", { QVariant::fromValue(layout) });
 }
 
 QDBusPendingReply<void> DSystemUserInterface::setLocked(const bool locked)
 {
-    return m_inter->asyncCallWithArgumentList("SetLocked", {QVariant::fromValue(locked)});
+    return m_inter->asyncCallWithArgumentList("SetLocked", { QVariant::fromValue(locked) });
 }
 
 QDBusPendingReply<void> DSystemUserInterface::setGroups(const QStringList &groups)
 {
-    return m_inter->asyncCallWithArgumentList("SetGroups", {QVariant::fromValue(groups)});
+    return m_inter->asyncCallWithArgumentList("SetGroups", { QVariant::fromValue(groups) });
 }
 
 QDBusPendingReply<void> DSystemUserInterface::setLocale(const QString &locale)
 {
-    return m_inter->asyncCallWithArgumentList("SetLocale", {QVariant::fromValue(locale)});
+    return m_inter->asyncCallWithArgumentList("SetLocale", { QVariant::fromValue(locale) });
 }
 
 QDBusPendingReply<void> DSystemUserInterface::setMaxPasswordAge(qint32 nDays)
 {
-    return m_inter->asyncCallWithArgumentList("SetMaxPasswordAge", {QVariant::fromValue(nDays)});
+    return m_inter->asyncCallWithArgumentList("SetMaxPasswordAge", { QVariant::fromValue(nDays) });
 }
 
 QDBusPendingReply<void> DSystemUserInterface::setPassword(const QString &password)
 {
-    return m_inter->asyncCallWithArgumentList("SetPassword", {QVariant::fromValue(password)});
+    return m_inter->asyncCallWithArgumentList("SetPassword", { QVariant::fromValue(password) });
 }
 
 QDBusPendingReply<void> DSystemUserInterface::setPasswordHint(const QString &hint)
 {
-    return m_inter->asyncCallWithArgumentList("SetPasswordHint", {QVariant::fromValue(hint)});
+    return m_inter->asyncCallWithArgumentList("SetPasswordHint", { QVariant::fromValue(hint) });
 }
 
-QDBusPendingReply<void> DSystemUserInterface::setSecretQuestions(const QMap<qint32, QByteArray> &list)
+QDBusPendingReply<void>
+DSystemUserInterface::setSecretQuestions(const QMap<qint32, QByteArray> &list)
 {
-    return m_inter->asyncCallWithArgumentList("SetSecretQuestions", {QVariant::fromValue(list)});
+    return m_inter->asyncCallWithArgumentList("SetSecretQuestions", { QVariant::fromValue(list) });
 }
 
-QDBusPendingReply<QList<qint32>> DSystemUserInterface::verifySecretQuestions(const QMap<qint32, QString> &anwsers)
+QDBusPendingReply<QList<qint32>>
+DSystemUserInterface::verifySecretQuestions(const QMap<qint32, QString> &anwsers)
 {
-    return m_inter->asyncCallWithArgumentList("VerifySecretQuestions", {QVariant::fromValue(anwsers)});
+    return m_inter->asyncCallWithArgumentList("VerifySecretQuestions",
+                                              { QVariant::fromValue(anwsers) });
 }
+
 DACCOUNTS_END_NAMESPACE

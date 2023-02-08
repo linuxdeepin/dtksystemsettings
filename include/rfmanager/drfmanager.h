@@ -5,17 +5,21 @@
 #define DRFMANAGER_H
 
 #include "dtkrfmanager_global.h"
-#include <QObject>
-#include <dexpected.h>
 #include "dtksystemsettings_global.h"
+
+#include <dexpected.h>
+
+#include <QObject>
 
 DRFMGR_BEGIN_NAMESPACE
 using DCORE_NAMESPACE::DExpected;
 class DRfmanagerPrivate;
+
 class LIBDTKSYSTEMSETTINGSSHARED_EXPORT DRfmanager : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(bool bluetoothBlocked READ isBluetoothBlocked WRITE blockBluetooth NOTIFY bluetoothBlockedChanged)
+    Q_PROPERTY(bool bluetoothBlocked READ isBluetoothBlocked WRITE blockBluetooth NOTIFY
+                       bluetoothBlockedChanged)
     Q_PROPERTY(bool wifiBlocked READ isWifiBlocked WRITE blockWifi NOTIFY wifiBlockedChanged)
     Q_PROPERTY(int count READ count NOTIFY countChanged)
     Q_PROPERTY(bool allBlocked READ isAllBlocked WRITE blockAll NOTIFY allBlockedChanged)
@@ -93,4 +97,4 @@ Q_CORE_EXPORT QDebug operator<<(QDebug, const DRfmanager::RfDevice &);
 #endif
 
 DRFMGR_END_NAMESPACE
-#endif  // DRFMANAGER_H
+#endif // DRFMANAGER_H

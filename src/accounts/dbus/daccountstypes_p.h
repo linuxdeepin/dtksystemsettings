@@ -4,10 +4,11 @@
 
 #pragma once
 
+#include "dtkaccounts_global.h"
+
 #include <QDBusArgument>
 #include <QMap>
 #include <QVariant>
-#include "dtkaccounts_global.h"
 
 DACCOUNTS_BEGIN_NAMESPACE
 

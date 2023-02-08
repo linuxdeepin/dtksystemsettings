@@ -3,17 +3,17 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
 #include "dloginuser.h"
-#include "dloginuser_p.h"
-
-#include <qdbuspendingreply.h>
-#include <qlist.h>
-#include <qobject.h>
-#include <qdebug.h>
-#include <qdbusconnection.h>
 
 #include "dlogintypes_p.h"
-#include "login1userinterface.h"
+#include "dloginuser_p.h"
 #include "dloginutils.h"
+#include "login1userinterface.h"
+
+#include <qdbusconnection.h>
+#include <qdbuspendingreply.h>
+#include <qdebug.h>
+#include <qlist.h>
+#include <qobject.h>
 
 DLOGIN_BEGIN_NAMESPACE
 using DCORE_NAMESPACE::DError;
@@ -24,7 +24,7 @@ DLoginUser::DLoginUser(const QString &path, QObject *parent)
     : QObject(parent)
     , d_ptr(new DLoginUserPrivate(this))
 {
-#if defined(USE_FAKE_INTERFACE)  // for unit test
+#if defined(USE_FAKE_INTERFACE) // for unit test
     const QString &Service = QStringLiteral("org.freedesktop.fakelogin1");
     QDBusConnection connection = QDBusConnection::sessionBus();
 #else
@@ -38,7 +38,7 @@ DLoginUser::DLoginUser(const QString &path, QObject *parent)
     d->m_inter = new Login1UserInterface(Service, path, connection, this);
 }
 
-DLoginUser::~DLoginUser() {}
+DLoginUser::~DLoginUser() { }
 
 QStringList DLoginUser::sessions() const
 {
@@ -144,7 +144,7 @@ DExpected<void> DLoginUser::kill(qint32 signalNumber)
     QDBusPendingReply<> reply = d->m_inter->kill(signalNumber);
     reply.waitForFinished();
     if (!reply.isValid()) {
-        return DUnexpected{DError{reply.error().type(), reply.error().message()}};
+        return DUnexpected{ DError{ reply.error().type(), reply.error().message() } };
     }
     return {};
 }
@@ -155,7 +155,7 @@ DExpected<void> DLoginUser::terminate()
     QDBusPendingReply<> reply = d->m_inter->terminate();
     reply.waitForFinished();
     if (!reply.isValid()) {
-        return DUnexpected{DError{reply.error().type(), reply.error().message()}};
+        return DUnexpected{ DError{ reply.error().type(), reply.error().message() } };
     }
     return {};
 }

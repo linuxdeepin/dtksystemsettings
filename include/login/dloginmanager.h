@@ -4,12 +4,12 @@
 
 #pragma once
 
+#include "dlogintypes.h"
+
+#include <dexpected.h>
 #include <qobject.h>
 #include <qscopedpointer.h>
 #include <qsharedpointer.h>
-#include <dexpected.h>
-
-#include "dlogintypes.h"
 
 DLOGIN_BEGIN_NAMESPACE
 class DLoginSeat;
@@ -134,7 +134,9 @@ public Q_SLOTS:
     DExpected<void> hibernate(bool interactive = false);
     DExpected<void> hybridSleep(bool interactive = false);
     DExpected<int> inhibit(int what, const QString &who, const QString &why, LoginInhibitMode mode);
-    DExpected<void> killSession(const QString &sessionId, LoginSessionRole who, qint32 signalNumber);
+    DExpected<void> killSession(const QString &sessionId,
+                                LoginSessionRole who,
+                                qint32 signalNumber);
     DExpected<void> killUser(quint32 UID, qint32 signalNumber);
     DExpected<LoginInhibitorList> listInhibitors();
     DExpected<QStringList> listSeats();
@@ -158,4 +160,5 @@ private:
     QScopedPointer<DLoginManagerPrivate> d_ptr;
     Q_DECLARE_PRIVATE(DLoginManager)
 };
+
 DLOGIN_END_NAMESPACE

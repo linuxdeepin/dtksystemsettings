@@ -2,8 +2,10 @@
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
-#include "daccountstypes_p.h"
 #include "duserinterface.h"
+
+#include "daccountstypes_p.h"
+
 #include <qdebug.h>
 
 DACCOUNTS_BEGIN_NAMESPACE
@@ -126,98 +128,99 @@ void DUserInterface::receiveChanged()
     emit ReceivedChanged();
 }
 
-QDBusPendingReply<qint64, qint64, qint64, qint64, qint64, qint64> DUserInterface::getPasswordExpirationPolicy()
+QDBusPendingReply<qint64, qint64, qint64, qint64, qint64, qint64>
+DUserInterface::getPasswordExpirationPolicy()
 {
     return m_inter->asyncCall("GetPasswordExpirationPolicy");
 }
 
 QDBusPendingReply<void> DUserInterface::setAccountType(qint32 accountType)
 {
-    QVariantList args{QVariant::fromValue(accountType)};
+    QVariantList args{ QVariant::fromValue(accountType) };
     return m_inter->asyncCallWithArgumentList("SetAccountType", args);
 }
 
 QDBusPendingReply<void> DUserInterface::setAutomaticLogin(bool enabled)
 {
-    QVariantList args{QVariant::fromValue(enabled)};
+    QVariantList args{ QVariant::fromValue(enabled) };
     return m_inter->asyncCallWithArgumentList("SetAutomaticLogin", args);
 }
 
 QDBusPendingReply<void> DUserInterface::setEmail(const QString &email)
 {
-    QVariantList args{QVariant::fromValue(email)};
+    QVariantList args{ QVariant::fromValue(email) };
     return m_inter->asyncCallWithArgumentList("SetEmail", args);
 }
 
 QDBusPendingReply<void> DUserInterface::setHomeDirectory(const QString &homedir)
 {
-    QVariantList args{QVariant::fromValue(homedir)};
+    QVariantList args{ QVariant::fromValue(homedir) };
     return m_inter->asyncCallWithArgumentList("SetHomeDirectory", args);
 }
 
 QDBusPendingReply<void> DUserInterface::setIconFile(const QString &filename)
 {
-    QVariantList args{QVariant::fromValue(filename)};
+    QVariantList args{ QVariant::fromValue(filename) };
     return m_inter->asyncCallWithArgumentList("SetIconFile", args);
 }
 
 QDBusPendingReply<void> DUserInterface::setLanguage(const QString &language)
 {
-    QVariantList args{QVariant::fromValue(language)};
+    QVariantList args{ QVariant::fromValue(language) };
     return m_inter->asyncCallWithArgumentList("SetLanguage", args);
 }
 
 QDBusPendingReply<void> DUserInterface::setLocation(const QString &location)
 {
-    QVariantList args{QVariant::fromValue(location)};
+    QVariantList args{ QVariant::fromValue(location) };
     return m_inter->asyncCallWithArgumentList("SetLocation", args);
 }
 
 QDBusPendingReply<void> DUserInterface::setLocked(bool locked)
 {
-    QVariantList args{QVariant::fromValue(locked)};
+    QVariantList args{ QVariant::fromValue(locked) };
     return m_inter->asyncCallWithArgumentList("SetLocked", args);
 }
 
 QDBusPendingReply<void> DUserInterface::setPassword(const QString &password, const QString &hint)
 {
-    QVariantList args{QVariant::fromValue(password), QVariant::fromValue(hint)};
+    QVariantList args{ QVariant::fromValue(password), QVariant::fromValue(hint) };
     return m_inter->asyncCallWithArgumentList("SetPassword", args);
 }
 
 QDBusPendingReply<void> DUserInterface::setPasswordHint(const QString &hint)
 {
-    QVariantList args{QVariant::fromValue(hint)};
+    QVariantList args{ QVariant::fromValue(hint) };
     return m_inter->asyncCallWithArgumentList("SetPasswordHint", args);
 }
 
 QDBusPendingReply<void> DUserInterface::setPasswordMode(qint32 mode)
 {
-    QVariantList args{QVariant::fromValue(mode)};
+    QVariantList args{ QVariant::fromValue(mode) };
     return m_inter->asyncCallWithArgumentList("SetPasswordMode", args);
 }
 
 QDBusPendingReply<void> DUserInterface::setRealName(const QString &name)
 {
-    QVariantList args{QVariant::fromValue(name)};
+    QVariantList args{ QVariant::fromValue(name) };
     return m_inter->asyncCallWithArgumentList("SetRealName", args);
 }
 
 QDBusPendingReply<void> DUserInterface::setShell(const QString &shell)
 {
-    QVariantList args{QVariant::fromValue(shell)};
+    QVariantList args{ QVariant::fromValue(shell) };
     return m_inter->asyncCallWithArgumentList("SetShell", args);
 }
 
 QDBusPendingReply<void> DUserInterface::setUserName(const QString &name)
 {
-    QVariantList args{QVariant::fromValue(name)};
+    QVariantList args{ QVariant::fromValue(name) };
     return m_inter->asyncCallWithArgumentList("SetUserName", args);
 }
 
 QDBusPendingReply<void> DUserInterface::setXSession(const QString &x_session)
 {
-    QVariantList args{QVariant::fromValue(x_session)};
+    QVariantList args{ QVariant::fromValue(x_session) };
     return m_inter->asyncCallWithArgumentList("SetXSession", args);
 }
 

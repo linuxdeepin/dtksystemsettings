@@ -4,11 +4,13 @@
 
 #pragma once
 
-#include <QDBusPendingReply>
-#include <QStringList>
-#include <QScopedPointer>
-#include <DDBusInterface>
 #include "daccountstypes.h"
+
+#include <DDBusInterface>
+
+#include <QDBusPendingReply>
+#include <QScopedPointer>
+#include <QStringList>
 
 DACCOUNTS_BEGIN_NAMESPACE
 using DTK_CORE_NAMESPACE::DDBusInterface;
@@ -25,7 +27,9 @@ public:
     QStringList UserList() const;
 
 public slots:
-    QDBusPendingReply<QDBusObjectPath> createUser(const QString &name, const QString &fullName, qint32 accountType);
+    QDBusPendingReply<QDBusObjectPath> createUser(const QString &name,
+                                                  const QString &fullName,
+                                                  qint32 accountType);
     QDBusPendingReply<void> deleteUser(const QString &name, bool rmFiles);
     QDBusPendingReply<QStringList> getPresetGroups(qint32 accountType);
     QDBusPendingReply<bool, QString, qint32> isPasswordValid(const QString &password);

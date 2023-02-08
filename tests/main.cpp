@@ -2,8 +2,9 @@
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
-#include <qcoreapplication.h>
 #include <gtest/gtest.h>
+
+#include <qcoreapplication.h>
 #include <qresource.h>
 #include <qtimer.h>
 #include <sanitizer/asan_interface.h>

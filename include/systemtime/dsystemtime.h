@@ -8,17 +8,18 @@
 #ifndef DSYSTEMTIME_H
 #define DSYSTEMTIME_H
 
+#include "dsystemtimetypes.h"
+#include "dtksystemtime_global.h"
+
+#include <dexpected.h>
+#include <qdatetime.h>
 #include <qobject.h>
 #include <qscopedpointer.h>
-#include <qdatetime.h>
-#include <dexpected.h>
-
-#include "dtksystemtime_global.h"
-#include "dsystemtimetypes.h"
 
 DSYSTEMTIME_BEGIN_NAMESPACE
 using DCORE_NAMESPACE::DExpected;
 class DSystemTimePrivate;
+
 class DSystemTime : public QObject
 {
     Q_OBJECT

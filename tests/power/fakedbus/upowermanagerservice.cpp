@@ -2,6 +2,7 @@
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 #include "upowermanagerservice.h"
+
 #include <qdbusconnection.h>
 #include <qdebug.h>
 

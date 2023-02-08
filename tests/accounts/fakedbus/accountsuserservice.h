@@ -4,8 +4,10 @@
 
 #pragma once
 
-#include <qdbusmetatype.h>
 #include "daccountstypes_p.h"
+
+#include <qdbusmetatype.h>
+
 #include <QDBusArgument>
 
 using questionsType = QMap<qint32, QByteArray>;
@@ -37,7 +39,8 @@ class FakeAccountsUserService : public QObject
                 "    </method>\n"
                 "    <method name=\"GetReminderInfo\">\n"
                 "      <arg direction=\"out\" type=\"(s(iiiiii)(sssss)(sssss)i)\" name=\"info\"/>\n"
-                "      <annotation value=\"Dtk::Accounts::ReminderInfo_p\" name=\"org.qtproject.QtDBus.QtTypeName.info\"/>\n"
+                "      <annotation value=\"Dtk::Accounts::ReminderInfo_p\" "
+                "name=\"org.qtproject.QtDBus.QtTypeName.info\"/>\n"
                 "    </method>\n"
                 "    <method name=\"SetAutomaticLogin\">\n"
                 "      <arg direction=\"in\" type=\"b\" name=\"enabled\"/>\n"
@@ -123,25 +126,25 @@ public:
     Q_PROPERTY(quint64 CreatedTime READ CreatedTime)
     Q_PROPERTY(qint32 PasswordLastChange READ PasswordLastChange)
 
-    qint32 m_accountType{0};
-    bool m_automaticLogin{false};
-    QString m_realName{"test1"};
-    QStringList m_historylayout{"cn;"};
-    QString m_homedirectory{"/home/test"};
-    QString m_iconFile{"file:///var/lib/AccountsService/icons/11.png"};
-    QString m_layout{"cn;"};
-    QString m_locale{"zh_CN.UTF-8"};
-    bool m_locked{false};
-    QString m_passwordhint{"hint"};
-    QString m_shell{"/bin/bash"};
-    QString m_UUID{"3778df97-91e8-46b2-a136-bfdcdede27fe"};
-    QString m_username{"test"};
-    bool m_noPasswdLogin{false};
-    qint64 m_loginTime{1234567};
-    qint32 m_passwordMode{0};
-    qint32 m_maxpasswordage{99999};
-    quint64 m_createdtime{1656048743};
-    qint32 m_passwordlastchange{19167};
+    qint32 m_accountType{ 0 };
+    bool m_automaticLogin{ false };
+    QString m_realName{ "test1" };
+    QStringList m_historylayout{ "cn;" };
+    QString m_homedirectory{ "/home/test" };
+    QString m_iconFile{ "file:///var/lib/AccountsService/icons/11.png" };
+    QString m_layout{ "cn;" };
+    QString m_locale{ "zh_CN.UTF-8" };
+    bool m_locked{ false };
+    QString m_passwordhint{ "hint" };
+    QString m_shell{ "/bin/bash" };
+    QString m_UUID{ "3778df97-91e8-46b2-a136-bfdcdede27fe" };
+    QString m_username{ "test" };
+    bool m_noPasswdLogin{ false };
+    qint64 m_loginTime{ 1234567 };
+    qint32 m_passwordMode{ 0 };
+    qint32 m_maxpasswordage{ 99999 };
+    quint64 m_createdtime{ 1656048743 };
+    qint32 m_passwordlastchange{ 19167 };
 
     inline qint32 MaxPasswordAge() const { return m_maxpasswordage; }
 
@@ -152,33 +155,43 @@ public:
     inline qint32 AccountType() const { return m_accountType; }
 
     inline bool AutomaticLogin() const { return m_automaticLogin; }
+
     Q_SCRIPTABLE inline void SetAutomaticLogin(bool enabled) { m_automaticLogin = enabled; }
 
     inline QString RealName() const { return m_realName; }
+
     Q_SCRIPTABLE inline void SetRealName(QString name) { m_realName = name; }
 
     inline QStringList HistoryLayout() const { return m_historylayout; }
+
     Q_SCRIPTABLE inline void SetHistoryLayout(QStringList list) { m_historylayout = list; }
 
     inline QString HomeDirectory() const { return m_homedirectory; }
+
     Q_SCRIPTABLE inline void SetHomeDirectory(QString dir) { m_homedirectory = dir; }
 
     inline QString IconFile() const { return m_iconFile; }
+
     Q_SCRIPTABLE inline void SetIconFile(QString file) { m_iconFile = file; }
 
     inline QString Layout() const { return m_layout; }
+
     Q_SCRIPTABLE inline void SetLayout(QString layout) { m_layout = layout; }
 
     inline QString Locale() const { return m_locale; }
+
     Q_SCRIPTABLE inline void SetLocale(QString locale) { m_locale = locale; }
 
     inline bool Locked() const { return m_locked; }
+
     Q_SCRIPTABLE inline void SetLocked(bool locked) { m_locked = locked; }
 
     inline QString PasswordHint() const { return m_passwordhint; }
+
     Q_SCRIPTABLE inline void SetPasswordHint(QString hint) { m_passwordhint = hint; }
 
     inline QString Shell() const { return m_shell; }
+
     Q_SCRIPTABLE inline void SetShell(QString shell) { m_shell = shell; }
 
     inline QString UUID() const { return m_UUID; }
@@ -186,20 +199,21 @@ public:
     inline QString UserName() const { return m_username; }
 
     inline bool NoPasswdLogin() const { return m_noPasswdLogin; }
+
     Q_SCRIPTABLE inline void EnableNoPasswdLogin(bool enabled) { m_noPasswdLogin = enabled; }
 
     inline qint64 LoginTime() const { return m_loginTime; }
 
     inline qint32 PasswordMode() const { return m_passwordMode; }
 
-    bool m_addGroupTrigger{false};
-    bool m_deleteGroupTrigger{false};
-    bool m_deleteIconFileTrigger{false};
-    bool m_getReminderInfoTrigger{false};
-    bool m_setGroupsTrigger{false};
-    bool m_setMaxPasswordAgeTrigger{false};
-    bool m_setPasswordTrigger{false};
-    bool m_passwordExpiredInfoTirgger{false};
+    bool m_addGroupTrigger{ false };
+    bool m_deleteGroupTrigger{ false };
+    bool m_deleteIconFileTrigger{ false };
+    bool m_getReminderInfoTrigger{ false };
+    bool m_setGroupsTrigger{ false };
+    bool m_setMaxPasswordAgeTrigger{ false };
+    bool m_setPasswordTrigger{ false };
+    bool m_passwordExpiredInfoTirgger{ false };
 
 public slots:
 

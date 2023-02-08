@@ -2,10 +2,11 @@
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 #include "timesync1interface.h"
-#include <qvariant.h>
+
 #include <qdbusconnection.h>
 #include <qdbusextratypes.h>
 #include <qstring.h>
+#include <qvariant.h>
 
 DSYSTEMTIME_BEGIN_NAMESPACE
 TimeSync1Interface::TimeSync1Interface(QObject *parent)
@@ -28,7 +29,8 @@ TimeSync1Interface::TimeSync1Interface(QObject *parent)
     Message_p::registerMetaType();
 }
 
-TimeSync1Interface::~TimeSync1Interface() {}
+TimeSync1Interface::~TimeSync1Interface() { }
+
 // properties
 
 QStringList TimeSync1Interface::fallbackNTPServers() const

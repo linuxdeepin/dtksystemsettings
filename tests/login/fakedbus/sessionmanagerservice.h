@@ -4,6 +4,7 @@
 
 #pragma once
 #include "dtklogin_global.h"
+
 #include <qobject.h>
 
 DLOGIN_BEGIN_NAMESPACE

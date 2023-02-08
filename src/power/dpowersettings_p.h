@@ -17,7 +17,9 @@ class DPowerSettingsPrivate : public QObject
 public:
     DPowerSettingsPrivate(DPowerSettings *parent = nullptr)
         : q_ptr(parent){};
-    virtual ~DPowerSettingsPrivate() {}
+
+    virtual ~DPowerSettingsPrivate() { }
+
     void connectDBusSignal();
 
 public:

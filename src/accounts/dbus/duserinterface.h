@@ -4,9 +4,11 @@
 
 #pragma once
 
-#include <QDBusPendingReply>
-#include <DDBusInterface>
 #include "daccountstypes.h"
+
+#include <DDBusInterface>
+
+#include <QDBusPendingReply>
 
 DACCOUNTS_BEGIN_NAMESPACE
 using DTK_CORE_NAMESPACE::DDBusInterface;
@@ -63,12 +65,12 @@ signals:
     void ReceivedChanged();
 
 public slots:
-    QDBusPendingReply<qint64,  // expiration time
-                      qint64,  // last_change_time
-                      qint64,  // min days between changes
-                      qint64,  // max days between changes
-                      qint64,  // days to warn
-                      qint64   // days after expiration until lock
+    QDBusPendingReply<qint64, // expiration time
+                      qint64, // last_change_time
+                      qint64, // min days between changes
+                      qint64, // max days between changes
+                      qint64, // days to warn
+                      qint64  // days after expiration until lock
                       >
     getPasswordExpirationPolicy();
     QDBusPendingReply<void> setAccountType(qint32 accountType);

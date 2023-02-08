@@ -2,21 +2,23 @@
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 #include "drfmanager.h"
-#include <fcntl.h>
-#include <unistd.h>
+
 #include <linux/rfkill.h>
 
-#include <QFile>
 #include <QDebug>
+#include <QFile>
 #include <QSocketNotifier>
+
+#include <fcntl.h>
+#include <unistd.h>
 
 #ifdef USE_FAKE_RFKILL_FILE
 // for ut test file
-#define D_PATH_DEV_RFKILL "/tmp/dev/rfkill"
-#define D_SYS_CLS_RF_NAME "/tmp/dev/rfkill%1/name"
+#  define D_PATH_DEV_RFKILL "/tmp/dev/rfkill"
+#  define D_SYS_CLS_RF_NAME "/tmp/dev/rfkill%1/name"
 #else
-#define D_PATH_DEV_RFKILL "/dev/rfkill"
-#define D_SYS_CLS_RF_NAME "/sys/class/rfkill/rfkill%1/name"
+#  define D_PATH_DEV_RFKILL "/dev/rfkill"
+#  define D_SYS_CLS_RF_NAME "/sys/class/rfkill/rfkill%1/name"
 #endif
 
 DRFMGR_BEGIN_NAMESPACE
@@ -62,7 +64,9 @@ void DRfmanagerPrivate::init()
     readRf(fd);
 
     QSocketNotifier *sn = new QSocketNotifier(fd, QSocketNotifier::Read, this);
-    connect(sn, &QSocketNotifier::destroyed, this, [fd]() { close(fd); });
+    connect(sn, &QSocketNotifier::destroyed, this, [fd]() {
+        close(fd);
+    });
     connect(sn, &QSocketNotifier::activated, this, [fd, this](int socket) {
         if (socket == fd)
             readRf(fd);
@@ -143,8 +147,11 @@ QString DRfmanagerPrivate::deviceName(quint32 idx)
 
 bool DRfmanagerPrivate::deviceFromId(quint32 idx, DRfmanager::RfDevice *device)
 {
-    auto it =
-        std::find_if(deviceList.begin(), deviceList.end(), [idx](const DRfmanager::RfDevice &dev) { return idx == dev.idx; });
+    auto it = std::find_if(deviceList.begin(),
+                           deviceList.end(),
+                           [idx](const DRfmanager::RfDevice &dev) {
+                               return idx == dev.idx;
+                           });
 
     if (device && it != deviceList.end())
         *device = *it;
@@ -157,28 +164,28 @@ void DRfmanagerPrivate::updateDevice(const rfkill_event &re)
     Q_Q(DRfmanager);
 
     switch (re.op) {
-        case DRfmanager::ADD:
-            appendDevice(re);
-            updateDeviceInfo(re);
-            break;
-        case DRfmanager::DEL:
-            for (int i = 0; i < deviceList.count(); i++) {
-                if (re.idx == deviceList.at(i).idx) {
-                    deviceList.removeAt(i);
-                    break;
-                }
+    case DRfmanager::ADD:
+        appendDevice(re);
+        updateDeviceInfo(re);
+        break;
+    case DRfmanager::DEL:
+        for (int i = 0; i < deviceList.count(); i++) {
+            if (re.idx == deviceList.at(i).idx) {
+                deviceList.removeAt(i);
+                break;
             }
-            emit q->countChanged(deviceList.count());
-            updateDeviceInfo(re);
-            break;
-        case DRfmanager::CHANGE:
-        case DRfmanager::CHANGE_ALL:
-            updateDeviceInfo(re);
-            if (re.idx != INT_MAX)
-                emit q->blockedChanged(re.idx);
-            break;
-        default:
-            break;
+        }
+        emit q->countChanged(deviceList.count());
+        updateDeviceInfo(re);
+        break;
+    case DRfmanager::CHANGE:
+    case DRfmanager::CHANGE_ALL:
+        updateDeviceInfo(re);
+        if (re.idx != INT_MAX)
+            emit q->blockedChanged(re.idx);
+        break;
+    default:
+        break;
     }
 }
 
@@ -210,7 +217,8 @@ void DRfmanagerPrivate::updateDeviceInfo(const rfkill_event &re)
     allBlocked = isBlocked(DRfmanager::ALL);
 
 #ifdef QT_DEBUG
-    qDebug() << "wifiBlocked:" << wifiBlocked << "\tbluetoothBlocked:" << bluetoothBlocked << "\tallBlocked:" << allBlocked;
+    qDebug() << "wifiBlocked:" << wifiBlocked << "\tbluetoothBlocked:" << bluetoothBlocked
+             << "\tallBlocked:" << allBlocked;
 #endif
 
     // if device not found blocked state switch to false
@@ -268,7 +276,7 @@ DRfmanager::DRfmanager(QObject *parent)
     d_dptr->init();
 }
 
-DRfmanager::~DRfmanager() {}
+DRfmanager::~DRfmanager() { }
 
 /**
  * \~english \brief DRfmanager::block block specify type of device
@@ -413,7 +421,8 @@ QDebug operator<<(QDebug dbg, const DRfmanager::RfDevice &device)
     dbg.resetFormat();
 
     dbg << "id:" << device.idx << "\ttype:" << device.type << "\tdevice:" << device.name
-        << "\tsoft blocked:" << device.softBlocked << "\thard blocked:" << device.hardBlocked << "\n";
+        << "\tsoft blocked:" << device.softBlocked << "\thard blocked:" << device.hardBlocked
+        << "\n";
     return dbg;
 }
 #endif

@@ -18,7 +18,8 @@ public:
         : q_ptr(parent)
     {
     }
-    virtual ~DPowerDevicePrivate() {}
+
+    virtual ~DPowerDevicePrivate() { }
 
 public:
     QString devicename;

@@ -5,6 +5,7 @@
 #pragma once
 
 #include "dtkaccounts_global.h"
+
 #include <QString>
 
 DACCOUNTS_BEGIN_NAMESPACE

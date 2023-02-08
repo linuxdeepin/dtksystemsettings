@@ -2,15 +2,15 @@
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
-#include "dpowersettings_p.h"
 #include "dpowersettings.h"
 
-#include <qsharedpointer.h>
-#include <qdebug.h>
-
-#include "dbus/systempowerinterface.h"
 #include "dbus/daemonpowerinterface.h"
+#include "dbus/systempowerinterface.h"
+#include "dpowersettings_p.h"
 #include "dpowertypes.h"
+
+#include <qdebug.h>
+#include <qsharedpointer.h>
 
 DPOWER_BEGIN_NAMESPACE
 using DCORE_NAMESPACE::DError;
@@ -20,7 +20,10 @@ using DCORE_NAMESPACE::DUnexpected;
 void DPowerSettingsPrivate::connectDBusSignal()
 {
     Q_Q(DPowerSettings);
-    connect(m_systemPowerInter, &SystemPowerInterface::CpuGovernorChanged, q, &DPowerSettings::cpuGovernorChanged);
+    connect(m_systemPowerInter,
+            &SystemPowerInterface::CpuGovernorChanged,
+            q,
+            &DPowerSettings::cpuGovernorChanged);
     connect(m_systemPowerInter,
             &SystemPowerInterface::PowerSavingModeAutoChanged,
             q,
@@ -41,7 +44,10 @@ void DPowerSettingsPrivate::connectDBusSignal()
             &SystemPowerInterface::PowerSavingModeBrightnessDataChanged,
             q,
             &DPowerSettings::powerSavingModeBrightnessDataChanged);
-    connect(m_systemPowerInter, &SystemPowerInterface::CpuBoostChanged, q, &DPowerSettings::cpuBoostChanged);
+    connect(m_systemPowerInter,
+            &SystemPowerInterface::CpuBoostChanged,
+            q,
+            &DPowerSettings::cpuBoostChanged);
     connect(m_systemPowerInter, &SystemPowerInterface::ModeChanged, q, [q](const QString &value) {
         if (value == "powsersave")
             emit q->powerModeChanged(PowerMode::PowerSave);
@@ -52,17 +58,26 @@ void DPowerSettingsPrivate::connectDBusSignal()
         else
             emit q->powerModeChanged(PowerMode::Unknown);
     });
-    connect(m_daemonPowerInter, &DaemonPowerInterface::BatteryLidClosedActionChanged, q, [q](const qint32 value) {
-        if (value < 1 || value > 4)
-            return;
-        emit q->batteryLidClosedActionChanged(static_cast<LidClosedAction>(value));
-    });
-    connect(m_daemonPowerInter, &DaemonPowerInterface::BatteryLockDelayChanged, q, &DPowerSettings::batteryLockDelayChanged);
-    connect(m_daemonPowerInter, &DaemonPowerInterface::BatteryPressPowerBtnActionChanged, q, [q](const qint32 value) {
-        if (value < 0 || value > 4)
-            return;
-        emit q->batteryPressPowerBtnActionChanged(static_cast<PowerBtnAction>(value));
-    });
+    connect(m_daemonPowerInter,
+            &DaemonPowerInterface::BatteryLidClosedActionChanged,
+            q,
+            [q](const qint32 value) {
+                if (value < 1 || value > 4)
+                    return;
+                emit q->batteryLidClosedActionChanged(static_cast<LidClosedAction>(value));
+            });
+    connect(m_daemonPowerInter,
+            &DaemonPowerInterface::BatteryLockDelayChanged,
+            q,
+            &DPowerSettings::batteryLockDelayChanged);
+    connect(m_daemonPowerInter,
+            &DaemonPowerInterface::BatteryPressPowerBtnActionChanged,
+            q,
+            [q](const qint32 value) {
+                if (value < 0 || value > 4)
+                    return;
+                emit q->batteryPressPowerBtnActionChanged(static_cast<PowerBtnAction>(value));
+            });
     connect(m_daemonPowerInter,
             &DaemonPowerInterface::BatteryScreenBlackDelayChanged,
             q,
@@ -71,18 +86,30 @@ void DPowerSettingsPrivate::connectDBusSignal()
             &DaemonPowerInterface::BatteryScreensaverDelayChanged,
             q,
             &DPowerSettings::batteryScreensaverDelayChanged);
-    connect(m_daemonPowerInter, &DaemonPowerInterface::BatterySleepDelayChanged, q, &DPowerSettings::batterySleepDelayChanged);
-    connect(m_daemonPowerInter, &DaemonPowerInterface::LinePowerLidClosedActionChanged, q, [q](const qint32 value) {
-        if (value < 1 || value > 4)
-            return;
-        emit q->linePowerLidClosedActionChanged(static_cast<LidClosedAction>(value));
-    });
-    connect(m_daemonPowerInter, &DaemonPowerInterface::LinePowerLockDelayChanged, q, &DPowerSettings::linePowerLockDelayChanged);
-    connect(m_daemonPowerInter, &DaemonPowerInterface::LinePowerPressPowerBtnActionChanged, q, [q](const qint32 value) {
-        if (value < 0 || value > 4)
-            return;
-        emit q->linePowerPressPowerBtnActionChanged(static_cast<PowerBtnAction>(value));
-    });
+    connect(m_daemonPowerInter,
+            &DaemonPowerInterface::BatterySleepDelayChanged,
+            q,
+            &DPowerSettings::batterySleepDelayChanged);
+    connect(m_daemonPowerInter,
+            &DaemonPowerInterface::LinePowerLidClosedActionChanged,
+            q,
+            [q](const qint32 value) {
+                if (value < 1 || value > 4)
+                    return;
+                emit q->linePowerLidClosedActionChanged(static_cast<LidClosedAction>(value));
+            });
+    connect(m_daemonPowerInter,
+            &DaemonPowerInterface::LinePowerLockDelayChanged,
+            q,
+            &DPowerSettings::linePowerLockDelayChanged);
+    connect(m_daemonPowerInter,
+            &DaemonPowerInterface::LinePowerPressPowerBtnActionChanged,
+            q,
+            [q](const qint32 value) {
+                if (value < 0 || value > 4)
+                    return;
+                emit q->linePowerPressPowerBtnActionChanged(static_cast<PowerBtnAction>(value));
+            });
     connect(m_daemonPowerInter,
             &DaemonPowerInterface::LinePowerScreenBlackDelayChanged,
             q,
@@ -91,20 +118,30 @@ void DPowerSettingsPrivate::connectDBusSignal()
             &DaemonPowerInterface::LinePowerScreensaverDelayChanged,
             q,
             &DPowerSettings::linePowerScreensaverDelayChanged);
-    connect(
-        m_daemonPowerInter, &DaemonPowerInterface::LinePowerSleepDelayChanged, q, &DPowerSettings::linePowerSleepDelayChanged);
+    connect(m_daemonPowerInter,
+            &DaemonPowerInterface::LinePowerSleepDelayChanged,
+            q,
+            &DPowerSettings::linePowerSleepDelayChanged);
     connect(m_daemonPowerInter,
             &DaemonPowerInterface::LowPowerAutoSleepThresholdChanged,
             q,
             &DPowerSettings::lowPowerAutoSleepThresholdChanged);
-    connect(
-        m_daemonPowerInter, &DaemonPowerInterface::LowPowerNotifyEnableChanged, q, &DPowerSettings::lowPowerNotifyEnableChanged);
+    connect(m_daemonPowerInter,
+            &DaemonPowerInterface::LowPowerNotifyEnableChanged,
+            q,
+            &DPowerSettings::lowPowerNotifyEnableChanged);
     connect(m_daemonPowerInter,
             &DaemonPowerInterface::LowPowerNotifyThresholdChanged,
             q,
             &DPowerSettings::lowPowerNotifyThresholdChanged);
-    connect(m_daemonPowerInter, &DaemonPowerInterface::ScreenBlackLockChanged, q, &DPowerSettings::screenBlackLockChanged);
-    connect(m_daemonPowerInter, &DaemonPowerInterface::SleepLockChanged, q, &DPowerSettings::sleepLockChanged);
+    connect(m_daemonPowerInter,
+            &DaemonPowerInterface::ScreenBlackLockChanged,
+            q,
+            &DPowerSettings::screenBlackLockChanged);
+    connect(m_daemonPowerInter,
+            &DaemonPowerInterface::SleepLockChanged,
+            q,
+            &DPowerSettings::sleepLockChanged);
 }
 
 DPowerSettings::DPowerSettings(QObject *parent)
@@ -117,7 +154,7 @@ DPowerSettings::DPowerSettings(QObject *parent)
     d->connectDBusSignal();
 }
 
-DPowerSettings::~DPowerSettings() {}
+DPowerSettings::~DPowerSettings() { }
 
 QString DPowerSettings::cpuGovernor() const
 {
@@ -421,8 +458,9 @@ DExpected<void> DPowerSettings::reset()
     auto reply = d->m_daemonPowerInter->reset();
     reply.waitForFinished();
     if (!reply.isValid()) {
-        return DUnexpected<>{DError{reply.error().type(), reply.error().message()}};
+        return DUnexpected<>{ DError{ reply.error().type(), reply.error().message() } };
     }
     return {};
 }
+
 DPOWER_END_NAMESPACE

@@ -19,6 +19,7 @@ public:
         , q_ptr(parent)
     {
     }
+
     void connectDBusSignal();
 
 public:

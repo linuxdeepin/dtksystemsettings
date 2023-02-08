@@ -6,24 +6,25 @@
 
 #include "dloginseat_p.h"
 #include "dlogintypes_p.h"
+#include "login1seatinterface.h"
+
+#include <qdatetime.h>
+#include <qdbusconnection.h>
 #include <qdbuspendingreply.h>
+#include <qdebug.h>
 #include <qlist.h>
 #include <qobject.h>
-#include <qdebug.h>
-#include <qdbusconnection.h>
-#include <qdatetime.h>
-
-#include "login1seatinterface.h"
 
 DLOGIN_BEGIN_NAMESPACE
 using DCORE_NAMESPACE::DError;
 using DCORE_NAMESPACE::DExpected;
 using DCORE_NAMESPACE::DUnexpected;
+
 DLoginSeat::DLoginSeat(const QString &path, QObject *parent)
     : QObject(parent)
     , d_ptr(new DLoginSeatPrivate(this))
 {
-#if defined(USE_FAKE_INTERFACE)  // for unit test
+#if defined(USE_FAKE_INTERFACE) // for unit test
     const QString &Service = QStringLiteral("org.freedesktop.fakelogin1");
     QDBusConnection connection = QDBusConnection::sessionBus();
 #else
@@ -96,7 +97,7 @@ DExpected<void> DLoginSeat::activateSession(const QString &sessionId)
     QDBusPendingReply<> reply = d->m_inter->activateSession(sessionId);
     reply.waitForFinished();
     if (!reply.isValid()) {
-        return DUnexpected{DError{reply.error().type(), reply.error().message()}};
+        return DUnexpected{ DError{ reply.error().type(), reply.error().message() } };
     }
     return {};
 }
@@ -107,7 +108,7 @@ DExpected<void> DLoginSeat::switchTo(quint32 VTNr)
     QDBusPendingReply<> reply = d->m_inter->switchTo(VTNr);
     reply.waitForFinished();
     if (!reply.isValid()) {
-        return DUnexpected{DError{reply.error().type(), reply.error().message()}};
+        return DUnexpected{ DError{ reply.error().type(), reply.error().message() } };
     }
     return {};
 }

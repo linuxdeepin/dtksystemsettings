@@ -5,6 +5,7 @@
 #pragma once
 
 #include "drfmanager.h"
+
 #include <QObject>
 
 DRFMGR_USE_NAMESPACE

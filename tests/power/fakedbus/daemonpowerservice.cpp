@@ -4,9 +4,9 @@
 
 #include "daemonpowerservice.h"
 
-#include <qdebug.h>
 #include <qdbusconnection.h>
 #include <qdbuserror.h>
+#include <qdebug.h>
 
 DaemonPowerService::DaemonPowerService(QObject *parent)
     : QObject(parent)

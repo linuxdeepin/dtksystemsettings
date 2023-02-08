@@ -2,6 +2,7 @@
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 #include "timedate1service.h"
+
 #include <qdebug.h>
 
 TimeDate1Service::TimeDate1Service(QObject *parent)
@@ -9,6 +10,7 @@ TimeDate1Service::TimeDate1Service(QObject *parent)
     Q_UNUSED(parent);
     registerService();
 }
+
 TimeDate1Service::~TimeDate1Service()
 {
     unRegisterService();
@@ -75,10 +77,12 @@ quint64 TimeDate1Service::timeUSec() const
 
 QStringList TimeDate1Service::ListTimezones() const
 {
-    return {"Asia/Tokyo", "Asia/Shanghai", "Asia/Hongkong", "Asia/Korea"};
+    return { "Asia/Tokyo", "Asia/Shanghai", "Asia/Hongkong", "Asia/Korea" };
 }
 
-void TimeDate1Service::SetLocalRTC(const bool local_rtc, const bool fix_system, const bool interactive)
+void TimeDate1Service::SetLocalRTC(const bool local_rtc,
+                                   const bool fix_system,
+                                   const bool interactive)
 {
     setLocalRTC_sig = local_rtc;
     Q_UNUSED(fix_system);

@@ -6,6 +6,7 @@
 #include "dloginmanager.h"
 #include "dloginsession.h"
 DLOGIN_USE_NAMESPACE
+
 class PropertyDemo : public LoginDemo
 {
     Q_OBJECT

@@ -3,15 +3,16 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
 #pragma once
-#include <qobject.h>
-#include <QtDBus>
-
 #include "dlogintypes_p.h"
+
+#include <qobject.h>
+
+#include <QtDBus>
 QT_BEGIN_NAMESPACE
 class QByteArray;
-template <class T>
+template<class T>
 class QList;
-template <class Key, class Value>
+template<class Key, class Value>
 class QMap;
 class QString;
 class QStringList;
@@ -19,6 +20,7 @@ class QVariant;
 QT_END_NAMESPACE
 
 DLOGIN_BEGIN_NAMESPACE
+
 /*
  * Adaptor class for interface org.freedesktop.login1.Session
  */
@@ -27,12 +29,13 @@ class Login1SessionService : public QObject
     Q_OBJECT
     Q_CLASSINFO("D-Bus Interface", "org.freedesktop.login1.Session")
 public:
-    explicit Login1SessionService(const QString &service = QStringLiteral("org.freedesktop.fakelogin1"),
-                                  const QString &path = QStringLiteral("/org/freedesktop/login1/session"),
-                                  QObject *parent = nullptr);
+    explicit Login1SessionService(
+            const QString &service = QStringLiteral("org.freedesktop.fakelogin1"),
+            const QString &path = QStringLiteral("/org/freedesktop/login1/session"),
+            QObject *parent = nullptr);
     ~Login1SessionService() override;
 
-public:  // PROPERTIES
+public: // PROPERTIES
     Q_PROPERTY(bool Active MEMBER m_active READ active);
     Q_PROPERTY(quint32 Audit MEMBER m_audit READ audit);
     Q_PROPERTY(QString Class MEMBER m_sessionClass READ sessionClass);
@@ -85,7 +88,7 @@ public:  // PROPERTIES
     DTK_LOGIN_NAMESPACE::DBusUserPath user() const;
     quint32 VTNr() const;
 
-public Q_SLOTS:  // METHODS
+public Q_SLOTS: // METHODS
     void Activate();
     void Kill(const QString &who, qint32 signal_number);
     void Lock();

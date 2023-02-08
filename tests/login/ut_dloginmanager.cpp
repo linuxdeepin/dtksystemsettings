@@ -2,27 +2,30 @@
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
-#include "dloginmanager.h"
-#include "dloginseat.h"
-#include "dloginsession.h"
-#include "dloginuser.h"
-#include "login1seatinterface.h"
-#include "login1sessioninterface.h"
-#include "login1managerservice.h"
-#include "login1userservice.h"
-#include "login1userinterface.h"
-#include "login1seatservice.h"
-#include "login1sessionservice.h"
-#include <gtest/gtest.h>
 #include <gmock/gmock.h>
-#include <ostream>
-#include "dloginseat_p.h"
-#include "dloginsession_p.h"
-#include "dloginuser_p.h"
+#include <gtest/gtest.h>
+
+#include "dloginmanager.h"
 #include "dloginmanager_p.h"
-#include <ddbusinterface.h>
-#include "login1managerinterface.h"
+#include "dloginseat.h"
+#include "dloginseat_p.h"
+#include "dloginsession.h"
+#include "dloginsession_p.h"
+#include "dloginuser.h"
+#include "dloginuser_p.h"
 #include "dloginutils.h"
+#include "login1managerinterface.h"
+#include "login1managerservice.h"
+#include "login1seatinterface.h"
+#include "login1seatservice.h"
+#include "login1sessioninterface.h"
+#include "login1sessionservice.h"
+#include "login1userinterface.h"
+#include "login1userservice.h"
+
+#include <ddbusinterface.h>
+
+#include <ostream>
 
 DLOGIN_USE_NAMESPACE
 
@@ -47,6 +50,7 @@ protected:
     DLoginManager *m_dLoginManager;
     static const QString Service;
 };
+
 const QString TestDLoginManager::Service = QStringLiteral("org.freedesktop.fakelogin1");
 
 TEST_F(TestDLoginManager, propertyKillExcludeUsers)
@@ -256,12 +260,12 @@ TEST_F(TestDLoginManager, propertyIdleAction)
 
 TEST_F(TestDLoginManager, propertyScheduledShutdown)
 {
-    m_fakeService->m_scheduledShutdown = {.type = "poweroff", .usec = 1000};
+    m_fakeService->m_scheduledShutdown = { .type = "poweroff", .usec = 1000 };
     ASSERT_EQ("poweroff", m_fakeService->scheduledShutdown().type);
     ASSERT_EQ(1000, m_fakeService->scheduledShutdown().usec);
     EXPECT_EQ(ShutdownType::PowerOff, m_dLoginManager->scheduledShutdown().type);
     EXPECT_EQ(1, m_dLoginManager->scheduledShutdown().time.toMSecsSinceEpoch());
-    m_fakeService->m_scheduledShutdown = {.type = "", .usec = 2000};
+    m_fakeService->m_scheduledShutdown = { .type = "", .usec = 2000 };
     ASSERT_EQ("", m_fakeService->scheduledShutdown().type);
     ASSERT_EQ(2000, m_fakeService->scheduledShutdown().usec);
     EXPECT_EQ(ShutdownType::Unknown, m_dLoginManager->scheduledShutdown().type);
@@ -412,6 +416,7 @@ struct ExecuteQuery
 {
     QString query;
     ExecuteStatus result;
+
     friend std::ostream &operator<<(std::ostream &os, const ExecuteQuery &executeQuery)
     {
         os << "{query: \"" << executeQuery.query.toStdString() << "\", "
@@ -489,12 +494,12 @@ TEST_P(TestExecuteQuery, canSuspendThenHibernate)
 
 INSTANTIATE_TEST_CASE_P(Default,
                         TestExecuteQuery,
-                        testing::Values(ExecuteQuery{"yes", ExecuteStatus::Yes},
-                                        ExecuteQuery{"no", ExecuteStatus::No},
-                                        ExecuteQuery{"na", ExecuteStatus::Na},
-                                        ExecuteQuery{"challenge", ExecuteStatus::Challenge},
-                                        ExecuteQuery{"", ExecuteStatus::Unknown},
-                                        ExecuteQuery{"fsadjfkasjhfo", ExecuteStatus::Unknown}));
+                        testing::Values(ExecuteQuery{ "yes", ExecuteStatus::Yes },
+                                        ExecuteQuery{ "no", ExecuteStatus::No },
+                                        ExecuteQuery{ "na", ExecuteStatus::Na },
+                                        ExecuteQuery{ "challenge", ExecuteStatus::Challenge },
+                                        ExecuteQuery{ "", ExecuteStatus::Unknown },
+                                        ExecuteQuery{ "fsadjfkasjhfo", ExecuteStatus::Unknown }));
 
 TEST_F(TestDLoginManager, cancelScheduledShutdown)
 {
@@ -641,8 +646,9 @@ struct InhibitParam
 
     friend std::ostream &operator<<(std::ostream &os, const InhibitParam &param)
     {
-        os << "{what: " << param.what << " strWhat: " << param.strWhat << " who: " << param.who << " why: " << param.why
-           << " mode: " << static_cast<int>(param.mode) << " strMode: " << param.strMode << " fd: " << param.fd << "}";
+        os << "{what: " << param.what << " strWhat: " << param.strWhat << " who: " << param.who
+           << " why: " << param.why << " mode: " << static_cast<int>(param.mode)
+           << " strMode: " << param.strMode << " fd: " << param.fd << "}";
         return os;
     }
 };
@@ -654,6 +660,7 @@ public:
         : TestDLoginManager()
     {
     }
+
     ~TestInhibit() override = default;
 };
 
@@ -685,27 +692,39 @@ TEST_P(TestInhibit, inhibit)
     EXPECT_EQ(params.strMode, dbusInhibitor.mode);
 }
 
-INSTANTIATE_TEST_CASE_P(
-    Default,
-    TestInhibit,
-    testing::Values(
-        InhibitParam{InhibitBehavior::HandleHibernateKey, "handle-hibernate-key", "uos", "test", InhibitMode::Block, "block", 3},
-        InhibitParam{InhibitBehavior::HandleHibernateKey | InhibitBehavior::Shutdown,
-                     "handle-hibernate-key:shutdown",
-                     "uos",
-                     "test",
-                     InhibitMode::Block,
-                     "block",
-                     3},
-        InhibitParam{InhibitBehavior::HandleHibernateKey | InhibitBehavior::Shutdown | InhibitBehavior::Sleep,
-                     "handle-hibernate-key:shutdown:sleep",
-                     "uos",
-                     "test",
-                     InhibitMode::Block,
-                     "block",
-                     3},
-        InhibitParam{
-            InhibitBehavior::HandleHibernateKey, "handle-hibernate-key", "uos", "test", InhibitMode::Delay, "delay", 3}));
+INSTANTIATE_TEST_CASE_P(Default,
+                        TestInhibit,
+                        testing::Values(InhibitParam{ InhibitBehavior::HandleHibernateKey,
+                                                      "handle-hibernate-key",
+                                                      "uos",
+                                                      "test",
+                                                      InhibitMode::Block,
+                                                      "block",
+                                                      3 },
+                                        InhibitParam{ InhibitBehavior::HandleHibernateKey
+                                                              | InhibitBehavior::Shutdown,
+                                                      "handle-hibernate-key:shutdown",
+                                                      "uos",
+                                                      "test",
+                                                      InhibitMode::Block,
+                                                      "block",
+                                                      3 },
+                                        InhibitParam{ InhibitBehavior::HandleHibernateKey
+                                                              | InhibitBehavior::Shutdown
+                                                              | InhibitBehavior::Sleep,
+                                                      "handle-hibernate-key:shutdown:sleep",
+                                                      "uos",
+                                                      "test",
+                                                      InhibitMode::Block,
+                                                      "block",
+                                                      3 },
+                                        InhibitParam{ InhibitBehavior::HandleHibernateKey,
+                                                      "handle-hibernate-key",
+                                                      "uos",
+                                                      "test",
+                                                      InhibitMode::Delay,
+                                                      "delay",
+                                                      3 }));
 
 TEST_F(TestDLoginManager, killSession)
 {
@@ -733,8 +752,10 @@ TEST_F(TestDLoginManager, killUser)
 
 TEST_F(TestDLoginManager, listInhibitors)
 {
-    m_fakeService->m_inhibitors = {DBusInhibitor{"sleep:shutdown", "test", "test", "block", 1000, 1},
-                                   DBusInhibitor{"handle-hibernate-key:handle-power-key", "uos", "test", "delay", 1001, 2}};
+    m_fakeService->m_inhibitors = {
+        DBusInhibitor{ "sleep:shutdown", "test", "test", "block", 1000, 1 },
+        DBusInhibitor{ "handle-hibernate-key:handle-power-key", "uos", "test", "delay", 1001, 2 }
+    };
     auto eInhibitors = m_dLoginManager->listInhibitors();
     ASSERT_TRUE(eInhibitors.hasValue());
     auto inhibitors = eInhibitors.value();
@@ -750,9 +771,9 @@ TEST_F(TestDLoginManager, listInhibitors)
 TEST_F(TestDLoginManager, listSeats)
 {
     auto &dbusSeats = m_fakeService->m_seats;
-    dbusSeats = {{"seat0", QDBusObjectPath("/org/freedesktop/login1/seat0")},
-                 {"seat1", QDBusObjectPath("/org/freedesktop/login1/seat1")},
-                 {"seat2", QDBusObjectPath("/org/freedesktop/login1/seat2")}};
+    dbusSeats = { { "seat0", QDBusObjectPath("/org/freedesktop/login1/seat0") },
+                  { "seat1", QDBusObjectPath("/org/freedesktop/login1/seat1") },
+                  { "seat2", QDBusObjectPath("/org/freedesktop/login1/seat2") } };
 
     auto eSeats = m_dLoginManager->listSeats();
     ASSERT_TRUE(eSeats.hasValue());
@@ -766,9 +787,11 @@ TEST_F(TestDLoginManager, listSeats)
 TEST_F(TestDLoginManager, listSessions)
 {
     auto &dbusSessions = m_fakeService->m_sessions;
-    dbusSessions = {{"session0", 1000, "test0", "seat0", QDBusObjectPath("/org/freedesktop/login1/session0")},
-                    {"session1", 1001, "test1", "seat1", QDBusObjectPath("/org/freedesktop/login1/session1")},
-                    {"session2", 1002, "test2", "seat2", QDBusObjectPath("/org/freedesktop/login1/session2")}};
+    dbusSessions = {
+        { "session0", 1000, "test0", "seat0", QDBusObjectPath("/org/freedesktop/login1/session0") },
+        { "session1", 1001, "test1", "seat1", QDBusObjectPath("/org/freedesktop/login1/session1") },
+        { "session2", 1002, "test2", "seat2", QDBusObjectPath("/org/freedesktop/login1/session2") }
+    };
     auto eSessions = m_dLoginManager->listSessions();
     ASSERT_TRUE(eSessions.hasValue());
     auto sessions = eSessions.value();
@@ -781,9 +804,9 @@ TEST_F(TestDLoginManager, listSessions)
 TEST_F(TestDLoginManager, listUsers)
 {
     auto &dbusUsers = m_fakeService->m_users;
-    dbusUsers = {{1000, "test0", QDBusObjectPath("/org/freedesktop/login1/user1000")},
-                 {1001, "test1", QDBusObjectPath("/org/freedesktop/login1/user1001")},
-                 {1002, "test2", QDBusObjectPath("/org/freedesktop/login1/user1002")}};
+    dbusUsers = { { 1000, "test0", QDBusObjectPath("/org/freedesktop/login1/user1000") },
+                  { 1001, "test1", QDBusObjectPath("/org/freedesktop/login1/user1001") },
+                  { 1002, "test2", QDBusObjectPath("/org/freedesktop/login1/user1002") } };
     auto eUsers = m_dLoginManager->listUsers();
     ASSERT_TRUE(eUsers.hasValue());
     auto users = eUsers.value();
@@ -807,12 +830,14 @@ struct ScheduleShutdownParam
     quint64 usec;
 };
 
-class TestScheduleShutdown : public TestDLoginManager, public testing::WithParamInterface<ScheduleShutdownParam>
+class TestScheduleShutdown : public TestDLoginManager,
+                             public testing::WithParamInterface<ScheduleShutdownParam>
 {
     TestScheduleShutdown()
         : TestDLoginManager()
     {
     }
+
     ~TestScheduleShutdown() override = default;
 };
 
@@ -826,15 +851,16 @@ TEST_P(TestScheduleShutdown, scheduleShutdown)
     EXPECT_EQ(params.usec * 1000, m_fakeService->m_scheduledShutdown.usec);
 }
 
-INSTANTIATE_TEST_CASE_P(Default,
-                        TestScheduleShutdown,
-                        testing::Values(ScheduleShutdownParam{ShutdownType::Halt, "halt", 1000},
-                                        ScheduleShutdownParam{ShutdownType::DryHalt, "dry-halt", 1000},
-                                        ScheduleShutdownParam{ShutdownType::Reboot, "reboot", 1000},
-                                        ScheduleShutdownParam{ShutdownType::DryReboot, "dry-reboot", 1000},
-                                        ScheduleShutdownParam{ShutdownType::PowerOff, "poweroff", 1000},
-                                        ScheduleShutdownParam{ShutdownType::DryPowerOff, "dry-poweroff", 1000},
-                                        ScheduleShutdownParam{ShutdownType::Unknown, "", 1000}));
+INSTANTIATE_TEST_CASE_P(
+        Default,
+        TestScheduleShutdown,
+        testing::Values(ScheduleShutdownParam{ ShutdownType::Halt, "halt", 1000 },
+                        ScheduleShutdownParam{ ShutdownType::DryHalt, "dry-halt", 1000 },
+                        ScheduleShutdownParam{ ShutdownType::Reboot, "reboot", 1000 },
+                        ScheduleShutdownParam{ ShutdownType::DryReboot, "dry-reboot", 1000 },
+                        ScheduleShutdownParam{ ShutdownType::PowerOff, "poweroff", 1000 },
+                        ScheduleShutdownParam{ ShutdownType::DryPowerOff, "dry-poweroff", 1000 },
+                        ScheduleShutdownParam{ ShutdownType::Unknown, "", 1000 }));
 
 TEST_F(TestDLoginManager, setUserLinger)
 {

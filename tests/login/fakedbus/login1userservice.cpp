@@ -4,17 +4,18 @@
 
 #include "login1userservice.h"
 
-#include <qmetaobject.h>
+#include "dlogintypes_p.h"
+
 #include <qbytearray.h>
 #include <qlist.h>
 #include <qmap.h>
+#include <qmetaobject.h>
 #include <qstring.h>
 #include <qstringlist.h>
 #include <qvariant.h>
 
-#include "dlogintypes_p.h"
-
 DLOGIN_BEGIN_NAMESPACE
+
 /*
  * Implementation of adaptor class Login1UserAdaptor
  */
@@ -116,22 +117,27 @@ void Login1UserService::Terminate()
 {
     m_terminated = true;
 }
+
 QList<DTK_LOGIN_NAMESPACE::DBusSessionPath> Login1UserService::sessions() const
 {
     return m_sessions;
 }
+
 bool Login1UserService::idleHint() const
 {
     return m_idleHint;
 }
+
 bool Login1UserService::linger() const
 {
     return m_linger;
 }
+
 quint64 Login1UserService::idleSinceHint() const
 {
     return m_idleSinceHint;
 }
+
 quint64 Login1UserService::idleSinceHintMonotonic() const
 {
     return m_idleSinceHintMonotonic;

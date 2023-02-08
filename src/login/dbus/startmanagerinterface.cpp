@@ -4,9 +4,9 @@
 
 #include "startmanagerinterface.h"
 
-#include <qdbusconnection.h>
-
 #include "ddbusinterface.h"
+
+#include <qdbusconnection.h>
 
 DLOGIN_BEGIN_NAMESPACE
 StartManagerInterface::StartManagerInterface(const QString &service,
@@ -23,16 +23,20 @@ StartManagerInterface::StartManagerInterface(const QString &service,
                        this,
                        SIGNAL(autostartChanged(const QString &, const QString &)));
 }
+
 QDBusPendingReply<bool> StartManagerInterface::addAutostart(const QString &fileName)
 {
     QDBusPendingReply<bool> result =
-        m_interface->asyncCallWithArgumentList(QLatin1String("AddAutostart"), {QVariant::fromValue(fileName)});
+            m_interface->asyncCallWithArgumentList(QLatin1String("AddAutostart"),
+                                                   { QVariant::fromValue(fileName) });
     return result;
 }
+
 QDBusPendingReply<bool> StartManagerInterface::removeAutostart(const QString &fileName)
 {
     QDBusPendingReply<bool> result =
-        m_interface->asyncCallWithArgumentList(QLatin1String("RemoveAutostart"), {QVariant::fromValue(fileName)});
+            m_interface->asyncCallWithArgumentList(QLatin1String("RemoveAutostart"),
+                                                   { QVariant::fromValue(fileName) });
     return result;
 }
 

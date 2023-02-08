@@ -3,7 +3,9 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
 #include "login1userinterface.h"
+
 #include "ddbusinterface.h"
+
 DLOGIN_BEGIN_NAMESPACE
 Login1UserInterface::Login1UserInterface(const QString &service,
                                          const QString &path,
@@ -15,6 +17,7 @@ Login1UserInterface::Login1UserInterface(const QString &service,
 {
     DBusSessionPath::registerMetaType();
 }
+
 Login1UserInterface::~Login1UserInterface() = default;
 
 QList<DBusSessionPath> Login1UserInterface::sessions() const
@@ -94,7 +97,8 @@ quint64 Login1UserInterface::timestampMonotonic() const
 
 QDBusPendingReply<> Login1UserInterface::kill(const int signalNumber)
 {
-    QDBusPendingReply<> reply = m_interface->asyncCallWithArgumentList("Kill", {QVariant::fromValue(signalNumber)});
+    QDBusPendingReply<> reply =
+            m_interface->asyncCallWithArgumentList("Kill", { QVariant::fromValue(signalNumber) });
     return reply;
 }
 

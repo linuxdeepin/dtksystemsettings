@@ -4,12 +4,13 @@
 
 #include <gtest/gtest.h>
 
-#include "dpowersettings.h"
 #include "daemonpowerservice.h"
-#include <QDBusMessage>
-#include <QDBusConnection>
-#include <QDBusReply>
+#include "dpowersettings.h"
 #include "dpowertypes.h"
+
+#include <QDBusConnection>
+#include <QDBusMessage>
+#include <QDBusReply>
 
 DPOWER_USE_NAMESPACE
 
@@ -22,6 +23,7 @@ public:
         m_fakeInterface = new DaemonPowerService();
         m_dpowerSettings = new DPowerSettings();
     }
+
     // 在测试套件中的最后一个测试用例运行结束后，TearDownTestCase 函数会被调用
     static void TearDownTestCase()
     {
@@ -32,9 +34,10 @@ public:
     }
 
     // 每个测试用例开始前，SetUp 函数都会被被调用
-    void SetUp() override {}
+    void SetUp() override { }
+
     // 每个测试用例运行结束后，TearDown 函数都会被被调用
-    void TearDown() override {}
+    void TearDown() override { }
 
     static DaemonPowerService *m_fakeInterface;
     static DPowerSettings *m_dpowerSettings;
@@ -61,6 +64,7 @@ TEST_F(TestDPowerSettings, batteryLidClosedAction)
     ASSERT_EQ(2, m_fakeInterface->m_batteryLidClosedAction);
     EXPECT_EQ(LidClosedAction::Hibernate, m_dpowerSettings->batteryLidClosedAction());
 }
+
 TEST_F(TestDPowerSettings, batteryLockDelay)
 {
     m_dpowerSettings->setBatteryLockDelay(100);
@@ -70,6 +74,7 @@ TEST_F(TestDPowerSettings, batteryLockDelay)
     ASSERT_EQ(200, m_fakeInterface->m_batteryLockDelay);
     EXPECT_EQ(200, m_dpowerSettings->batteryLockDelay());
 }
+
 TEST_F(TestDPowerSettings, batteryPressPowerBtnAction)
 {
     m_dpowerSettings->setBatteryPressPowerBtnAction(PowerBtnAction::Suspend);
@@ -79,6 +84,7 @@ TEST_F(TestDPowerSettings, batteryPressPowerBtnAction)
     EXPECT_EQ(2, m_fakeInterface->m_batteryPressPowerBtnAction);
     EXPECT_EQ(PowerBtnAction::Hibernate, m_dpowerSettings->batteryPressPowerBtnAction());
 }
+
 TEST_F(TestDPowerSettings, batteryScreenBlackDelay)
 {
     m_dpowerSettings->setBatteryScreenBlackDelay(100);
@@ -88,6 +94,7 @@ TEST_F(TestDPowerSettings, batteryScreenBlackDelay)
     ASSERT_EQ(200, m_fakeInterface->m_batteryScreenBlackDelay);
     EXPECT_EQ(200, m_dpowerSettings->batteryScreenBlackDelay());
 }
+
 TEST_F(TestDPowerSettings, BatteryScreenBlackDelay)
 {
     m_dpowerSettings->setBatteryScreensaverDelay(100);
@@ -97,6 +104,7 @@ TEST_F(TestDPowerSettings, BatteryScreenBlackDelay)
     ASSERT_EQ(200, m_fakeInterface->m_batteryScreensaverDelay);
     EXPECT_EQ(200, m_dpowerSettings->batteryScreensaverDelay());
 }
+
 TEST_F(TestDPowerSettings, batterySleepDelay)
 {
     m_dpowerSettings->setBatterySleepDelay(100);
@@ -106,6 +114,7 @@ TEST_F(TestDPowerSettings, batterySleepDelay)
     ASSERT_EQ(200, m_fakeInterface->m_batterySleepDelay);
     EXPECT_EQ(200, m_dpowerSettings->batterySleepDelay());
 }
+
 TEST_F(TestDPowerSettings, linePowerLidClosedAction)
 {
     m_dpowerSettings->setLinePowerLidClosedAction(LidClosedAction::Suspend);
@@ -115,6 +124,7 @@ TEST_F(TestDPowerSettings, linePowerLidClosedAction)
     EXPECT_EQ(2, m_fakeInterface->m_linePowerLidClosedAction);
     EXPECT_EQ(LidClosedAction::Hibernate, m_dpowerSettings->linePowerLidClosedAction());
 }
+
 TEST_F(TestDPowerSettings, linePowerLockDelay)
 {
     m_dpowerSettings->setLinePowerLockDelay(100);
@@ -124,6 +134,7 @@ TEST_F(TestDPowerSettings, linePowerLockDelay)
     ASSERT_EQ(200, m_fakeInterface->m_linePowerLockDelay);
     EXPECT_EQ(200, m_dpowerSettings->linePowerLockDelay());
 }
+
 TEST_F(TestDPowerSettings, linePowerPressPowerBtnAction)
 {
     m_dpowerSettings->setLinePowerPressPowerBtnAction(PowerBtnAction::Suspend);
@@ -133,6 +144,7 @@ TEST_F(TestDPowerSettings, linePowerPressPowerBtnAction)
     ASSERT_EQ(2, m_fakeInterface->m_linePowerPressPowerBtnAction);
     EXPECT_EQ(PowerBtnAction::Hibernate, m_dpowerSettings->linePowerPressPowerBtnAction());
 }
+
 TEST_F(TestDPowerSettings, linePowerScreenBlackDelay)
 {
     m_dpowerSettings->setLinePowerScreenBlackDelay(100);
@@ -142,6 +154,7 @@ TEST_F(TestDPowerSettings, linePowerScreenBlackDelay)
     ASSERT_EQ(200, m_fakeInterface->m_linePowerScreenBlackDelay);
     EXPECT_EQ(200, m_dpowerSettings->linePowerScreenBlackDelay());
 }
+
 TEST_F(TestDPowerSettings, linePowerScreensaverDelay)
 {
     m_dpowerSettings->setLinePowerScreensaverDelay(100);
@@ -151,6 +164,7 @@ TEST_F(TestDPowerSettings, linePowerScreensaverDelay)
     ASSERT_EQ(200, m_fakeInterface->m_linePowerScreensaverDelay);
     EXPECT_EQ(200, m_dpowerSettings->linePowerScreensaverDelay());
 }
+
 TEST_F(TestDPowerSettings, linePowerSleepDelay)
 {
     m_dpowerSettings->setLinePowerSleepDelay(100);
@@ -160,6 +174,7 @@ TEST_F(TestDPowerSettings, linePowerSleepDelay)
     ASSERT_EQ(200, m_fakeInterface->m_linePowerSleepDelay);
     EXPECT_EQ(200, m_dpowerSettings->linePowerSleepDelay());
 }
+
 TEST_F(TestDPowerSettings, lowPowerAutoSleepThreshold)
 {
     m_dpowerSettings->setLowPowerAutoSleepThreshold(5);
@@ -169,6 +184,7 @@ TEST_F(TestDPowerSettings, lowPowerAutoSleepThreshold)
     ASSERT_EQ(2, m_fakeInterface->m_lowPowerAutoSleepThreshold);
     EXPECT_EQ(2, m_dpowerSettings->lowPowerAutoSleepThreshold());
 }
+
 TEST_F(TestDPowerSettings, lowPowerNotifyEnable)
 {
     m_dpowerSettings->setLowPowerNotifyEnable(true);
@@ -178,6 +194,7 @@ TEST_F(TestDPowerSettings, lowPowerNotifyEnable)
     ASSERT_FALSE(m_fakeInterface->m_lowPowerNotifyEnable);
     EXPECT_FALSE(m_dpowerSettings->lowPowerNotifyEnable());
 }
+
 TEST_F(TestDPowerSettings, lowPowerNotifyThreshold)
 {
     m_dpowerSettings->setLowPowerNotifyThreshold(25);
@@ -187,6 +204,7 @@ TEST_F(TestDPowerSettings, lowPowerNotifyThreshold)
     ASSERT_EQ(10, m_fakeInterface->m_lowPowerNotifyThreshold);
     EXPECT_EQ(10, m_dpowerSettings->lowPowerNotifyThreshold());
 }
+
 TEST_F(TestDPowerSettings, screenBlackLock)
 {
     m_dpowerSettings->setScreenBlackLock(true);
@@ -196,6 +214,7 @@ TEST_F(TestDPowerSettings, screenBlackLock)
     ASSERT_FALSE(m_fakeInterface->m_screenBlackLock);
     EXPECT_FALSE(m_dpowerSettings->screenBlackLock());
 }
+
 TEST_F(TestDPowerSettings, sleepLock)
 {
     m_dpowerSettings->setSleepLock(true);

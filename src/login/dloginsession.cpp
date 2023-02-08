@@ -3,23 +3,23 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
 #include "dloginsession.h"
-#include "dloginsession_p.h"
 
+#include "dloginsession_p.h"
+#include "dloginutils.h"
+#include "login1sessioninterface.h"
+#include "sessionmanagerinterface.h"
+#include "startmanagerinterface.h"
+
+#include <qdatetime.h>
+#include <qdbusconnection.h>
 #include <qdbuspendingreply.h>
+#include <qdebug.h>
 #include <qdir.h>
+#include <qfilesystemwatcher.h>
 #include <qobject.h>
 #include <qprocess.h>
 #include <qsettings.h>
 #include <qvariant.h>
-#include <qdebug.h>
-#include <qdbusconnection.h>
-#include <qdatetime.h>
-#include <qfilesystemwatcher.h>
-
-#include "login1sessioninterface.h"
-#include "startmanagerinterface.h"
-#include "sessionmanagerinterface.h"
-#include "dloginutils.h"
 DLOGIN_BEGIN_NAMESPACE
 using DCORE_NAMESPACE::DError;
 using DCORE_NAMESPACE::DExpected;
@@ -29,7 +29,7 @@ DLoginSession::DLoginSession(const QString &path, QObject *parent)
     : QObject(parent)
     , d_ptr(new DLoginSessionPrivate(this))
 {
-#if defined(USE_FAKE_INTERFACE)  // for unit test
+#if defined(USE_FAKE_INTERFACE) // for unit test
     const QString &Service = QStringLiteral("org.freedesktop.fakelogin1");
     QDBusConnection connection = QDBusConnection::sessionBus();
     const QString &StartManagerService = QStringLiteral("com.deepin.FakeSessionManager");
@@ -51,21 +51,30 @@ DLoginSession::DLoginSession(const QString &path, QObject *parent)
     qRegisterMetaType<SessionType>("SessionType");
     qRegisterMetaType<SessionClass>("SessionClass");
     d->m_inter = new Login1SessionInterface(Service, path, connection, this);
-    d->m_startManagerInter =
-        new StartManagerInterface(StartManagerService, StartManagerPath, QDBusConnection::sessionBus(), this);
-    d->m_sessionManagerInter =
-        new SessionManagerInterface(SessionManagerService, SessionManagerPath, QDBusConnection::sessionBus(), this);
-    connect(
-        d->m_startManagerInter, &StartManagerInterface::autostartChanged, this, [=](const QString &status, const QString &name) {
-            if (status == "added") {
-                Q_EMIT this->autostartAdded(name);
-            } else if (status == "deleted") {
-                Q_EMIT this->autostartRemoved(name);
-            } else {
-                qWarning() << "Unknown autostart changed signal.";
-            }
-        });
-    connect(d->m_sessionManagerInter, &SessionManagerInterface::LockedChanged, this, &DLoginSession::lockedChanged);
+    d->m_startManagerInter = new StartManagerInterface(StartManagerService,
+                                                       StartManagerPath,
+                                                       QDBusConnection::sessionBus(),
+                                                       this);
+    d->m_sessionManagerInter = new SessionManagerInterface(SessionManagerService,
+                                                           SessionManagerPath,
+                                                           QDBusConnection::sessionBus(),
+                                                           this);
+    connect(d->m_startManagerInter,
+            &StartManagerInterface::autostartChanged,
+            this,
+            [=](const QString &status, const QString &name) {
+                if (status == "added") {
+                    Q_EMIT this->autostartAdded(name);
+                } else if (status == "deleted") {
+                    Q_EMIT this->autostartRemoved(name);
+                } else {
+                    qWarning() << "Unknown autostart changed signal.";
+                }
+            });
+    connect(d->m_sessionManagerInter,
+            &SessionManagerInterface::LockedChanged,
+            this,
+            &DLoginSession::lockedChanged);
 }
 
 DLoginSession::~DLoginSession(){};
@@ -93,26 +102,31 @@ bool DLoginSession::remote() const
     Q_D(const DLoginSession);
     return d->m_inter->remote();
 }
+
 SessionClass DLoginSession::sessionClass() const
 {
     Q_D(const DLoginSession);
     return Utils::stringToSessionClass(d->m_inter->sessionClass());
 }
+
 QString DLoginSession::desktop() const
 {
     Q_D(const DLoginSession);
     return d->m_inter->desktop();
 }
+
 QString DLoginSession::display() const
 {
     Q_D(const DLoginSession);
     return d->m_inter->display();
 }
+
 QString DLoginSession::id() const
 {
     Q_D(const DLoginSession);
     return d->m_inter->id();
 }
+
 QString DLoginSession::name() const
 {
     Q_D(const DLoginSession);
@@ -124,6 +138,7 @@ QString DLoginSession::remoteHost() const
     Q_D(const DLoginSession);
     return d->m_inter->remoteHost();
 }
+
 QString DLoginSession::remoteUser() const
 {
     Q_D(const DLoginSession);
@@ -166,6 +181,7 @@ QString DLoginSession::seat() const
     const auto &result = d->m_inter->seat();
     return result.seatId;
 }
+
 quint32 DLoginSession::user() const
 {
     Q_D(const DLoginSession);
@@ -184,6 +200,7 @@ quint32 DLoginSession::leader() const
     Q_D(const DLoginSession);
     return d->m_inter->leader();
 }
+
 quint32 DLoginSession::VTNr() const
 {
     Q_D(const DLoginSession);
@@ -207,6 +224,7 @@ QDateTime DLoginSession::createdTime() const
     Q_D(const DLoginSession);
     return QDateTime::fromMSecsSinceEpoch(d->m_inter->timestamp() / 1000);
 }
+
 quint64 DLoginSession::createdTimeMonotonic() const
 {
     Q_D(const DLoginSession);
@@ -219,7 +237,7 @@ DExpected<void> DLoginSession::activate()
     QDBusPendingReply<> reply = d->m_inter->activate();
     reply.waitForFinished();
     if (!reply.isValid()) {
-        return DUnexpected{DError{reply.error().type(), reply.error().message()}};
+        return DUnexpected{ DError{ reply.error().type(), reply.error().message() } };
     }
     return {};
 }
@@ -230,27 +248,29 @@ DExpected<void> DLoginSession::kill(SessionRole who, qint32 signalNumber)
     QDBusPendingReply<> reply = d->m_inter->kill(Utils::sessionRoleToString(who), signalNumber);
     reply.waitForFinished();
     if (!reply.isValid()) {
-        return DUnexpected{DError{reply.error().type(), reply.error().message()}};
+        return DUnexpected{ DError{ reply.error().type(), reply.error().message() } };
     }
     return {};
 }
+
 DExpected<void> DLoginSession::lock()
 {
     Q_D(DLoginSession);
     QDBusPendingReply<> reply = d->m_inter->lock();
     reply.waitForFinished();
     if (!reply.isValid()) {
-        return DUnexpected{DError{reply.error().type(), reply.error().message()}};
+        return DUnexpected{ DError{ reply.error().type(), reply.error().message() } };
     }
     return {};
 }
+
 DExpected<void> DLoginSession::setIdleHint(bool idle)
 {
     Q_D(DLoginSession);
     QDBusPendingReply<> reply = d->m_inter->setIdleHint(idle);
     reply.waitForFinished();
     if (!reply.isValid()) {
-        return DUnexpected{DError{reply.error().type(), reply.error().message()}};
+        return DUnexpected{ DError{ reply.error().type(), reply.error().message() } };
     }
     return {};
 }
@@ -261,7 +281,7 @@ DExpected<void> DLoginSession::setType(SessionType type)
     QDBusPendingReply<> reply = d->m_inter->setType(Utils::sessionTypeToString(type));
     reply.waitForFinished();
     if (!reply.isValid()) {
-        return DUnexpected{DError{reply.error().type(), reply.error().message()}};
+        return DUnexpected{ DError{ reply.error().type(), reply.error().message() } };
     }
     return {};
 }
@@ -272,7 +292,7 @@ DExpected<void> DLoginSession::terminate()
     QDBusPendingReply<> reply = d->m_inter->terminate();
     reply.waitForFinished();
     if (!reply.isValid()) {
-        return DUnexpected{DError{reply.error().type(), reply.error().message()}};
+        return DUnexpected{ DError{ reply.error().type(), reply.error().message() } };
     }
     return {};
 }
@@ -328,7 +348,7 @@ DExpected<bool> DLoginSession::removeAutostart(const QString &fileName)
     auto reply = d->m_startManagerInter->removeAutostart(fileName);
     reply.waitForFinished();
     if (!reply.isValid()) {
-        return DUnexpected{DError{reply.error().type(), reply.error().message()}};
+        return DUnexpected{ DError{ reply.error().type(), reply.error().message() } };
     } else {
         return reply.value();
     }
@@ -340,7 +360,7 @@ DExpected<bool> DLoginSession::addAutostart(const QString &fileName)
     auto reply = d->m_startManagerInter->addAutostart(fileName);
     reply.waitForFinished();
     if (!reply.isValid()) {
-        return DUnexpected{DError{reply.error().type(), reply.error().message()}};
+        return DUnexpected{ DError{ reply.error().type(), reply.error().message() } };
     } else {
         return reply.value();
     }
@@ -353,7 +373,8 @@ QString DLoginSessionPrivate::getUserAutostartDir()
     if (!homeDir.isEmpty()) {
         defaultUserConfigDir = homeDir + "/.config";
     }
-    QString configuredUserConfigDir = QProcessEnvironment::systemEnvironment().value("XDG_CONFIG_HOME");
+    QString configuredUserConfigDir =
+            QProcessEnvironment::systemEnvironment().value("XDG_CONFIG_HOME");
     if (!configuredUserConfigDir.isEmpty() && QDir::isAbsolutePath(configuredUserConfigDir)) {
         return QDir::cleanPath(configuredUserConfigDir + "/autostart");
     } else {
@@ -365,7 +386,8 @@ QStringList DLoginSessionPrivate::getSystemAutostartDirs()
 {
     QStringList autostartDirs;
     QString defaultSystemConfigDir("/etc/xdg");
-    QString configuredSystemConfigDirsVar = QProcessEnvironment::systemEnvironment().value("XDG_CONFIG_DIRS");
+    QString configuredSystemConfigDirsVar =
+            QProcessEnvironment::systemEnvironment().value("XDG_CONFIG_DIRS");
     QStringList configuredSystemConfigDirs = configuredSystemConfigDirsVar.split(":");
     foreach (const QString &configuredSystemConfigDir, configuredSystemConfigDirs) {
         if (!QDir::isAbsolutePath(configuredSystemConfigDir)) {
@@ -434,7 +456,7 @@ QStringList DLoginSessionPrivate::getAutostartApps(const QString &dir)
     QStringList autostartApps;
     QDir autostartDir(dir);
     if (autostartDir.exists()) {
-        autostartDir.setNameFilters({"*.desktop"});
+        autostartDir.setNameFilters({ "*.desktop" });
         QFileInfoList fileInfos = autostartDir.entryInfoList(QDir::Files);
         foreach (const auto &fileInfo, fileInfos) {
             if (judgeAutostart(fileInfo.canonicalFilePath())) {

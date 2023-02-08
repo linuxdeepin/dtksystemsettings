@@ -4,15 +4,17 @@
 
 #ifndef TIMESYNC1SERVICE_H
 #define TIMESYNC1SERVICE_H
-#include <qobject.h>
-#include <qscopedpointer.h>
-#include <qdbuspendingreply.h>
-#include <ddbusinterface.h>
 #include "dsystemtimetypes_p.h"
 #include "dtksystemtime_global.h"
 
+#include <ddbusinterface.h>
+#include <qdbuspendingreply.h>
+#include <qobject.h>
+#include <qscopedpointer.h>
+
 DSYSTEMTIME_BEGIN_NAMESPACE
 using DCORE_NAMESPACE::DDBusInterface;
+
 class TimeSync1Service : public QObject
 {
     Q_OBJECT
@@ -50,5 +52,6 @@ private:
     void registerService();
     void unRegisterService();
 };
+
 DSYSTEMTIME_END_NAMESPACE
 #endif

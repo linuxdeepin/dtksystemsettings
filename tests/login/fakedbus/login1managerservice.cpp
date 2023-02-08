@@ -4,27 +4,30 @@
 
 #include "login1managerservice.h"
 
-#include <QDBusObjectPath>
-#include <qdbusunixfiledescriptor.h>
-#include <qmetaobject.h>
+#include "dlogintypes_p.h"
+
 #include <qbytearray.h>
+#include <qdbusconnection.h>
+#include <qdbuserror.h>
+#include <qdbusunixfiledescriptor.h>
+#include <qdebug.h>
 #include <qlist.h>
 #include <qmap.h>
+#include <qmetaobject.h>
 #include <qstring.h>
 #include <qstringlist.h>
 #include <qvariant.h>
-#include <qdbusconnection.h>
-#include <qdebug.h>
-#include <qdbuserror.h>
 
-#include "dlogintypes_p.h"
+#include <QDBusObjectPath>
 DLOGIN_BEGIN_NAMESPACE
 
 /*
  * Implementation of adaptor class  Login1ManagerService
  */
 
-Login1ManagerService::Login1ManagerService(const QString &service, const QString &path, QObject *parent)
+Login1ManagerService::Login1ManagerService(const QString &service,
+                                           const QString &path,
+                                           QObject *parent)
     : QObject(parent)
     , m_service(service)
     , m_path(path)
@@ -323,8 +326,10 @@ void Login1ManagerService::HybridSleep(bool interactive)
     m_hybridSleepInteractive = interactive;
 }
 
-QDBusUnixFileDescriptor
-Login1ManagerService::Inhibit(const QString &what, const QString &who, const QString &why, const QString &mode)
+QDBusUnixFileDescriptor Login1ManagerService::Inhibit(const QString &what,
+                                                      const QString &who,
+                                                      const QString &why,
+                                                      const QString &mode)
 {
     m_inhibitor.what = what;
     m_inhibitor.who = who;
@@ -333,7 +338,9 @@ Login1ManagerService::Inhibit(const QString &what, const QString &who, const QSt
     return m_inhibitFileDescriptor;
 }
 
-void Login1ManagerService::KillSession(const QString &sessionId, const QString &who, qint32 signalNumber)
+void Login1ManagerService::KillSession(const QString &sessionId,
+                                       const QString &who,
+                                       qint32 signalNumber)
 {
     m_sessionId = sessionId;
     m_sessionRole = who;
@@ -423,4 +430,5 @@ void Login1ManagerService::TerminateUser(quint32 UID)
 {
     m_UID = UID;
 }
+
 DLOGIN_END_NAMESPACE

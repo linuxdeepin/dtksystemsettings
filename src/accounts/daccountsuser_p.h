@@ -4,8 +4,9 @@
 
 #pragma once
 
-#include "dbus/duserinterface.h"
 #include "dbus/dsystemuserinterface.h"
+#include "dbus/duserinterface.h"
+
 #include <QDir>
 
 DACCOUNTS_BEGIN_NAMESPACE

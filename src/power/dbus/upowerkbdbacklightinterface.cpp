@@ -3,7 +3,9 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
 #include "upowerkbdbacklightinterface.h"
+
 #include "ddbusinterface.h"
+
 #include <qdbusconnection.h>
 #include <qdbuspendingreply.h>
 
@@ -21,13 +23,18 @@ UPowerKbdBacklightInterface::UPowerKbdBacklightInterface(QObject *parent)
     static const QString &Path = QStringLiteral("/org/freedesktop/UPower/KbdBacklight");
     static const QString &Interface = QStringLiteral("org.freedesktop.UPower.KbdBacklight");
     QDBusConnection connection = QDBusConnection::systemBus();
-    connection.connect(Service, Path, Interface, "BrightnessChanged", this, SIGNAL(BrightnessChanged(const qint32)));
+    connection.connect(Service,
+                       Path,
+                       Interface,
+                       "BrightnessChanged",
+                       this,
+                       SIGNAL(BrightnessChanged(const qint32)));
 
 #endif
     m_inter = new DDBusInterface(Service, Path, Interface, connection, this);
 }
 
-UPowerKbdBacklightInterface::~UPowerKbdBacklightInterface() {}
+UPowerKbdBacklightInterface::~UPowerKbdBacklightInterface() { }
 
 // pubilc slots
 
@@ -43,7 +50,7 @@ QDBusPendingReply<qint32> UPowerKbdBacklightInterface::getMaxBrightness() const
 
 QDBusPendingReply<> UPowerKbdBacklightInterface::setBrightness(qint32 value)
 {
-    return m_inter->asyncCallWithArgumentList("SetBrightness", {QVariant::fromValue(value)});
+    return m_inter->asyncCallWithArgumentList("SetBrightness", { QVariant::fromValue(value) });
 }
 
 DPOWER_END_NAMESPACE

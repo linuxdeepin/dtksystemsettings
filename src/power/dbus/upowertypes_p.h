@@ -5,6 +5,7 @@
 #pragma once
 
 #include "dtkpower_global.h"
+
 #include <qdbusargument.h>
 #include <qdbusmetatype.h>
 #include <qlist.h>

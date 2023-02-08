@@ -5,6 +5,7 @@
 #pragma once
 
 #include "dtklogin_global.h"
+
 #include <qobject.h>
 
 class QFileSystemWatcher;

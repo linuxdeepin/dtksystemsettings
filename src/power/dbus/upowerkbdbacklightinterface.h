@@ -5,9 +5,10 @@
 #pragma once
 
 #include "dtkpower_global.h"
+
+#include <ddbusinterface.h>
 #include <qdbuspendingreply.h>
 #include <qscopedpointer.h>
-#include <ddbusinterface.h>
 
 DPOWER_BEGIN_NAMESPACE
 using DCORE_NAMESPACE::DDBusInterface;

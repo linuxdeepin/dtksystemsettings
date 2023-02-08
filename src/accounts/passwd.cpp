@@ -2,16 +2,17 @@
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
-#include <time.h>
-#include <unistd.h>
+#include "passwd.h"
+
 #include <crypt.h>
 #include <shadow.h>
-#include <pwd.h>
-#include <grp.h>
-#include <string.h>
-#include <stdlib.h>
 
-#include "passwd.h"
+#include <grp.h>
+#include <pwd.h>
+#include <stdlib.h>
+#include <string.h>
+#include <time.h>
+#include <unistd.h>
 
 #define ERROR_NULLPOINTER -1;
 #define ERROR_NOERROR 0;

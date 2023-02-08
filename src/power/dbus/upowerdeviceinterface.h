@@ -4,18 +4,19 @@
 
 #pragma once
 
-#include <qglobal.h>
-#include <qobject.h>
-#include <qdbuspendingreply.h>
-#include <qdbusconnection.h>
-#include <qvariant.h>
-#include <ddbusinterface.h>
-
 #include "dtkpower_global.h"
 #include "upowertypes_p.h"
 
+#include <ddbusinterface.h>
+#include <qdbusconnection.h>
+#include <qdbuspendingreply.h>
+#include <qglobal.h>
+#include <qobject.h>
+#include <qvariant.h>
+
 DPOWER_BEGIN_NAMESPACE
 using DCORE_NAMESPACE::DDBusInterface;
+
 class UPowerDeviceInterface : public QObject
 {
     Q_OBJECT
@@ -100,11 +101,13 @@ signals:
 public slots:
     QDBusPendingReply<QList<DTK_POWER_NAMESPACE::History_p>>
     getHistory(const QString &type, const uint timespan, const uint resolution) const;
-    QDBusPendingReply<QList<DTK_POWER_NAMESPACE::Statistic_p>> getStatistics(const QString &type) const;
+    QDBusPendingReply<QList<DTK_POWER_NAMESPACE::Statistic_p>>
+    getStatistics(const QString &type) const;
     QDBusPendingReply<> refresh();
 
 private:
     DDBusInterface *m_inter;
     QString devicename;
 };
+
 DPOWER_END_NAMESPACE

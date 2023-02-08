@@ -3,10 +3,13 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
 #include "powerdemo.h"
+
+#include "dlogintypes.h"
+
 #include <qdebug.h>
+
 #include <iostream>
 #include <string>
-#include "dlogintypes.h"
 
 PowerDemo::PowerDemo(QObject *parent)
     : LoginDemo(parent)

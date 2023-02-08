@@ -4,10 +4,10 @@
 
 #pragma once
 
+#include <qdbuspendingreply.h>
+#include <qdebug.h>
 #include <qobject.h>
 #include <qscopedpointer.h>
-#include <qdebug.h>
-#include <qdbuspendingreply.h>
 
 // class DKbdBacklightPrivate;
 
@@ -23,7 +23,9 @@ public:
     //     Q_SCRIPTABLE void PropertiesChanged(const QVariantMap &properties);
 
 public slots:
+
     Q_SCRIPTABLE void Reset() { m_reset = true; }
+
     Q_SCRIPTABLE qint32 GetBrightness() const;
     Q_SCRIPTABLE qint32 GetMaxBrightness() const;
     Q_SCRIPTABLE void SetBrightness(const qint32 value);

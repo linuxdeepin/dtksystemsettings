@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
 #include "upowertypes_p.h"
+
 #include <qdbusargument.h>
 #include <qdbusmetatype.h>
 #include <qlist.h>
@@ -53,6 +54,7 @@ void History_p::registerMetaType()
     qDBusRegisterMetaType<History_p>();
     qDBusRegisterMetaType<QList<History_p>>();
 }
+
 void Statistic_p::registerMetaType()
 {
     qRegisterMetaType<Statistic_p>("Statistic_p");

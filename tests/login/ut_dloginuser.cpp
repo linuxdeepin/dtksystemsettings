@@ -2,13 +2,14 @@
 //
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
+#include <gmock/gmock.h>
+#include <gtest/gtest.h>
+
 #include "dloginuser.h"
 #include "dloginuser_p.h"
-#include "login1userservice.h"
-#include "login1userinterface.h"
-#include <gtest/gtest.h>
-#include <gmock/gmock.h>
 #include "dloginutils.h"
+#include "login1userinterface.h"
+#include "login1userservice.h"
 
 DLOGIN_USE_NAMESPACE
 
@@ -38,8 +39,10 @@ const QString TestDLoginUser::Service = QStringLiteral("org.freedesktop.fakelogi
 
 TEST_F(TestDLoginUser, propertySessions)
 {
-    m_fakeService->m_sessions = {{"session0", QDBusObjectPath("/org/freedesktop/login1/session0")},
-                                 {"session1", QDBusObjectPath("/org/freedesktop/login1/session0")}};
+    m_fakeService->m_sessions = {
+        { "session0", QDBusObjectPath("/org/freedesktop/login1/session0") },
+        { "session1", QDBusObjectPath("/org/freedesktop/login1/session0") }
+    };
     auto sessionList = m_dLoginUser->sessions();
     ASSERT_THAT(sessionList, testing::SizeIs(2));
     EXPECT_EQ("session0", sessionList[0]);
@@ -107,6 +110,7 @@ public:
         : TestDLoginUser()
     {
     }
+
     ~TestUserState() override = default;
 };
 
@@ -120,12 +124,12 @@ TEST_P(TestUserState, propertyState)
 
 INSTANTIATE_TEST_CASE_P(Default,
                         TestUserState,
-                        testing::Values(UserStateParam{"active", UserState::Active},
-                                        UserStateParam{"closing", UserState::Closing},
-                                        UserStateParam{"lingering", UserState::Lingering},
-                                        UserStateParam{"offline", UserState::Offline},
-                                        UserStateParam{"online", UserState::Online},
-                                        UserStateParam{"", UserState::Unknown}));
+                        testing::Values(UserStateParam{ "active", UserState::Active },
+                                        UserStateParam{ "closing", UserState::Closing },
+                                        UserStateParam{ "lingering", UserState::Lingering },
+                                        UserStateParam{ "offline", UserState::Offline },
+                                        UserStateParam{ "online", UserState::Online },
+                                        UserStateParam{ "", UserState::Unknown }));
 
 TEST_F(TestDLoginUser, propertyDisplay)
 {

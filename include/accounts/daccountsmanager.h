@@ -5,9 +5,11 @@
 #pragma once
 
 #include "daccountstypes.h"
+
+#include <DExpected>
+
 #include <QSharedPointer>
 #include <QStringList>
-#include <DExpected>
 
 DACCOUNTS_BEGIN_NAMESPACE
 class DAccountsUser;
@@ -31,8 +33,11 @@ public:
     virtual ~DAccountsManager();
 
 public slots:
-    DExpected<QList<quint64>> userList() const;  // TODO:创建或删除userlist无法及时刷新，调用sleep(1)正常
-    DExpected<AccountsUserPtr> createUser(const QString &name, const QString &fullName, const DAccountTypes &type);
+    DExpected<QList<quint64>>
+    userList() const; // TODO:创建或删除userlist无法及时刷新，调用sleep(1)正常
+    DExpected<AccountsUserPtr> createUser(const QString &name,
+                                          const QString &fullName,
+                                          const DAccountTypes &type);
     DExpected<void> deleteUser(const QString &name, const bool rmFiles);
     DExpected<AccountsUserPtr> findUserByName(const QString &name);
     DExpected<AccountsUserPtr> findUserById(const qint64 uid);

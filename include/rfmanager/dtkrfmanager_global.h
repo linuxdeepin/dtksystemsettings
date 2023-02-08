@@ -10,12 +10,12 @@
 
 #define DRFMGR_USE_NAMESPACE using namespace DTK_RFMGR_NAMESPACE;
 
-#define DRFMGR_BEGIN_NAMESPACE                                                                                                   \
-    namespace DTK_NAMESPACE {                                                                                                    \
-    namespace DRFMGR_NAMESPACE {
+#define DRFMGR_BEGIN_NAMESPACE \
+  namespace DTK_NAMESPACE {    \
+  namespace DRFMGR_NAMESPACE {
 
-#define DRFMGR_END_NAMESPACE                                                                                                     \
-    }                                                                                                                            \
-    }
+#define DRFMGR_END_NAMESPACE \
+  }                          \
+  }
 
-#endif  // DTKRFMANAGER_GLOBAL_H
+#endif // DTKRFMANAGER_GLOBAL_H

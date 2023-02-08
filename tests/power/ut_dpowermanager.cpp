@@ -4,14 +4,17 @@
 
 #include <gtest/gtest.h>
 
-#include "dpowermanager.h"
 #include "dpowerdevice.h"
+#include "dpowermanager.h"
 #include "upowermanagerservice.h"
-#include <QDBusMessage>
+
 #include <QDBusConnection>
+#include <QDBusMessage>
 #include <QDBusReply>
-#include <unistd.h>
+
 #include <iostream>
+
+#include <unistd.h>
 DPOWER_USE_NAMESPACE
 
 class TestDPowerManager : public testing::Test
@@ -23,6 +26,7 @@ public:
         m_fakeInterface = new UPowerManagerService();
         m_dpowermanager = new DPowerManager();
     }
+
     // 在测试套件中的最后一个测试用例运行结束后，TearDownTestCase 函数会被调用
     static void TearDownTestCase()
     {
@@ -33,9 +37,10 @@ public:
     }
 
     // 每个测试用例开始前，SetUp 函数都会被被调用
-    void SetUp() override {}
+    void SetUp() override { }
+
     // 每个测试用例运行结束后，TearDown 函数都会被被调用
-    void TearDown() override {}
+    void TearDown() override { }
 
     static UPowerManagerService *m_fakeInterface;
     static DPowerManager *m_dpowermanager;
@@ -44,12 +49,13 @@ public:
 UPowerManagerService *TestDPowerManager::m_fakeInterface = nullptr;
 DPowerManager *TestDPowerManager::m_dpowermanager = nullptr;
 
-QT_BEGIN_NAMESPACE  // for QString support
-    inline void
-    PrintTo(const QString &qString, ::std::ostream *os)
+QT_BEGIN_NAMESPACE // for QString support
+        inline void
+        PrintTo(const QString &qString, ::std::ostream *os)
 {
     *os << qUtf8Printable(qString);
 }
+
 QT_END_NAMESPACE
 
 TEST_F(TestDPowerManager, displayDevice)

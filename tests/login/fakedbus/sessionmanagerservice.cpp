@@ -3,9 +3,10 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
 #include "sessionmanagerservice.h"
+
 #include <qdbusconnection.h>
-#include <qdebug.h>
 #include <qdbuserror.h>
+#include <qdebug.h>
 
 DLOGIN_BEGIN_NAMESPACE
 
@@ -38,12 +39,18 @@ bool SessionManagerService::registerService()
         if (errorMsg.isEmpty())
             errorMsg = "maybe it's running";
 
-        qWarning() << QString("Can't register the %1 service, %2.").arg("com.deepin.FakeSessionManager").arg(errorMsg);
+        qWarning() << QString("Can't register the %1 service, %2.")
+                              .arg("com.deepin.FakeSessionManager")
+                              .arg(errorMsg);
         return false;
     }
-    if (!connection.registerObject("/com/deepin/FakeSessionManager", this, QDBusConnection::ExportScriptableContents)) {
+    if (!connection.registerObject("/com/deepin/FakeSessionManager",
+                                   this,
+                                   QDBusConnection::ExportScriptableContents)) {
         QString errorMsg = connection.lastError().message();
-        qWarning() << QString("Can't register %1 the D-Bus object, %2.").arg("com.deepin.FakeSessionManager").arg(errorMsg);
+        qWarning() << QString("Can't register %1 the D-Bus object, %2.")
+                              .arg("com.deepin.FakeSessionManager")
+                              .arg(errorMsg);
         return false;
     }
     return true;
