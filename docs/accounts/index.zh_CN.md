@@ -1,5 +1,8 @@
 @page dtkaccounts dtkaccounts
 @brief dtk用户管理模块
+
+# dtkaccounts
+
 ## 项目介绍
 
 dtkaccounts是对于deepin/UOS系统上的org.freedesktop.Accounts的dbus接口和com.deepin.daemon.Accounts的dbus接口的封装，同时使用Qt以及Linux原生接口实现了一部分功能，其目的是在于方便第三方开发者轻松且快速的调用接口进行开发。<br>
