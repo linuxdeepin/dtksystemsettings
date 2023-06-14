@@ -9,6 +9,7 @@
 #include <qdbuspendingreply.h>
 #include <qobject.h>
 #include <qscopedpointer.h>
+#include <QStringList>
 
 using DTK_CORE_NAMESPACE::DDBusInterface;
 

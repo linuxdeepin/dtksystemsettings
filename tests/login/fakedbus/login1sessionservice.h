@@ -6,7 +6,7 @@
 #include "dlogintypes_p.h"
 
 #include <qobject.h>
-
+#include <QStringList>
 #include <QtDBus>
 QT_BEGIN_NAMESPACE
 class QByteArray;
@@ -15,7 +15,6 @@ class QList;
 template<class Key, class Value>
 class QMap;
 class QString;
-class QStringList;
 class QVariant;
 QT_END_NAMESPACE
 

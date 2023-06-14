@@ -62,6 +62,9 @@ struct Inhibitor
     quint32 UID;
     quint32 PID;
     friend QDebug operator<<(QDebug debug, const Inhibitor &inhibitor);
+    friend bool operator==(const Inhibitor &lhs, const Inhibitor &rhs){
+        return lhs.what == rhs.what && lhs.who == rhs.who && lhs.why == rhs.why && lhs.mode == rhs.mode && lhs.UID == rhs.UID && lhs.PID == rhs.PID;
+    }
 };
 
 enum DLoginErrorCode {

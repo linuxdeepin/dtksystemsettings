@@ -5,14 +5,23 @@
 cmake_minimum_required(VERSION 3.13)
 
 # If do't define version number, specify the version number
-set(VERSION "1.0.0" CACHE STRING "define project version")
+set(DTK_VERSION "5.0.0" CACHE STRING "define project version")
 
 project(DtkSystemSettings
     LANGUAGES CXX
     HOMEPAGE_URL https://github.com/linuxdeepin/dtksystemsettings
     DESCRIPTION "dtk library for systemsettings."
-    VERSION ${VERSION}
+    VERSION ${DTK_VERSION}
 )
+
+if("${PROJECT_VERSION_MAJOR}" STREQUAL "5")
+    set(QT_VERSION_MAJOR "5")
+elseif("${PROJECT_VERSION_MAJOR}" STREQUAL "6")
+    set(QT_VERSION_MAJOR "6")
+    set(DTK_VERSION_MAJOR "6")
+else()
+    message(SEND_ERROR "not support Prject Version ${PROJECT_VERSION}.")
+endif()
 
 set(LIB_NAME dtksystemsettings)
 set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH}) # Set module path for include() command search
@@ -22,8 +31,8 @@ include(GNUInstallDirs) # Specify install dir
 include(CMakePackageConfigHelpers)
 include(CMakePrintHelpers)
 
-set_install_dir(INCLUDE include/dtk1/DSystemSettings)
-set(MKSPECS_INSTALL_DIR "${CMAKE_INSTALL_LIBDIR}/qt5/mkspecs/modules" CACHE STRING "Install directory for qt pri files")
+set_install_dir(INCLUDE include/dtk${DTK_VERSION_MAJOR}/DSystemSettings)
+set(MKSPECS_INSTALL_DIR "${CMAKE_INSTALL_LIBDIR}/qt${QT_VERSION_MAJOR}" CACHE STRING "Install directory for qt pri files")
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED on)
 set(CMAKE_AUTOMOC ON)
@@ -50,9 +59,8 @@ if (CMAKE_BUILD_TYPE STREQUAL "Debug")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address -fno-omit-frame-pointer")
 endif ()
 
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core DBus)
-find_package(Dtk REQUIRED COMPONENTS Core)
+find_package(Dtk${DTK_VERSION_MAJOR}Core REQUIRED)
 
 file(GLOB_RECURSE LIB_PUBLIC_HEADERS "${PROJECT_SOURCE_DIR}/include/*") # Get all headers which will be exported
 
@@ -80,7 +88,7 @@ target_link_directories(${LIB_NAME} INTERFACE
 
 write_basic_package_version_file(
     DtkSystemSettingsConfigVersion.cmake
-    VERSION ${VERSION}
+    VERSION ${DTK_VERSION}
     COMPATIBILITY SameMajorVersion
 )
 
