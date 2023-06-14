@@ -7,16 +7,13 @@
 #include "daccountstypes_p.h"
 
 #include <qdbusmetatype.h>
-
+#include <QStringList>
 #include <QDBusArgument>
 
 using questionsType = QMap<qint32, QByteArray>;
 using anwserType = QMap<qint32, QString>;
 using anwserIndex = QList<qint32>;
 
-Q_DECLARE_METATYPE(questionsType)
-Q_DECLARE_METATYPE(anwserType)
-Q_DECLARE_METATYPE(anwserIndex)
 
 class FakeAccountsUserService : public QObject
 {

@@ -11,7 +11,6 @@
 #include <qmap.h>
 #include <qmetaobject.h>
 #include <qstring.h>
-#include <qstringlist.h>
 #include <qvariant.h>
 
 DLOGIN_BEGIN_NAMESPACE

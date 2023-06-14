@@ -8,6 +8,7 @@
 #include <qdbusabstractadaptor.h>
 #include <qdbusunixfiledescriptor.h>
 #include <qobject.h>
+#include <QStringList>
 
 QT_BEGIN_NAMESPACE
 class QByteArray;
@@ -16,7 +17,6 @@ class QList;
 template<class Key, class Value>
 class QMap;
 class QString;
-class QStringList;
 class QVariant;
 class QDBusObjectPath;
 QT_END_NAMESPACE

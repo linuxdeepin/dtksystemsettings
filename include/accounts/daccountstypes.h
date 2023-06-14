@@ -26,6 +26,11 @@ struct ShadowInfo
     qint32 warn;
     qint32 inactive;
     qint32 expired;
+    friend bool operator==(const ShadowInfo &lhs, const ShadowInfo &rhs)
+    {
+        return lhs.lastChange == rhs.lastChange && lhs.min == rhs.min && lhs.max == rhs.max
+            && lhs.warn == rhs.warn && lhs.inactive == rhs.inactive && lhs.expired == rhs.expired;
+    }
 };
 
 struct LoginUtmpx
@@ -35,6 +40,11 @@ struct LoginUtmpx
     QByteArray host;
     QByteArray address;
     QByteArray time;
+    friend bool operator==(const LoginUtmpx &lhs, const LoginUtmpx &rhs)
+    {
+        return lhs.inittabID == rhs.inittabID && lhs.line == rhs.line && lhs.host == rhs.host
+            && lhs.address == rhs.address && lhs.time == rhs.time;
+    }
 };
 
 struct ReminderInfo
@@ -44,6 +54,12 @@ struct ReminderInfo
     LoginUtmpx currentLogin;
     LoginUtmpx lastLogin;
     qint32 failCountSinceLastLogin;
+    friend bool operator==(const ReminderInfo &lhs, const ReminderInfo &rhs)
+    {
+        return lhs.userName == rhs.userName && lhs.spent == rhs.spent
+            && lhs.currentLogin == rhs.currentLogin && lhs.lastLogin == rhs.lastLogin
+            && lhs.failCountSinceLastLogin == rhs.failCountSinceLastLogin;
+    }
 };
 
 struct ValidMsg
@@ -51,6 +67,10 @@ struct ValidMsg
     bool valid;
     qint32 code;
     QString msg;
+    friend bool operator==(const ValidMsg &lhs, const ValidMsg &rhs)
+    {
+        return lhs.valid == rhs.valid && lhs.code == rhs.code && lhs.msg == rhs.msg;
+    }
 };
 
 DACCOUNTS_END_NAMESPACE

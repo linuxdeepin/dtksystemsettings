@@ -7,7 +7,7 @@
 #include "daccountstypes.h"
 
 #include <DExpected>
-
+#include <QObject>
 #include <QSharedPointer>
 #include <QStringList>
 
@@ -34,7 +34,7 @@ public:
 
 public slots:
     DExpected<QList<quint64>>
-    userList() const; // TODO:创建或删除userlist无法及时刷新，调用sleep(1)正常
+    userList() const; // TODO:创建或删除 userlist 无法及时刷新，调用 sleep(1) 正常
     DExpected<AccountsUserPtr> createUser(const QString &name,
                                           const QString &fullName,
                                           const DAccountTypes &type);

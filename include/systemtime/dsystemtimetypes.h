@@ -15,6 +15,10 @@ struct Address
 {
     qint32 type;
     QByteArray ip;
+    friend bool operator==(const Address &lhs, const Address &rhs)
+    {
+        return lhs.type == rhs.type && lhs.ip == rhs.ip;
+    }
 };
 
 struct Message
@@ -49,6 +53,25 @@ struct Message
     bool spike;
     quint64 packet_count;
     quint64 samples_jitter;
+    friend bool operator==(const Message &lhs, const Message &rhs)
+    {
+        return lhs.ntp_field_leap == rhs.ntp_field_leap &&
+               lhs.ntp_field_version == rhs.ntp_field_version &&
+               lhs.ntp_field_mode == rhs.ntp_field_mode &&
+               lhs.ntp_msg_stratum == rhs.ntp_msg_stratum &&
+               lhs.ntp_msg_precision == rhs.ntp_msg_precision &&
+               lhs.ntp_ts_short_to_usec_delay == rhs.ntp_ts_short_to_usec_delay &&
+               lhs.ntp_ts_short_to_usec_dispersion == rhs.ntp_ts_short_to_usec_dispersion &&
+               lhs.ntp_msg_refid == rhs.ntp_msg_refid &&
+               lhs.origin_time == rhs.origin_time &&
+               lhs.ntp_msg_recv_time == rhs.ntp_msg_recv_time &&
+               lhs.ntp_msg_trans_time == rhs.ntp_msg_trans_time &&
+               lhs.dest_time == rhs.dest_time &&
+               lhs.spike == rhs.spike &&
+               lhs.packet_count == rhs.packet_count &&
+               lhs.samples_jitter == rhs.samples_jitter;
+    }
+    
 };
 
 DSYSTEMTIME_END_NAMESPACE

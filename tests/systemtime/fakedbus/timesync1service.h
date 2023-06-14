@@ -11,6 +11,7 @@
 #include <qdbuspendingreply.h>
 #include <qobject.h>
 #include <qscopedpointer.h>
+#include <QStringList>
 
 DSYSTEMTIME_BEGIN_NAMESPACE
 using DCORE_NAMESPACE::DDBusInterface;

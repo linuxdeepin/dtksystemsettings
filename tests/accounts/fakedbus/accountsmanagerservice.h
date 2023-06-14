@@ -5,6 +5,7 @@
 #pragma once
 
 #include <QDBusObjectPath>
+#include <QStringList>
 
 class FakeAccountsManagerService : public QObject
 {

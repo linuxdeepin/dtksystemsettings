@@ -15,12 +15,20 @@ struct History
     uint time;
     double value;
     uint state;
+    friend bool operator==(const History &lhs, const History &rhs)
+    {
+        return lhs.time == rhs.time && lhs.value == rhs.value && lhs.state == rhs.state;
+    }
 };
 
 struct Statistic
 {
     double value;
     double accuracy;
+    friend bool operator==(const Statistic &lhs, const Statistic &rhs)
+    {
+        return lhs.value == rhs.value && lhs.accuracy == rhs.accuracy;
+    }
 };
 
 enum class KbdSource { Internal, External, Unknown };
