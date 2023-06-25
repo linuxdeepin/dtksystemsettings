@@ -98,11 +98,11 @@
 @brief TCO认证定义的充电周期数, 如果该值未知或不适用, 则为-1。(systemd>=251)
 @return 整数
 
-@fn quint64 DPowerDevice::timeToEmpty() const
+@fn qint64 DPowerDevice::timeToEmpty() const
 @brief 直到电源被认为是空的秒数。如果未知, 则设置为0
 @return 长整数
 
-@fn quint64 DPowerDevice::timeToFull() const
+@fn qint64 DPowerDevice::timeToFull() const
 @brief 电池充电达到被认为充满所需的秒数。如果未知, 则设置为0
 @return 长整数
 
