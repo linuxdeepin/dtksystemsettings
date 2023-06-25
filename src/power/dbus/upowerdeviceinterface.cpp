@@ -119,12 +119,12 @@ qint32 UPowerDeviceInterface::chargeCycles() const
 
 qint64 UPowerDeviceInterface::timeToEmpty() const
 {
-    return qdbus_cast<quint64>(m_inter->property("TimeToEmpty"));
+    return qdbus_cast<qint64>(m_inter->property("TimeToEmpty"));
 }
 
 qint64 UPowerDeviceInterface::timeToFull() const
 {
-    return qdbus_cast<quint64>(m_inter->property("TimeToFull"));
+    return qdbus_cast<qint64>(m_inter->property("TimeToFull"));
 }
 
 QString UPowerDeviceInterface::iconName() const
