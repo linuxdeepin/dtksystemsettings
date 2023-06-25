@@ -117,7 +117,7 @@ TEST_P(TestSessionClass, sessionClass)
     EXPECT_EQ(params.enumClass, m_dLoginSession->sessionClass());
 }
 
-INSTANTIATE_TEST_CASE_P(Default,
+INSTANTIATE_TEST_SUITE_P(Default,
                         TestSessionClass,
                         testing::Values(SessionClassParam{ "greeter", SessionClass::Greeter },
                                         SessionClassParam{ "lock-screen",
@@ -207,7 +207,7 @@ TEST_P(TestSessionState, state)
     EXPECT_EQ(params.enumState, m_dLoginSession->state());
 }
 
-INSTANTIATE_TEST_CASE_P(Default,
+INSTANTIATE_TEST_SUITE_P(Default,
                         TestSessionState,
                         testing::Values(SessionStateParam{ "active", SessionState::Active },
                                         SessionStateParam{ "closing", SessionState::Closing },
@@ -240,7 +240,7 @@ TEST_P(TestSessionType, type)
     EXPECT_EQ(params.enumType, m_dLoginSession->type());
 }
 
-INSTANTIATE_TEST_CASE_P(Default,
+INSTANTIATE_TEST_SUITE_P(Default,
                         TestSessionType,
                         testing::Values(SessionTypeParam{ "x11", SessionType::X11 },
                                         SessionTypeParam{ "wayland", SessionType::Wayland },
@@ -641,7 +641,7 @@ TEST_P(TestAutostart, isAutostart)
     EXPECT_EQ(params.isAutostartResult, result);
 }
 
-INSTANTIATE_TEST_CASE_P(
+INSTANTIATE_TEST_SUITE_P(
         Default,
         TestAutostart,
         testing::Values(

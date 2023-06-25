@@ -6,6 +6,20 @@
 
 #include <qdebug.h>
 #include <qmap.h>
+
+std::ostream &operator<<(std::ostream &os, const QString &str)
+{
+    os << str.toStdString();
+    return os;
+}
+
+std::ostream &operator<<(std::ostream &os, const QStringList &strList)
+{
+    const QString str = strList.join(",");
+    os << "{ " << str << " }";
+    return os;
+}
+
 DLOGIN_BEGIN_NAMESPACE
 
 namespace Utils {
@@ -351,18 +365,4 @@ bool registerAllStringConverter()
 }
 
 } // namespace Utils
-
-std::ostream &operator<<(std::ostream &os, const QString &str)
-{
-    os << str.toStdString();
-    return os;
-}
-
-std::ostream &operator<<(std::ostream &os, const QStringList &strList)
-{
-    const QString str = strList.join(",");
-    os << "{ " << str << " }";
-    return os;
-}
-
 DLOGIN_END_NAMESPACE

@@ -492,7 +492,7 @@ TEST_P(TestExecuteQuery, canSuspendThenHibernate)
     EXPECT_EQ(m_dLoginManager->canSuspendThenHibernate(), params.result);
 }
 
-INSTANTIATE_TEST_CASE_P(Default,
+INSTANTIATE_TEST_SUITE_P(Default,
                         TestExecuteQuery,
                         testing::Values(ExecuteQuery{ "yes", ExecuteStatus::Yes },
                                         ExecuteQuery{ "no", ExecuteStatus::No },
@@ -692,7 +692,7 @@ TEST_P(TestInhibit, inhibit)
     EXPECT_EQ(params.strMode, dbusInhibitor.mode);
 }
 
-INSTANTIATE_TEST_CASE_P(Default,
+INSTANTIATE_TEST_SUITE_P(Default,
                         TestInhibit,
                         testing::Values(InhibitParam{ InhibitBehavior::HandleHibernateKey,
                                                       "handle-hibernate-key",
@@ -851,7 +851,7 @@ TEST_P(TestScheduleShutdown, scheduleShutdown)
     EXPECT_EQ(params.usec * 1000, m_fakeService->m_scheduledShutdown.usec);
 }
 
-INSTANTIATE_TEST_CASE_P(
+INSTANTIATE_TEST_SUITE_P(
         Default,
         TestScheduleShutdown,
         testing::Values(ScheduleShutdownParam{ ShutdownType::Halt, "halt", 1000 },

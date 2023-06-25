@@ -7,7 +7,6 @@
 
 #include "dloginuser.h"
 #include "dloginuser_p.h"
-#include "dloginutils.h"
 #include "login1userinterface.h"
 #include "login1userservice.h"
 
@@ -122,7 +121,7 @@ TEST_P(TestUserState, propertyState)
     EXPECT_EQ(params.enumState, m_dLoginUser->state());
 }
 
-INSTANTIATE_TEST_CASE_P(Default,
+INSTANTIATE_TEST_SUITE_P(Default,
                         TestUserState,
                         testing::Values(UserStateParam{ "active", UserState::Active },
                                         UserStateParam{ "closing", UserState::Closing },
