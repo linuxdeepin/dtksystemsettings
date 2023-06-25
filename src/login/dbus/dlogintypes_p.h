@@ -21,8 +21,14 @@ struct DBusScheduledShutdownValue
     QString type;
     quint64 usec;
     static void registerMetaType();
-    bool operator==(const DBusScheduledShutdownValue &v);
-    bool operator!=(const DBusScheduledShutdownValue &v);
+    inline friend bool operator==(const DBusScheduledShutdownValue &lhs, const DBusScheduledShutdownValue &rhs)
+    {
+        return lhs.type == rhs.type && lhs.usec == rhs.usec;
+    }
+    inline friend bool operator!=(const DBusScheduledShutdownValue &lhs, const DBusScheduledShutdownValue &rhs)
+    {
+        return !(lhs == rhs);
+    }
 };
 
 struct DBusInhibitor
@@ -41,8 +47,14 @@ struct DBusSeat
     QString seatId;
     QDBusObjectPath path;
     static void registerMetaType();
-    bool operator==(const DBusSeat &v);
-    bool operator!=(const DBusSeat &v);
+    inline friend bool operator==(const DBusSeat &lhs, const DBusSeat &rhs)
+    {
+        return lhs.seatId == rhs.seatId && lhs.path == rhs.path;
+    }
+    inline friend bool operator!=(const DBusSeat &lhs, const DBusSeat &rhs)
+    {
+        return !(lhs == rhs);
+    }
 };
 
 struct DBusSeatPath
@@ -50,8 +62,14 @@ struct DBusSeatPath
     QString seatId;
     QDBusObjectPath path;
     static void registerMetaType();
-    bool operator==(const DBusSeatPath &v);
-    bool operator!=(const DBusSeatPath &v);
+    inline friend bool operator==(const DBusSeatPath &lhs, const DBusSeatPath &rhs)
+    {
+        return lhs.path == rhs.path && lhs.seatId == rhs.seatId;
+    }
+    inline friend bool operator!=(const DBusSeatPath &lhs, const DBusSeatPath &rhs)
+    {
+        return !(lhs == rhs);
+    }
 };
 
 struct DBusSession
@@ -77,8 +95,14 @@ struct DBusSessionPath
     QString sessionId;
     QDBusObjectPath path;
     static void registerMetaType();
-    bool operator==(const DBusSessionPath &v);
-    bool operator!=(const DBusSessionPath &v);
+    inline friend bool operator==(const DBusSessionPath &lhs, const DBusSessionPath &rhs)
+    {
+        return lhs.path == rhs.path && lhs.sessionId == rhs.sessionId;
+    }
+    inline friend bool operator!=(const DBusSessionPath &lhs, const DBusSessionPath &rhs)
+    {
+        return !(lhs == rhs);
+    }
 };
 
 struct DBusUserPath
@@ -86,8 +110,14 @@ struct DBusUserPath
     uint userId;
     QDBusObjectPath path;
     static void registerMetaType();
-    bool operator==(const DBusUserPath &v);
-    bool operator!=(const DBusUserPath &v);
+    inline friend bool operator==(const DBusUserPath &lhs, const DBusUserPath &rhs)
+    {
+        return lhs.path == rhs.path && lhs.userId == rhs.userId;
+    }
+    inline friend bool operator!=(const DBusUserPath &lhs, const DBusUserPath &rhs)
+    {
+        return !(lhs == rhs);
+    }
 };
 
 QDBusArgument &operator<<(QDBusArgument &arg, const DBusScheduledShutdownValue &value);

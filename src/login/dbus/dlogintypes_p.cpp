@@ -8,56 +8,6 @@
 
 DLOGIN_BEGIN_NAMESPACE
 
-bool DBusScheduledShutdownValue::operator==(const DBusScheduledShutdownValue &v)
-{
-    return this->type == v.type && this->usec == v.usec;
-}
-
-bool DBusScheduledShutdownValue::operator!=(const DBusScheduledShutdownValue &v)
-{
-    return !(*this == v);
-}
-
-bool DBusSessionPath::operator==(const DBusSessionPath &v)
-{
-    return this->path == v.path && this->sessionId == v.sessionId;
-}
-
-bool DBusSessionPath::operator!=(const DBusSessionPath &v)
-{
-    return !(*this == v);
-}
-
-bool DBusSeat::operator==(const DBusSeat &v)
-{
-    return this->seatId == v.seatId && this->path == v.path;
-}
-
-bool DBusSeat::operator!=(const DBusSeat &v)
-{
-    return !(*this == v);
-}
-
-bool DBusSeatPath::operator==(const DBusSeatPath &v)
-{
-    return this->seatId == v.seatId && this->path == v.path;
-}
-
-bool DBusSeatPath::operator!=(const DBusSeatPath &v)
-{
-    return !(*this == v);
-}
-
-bool DBusUserPath::operator==(const DBusUserPath &v)
-{
-    return this->path == v.path && this->userId == v.userId;
-}
-
-bool DBusUserPath::operator!=(const DBusUserPath &v)
-{
-    return !(*this == v);
-}
-
 QDBusArgument &operator<<(QDBusArgument &arg, const DBusScheduledShutdownValue &value)
 {
     arg.beginStructure();
