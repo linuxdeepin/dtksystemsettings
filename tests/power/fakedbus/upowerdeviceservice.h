@@ -35,8 +35,8 @@ public:
     Q_PROPERTY(double Temperature READ temperature);
     Q_PROPERTY(double Voltage READ voltage);
     Q_PROPERTY(quint32 ChargeCycles READ chargeCycles);
-    Q_PROPERTY(quint64 TimeToEmpty READ timeToEmpty);
-    Q_PROPERTY(quint64 TimeToFull READ timeToFull);
+    Q_PROPERTY(qint64 TimeToEmpty READ timeToEmpty);
+    Q_PROPERTY(qint64 TimeToFull READ timeToFull);
     Q_PROPERTY(QString IconName READ iconName);
     Q_PROPERTY(QString Model READ model);
     Q_PROPERTY(QString NativePath READ nativePath);
