@@ -18,8 +18,8 @@ Files: debian/*
 Copyright: None
 License: CC0-1.0
 
-# git github
-Files: .github/* .gitignore
+# git github ci
+Files: .github/* .gitignore .obs/* .syncexclude
 Copyright: None
 License: CC0-1.0
 
