@@ -115,6 +115,7 @@ signals:
     void maxPasswordAgeChanged(const qint32 age);
     void passwordHintChanged(const QString &hint);
     void noPasswdLoginChanged(const bool enabled);
+    void userDataChanged();
 
 private:
     explicit DAccountsUser(const quint64 uid, QObject *parent = nullptr);

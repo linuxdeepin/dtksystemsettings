@@ -62,7 +62,7 @@ public:
     quint64 UID() const;
 
 signals:
-    void ReceivedChanged();
+    void DataChanged();
 
 public slots:
     QDBusPendingReply<qint64, // expiration time
@@ -88,9 +88,6 @@ public slots:
     QDBusPendingReply<void> setShell(const QString &shell);
     QDBusPendingReply<void> setUserName(const QString &name);
     QDBusPendingReply<void> setXSession(const QString &x_session);
-
-private slots:
-    void receiveChanged();
 
 private:
     DDBusInterface *m_inter;
