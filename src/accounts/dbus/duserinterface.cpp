@@ -21,6 +21,7 @@ DUserInterface::DUserInterface(const QString &path, QObject *parent)
     const QString &Service = QStringLiteral("org.freedesktop.Accounts");
     const QString &Interface = QStringLiteral("org.freedesktop.Accounts.User");
     QDBusConnection Connection = QDBusConnection::systemBus();
+    Connection.connect(Service, path, Interface, "Changed", this, SIGNAL(DataChanged()));
 #endif
     LoginHistory_p::registerMetaType();
 
@@ -120,12 +121,6 @@ quint64 DUserInterface::loginFrequency() const
 quint64 DUserInterface::UID() const
 {
     return qdbus_cast<quint64>(m_inter->property("Uid"));
-}
-
-// private slots
-void DUserInterface::receiveChanged()
-{
-    emit ReceivedChanged();
 }
 
 QDBusPendingReply<qint64, qint64, qint64, qint64, qint64, qint64>

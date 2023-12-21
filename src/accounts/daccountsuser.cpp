@@ -115,6 +115,8 @@ DAccountsUser::DAccountsUser(const quint64 uid, QObject *parent)
             [this](const QString &hint) {
                 emit this->passwordHintChanged(hint);
             });
+
+    connect(d->m_dUserInter, &DUserInterface::DataChanged, this, &DAccountsUser::userDataChanged);
 }
 
 DAccountsUser::~DAccountsUser() { }
