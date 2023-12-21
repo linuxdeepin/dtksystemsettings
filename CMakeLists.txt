@@ -23,7 +23,8 @@ else()
     message(SEND_ERROR "not support Prject Version ${PROJECT_VERSION}.")
 endif()
 
-set(LIB_NAME dtksystemsettings)
+set(LIB_NAME dtk${DTK_VERSION_MAJOR}systemsettings)
+set(DtkSystemSettings Dtk${DTK_VERSION_MAJOR}SystemSettings)
 set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH}) # Set module path for include() command search
 
 include(DtkUtils) # Include cmake/DtkUtils.cmake
@@ -41,26 +42,25 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC -Wall -Wextra")
 set(CMAKE_SHARED_LINKER_FLAGS ${CMAKE_SHARED_LINKER_FLAGS} "-Wl,--as-needed")
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-
-set(ConfigPackageLocation ${CMAKE_INSTALL_LIBDIR}/cmake/DtkSystemSettings)
+set(CONFIG_CMAKE_INSTALL_DIR "${CMAKE_INSTALL_LIBDIR}/cmake/${DtkSystemSettings}" CACHE STRING "Install dir for cmake config files")
 
 # Install settings
-if (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
     set(CMAKE_INSTALL_PREFIX /usr)
-endif ()
+endif()
 
-if (NOT CMAKE_BUILD_TYPE)
+if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Release CACHE STRING "Choose Debug or Release" FORCE)
 endif()
 
-if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     set(BUILD_TESTING ON)
     set(BUILD_EXAMPLES ON)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address -fno-omit-frame-pointer")
-endif ()
+endif()
 
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core DBus)
-find_package(Dtk${DTK_VERSION_MAJOR}Core REQUIRED)
+find_package(Dtk${DTK_VERSION_MAJOR} REQUIRED Core)
 
 file(GLOB_RECURSE LIB_PUBLIC_HEADERS "${PROJECT_SOURCE_DIR}/include/*") # Get all headers which will be exported
 
@@ -68,17 +68,18 @@ add_subdirectory(src)
 
 set(BUILD_DOCS ON CACHE BOOL "Generate doxygen-based documentation")
 find_package(Doxygen)
-if (BUILD_DOCS AND DOXYGEN_FOUND)
+
+if(BUILD_DOCS AND DOXYGEN_FOUND)
     add_subdirectory(docs)
 endif()
 
 # example
-if (BUILD_EXAMPLES)
+if(BUILD_EXAMPLES)
     add_subdirectory(examples)
 endif()
 
 # test
-if (BUILD_TESTING)
+if(BUILD_TESTING)
     add_subdirectory(tests)
 endif()
 
@@ -87,18 +88,21 @@ target_link_directories(${LIB_NAME} INTERFACE
 )
 
 write_basic_package_version_file(
-    DtkSystemSettingsConfigVersion.cmake
+    Dtk${DTK_VERSION_MAJOR}SystemSettingsConfigVersion.cmake
     VERSION ${DTK_VERSION}
     COMPATIBILITY SameMajorVersion
 )
 
 configure_package_config_file(misc/DtkSystemSettingsConfig.cmake.in
-    DtkSystemSettingsConfig.cmake
-    INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/DtkSystemSettings
+    ${CMAKE_CURRENT_BINARY_DIR}/${DtkSystemSettings}Config.cmake
+    INSTALL_DESTINATION ${CONFIG_CMAKE_INSTALL_DIR}
     PATH_VARS CMAKE_INSTALL_INCLUDEDIR CMAKE_INSTALL_LIBDIR
 )
 
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/DtkSystemSettingsConfig.cmake ${CMAKE_CURRENT_BINARY_DIR}/DtkSystemSettingsConfigVersion.cmake DESTINATION ${ConfigPackageLocation})
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${DtkSystemSettings}Config.cmake
+    ${CMAKE_CURRENT_BINARY_DIR}/Dtk${DTK_VERSION_MAJOR}SystemSettingsConfigVersion.cmake
+    DESTINATION ${CONFIG_CMAKE_INSTALL_DIR}
+)
 
 set(PC_REQUIRES "Qt${QT_VERSION_MAJOR}Core Qt${QT_VERSION_MAJOR}DBus dtkcore")
 configure_file(misc/dtksystemsettings.pc.in dtksystemsettings.pc @ONLY)
@@ -107,5 +111,5 @@ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/dtksystemsettings.pc DESTINATION "${CM
 set(DTK_MODULE ${LIB_NAME})
 set(DTK_DEPS "core dbus dtkcore")
 set(DTK_CFG "v2 ltcg")
-configure_file(misc/qt_lib_dtksystemsettings.pri.in qt_lib_dtksystemsettings.pri @ONLY)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/qt_lib_dtksystemsettings.pri DESTINATION "${MKSPECS_INSTALL_DIR}")
+configure_file(misc/qt_lib_dtksystemsettings.pri.in qt_lib_dtk${DTK_VERSION_MAJOR}systemsettings.pri @ONLY)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/qt_lib_dtk${DTK_VERSION_MAJOR}systemsettings.pri DESTINATION "${MKSPECS_INSTALL_DIR}")

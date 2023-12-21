@@ -44,13 +44,13 @@ set_target_properties(${LIB_NAME} PROPERTIES
     PUBLIC_HEADER "${LIB_PUBLIC_HEADERS}"
 )
 
-install(TARGETS ${LIB_NAME} EXPORT DtkSystemSettingsTargets
+install(TARGETS ${LIB_NAME} EXPORT ${DtkSystemSettings}Targets
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
 )
 
-install(EXPORT DtkSystemSettingsTargets
-    FILE DtkSystemSettingsTargets.cmake
-    NAMESPACE Dtk::
-    DESTINATION ${ConfigPackageLocation}
+install(EXPORT ${DtkSystemSettings}Targets
+    FILE ${DtkSystemSettings}Targets.cmake
+    NAMESPACE Dtk${DTK_VERSION_MAJOR}::
+    DESTINATION ${CONFIG_CMAKE_INSTALL_DIR}
 )
