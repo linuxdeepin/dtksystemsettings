@@ -9,6 +9,7 @@ Build-Depends:
  qhelpgenerator-qt5 | qttools5-dev-tools,
  qtbase5-dev,
  libdtkcore-dev,
+ libdtkcommon-dev,
  graphviz
 Standards-Version: 4.5.0
 
