@@ -31,7 +31,7 @@ DAccountsUserPrivate::DAccountsUserPrivate(const quint64 uid, DAccountsUser *par
     const auto &daemonPath = "/com/deepin/daemon/FakeAccounts/User" + QString::number(uid);
 #else
     const auto &freeDesktopPath = "/org/freedesktop/Accounts/User" + QString::number(uid);
-    const auto &daemonPath = "/com/deepin/daemon/Accounts/User" + QString::number(uid);
+    const auto &daemonPath = "/org/deepin/dde/Accounts1/User" + QString::number(uid);
 #endif
     m_dSystemUserInter = new DSystemUserInterface(daemonPath, this);
     m_dUserInter = new DUserInterface(freeDesktopPath, this);
