@@ -87,7 +87,7 @@ target_link_directories(${LIB_NAME} INTERFACE
 )
 
 write_basic_package_version_file(
-    Dtk${DTK_VERSION_MAJOR}SystemSettingsConfigVersion.cmake
+    ${DtkSystemSettings}ConfigVersion.cmake
     VERSION ${DTK_VERSION}
     COMPATIBILITY SameMajorVersion
 )
@@ -99,16 +99,16 @@ configure_package_config_file(misc/DtkSystemSettingsConfig.cmake.in
 )
 
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${DtkSystemSettings}Config.cmake
-    ${CMAKE_CURRENT_BINARY_DIR}/Dtk${DTK_VERSION_MAJOR}SystemSettingsConfigVersion.cmake
+    ${CMAKE_CURRENT_BINARY_DIR}/${DtkSystemSettings}ConfigVersion.cmake
     DESTINATION ${CONFIG_CMAKE_INSTALL_DIR}
 )
 
-set(PC_REQUIRES "Qt${QT_VERSION_MAJOR}Core Qt${QT_VERSION_MAJOR}DBus dtkcore")
-configure_file(misc/dtksystemsettings.pc.in dtksystemsettings.pc @ONLY)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/dtksystemsettings.pc DESTINATION "${CMAKE_INSTALL_LIBDIR}/pkgconfig")
+set(PC_REQUIRES "Qt${QT_VERSION_MAJOR}Core Qt${QT_VERSION_MAJOR}DBus dtk${DTK_VERSION_MAJOR}core")
+configure_file(misc/dtksystemsettings.pc.in dtk${DTK_VERSION_MAJOR}systemsettings.pc @ONLY)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/dtk${DTK_VERSION_MAJOR}systemsettings.pc DESTINATION "${CMAKE_INSTALL_LIBDIR}/pkgconfig")
 
 set(DTK_MODULE ${LIB_NAME})
-set(DTK_DEPS "core dbus dtkcore")
+set(DTK_DEPS "core dbus dtk${DTK_VERSION_MAJOR}core")
 set(DTK_CFG "v2 ltcg")
 configure_file(misc/qt_lib_dtksystemsettings.pri.in qt_lib_dtk${DTK_VERSION_MAJOR}systemsettings.pri @ONLY)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/qt_lib_dtk${DTK_VERSION_MAJOR}systemsettings.pri DESTINATION "${MKSPECS_INSTALL_DIR}")
