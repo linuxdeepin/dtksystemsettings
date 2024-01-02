@@ -16,23 +16,26 @@ project(DtkSystemSettings
 
 if("${PROJECT_VERSION_MAJOR}" STREQUAL "5")
     set(QT_VERSION_MAJOR "5")
+    set(DTK_VERSION_MAJOR "5")
 elseif("${PROJECT_VERSION_MAJOR}" STREQUAL "6")
     set(QT_VERSION_MAJOR "6")
     set(DTK_VERSION_MAJOR "6")
+    set(VERSION_SUFFIX "6")
 else()
     message(SEND_ERROR "not support Prject Version ${PROJECT_VERSION}.")
 endif()
 
-set(LIB_NAME dtk${DTK_VERSION_MAJOR}systemsettings)
-set(DtkSystemSettings Dtk${DTK_VERSION_MAJOR}SystemSettings)
-set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH}) # Set module path for include() command search
-
-include(DtkUtils) # Include cmake/DtkUtils.cmake
+# Install settings
+if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+    set(CMAKE_INSTALL_PREFIX /usr)
+endif()
 include(GNUInstallDirs) # Specify install dir
 include(CMakePackageConfigHelpers)
 include(CMakePrintHelpers)
 
-set_install_dir(INCLUDE include/dtk${DTK_VERSION_MAJOR}/DSystemSettings)
+set(LIB_NAME dtk${VERSION_SUFFIX}systemsettings)
+set(DtkSystemSettings Dtk${VERSION_SUFFIX}SystemSettings)
+set(DTK_INCLUDE_INSTALL_DIR "${CMAKE_INSTALL_INCLUDEDIR}/dtk${DTK_VERSION_MAJOR}/DSystemSettings" CACHE STRING "Include directory headers")
 set(MKSPECS_INSTALL_DIR "${CMAKE_INSTALL_LIBDIR}/qt${QT_VERSION_MAJOR}" CACHE STRING "Install directory for qt pri files")
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED on)
@@ -42,11 +45,6 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC -Wall -Wextra")
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CONFIG_CMAKE_INSTALL_DIR "${CMAKE_INSTALL_LIBDIR}/cmake/${DtkSystemSettings}" CACHE STRING "Install dir for cmake config files")
-
-# Install settings
-if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
-    set(CMAKE_INSTALL_PREFIX /usr)
-endif()
 
 if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Release CACHE STRING "Choose Debug or Release" FORCE)
@@ -59,7 +57,7 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
 endif()
 
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core DBus)
-find_package(Dtk${DTK_VERSION_MAJOR} REQUIRED Core)
+find_package(Dtk${VERSION_SUFFIX} REQUIRED Core)
 
 file(GLOB_RECURSE LIB_PUBLIC_HEADERS "${PROJECT_SOURCE_DIR}/include/*") # Get all headers which will be exported
 
@@ -103,12 +101,13 @@ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${DtkSystemSettings}Config.cmake
     DESTINATION ${CONFIG_CMAKE_INSTALL_DIR}
 )
 
-set(PC_REQUIRES "Qt${QT_VERSION_MAJOR}Core Qt${QT_VERSION_MAJOR}DBus dtk${DTK_VERSION_MAJOR}core")
-configure_file(misc/dtksystemsettings.pc.in dtk${DTK_VERSION_MAJOR}systemsettings.pc @ONLY)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/dtk${DTK_VERSION_MAJOR}systemsettings.pc DESTINATION "${CMAKE_INSTALL_LIBDIR}/pkgconfig")
+GNUInstallDirs_get_absolute_install_dir(DTK_FULL_INCLUDE_INSTALL_DIR DTK_INCLUDE_INSTALL_DIR INCLUDEDIR)
+set(PC_REQUIRES "Qt${QT_VERSION_MAJOR}Core Qt${QT_VERSION_MAJOR}DBus dtk${VERSION_SUFFIX}core")
+configure_file(misc/dtksystemsettings.pc.in dtk${VERSION_SUFFIX}systemsettings.pc @ONLY)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/dtk${VERSION_SUFFIX}systemsettings.pc DESTINATION "${CMAKE_INSTALL_LIBDIR}/pkgconfig")
 
 set(DTK_MODULE ${LIB_NAME})
-set(DTK_DEPS "core dbus dtk${DTK_VERSION_MAJOR}core")
+set(DTK_DEPS "core dbus dtk${VERSION_SUFFIX}core")
 set(DTK_CFG "v2 ltcg")
-configure_file(misc/qt_lib_dtksystemsettings.pri.in qt_lib_dtk${DTK_VERSION_MAJOR}systemsettings.pri @ONLY)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/qt_lib_dtk${DTK_VERSION_MAJOR}systemsettings.pri DESTINATION "${MKSPECS_INSTALL_DIR}")
+configure_file(misc/qt_lib_dtksystemsettings.pri.in qt_lib_dtk${VERSION_SUFFIX}systemsettings.pri @ONLY)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/qt_lib_dtk${VERSION_SUFFIX}systemsettings.pri DESTINATION "${MKSPECS_INSTALL_DIR}")
