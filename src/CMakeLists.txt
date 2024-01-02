@@ -21,7 +21,7 @@ target_include_directories(${LIB_NAME} PUBLIC
 
 # Set include directory only for external targets linked to this target(i.e. downstream user)
 target_include_directories(${LIB_NAME} INTERFACE
-    $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
+    $<INSTALL_INTERFACE:${DTK_INCLUDE_INSTALL_DIR}>
 )
 
 add_subdirectory(accounts)
@@ -46,11 +46,11 @@ set_target_properties(${LIB_NAME} PROPERTIES
 
 install(TARGETS ${LIB_NAME} EXPORT ${DtkSystemSettings}Targets
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+    PUBLIC_HEADER DESTINATION ${DTK_INCLUDE_INSTALL_DIR}
 )
 
 install(EXPORT ${DtkSystemSettings}Targets
     FILE ${DtkSystemSettings}Targets.cmake
-    NAMESPACE Dtk${DTK_VERSION_MAJOR}::
+    NAMESPACE Dtk${VERSION_SUFFIX}::
     DESTINATION ${CONFIG_CMAKE_INSTALL_DIR}
 )
