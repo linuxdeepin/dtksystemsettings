@@ -9,4 +9,4 @@ PACK_VER = $(shell echo $(DEB_VERSION_UPSTREAM) | awk -F'[+_~-]' '{print $$1}')
 BUILD_VER = $(shell echo $(DEB_VERSION_UPSTREAM) | awk -F'[+_~-]' '{print $$2}' | sed 's/[^0-9]//g' | awk '{print int($$1)}')
 
 override_dh_auto_configure:
-	dh_auto_configure -- -DBUILD_VERSION=$(BUILD_VER) -DVERSION=$(PACK_VER)
+	dh_auto_configure -- -DBUILD_VERSION=$(BUILD_VER) -DDTK_VERSION=$(PACK_VER)
