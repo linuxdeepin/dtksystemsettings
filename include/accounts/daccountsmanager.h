@@ -32,7 +32,7 @@ public:
     explicit DAccountsManager(QObject *parent = nullptr);
     virtual ~DAccountsManager();
 
-public slots:
+public Q_SLOTS:
     DExpected<QList<quint64>>
     userList() const; // TODO:创建或删除 userlist 无法及时刷新，调用 sleep(1) 正常
     DExpected<AccountsUserPtr> createUser(const QString &name,
@@ -46,7 +46,7 @@ public slots:
     DExpected<AccountsValidMsg> isPasswordValid(const QString &password);
     DExpected<AccountsValidMsg> isUsernameValid(const QString &name);
 
-signals:
+Q_SIGNALS:
     void UserAdded(const quint64 uid);
     void UserDeleted(const quint64 uid);
 

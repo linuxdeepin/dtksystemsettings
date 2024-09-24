@@ -302,12 +302,12 @@ DExpected<QStringList> DLoginSession::autostartList()
     Q_D(DLoginSession);
     QStringList autostartApps;
     QStringList autostartPaths = d->getAutostartDirs();
-    foreach (const auto &autostartPath, autostartPaths) {
+    for (const auto &autostartPath : autostartPaths) {
         auto apps = d->getAutostartApps(autostartPath);
         if (autostartApps.isEmpty()) {
             autostartApps += apps;
         } else {
-            foreach (const QString &app, apps) {
+            for (const QString &app : apps) {
                 if (!autostartApps.contains(app)) {
                     autostartApps.append(app);
                 }
@@ -332,7 +332,7 @@ DExpected<bool> DLoginSession::isAutostart(const QString &fileName)
             if (!file.endsWith(".desktop")) {
                 file += ".desktop";
             }
-            foreach (QString autostartDir, autostartDirs) {
+            for (QString autostartDir : autostartDirs) {
                 if (d->judgeAutostart(QDir::cleanPath(autostartDir + "/" + file))) {
                     return true;
                 }
@@ -389,7 +389,7 @@ QStringList DLoginSessionPrivate::getSystemAutostartDirs()
     QString configuredSystemConfigDirsVar =
             QProcessEnvironment::systemEnvironment().value("XDG_CONFIG_DIRS");
     QStringList configuredSystemConfigDirs = configuredSystemConfigDirsVar.split(":");
-    foreach (const QString &configuredSystemConfigDir, configuredSystemConfigDirs) {
+    for (const QString &configuredSystemConfigDir : configuredSystemConfigDirs) {
         if (!QDir::isAbsolutePath(configuredSystemConfigDir)) {
             configuredSystemConfigDirs.removeAll(configuredSystemConfigDir);
         }
@@ -397,7 +397,7 @@ QStringList DLoginSessionPrivate::getSystemAutostartDirs()
     if (configuredSystemConfigDirs.isEmpty()) {
         autostartDirs.append(QDir::cleanPath(defaultSystemConfigDir + "/autostart"));
     } else {
-        foreach (const QString &configuredSystemConfigDir, configuredSystemConfigDirs) {
+        for (const QString &configuredSystemConfigDir : configuredSystemConfigDirs) {
             autostartDirs.append(QDir::cleanPath(configuredSystemConfigDir + "/autostart"));
         }
     }
@@ -433,7 +433,7 @@ bool DLoginSessionPrivate::judgeAutostart(const QString &fullPath)
     QStringList onlyShowIn = desktopFile.value(KeyOnlyShowIn).toStringList();
     QStringList notShowIn = desktopFile.value(KeyNotShowIn).toStringList();
     if (!onlyShowIn.isEmpty()) {
-        foreach (const QString &currentDesktop, currentDesktops) {
+        for (const QString &currentDesktop : currentDesktops) {
             if (onlyShowIn.contains(currentDesktop)) {
                 return true;
             }
@@ -441,7 +441,7 @@ bool DLoginSessionPrivate::judgeAutostart(const QString &fullPath)
         return false;
     } else {
         if (!notShowIn.isEmpty()) {
-            foreach (const QString &currentDesktop, currentDesktops) {
+            for (const QString &currentDesktop : currentDesktops) {
                 if (notShowIn.contains(currentDesktop)) {
                     return false;
                 }
@@ -458,7 +458,7 @@ QStringList DLoginSessionPrivate::getAutostartApps(const QString &dir)
     if (autostartDir.exists()) {
         autostartDir.setNameFilters({ "*.desktop" });
         QFileInfoList fileInfos = autostartDir.entryInfoList(QDir::Files);
-        foreach (const auto &fileInfo, fileInfos) {
+        for (const auto &fileInfo : fileInfos) {
             if (judgeAutostart(fileInfo.canonicalFilePath())) {
                 autostartApps.append(fileInfo.canonicalFilePath());
             }

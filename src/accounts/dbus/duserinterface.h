@@ -61,10 +61,10 @@ public:
     quint64 loginFrequency() const;
     quint64 UID() const;
 
-signals:
+Q_SIGNALS:
     void DataChanged();
 
-public slots:
+public Q_SLOTS:
     QDBusPendingReply<qint64, // expiration time
                       qint64, // last_change_time
                       qint64, // min days between changes

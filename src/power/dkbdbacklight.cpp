@@ -35,7 +35,7 @@ void DKbdBacklightPrivate::connectDBusSignal()
                     realSource = sourceMap[source];
                 else
                     realSource = KbdSource::Unknown;
-                emit q->brightnessChangedWithSource(value, realSource);
+                Q_EMIT q->brightnessChangedWithSource(value, realSource);
             });
 }
 

@@ -54,7 +54,7 @@ public:
     quint64 idleSinceHintMonotonic() const;
     quint64 timestamp() const;
     quint64 timestampMonotonic() const;
-public slots:
+public Q_SLOTS:
     QDBusPendingReply<> kill(int signalNumber);
     QDBusPendingReply<> terminate();
 

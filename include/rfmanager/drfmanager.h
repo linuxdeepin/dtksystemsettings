@@ -75,12 +75,12 @@ public:
     int count() const;
     QList<RfDevice> deviceList() const;
 
-public slots:
+public Q_SLOTS:
     DExpected<bool> blockBluetooth(bool bluetoothBlocked = true);
     DExpected<bool> blockWifi(bool wifiBlocked = true);
     DExpected<bool> blockAll(bool blockAll = true);
 
-signals:
+Q_SIGNALS:
     void bluetoothBlockedChanged(bool bluetoothBlocked);
     void wifiBlockedChanged(bool wifiBlocked);
     void countChanged(int count);

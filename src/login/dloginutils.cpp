@@ -60,7 +60,7 @@ int encodeBehavior(const QString &behavior)
     };
     int result = 0;
     QStringList behaviors = behavior.split(":");
-    foreach (const QString &strBehavior, behaviors) {
+    for (const QString &strBehavior : behaviors) {
         if (behaviorMap.contains(strBehavior)) {
             result |= behaviorMap[strBehavior];
         }

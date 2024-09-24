@@ -26,25 +26,25 @@ void DPowerManagerPrivate::connectDBusSignal()
             &UPowerManagerInterface::DeviceAdded,
             q,
             [q](const QDBusObjectPath &path) {
-                emit q->deviceAdded(path.path().mid(32));
+                Q_EMIT q->deviceAdded(path.path().mid(32));
             });
     connect(m_manager_inter,
             &UPowerManagerInterface::DeviceRemoved,
             q,
             [q](const QDBusObjectPath &path) {
-                emit q->deviceRemoved(path.path().mid(32));
+                Q_EMIT q->deviceRemoved(path.path().mid(32));
             });
     connect(m_manager_inter,
             &UPowerManagerInterface::LidIsClosedChanged,
             q,
             [q](const bool &value) {
-                emit q->lidIsClosedChanged(value);
+                Q_EMIT q->lidIsClosedChanged(value);
             });
     connect(m_manager_inter,
             &UPowerManagerInterface::LidIsPresentChanged,
             q,
             [q](const bool &value) {
-                emit q->lidIsPresentChanged(value);
+                Q_EMIT q->lidIsPresentChanged(value);
             });
 }
 
