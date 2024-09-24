@@ -79,7 +79,7 @@ public:
     QDateTime loginTime() const;
     QDateTime createdTime() const;
 
-public slots:
+public Q_SLOTS:
 
     DExpected<void> setAutomaticLogin(const bool enabled);
     DExpected<void> setFullName(const QString &newfullname);
@@ -103,7 +103,7 @@ public slots:
     DExpected<AccountsReminderInfo> getReminderInfo() const;
     DExpected<AccountsPasswdExpirInfo> passwordExpirationInfo(qint64 &dayLeft) const;
 
-signals:
+Q_SIGNALS:
     void automaticLoginChanged(const bool enabled);
     void groupsChanged(const QStringList &list);
     void layoutListChanged(const QList<QByteArray> &list);

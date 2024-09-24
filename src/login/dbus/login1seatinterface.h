@@ -43,7 +43,7 @@ public:
     quint64 idleSinceHint() const;
     quint64 idleSinceHintMonotonic() const;
 
-public slots:
+public Q_SLOTS:
     QDBusPendingReply<> activateSession(const QString &sessionId);
     QDBusPendingReply<> switchTo(quint32 VTNr);
     QDBusPendingReply<> switchToNext();

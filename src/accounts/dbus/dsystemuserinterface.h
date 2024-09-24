@@ -59,7 +59,7 @@ public:
     QString UUID() const;
     quint64 createdTime();
 
-public slots:
+public Q_SLOTS:
     QDBusPendingReply<void> addGroup(const QString &group);
     QDBusPendingReply<void> deleteGroup(const QString &group);
     QDBusPendingReply<void> deleteIconFile(const QString &icon);
@@ -80,7 +80,7 @@ public slots:
     QDBusPendingReply<void> setSecretQuestions(const QMap<qint32, QByteArray> &list);
     QDBusPendingReply<QList<qint32>> verifySecretQuestions(const QMap<qint32, QString> &anwsers);
 
-signals:
+Q_SIGNALS:
     void AutomaticLoginChanged(const bool enabled);
     void AccountTypeChanged(const qint32 type);
     void GroupsChanged(const QStringList &groups);

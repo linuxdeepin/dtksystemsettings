@@ -87,7 +87,7 @@ public:
     QDateTime updateTime() const;
     QString deviceName() const;
 
-signals:
+Q_SIGNALS:
     void updateTimeChanged(const QDateTime &value);
     void percentageChanged(const double value);
     void timeToEmptyChanged(const qint64 value);
@@ -96,7 +96,7 @@ signals:
     void energyChanged(const double value);
     void iconNameChanged(const QString &value);
 
-public slots:
+public Q_SLOTS:
     DExpected<PowerHistoryList> history(const QString &type,
                                         const uint timespan,
                                         const uint resolution) const;

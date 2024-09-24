@@ -61,6 +61,8 @@ find_package(Dtk${VERSION_SUFFIX} REQUIRED Core)
 
 file(GLOB_RECURSE LIB_PUBLIC_HEADERS "${PROJECT_SOURCE_DIR}/include/*") # Get all headers which will be exported
 
+add_definitions(-DQT_NO_KEYWORDS)
+
 add_subdirectory(src)
 
 set(BUILD_DOCS ON CACHE BOOL "Generate doxygen-based documentation")

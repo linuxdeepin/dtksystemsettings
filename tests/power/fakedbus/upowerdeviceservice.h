@@ -82,7 +82,7 @@ public:
     quint64 updateTime() const;
     QString deviceName() const;
 
-public slots:
+public Q_SLOTS:
     Q_SCRIPTABLE QList<DTK_POWER_NAMESPACE::History_p> GetHistory(const QString &type,
                                                                   const uint timespan,
                                                                   const uint resolution) const;

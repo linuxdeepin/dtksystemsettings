@@ -39,13 +39,13 @@ public:
     QSharedPointer<DPowerDevice> findDeviceByName(const QString &name) const;
     QSharedPointer<DKbdBacklight> kbdBacklight() const;
 
-signals:
+Q_SIGNALS:
     void deviceAdded(const QString &name);
     void deviceRemoved(const QString &name);
     void lidIsClosedChanged(const bool &value);
     void lidIsPresentChanged(const bool &value);
 
-public slots:
+public Q_SLOTS:
     DExpected<QStringList> devices() const;
     DExpected<QString> criticalAction() const;
     DExpected<void> refresh();

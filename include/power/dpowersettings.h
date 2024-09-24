@@ -105,7 +105,7 @@ public:
     bool sleepLock() const;
     void setSleepLock(const bool value);
 
-signals:
+Q_SIGNALS:
     void cpuGovernorChanged(const QString &value);
     void powerModeChanged(const PowerMode &mode);
     void autoPowerSavingOnBatteryChanged(const bool enabled);
@@ -132,7 +132,7 @@ signals:
     void powerSavingModeBrightnessDataChanged(const QString &value);
     void cpuBoostChanged(const bool value);
 
-public slots:
+public Q_SLOTS:
     DExpected<void> reset();
 
 private:

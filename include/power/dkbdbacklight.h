@@ -22,11 +22,11 @@ class DKbdBacklight : public QObject
 public:
     virtual ~DKbdBacklight();
 
-signals:
+Q_SIGNALS:
     void brightnessChanged(const qint32 value);
     void brightnessChangedWithSource(const qint32 value, const KbdSource &source);
 
-public slots:
+public Q_SLOTS:
     DExpected<qint32> brightness() const;
     DExpected<qint32> maxBrightness() const;
     DExpected<void> setBrightness(const qint32 value);

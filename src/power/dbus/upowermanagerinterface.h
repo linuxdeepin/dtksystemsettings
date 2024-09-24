@@ -29,13 +29,13 @@ public:
     bool onBattery() const;
     QString daemonVersion() const;
 
-signals:
+Q_SIGNALS:
     void DeviceAdded(const QDBusObjectPath &path);
     void DeviceRemoved(const QDBusObjectPath &path);
     void LidIsClosedChanged(const bool &value);
     void LidIsPresentChanged(const bool &value);
 
-public slots:
+public Q_SLOTS:
     QDBusPendingReply<QList<QDBusObjectPath>> enumerateDevices() const;
     QDBusPendingReply<QString> getCriticalAction() const;
     QDBusPendingReply<QDBusObjectPath> getDisplayDevice() const;
