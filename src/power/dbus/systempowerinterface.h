@@ -100,7 +100,7 @@ public:
         m_inter->setProperty("PowerSavingModeBrightnessDropPercent", QVariant::fromValue(value));
     }
 
-signals:
+Q_SIGNALS:
     void CpuGovernorChanged(const QString &value);
     void ModeChanged(const QString &value);
     void PowerSavingModeAutoChanged(const bool value);
@@ -110,7 +110,7 @@ signals:
     void PowerSavingModeBrightnessDataChanged(const QString &value);
     void CpuBoostChanged(const bool value);
 
-public slots:
+public Q_SLOTS:
 
     QDBusPendingReply<> setMode(const QString &mode)
     {

@@ -50,13 +50,13 @@ void DPowerSettingsPrivate::connectDBusSignal()
             &DPowerSettings::cpuBoostChanged);
     connect(m_systemPowerInter, &SystemPowerInterface::ModeChanged, q, [q](const QString &value) {
         if (value == "powsersave")
-            emit q->powerModeChanged(PowerMode::PowerSave);
+            Q_EMIT q->powerModeChanged(PowerMode::PowerSave);
         else if (value == "performance")
-            emit q->powerModeChanged(PowerMode::Performance);
+            Q_EMIT q->powerModeChanged(PowerMode::Performance);
         else if (value == "balance")
-            emit q->powerModeChanged(PowerMode::Balance);
+            Q_EMIT q->powerModeChanged(PowerMode::Balance);
         else
-            emit q->powerModeChanged(PowerMode::Unknown);
+            Q_EMIT q->powerModeChanged(PowerMode::Unknown);
     });
     connect(m_daemonPowerInter,
             &DaemonPowerInterface::BatteryLidClosedActionChanged,
@@ -64,7 +64,7 @@ void DPowerSettingsPrivate::connectDBusSignal()
             [q](const qint32 value) {
                 if (value < 1 || value > 4)
                     return;
-                emit q->batteryLidClosedActionChanged(static_cast<LidClosedAction>(value));
+                Q_EMIT q->batteryLidClosedActionChanged(static_cast<LidClosedAction>(value));
             });
     connect(m_daemonPowerInter,
             &DaemonPowerInterface::BatteryLockDelayChanged,
@@ -76,7 +76,7 @@ void DPowerSettingsPrivate::connectDBusSignal()
             [q](const qint32 value) {
                 if (value < 0 || value > 4)
                     return;
-                emit q->batteryPressPowerBtnActionChanged(static_cast<PowerBtnAction>(value));
+                Q_EMIT q->batteryPressPowerBtnActionChanged(static_cast<PowerBtnAction>(value));
             });
     connect(m_daemonPowerInter,
             &DaemonPowerInterface::BatteryScreenBlackDelayChanged,
@@ -96,7 +96,7 @@ void DPowerSettingsPrivate::connectDBusSignal()
             [q](const qint32 value) {
                 if (value < 1 || value > 4)
                     return;
-                emit q->linePowerLidClosedActionChanged(static_cast<LidClosedAction>(value));
+                Q_EMIT q->linePowerLidClosedActionChanged(static_cast<LidClosedAction>(value));
             });
     connect(m_daemonPowerInter,
             &DaemonPowerInterface::LinePowerLockDelayChanged,
@@ -108,7 +108,7 @@ void DPowerSettingsPrivate::connectDBusSignal()
             [q](const qint32 value) {
                 if (value < 0 || value > 4)
                     return;
-                emit q->linePowerPressPowerBtnActionChanged(static_cast<PowerBtnAction>(value));
+                Q_EMIT q->linePowerPressPowerBtnActionChanged(static_cast<PowerBtnAction>(value));
             });
     connect(m_daemonPowerInter,
             &DaemonPowerInterface::LinePowerScreenBlackDelayChanged,

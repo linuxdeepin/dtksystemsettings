@@ -218,7 +218,7 @@ public:
         m_inter->setProperty("SleepLock", QVariant::fromValue(value));
     }
 
-signals:
+Q_SIGNALS:
     void BatteryLidClosedActionChanged(const qint32 value);
     void BatteryLockDelayChanged(const qint32 value);
     void BatteryPressPowerBtnActionChanged(const qint32 value);
@@ -237,7 +237,7 @@ signals:
     void ScreenBlackLockChanged(const bool value);
     void SleepLockChanged(const bool value);
 
-public slots:
+public Q_SLOTS:
 
     QDBusPendingReply<> reset() { return m_inter->asyncCall("Reset"); }
 

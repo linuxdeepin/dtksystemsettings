@@ -212,7 +212,7 @@ public:
     bool m_setPasswordTrigger{ false };
     bool m_passwordExpiredInfoTirgger{ false };
 
-public slots:
+public Q_SLOTS:
 
     Q_SCRIPTABLE void AddGroup(QString group)
     {

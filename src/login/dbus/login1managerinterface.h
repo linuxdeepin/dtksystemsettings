@@ -110,7 +110,7 @@ public:
     quint64 sessionsMax() const;
     quint64 userStopDelayUSec() const;
 
-public slots:
+public Q_SLOTS:
     QDBusPendingReply<> activateSession(const QString &sessionId);
     QDBusPendingReply<> activateSessionOnSeat(const QString &sessionId, const QString &seatId);
     QDBusPendingReply<> attachDevice(const QString &seatId,

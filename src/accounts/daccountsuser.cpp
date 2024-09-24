@@ -46,19 +46,19 @@ DAccountsUser::DAccountsUser(const quint64 uid, QObject *parent)
             &DSystemUserInterface::AutomaticLoginChanged,
             this,
             [this](const bool enabled) {
-                emit this->automaticLoginChanged(enabled);
+                Q_EMIT this->automaticLoginChanged(enabled);
             });
     connect(d->m_dSystemUserInter,
             &DSystemUserInterface::GroupsChanged,
             this,
             [this](const QStringList &list) {
-                emit this->groupsChanged(list);
+                Q_EMIT this->groupsChanged(list);
             });
     connect(d->m_dSystemUserInter,
             &DSystemUserInterface::LayoutChanged,
             this,
             [this](const QString &layout) {
-                emit this->layoutChanged(layout.toUtf8());
+                Q_EMIT this->layoutChanged(layout.toUtf8());
             });
     connect(d->m_dSystemUserInter,
             &DSystemUserInterface::HistoryLayoutChanged,
@@ -67,7 +67,7 @@ DAccountsUser::DAccountsUser(const quint64 uid, QObject *parent)
                 QList<QByteArray> tmp;
                 for (const auto &v : list)
                     tmp.append(v.toUtf8());
-                emit this->layoutListChanged(tmp);
+                Q_EMIT this->layoutListChanged(tmp);
             });
     connect(d->m_dSystemUserInter,
             &DSystemUserInterface::IconListChanged,
@@ -76,44 +76,44 @@ DAccountsUser::DAccountsUser(const quint64 uid, QObject *parent)
                 QList<QByteArray> tmp;
                 for (const auto &v : list)
                     tmp.append(v.toUtf8());
-                emit this->iconFileListChanged(tmp);
+                Q_EMIT this->iconFileListChanged(tmp);
             });
     connect(d->m_dSystemUserInter,
             &DSystemUserInterface::IconFileChanged,
             this,
             [this](const QString &url) {
                 QUrl tmp(url);
-                emit this->iconFileChanged(url);
+                Q_EMIT this->iconFileChanged(url);
             });
     connect(d->m_dSystemUserInter,
             &DSystemUserInterface::LocaleChanged,
             this,
             [this](const QString &locale) {
-                emit this->localeChanged(locale.toUtf8());
+                Q_EMIT this->localeChanged(locale.toUtf8());
             });
     connect(d->m_dSystemUserInter,
             &DSystemUserInterface::LockedChanged,
             this,
             [this](const bool locked) {
-                emit this->lockedChanged(locked);
+                Q_EMIT this->lockedChanged(locked);
             });
     connect(d->m_dSystemUserInter,
             &DSystemUserInterface::MaxPasswordAgeChanged,
             this,
             [this](const qint32 nDays) {
-                emit this->maxPasswordAgeChanged(nDays);
+                Q_EMIT this->maxPasswordAgeChanged(nDays);
             });
     connect(d->m_dSystemUserInter,
             &DSystemUserInterface::NoPasswdLoginChanged,
             this,
             [this](const bool enabled) {
-                emit this->noPasswdLoginChanged(enabled);
+                Q_EMIT this->noPasswdLoginChanged(enabled);
             });
     connect(d->m_dSystemUserInter,
             &DSystemUserInterface::PasswordHintChanged,
             this,
             [this](const QString &hint) {
-                emit this->passwordHintChanged(hint);
+                Q_EMIT this->passwordHintChanged(hint);
             });
 
     connect(d->m_dUserInter, &DUserInterface::DataChanged, this, &DAccountsUser::userDataChanged);

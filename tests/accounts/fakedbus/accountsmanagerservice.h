@@ -67,7 +67,7 @@ public:
     bool m_isPasswordValidTrigger{ false };
     bool m_isUsernameValidTrigger{ false };
 
-public slots:
+public Q_SLOTS:
 
     Q_SCRIPTABLE QList<QDBusObjectPath> ListCachedUsers()
     {

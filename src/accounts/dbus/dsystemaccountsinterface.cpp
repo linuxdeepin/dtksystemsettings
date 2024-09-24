@@ -75,12 +75,12 @@ QStringList DSystemAccountsInterface::UserList() const
 
 void DSystemAccountsInterface::receiveUserAdded(QString user)
 {
-    emit ReceivedUserAdded(std::move(user));
+    Q_EMIT ReceivedUserAdded(std::move(user));
 }
 
 void DSystemAccountsInterface::receiveUserDeleted(QString user)
 {
-    emit ReceivedUserDeleted(std::move(user));
+    Q_EMIT ReceivedUserDeleted(std::move(user));
 }
 
 DACCOUNTS_END_NAMESPACE

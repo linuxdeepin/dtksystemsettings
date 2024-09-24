@@ -89,7 +89,7 @@ public:
     quint64 updateTime() const;
     QString deviceName() const;
 
-signals:
+Q_SIGNALS:
     void UpdateTimeChanged(const quint64 value);
     void PercentageChanged(const double value);
     void TimeToEmptyChanged(const qint64 value);
@@ -98,7 +98,7 @@ signals:
     void EnergyChanged(const double value);
     void IconNameChanged(const QString &value);
 
-public slots:
+public Q_SLOTS:
     QDBusPendingReply<QList<DTK_POWER_NAMESPACE::History_p>>
     getHistory(const QString &type, const uint timespan, const uint resolution) const;
     QDBusPendingReply<QList<DTK_POWER_NAMESPACE::Statistic_p>>

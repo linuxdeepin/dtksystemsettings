@@ -21,11 +21,11 @@ public:
     explicit UPowerKbdBacklightInterface(QObject *parent = nullptr);
     virtual ~UPowerKbdBacklightInterface();
 
-signals:
+Q_SIGNALS:
     void BrightnessChanged(const qint32 value);
     void BrightnessChangedWithSource(const qint32 value, const QString &source);
 
-public slots:
+public Q_SLOTS:
     QDBusPendingReply<qint32> getBrightness() const;
     QDBusPendingReply<qint32> getMaxBrightness() const;
     QDBusPendingReply<> setBrightness(qint32 value);

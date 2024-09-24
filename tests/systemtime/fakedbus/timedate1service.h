@@ -36,7 +36,7 @@ public:
     quint64 RTCTimeUSec() const;
     quint64 timeUSec() const;
     // slot
-public slots:
+public Q_SLOTS:
     Q_SCRIPTABLE QStringList ListTimezones() const;
     Q_SCRIPTABLE void SetLocalRTC(const bool local_rtc,
                                   const bool fix_system,

@@ -79,13 +79,13 @@ public:
     quint64 idleSinceHintMonotonic() const;
     quint64 timestamp() const;
     quint64 timestampMonotonic() const;
-signals:
+Q_SIGNALS:
     void locked();
     void pauseDevice(const quint32 value, const quint32 device, const QString &location);
     void resumeDevice(const quint32 value, const quint32 device, const int descriptor);
     void unlocked();
 
-public slots:
+public Q_SLOTS:
     QDBusPendingReply<> activate();
     QDBusPendingReply<> kill(const QString &who, qint32 signalNumber);
     QDBusPendingReply<> lock();

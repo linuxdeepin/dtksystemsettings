@@ -175,14 +175,14 @@ void DRfmanagerPrivate::updateDevice(const rfkill_event &re)
                 break;
             }
         }
-        emit q->countChanged(deviceList.count());
+        Q_EMIT q->countChanged(deviceList.count());
         updateDeviceInfo(re);
         break;
     case DRfmanager::CHANGE:
     case DRfmanager::CHANGE_ALL:
         updateDeviceInfo(re);
         if (re.idx != INT_MAX)
-            emit q->blockedChanged(re.idx);
+            Q_EMIT q->blockedChanged(re.idx);
         break;
     default:
         break;
@@ -223,13 +223,13 @@ void DRfmanagerPrivate::updateDeviceInfo(const rfkill_event &re)
 
     // if device not found blocked state switch to false
     if (oldBlockBluetooth >= 0 && oldBlockBluetooth != bluetoothBlocked)
-        emit q->bluetoothBlockedChanged(bluetoothBlocked);
+        Q_EMIT q->bluetoothBlockedChanged(bluetoothBlocked);
 
     if (oldBlockWifi >= 0 && oldBlockWifi != wifiBlocked)
-        emit q->wifiBlockedChanged(wifiBlocked);
+        Q_EMIT q->wifiBlockedChanged(wifiBlocked);
 
     if (oldBlockAll >= 0 && oldBlockAll != allBlocked)
-        emit q->allBlockedChanged(allBlocked);
+        Q_EMIT q->allBlockedChanged(allBlocked);
 }
 
 void DRfmanagerPrivate::appendDevice(const rfkill_event &re)
@@ -248,7 +248,7 @@ void DRfmanagerPrivate::appendDevice(const rfkill_event &re)
     deviceList.append(device);
 
     Q_Q(DRfmanager);
-    emit q->countChanged(deviceList.count());
+    Q_EMIT q->countChanged(deviceList.count());
 }
 
 qint8 DRfmanagerPrivate::isBlocked(DRfmanager::RfType type)

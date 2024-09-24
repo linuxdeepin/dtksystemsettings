@@ -90,12 +90,12 @@ QDBusPendingReply<void> DAccountsInterface::uncacheUser(const QString &name)
 
 void DAccountsInterface::receiveUserAdded(const QDBusObjectPath &user)
 {
-    emit ReceivedUserAdded(user.path().toUtf8());
+    Q_EMIT ReceivedUserAdded(user.path().toUtf8());
 }
 
 void DAccountsInterface::receiveUserDeleted(const QDBusObjectPath &user)
 {
-    emit ReceivedUserDeleted(user.path().toUtf8());
+    Q_EMIT ReceivedUserDeleted(user.path().toUtf8());
 }
 
 DACCOUNTS_END_NAMESPACE

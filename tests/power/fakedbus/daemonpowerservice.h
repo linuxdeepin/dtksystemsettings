@@ -129,10 +129,10 @@ public:
 
     inline void setSleepLock(const bool value) { m_sleepLock = value; }
 
-signals:
+Q_SIGNALS:
     Q_SCRIPTABLE void PropertiesChanged(const QVariantMap &properties);
 
-public slots:
+public Q_SLOTS:
 
     Q_SCRIPTABLE void Reset() { m_reset = true; }
 

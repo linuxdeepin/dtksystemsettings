@@ -33,13 +33,13 @@ DAccountsManager::DAccountsManager(QObject *parent)
             &DSystemAccountsInterface::ReceivedUserAdded,
             this,
             [this, &d](const QString &user) {
-                emit this->UserAdded(d->getUIDFromObjectPath(user));
+                Q_EMIT this->UserAdded(d->getUIDFromObjectPath(user));
             });
     connect(d->m_dSystemAccountsInter,
             &DSystemAccountsInterface::ReceivedUserDeleted,
             this,
             [this, &d](const QString &user) {
-                emit this->UserDeleted(d->getUIDFromObjectPath(user));
+                Q_EMIT this->UserDeleted(d->getUIDFromObjectPath(user));
             });
 }
 

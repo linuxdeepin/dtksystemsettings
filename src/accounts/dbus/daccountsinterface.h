@@ -24,7 +24,7 @@ public:
     Q_PROPERTY(QString daemonVersion READ daemonVersion)
     QString daemonVersion() const;
 
-public slots:
+public Q_SLOTS:
     QDBusPendingReply<QDBusObjectPath> cacheUser(const QString &name);
     QDBusPendingReply<QDBusObjectPath> createUser(const QString &name,
                                                   const QString &fullname,
@@ -35,11 +35,11 @@ public slots:
     QDBusPendingReply<QList<QDBusObjectPath>> listCachedUsers();
     QDBusPendingReply<void> uncacheUser(const QString &name);
 
-signals:
+Q_SIGNALS:
     void ReceivedUserAdded(QString path);
     void ReceivedUserDeleted(QString path);
 
-private slots:
+private Q_SLOTS:
     void receiveUserAdded(const QDBusObjectPath &user);
     void receiveUserDeleted(const QDBusObjectPath &user);
 

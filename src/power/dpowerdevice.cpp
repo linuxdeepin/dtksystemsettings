@@ -28,55 +28,55 @@ DPowerDevice::DPowerDevice(const QString &name, QObject *parent)
             &UPowerDeviceInterface::UpdateTimeChanged,
             this,
             [this](const quint64 value) {
-                emit this->updateTimeChanged(QDateTime::fromSecsSinceEpoch(value));
+                Q_EMIT this->updateTimeChanged(QDateTime::fromSecsSinceEpoch(value));
             });
     connect(d->m_device_inter,
             &UPowerDeviceInterface::PercentageChanged,
             this,
             [this](const double value) {
-                emit this->percentageChanged(value);
+                Q_EMIT this->percentageChanged(value);
             });
     connect(d->m_device_inter,
             &UPowerDeviceInterface::TimeToEmptyChanged,
             this,
             [this](const qint64 value) {
-                emit this->timeToEmptyChanged(value);
+                Q_EMIT this->timeToEmptyChanged(value);
             });
     connect(d->m_device_inter,
             &UPowerDeviceInterface::TimeToEmptyChanged,
             this,
             [this](const qint64 value) {
-                emit this->timeToEmptyChanged(value);
+                Q_EMIT this->timeToEmptyChanged(value);
             });
     connect(d->m_device_inter,
             &UPowerDeviceInterface::TimeToEmptyChanged,
             this,
             [this](const qint64 value) {
-                emit this->timeToEmptyChanged(value);
+                Q_EMIT this->timeToEmptyChanged(value);
             });
     connect(d->m_device_inter,
             &UPowerDeviceInterface::TimeToFullChanged,
             this,
             [this](const qint64 value) {
-                emit this->timeToFullChanged(value);
+                Q_EMIT this->timeToFullChanged(value);
             });
     connect(d->m_device_inter,
             &UPowerDeviceInterface::EnergyRateChanged,
             this,
             [this](const double value) {
-                emit this->energyRateChanged(value);
+                Q_EMIT this->energyRateChanged(value);
             });
     connect(d->m_device_inter,
             &UPowerDeviceInterface::EnergyChanged,
             this,
             [this](const double value) {
-                emit this->energyChanged(value);
+                Q_EMIT this->energyChanged(value);
             });
     connect(d->m_device_inter,
             &UPowerDeviceInterface::IconNameChanged,
             this,
             [this](const QString &value) {
-                emit this->iconNameChanged(value);
+                Q_EMIT this->iconNameChanged(value);
             });
 }
 

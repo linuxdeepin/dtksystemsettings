@@ -72,12 +72,12 @@ public:
     QDateTime createdTime() const;
     quint64 createdTimeMonotonic() const;
 
-signals:
+Q_SIGNALS:
     void lockedChanged(bool locked);
     void autostartAdded(const QString &fileName);
     void autostartRemoved(const QString &fileName);
 
-public slots:
+public Q_SLOTS:
     DExpected<void> activate();
     DExpected<void> kill(DTK_LOGIN_NAMESPACE::SessionRole who, qint32 signalNumber);
     DExpected<void> lock();

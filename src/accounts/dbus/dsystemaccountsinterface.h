@@ -26,7 +26,7 @@ public:
     Q_PROPERTY(QStringList UserList READ UserList NOTIFY UserListChanged)
     QStringList UserList() const;
 
-public slots:
+public Q_SLOTS:
     QDBusPendingReply<QDBusObjectPath> createUser(const QString &name,
                                                   const QString &fullName,
                                                   qint32 accountType);
@@ -35,12 +35,12 @@ public slots:
     QDBusPendingReply<bool, QString, qint32> isPasswordValid(const QString &password);
     QDBusPendingReply<bool, QString, qint32> isUsernameValid(const QString &username);
 
-signals:
+Q_SIGNALS:
     void ReceivedUserAdded(QString path);
     void ReceivedUserDeleted(QString path);
     void UserListChanged(const QStringList &list);
 
-private slots:
+private Q_SLOTS:
     void receiveUserAdded(QString user);
     void receiveUserDeleted(QString user);
 
