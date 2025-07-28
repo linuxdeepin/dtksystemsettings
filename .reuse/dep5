@@ -3,6 +3,11 @@ Upstream-Name: dtksystemsettings
 Upstream-Contact: UnionTech Software Technology Co., Ltd.
 Source: https://github.com/linuxdeepin/dtksystemsettings
 
+# cmake
+Files: VERSION
+Copyright: None
+License: CC0-1.0
+
 # Config files
 Files: .clang-format *.in
 Copyright: None

@@ -4,8 +4,9 @@
 
 cmake_minimum_required(VERSION 3.13)
 
-# If do't define version number, specify the version number
-set(DTK_VERSION "5.0.0" CACHE STRING "define project version")
+file(READ "${CMAKE_CURRENT_SOURCE_DIR}/VERSION" DTK_FILE_VERSION)
+string(STRIP "${DTK_FILE_VERSION}" DTK_FILE_VERSION)
+set(DTK_VERSION "${DTK_FILE_VERSION}" CACHE STRING "DTK version")
 
 project(DtkSystemSettings
     LANGUAGES CXX
