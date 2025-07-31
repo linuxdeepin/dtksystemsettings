@@ -1,6 +1,6 @@
 # Maintainer: ComixHe <heyuming@deepin.org>
 pkgname=dtksystemsettings-git
-pkgver=5.6.20
+pkgver=5.6.21
 pkgrel=1
 sourcename=dtksystemsettings
 sourcetars=("$sourcename"_"$pkgver".tar.xz)
