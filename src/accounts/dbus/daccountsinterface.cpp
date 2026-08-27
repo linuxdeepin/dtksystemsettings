@@ -5,6 +5,8 @@
 #include "daccountsinterface.h"
 
 #include <QDBusConnection>
+#include <QDBusConnectionInterface>
+#include <QDBusReply>
 
 DACCOUNTS_BEGIN_NAMESPACE
 
@@ -40,6 +42,20 @@ DAccountsInterface::DAccountsInterface(QObject *parent)
 QString DAccountsInterface::daemonVersion() const
 {
     return qdbus_cast<QString>(m_inter->property("DaemonVersion"));
+}
+
+bool DAccountsInterface::isServiceRegistered() const
+{
+    // DDBusInterface::serviceValid() is filled in by an async NameHasOwner
+    // callback. Callers such as Treeland's UserModel invoke userList() before
+    // QCoreApplication::exec(), so serviceValid() is still false even when the
+    // service is up. Query the same connection/service synchronously so this
+    // also respects USE_FAKE_INTERFACE (sessionBus / FakeAccounts).
+    QDBusConnectionInterface *iface = m_inter->connection().interface();
+    if (!iface)
+        return false;
+    const QDBusReply<bool> reply = iface->isServiceRegistered(m_inter->service());
+    return reply.isValid() && reply.value();
 }
 
 QDBusPendingReply<QDBusObjectPath> DAccountsInterface::cacheUser(const QString &name)

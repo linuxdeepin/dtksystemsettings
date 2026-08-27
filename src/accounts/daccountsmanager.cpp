@@ -7,6 +7,7 @@
 #include "daccountsmanager_p.h"
 #include "daccountsuser.h"
 
+#include <QDBusError>
 #include <QDebug>
 
 #include <grp.h>
@@ -48,15 +49,27 @@ DAccountsManager::~DAccountsManager() { }
 DExpected<QList<quint64>> DAccountsManager::userList() const
 {
     Q_D(const DAccountsManager);
+    if (!d->m_dAccountsInter->isServiceRegistered()) {
+        return DUnexpected{ DCORE_NAMESPACE::emplace_tag::USE_EMPLACE,
+                            static_cast<int>(QDBusError::ServiceUnknown),
+                            QStringLiteral("Accounts service not available") };
+    }
     QList<quint64> list;
     auto reply = d->m_dAccountsInter->listCachedUsers();
     reply.waitForFinished();
-    if (!reply.isValid()) {
+    if (reply.isError() || !reply.isValid()) {
         return DUnexpected{ DCORE_NAMESPACE::emplace_tag::USE_EMPLACE,
                             reply.error().type(),
                             reply.error().message() };
     }
-    for (const auto &user : reply.value()) {
+    const auto value = reply.value();
+    for (int i = 0; i < value.size(); ++i) {
+        const auto &user = value.at(i);
+        if (user.path().isEmpty()) {
+            qWarning() << "DAccountsManager::userList: empty QDBusObjectPath at index" << i
+                       << "of" << value.size() << "skipped — accounts-daemon returned invalid entry";
+            continue;
+        }
         list.append(d->getUIDFromObjectPath(user.path()));
     }
     return list;

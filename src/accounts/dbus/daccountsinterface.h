@@ -24,6 +24,8 @@ public:
     Q_PROPERTY(QString daemonVersion READ daemonVersion)
     QString daemonVersion() const;
 
+    bool isServiceRegistered() const;
+
 public Q_SLOTS:
     QDBusPendingReply<QDBusObjectPath> cacheUser(const QString &name);
     QDBusPendingReply<QDBusObjectPath> createUser(const QString &name,
