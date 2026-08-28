@@ -1,11 +1,47 @@
 #!/usr/bin/make -f
 include /usr/share/dpkg/default.mk
-export QT_SELECT = qt5
+
+BUILD_DTK5 := $(if $(filter nodtk5,$(DEB_BUILD_PROFILES)),OFF,ON)
+BUILD_DTK6 := $(if $(filter nodtk6,$(DEB_BUILD_PROFILES)),OFF,ON)
 
 %:
 	dh $@
-# Fix: invalid digit "8" in octal constant. e.g.  u008 ==> 008 ==> 8
-BUILD_VER = $(shell echo $(DEB_VERSION_UPSTREAM) | awk -F'[+_~-]' '{print $$2}' | sed 's/[^0-9]//g' | awk '{print int($$1)}')
 
 override_dh_auto_configure:
-	dh_auto_configure -- -DBUILD_VERSION=$(BUILD_VER)
+ifeq ($(BUILD_DTK5),ON)
+	mkdir -p build5
+	QT_SELECT=qt5 dh_auto_configure --builddirectory=build5 -- -DBUILD_EXAMPLES=OFF -DBUILD_DOCS=ON -DDTK5=ON
+endif
+ifeq ($(BUILD_DTK6),ON)
+	mkdir -p build6
+	dh_auto_configure --builddirectory=build6 -- -DBUILD_EXAMPLES=OFF -DBUILD_DOCS=ON -DDTK5=OFF
+endif
+
+override_dh_auto_build:
+ifeq ($(BUILD_DTK5),ON)
+	QT_SELECT=qt5 dh_auto_build --builddirectory=build5
+endif
+ifeq ($(BUILD_DTK6),ON)
+	dh_auto_build --builddirectory=build6
+endif
+
+override_dh_auto_install:
+ifeq ($(BUILD_DTK5),ON)
+	QT_SELECT=qt5 dh_auto_install --builddirectory=build5
+endif
+ifeq ($(BUILD_DTK6),ON)
+	dh_auto_install --builddirectory=build6
+endif
+
+override_dh_auto_test:
+ifeq ($(BUILD_DTK5),ON)
+	QT_SELECT=qt5 dh_auto_test --builddirectory=build5
+endif
+ifeq ($(BUILD_DTK6),ON)
+	dh_auto_test --builddirectory=build6
+endif
+
+override_dh_auto_clean:
+	dh_auto_clean --builddirectory=build5
+	dh_auto_clean --builddirectory=build6
+	rm -rf build5 build6

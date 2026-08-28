@@ -1,6 +1,6 @@
-usr/lib/*/lib*.so
-usr/include
-usr/lib/*/pkgconfig/*.pc
-usr/lib/*/cmake/*/*.cmake
-usr/share/*/doc/*.qch
+usr/lib/*/libdtksystemsettings.so
+usr/include/dtk5/*
+usr/lib/*/pkgconfig/dtksystemsettings.pc
+usr/lib/*/cmake/DtkSystemSettings/*
+usr/share/qt5/doc/*.qch
 usr/lib/*/qt5/*
