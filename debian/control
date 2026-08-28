@@ -6,26 +6,48 @@ Build-Depends:
  debhelper-compat (= 12),
  cmake,
  doxygen,
- qhelpgenerator-qt5,
- qttools5-dev,
- qtbase5-dev,
- libdtkcore-dev,
- libdtkcommon-dev,
- graphviz
+ qhelpgenerator-qt5 <!nodtk5>,
+ qttools5-dev <!nodtk5>,
+ qtbase5-dev <!nodtk5>,
+ libdtkcore-dev <!nodtk5>,
+ qt6-tools-dev <!nodtk6>,
+ qt6-base-dev <!nodtk6>,
+ libdtk6core-dev <!nodtk6>,
+ libdtkcommon-dev
 Standards-Version: 4.5.0
 
 Package: libdtksystemsettings5
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
-Description: Deepin Tool Kit template library
+Build-Profiles: <!nodtk5>
+Description: Deepin Tool Kit systemsettings library (DTK5 with Qt5)
  libdtksystemsettings is base library of Deepin Qt/C++ applications.
  .
- This package contains the shared libraries.
+ This package contains the shared libraries for DTK5 applications.
 
 Package: libdtksystemsettings-dev
 Architecture: any
-Depends:${misc:Depends}, libdtksystemsettings5( =${binary:Version})
-Description: Deepin Tool Kit template devel library
+Depends: ${misc:Depends}, libdtksystemsettings5(=${binary:Version})
+Build-Profiles: <!nodtk5>
+Description: Deepin Tool Kit systemsettings devel library (DTK5 with Qt5)
  libdtksystemsettings-dev is base devel library of Deepin Qt/C++ applications.
  .
- This package contains the header files and static libraries.
+ This package contains the header files and development library symbolic links of DTK5 systemsettings.
+
+Package: libdtk6systemsettings
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Build-Profiles: <!nodtk6>
+Description: Deepin Tool Kit systemsettings library (DTK6 with Qt6)
+ libdtk6systemsettings is base library of Deepin Qt/C++ applications.
+ .
+ This package contains the shared libraries for DTK6 applications.
+
+Package: libdtk6systemsettings-dev
+Architecture: any
+Depends: ${misc:Depends}, libdtk6systemsettings(=${binary:Version})
+Build-Profiles: <!nodtk6>
+Description: Deepin Tool Kit systemsettings devel library (DTK6 with Qt6)
+ libdtk6systemsettings-dev is base devel library of Deepin Qt/C++ applications.
+ .
+ This package contains the header files and development library symbolic links of DTK6 systemsettings.

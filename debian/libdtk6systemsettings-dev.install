@@ -1,0 +1,6 @@
+usr/lib/*/libdtk6systemsettings.so
+usr/include/dtk6/*
+usr/lib/*/pkgconfig/dtk6systemsettings.pc
+usr/lib/*/cmake/Dtk6SystemSettings/*
+usr/share/qt6/doc/*.qch
+usr/lib/*/qt6/*
